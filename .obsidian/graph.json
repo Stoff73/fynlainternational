@@ -1,0 +1,29 @@
+{
+  "collapse-filter": true,
+  "search": "",
+  "showTags": false,
+  "showAttachments": false,
+  "hideUnresolved": false,
+  "showOrphans": true,
+  "collapse-color-groups": true,
+  "colorGroups": [
+    { "query": "path:March", "color": { "a": 1, "rgb": 14827118 } },
+    { "query": "path:Feb", "color": { "a": 1, "rgb": 5765350 } },
+    { "query": "path:appMapping/currentState", "color": { "a": 1, "rgb": 2143590 } },
+    { "query": "path:revolut", "color": { "a": 1, "rgb": 15228525 } },
+    { "query": "path:plugins", "color": { "a": 1, "rgb": 5722854 } },
+    { "query": "file:Home OR file:\"March Sessions\" OR file:\"February Sessions\" OR file:\"System Map\"", "color": { "a": 1, "rgb": 15228269 } }
+  ],
+  "collapse-display": true,
+  "showArrow": false,
+  "textFadeMultiplier": 0,
+  "nodeSizeMultiplier": 1,
+  "lineSizeMultiplier": 1,
+  "collapse-forces": true,
+  "centerStrength": 0.518713248970312,
+  "repelStrength": 10,
+  "linkStrength": 1,
+  "linkDistance": 250,
+  "scale": 0.09236163623914338,
+  "close": true
+}

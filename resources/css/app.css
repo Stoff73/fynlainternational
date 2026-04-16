@@ -1,0 +1,552 @@
+/* Import Google Fonts */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;900&family=JetBrains+Mono:wght@400;500&display=swap');
+
+/* Tailwind CSS Directives */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Base Styles */
+@layer base {
+  html, body {
+    background-color: #F7F6F4 !important;
+  }
+
+  body {
+    @apply font-sans text-horizon-500;
+  }
+
+  h1 {
+    @apply font-display text-h1 text-horizon-500;
+  }
+
+  h2 {
+    @apply font-display text-h2 text-horizon-500;
+  }
+
+  h3 {
+    @apply font-display text-h3 text-horizon-500;
+  }
+
+  h4 {
+    @apply text-h4 text-horizon-500;
+  }
+
+  h5 {
+    @apply text-h5 text-neutral-500;
+  }
+}
+
+/* Custom Component Styles */
+@layer components {
+  .btn-primary {
+    @apply px-4 py-2 bg-raspberry-500 text-white rounded-button font-medium hover:bg-raspberry-600 active:bg-raspberry-700 transition-all duration-150 shadow-sm hover:shadow-md;
+  }
+
+  .btn-secondary {
+    @apply px-4 py-2 bg-white text-horizon-500 border border-light-gray rounded-button font-medium hover:bg-savannah-100 active:bg-savannah-200 transition-all duration-150 shadow-sm hover:shadow-md;
+  }
+
+  .btn-outline {
+    @apply px-4 py-2 bg-transparent text-spring-500 border border-spring-500 rounded-button font-medium hover:bg-spring-50 active:bg-spring-100 transition-all duration-150;
+  }
+
+  .btn-danger {
+    @apply px-4 py-2 bg-raspberry-600 text-white rounded-button font-medium hover:bg-raspberry-700 active:bg-raspberry-800 transition-all duration-150 shadow-sm hover:shadow-md;
+  }
+
+  .card {
+    @apply bg-white rounded-card border border-light-gray shadow-sm p-6 transition-all duration-200 overflow-hidden;
+    overflow-wrap: anywhere;
+    word-break: break-word;
+  }
+
+  /* Clickable cards get premium hover effects automatically */
+  .card.cursor-pointer {
+    @apply hover:shadow-md hover:-translate-y-0.5 hover:bg-[#EEEEEE];
+  }
+
+  .card-hover {
+    @apply bg-white rounded-card border border-light-gray shadow-sm hover:shadow-md transform hover:-translate-y-0.5 hover:bg-[#EEEEEE] transition-all duration-200 cursor-pointer p-6 overflow-hidden;
+    overflow-wrap: anywhere;
+    word-break: break-word;
+  }
+
+  .input-field {
+    @apply w-full px-4 py-2 bg-white border border-light-gray rounded-button text-horizon-500 placeholder-horizon-400 focus:outline-none focus:ring-2 focus:ring-violet-500 focus:ring-opacity-20 focus:border-violet-500 transition-all duration-150;
+  }
+
+  .label {
+    @apply block text-body-sm font-medium text-neutral-500 mb-2;
+  }
+
+  /* Onboarding-specific field styles */
+  .onb-label {
+    @apply flex items-center gap-1.5 text-sm font-semibold text-horizon-500 mb-1;
+  }
+
+  .onb-input {
+    @apply w-full px-4 py-2.5 bg-white border border-light-blue-500/40 rounded-lg text-horizon-500 placeholder-neutral-400 transition-all duration-150 focus:outline-none focus:border-horizon-500 focus:ring-2 focus:ring-horizon-500/20;
+  }
+
+  .onb-input.prepop-input {
+    @apply bg-neutral-200 text-neutral-400 cursor-not-allowed border-neutral-300;
+  }
+
+  .q-icon {
+    @apply w-[18px] h-[18px] rounded-full bg-neutral-300 text-white text-[11px] font-bold inline-flex items-center justify-center cursor-pointer transition-colors flex-shrink-0 hover:bg-horizon-500;
+  }
+
+  .badge-success {
+    @apply inline-flex items-center px-3 py-1 rounded-full text-body-sm font-medium bg-success-100 text-success-700;
+  }
+
+  .badge-warning {
+    @apply inline-flex items-center px-3 py-1 rounded-full text-body-sm font-medium bg-violet-100 text-violet-700;
+  }
+
+  .badge-error {
+    @apply inline-flex items-center px-3 py-1 rounded-full text-body-sm font-medium bg-raspberry-100 text-raspberry-700;
+  }
+
+  .badge-info {
+    @apply inline-flex items-center px-3 py-1 rounded-full text-body-sm font-medium bg-horizon-100 text-horizon-700;
+  }
+
+  /* Modal Component Styles */
+  .modal-overlay {
+    @apply fixed inset-0 bg-horizon-500/75 flex items-center justify-center z-50;
+  }
+
+  .modal {
+    @apply bg-white rounded-lg w-full max-w-md shadow-xl;
+  }
+
+  .modal-header {
+    @apply px-6 py-4 border-b border-light-gray flex justify-between items-center;
+  }
+
+  .modal-header h3 {
+    @apply text-lg font-semibold text-horizon-500 m-0;
+  }
+
+  .modal-body {
+    @apply p-6;
+  }
+
+  .modal-footer {
+    @apply px-6 py-4 border-t border-light-gray flex justify-end gap-3;
+  }
+
+  .close-btn {
+    @apply bg-transparent border-none text-2xl cursor-pointer text-neutral-500 leading-none hover:text-horizon-500;
+  }
+
+  /* Form Styles */
+  .form-group {
+    @apply mb-4;
+  }
+
+  .form-group label {
+    @apply block text-sm font-medium text-neutral-500 mb-1.5;
+  }
+
+  .form-input {
+    @apply w-full px-3 py-2 border border-light-gray rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-violet-500;
+  }
+
+  .form-hint {
+    @apply text-xs text-neutral-500 mt-1;
+  }
+
+  /* Code Input (MFA) */
+  .code-input {
+    @apply w-40 py-3 text-2xl text-center tracking-widest border-2 border-horizon-200 rounded-lg font-mono focus:outline-none focus:border-violet-500;
+  }
+
+  /* Error Message */
+  .error-message {
+    @apply text-raspberry-500 text-sm mb-4;
+  }
+
+  /* Button Sizes */
+  .btn-sm {
+    @apply px-3 py-1 text-xs;
+  }
+
+  .btn:disabled {
+    @apply opacity-50 cursor-not-allowed;
+  }
+
+  /* ==========================================================================
+     STANDARDIZED CARD VARIANTS (per fynlaDesignGuide.md v1.2.0)
+     ========================================================================== */
+
+  /* Large Card Container - for page sections */
+  .card-lg {
+    @apply bg-white rounded-xl border border-light-gray shadow-sm p-8 transition-all duration-200 overflow-hidden;
+    overflow-wrap: anywhere;
+    word-break: break-word;
+  }
+
+  /* Small Card - for badges, compact elements */
+  .card-sm {
+    @apply bg-white rounded-lg border border-light-gray shadow-sm p-4 transition-all duration-200 overflow-hidden;
+    overflow-wrap: anywhere;
+    word-break: break-word;
+  }
+
+  /* Highlighted Card Variants */
+  .card-highlighted {
+    @apply bg-raspberry-50 rounded-card border border-raspberry-200 shadow-sm p-6 transition-all duration-200 overflow-hidden;
+    overflow-wrap: anywhere;
+    word-break: break-word;
+  }
+
+  .card-success {
+    @apply bg-spring-50 rounded-card border border-spring-200 shadow-sm p-6 transition-all duration-200 overflow-hidden;
+    overflow-wrap: anywhere;
+    word-break: break-word;
+  }
+
+  .card-warning {
+    @apply bg-violet-50 rounded-card border border-violet-200 shadow-sm p-6 transition-all duration-200 overflow-hidden;
+    overflow-wrap: anywhere;
+    word-break: break-word;
+  }
+
+  .card-error {
+    @apply bg-raspberry-50 rounded-card border border-raspberry-200 shadow-sm p-6 transition-all duration-200 overflow-hidden;
+    overflow-wrap: anywhere;
+    word-break: break-word;
+  }
+
+  /* ==========================================================================
+     INLINE DETAIL VIEW STYLES (shared across all *DetailInline components)
+     ========================================================================== */
+
+  .detail-inline {
+    animation: fadeIn 0.3s ease-out;
+  }
+
+  .detail-inline-back {
+    @apply inline-flex items-center gap-2 px-4 py-2 bg-white border border-light-gray rounded-button text-horizon-500 text-sm font-medium cursor-pointer transition-all duration-200 hover:bg-savannah-100 hover:border-horizon-300;
+  }
+
+  /* ==========================================================================
+     CHART CONTAINER STYLES
+     ========================================================================== */
+
+  .chart-card {
+    @apply bg-white rounded-lg border border-light-gray p-6 cursor-pointer transition-all duration-200;
+  }
+
+  .chart-card:hover {
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.08);
+    @apply border-raspberry-300;
+  }
+
+  .chart-title {
+    @apply text-lg font-semibold text-horizon-500 mb-1;
+  }
+
+  .chart-subtitle {
+    @apply text-sm text-neutral-500 mb-4;
+  }
+
+  /* ==========================================================================
+     DROPDOWN & OVERLAY STYLES (per shadow hierarchy)
+     ========================================================================== */
+
+  .dropdown-menu {
+    @apply bg-white rounded-lg border border-light-gray shadow-lg py-1;
+  }
+
+  .modal-content {
+    @apply bg-white rounded-card shadow-modal;
+  }
+
+  /* ==========================================================================
+     TRANSITION UTILITIES (per designStyle.md)
+     ========================================================================== */
+
+  /* Standard transition - 200ms for most UI elements */
+  .transition-standard {
+    @apply transition-all duration-200 ease-out;
+  }
+
+  /* Fast transition - 150ms for micro-interactions */
+  .transition-fast {
+    @apply transition-all duration-150 ease-out;
+  }
+
+  /* Slow transition - 300ms for panels and modals */
+  .transition-slow {
+    @apply transition-all duration-300 ease-out;
+  }
+
+  /* ==========================================================================
+     FOCUS STATES (accessibility)
+     ========================================================================== */
+
+  .focus-ring {
+    @apply focus:outline-none focus:ring-2 focus:ring-violet-500 focus:ring-opacity-20 focus:border-violet-500;
+  }
+
+  .focus-ring-visible {
+    @apply focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-violet-500 focus-visible:ring-offset-2;
+  }
+
+  /* ==========================================================================
+     BADGE STYLES (account types, status, priority, risk, tax)
+     ========================================================================== */
+
+  /* Base badge */
+  .badge {
+    @apply inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium;
+  }
+
+  .badge-sm { @apply px-2 py-0.5 text-xs; }
+  .badge-md { @apply px-3 py-1 text-sm; }
+  .badge-lg { @apply px-4 py-1.5 text-base; }
+
+  /* Account Type Badges */
+  .badge-isa { @apply bg-spring-100 text-spring-800 font-medium; }
+  .badge-sipp { @apply bg-purple-100 text-purple-800 font-medium; }
+  .badge-gia { @apply bg-violet-100 text-violet-800 font-medium; }
+  .badge-pension,
+  .badge-workplace-pension { @apply bg-indigo-100 text-indigo-800 font-medium; }
+  .badge-nsi,
+  .badge-premium-bonds,
+  .badge-bond { @apply bg-violet-100 text-violet-800 font-medium; }
+  .badge-vct,
+  .badge-eis { @apply bg-pink-100 text-pink-800 font-medium; }
+
+  /* Ownership Type Badges */
+  .badge-individual { @apply bg-savannah-100 text-neutral-500; }
+  .badge-joint { @apply bg-purple-100 text-purple-500; }
+  .badge-trust { @apply bg-violet-100 text-violet-800; }
+
+  /* Status Badges */
+  .badge-active { @apply bg-spring-600 text-white; }
+  .badge-pending { @apply bg-violet-500 text-white; }
+  .badge-completed { @apply bg-violet-600 text-white; }
+  .badge-expired { @apply bg-raspberry-600 text-white; }
+  .badge-draft { @apply bg-neutral-500 text-white; }
+
+  /* Priority Badges */
+  .badge-high-priority { @apply bg-raspberry-600 text-white; }
+  .badge-medium-priority { @apply bg-violet-500 text-white; }
+  .badge-low-priority { @apply bg-spring-600 text-white; }
+
+  /* Risk Level Badges */
+  .badge-risk-low { @apply bg-spring-100 text-spring-800; }
+  .badge-risk-medium { @apply bg-violet-100 text-violet-800; }
+  .badge-risk-high { @apply bg-raspberry-100 text-raspberry-800; }
+
+  /* Tax Efficiency Badges */
+  .badge-tax-free { @apply bg-spring-100 text-spring-800 font-medium; }
+  .badge-taxable { @apply bg-raspberry-100 text-raspberry-800 font-medium; }
+  .badge-tax-deferred { @apply bg-violet-100 text-violet-800 font-medium; }
+}
+
+/* Custom Utility Classes */
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+
+  /* Scrollbar hide */
+  .scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
+  .scrollbar-hide::-webkit-scrollbar { display: none; }
+
+  /* Scrollbar thin (for modals/panels) */
+  .scrollbar-thin { scrollbar-width: thin; scrollbar-color: theme('colors.horizon.300') theme('colors.savannah.100'); }
+  .scrollbar-thin::-webkit-scrollbar { width: 6px; }
+  .scrollbar-thin::-webkit-scrollbar-track { background: theme('colors.savannah.100'); border-radius: 3px; }
+  .scrollbar-thin::-webkit-scrollbar-thumb { background: theme('colors.horizon.300'); border-radius: 3px; }
+  .scrollbar-thin::-webkit-scrollbar-thumb:hover { background: theme('colors.horizon.400'); }
+
+  /* Module page gradient — subtle light grey fade from bottom with light grey border */
+  .module-gradient {
+    position: relative;
+    border: 1px solid theme('colors.light-gray');
+    border-radius: theme('borderRadius.card');
+    overflow: hidden;
+  }
+  .module-gradient::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 120px;
+    background: linear-gradient(to top, theme('colors.light-gray'), transparent);
+    pointer-events: none;
+    border-radius: 0 0 theme('borderRadius.card') theme('borderRadius.card');
+    z-index: 0;
+  }
+  .module-gradient > * {
+    position: relative;
+    z-index: 1;
+  }
+
+  /* Dashboard card gradient — subtle light pink fade from bottom */
+  .module-gradient-pink {
+    position: relative;
+    overflow: hidden;
+  }
+  .module-gradient-pink::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 80px;
+    background: linear-gradient(to top, theme('colors.light-pink.100'), transparent);
+    pointer-events: none;
+    border-radius: 0 0 theme('borderRadius.card') theme('borderRadius.card');
+  }
+
+  /* Dashboard card hover — switch border colour and gradient from grey to light blue */
+  .hover-blue-gradient::after {
+    transition: background 0.2s ease;
+  }
+  .hover-blue-gradient:hover {
+    border-color: theme('colors.light-blue.200');
+  }
+  .hover-blue-gradient:hover::after {
+    background: linear-gradient(to top, theme('colors.light-blue.100'), transparent);
+  }
+
+  /* Animation utilities */
+  .animate-fade-in { animation: fadeIn 0.3s ease-out; }
+  .animate-fade-in-slide { animation: fadeInSlideUp 0.3s ease-out; }
+
+  /* AI Form Fill — field highlight during Fyn auto-fill */
+  .ai-fill-highlight {
+    @apply ring-2 ring-violet-400 ring-offset-1 bg-violet-50 transition-all duration-200;
+  }
+}
+
+/* Shared keyframes */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes fadeInSlideUp {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes slideInFromRight {
+  from { transform: translateX(400px); opacity: 0; }
+  to { transform: translateX(0); opacity: 1; }
+}
+.animate-slide-in-right {
+  animation: slideInFromRight 0.3s ease-out;
+}
+
+@keyframes checkmark-scale {
+  0% {
+    transform: scale(0);
+    opacity: 0;
+  }
+  50% {
+    transform: scale(1.2);
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+@keyframes checkmark-draw {
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+/* Range slider styling */
+input[type="range"] { @apply appearance-none w-full h-2 rounded-full bg-horizon-200 outline-none cursor-pointer; }
+input[type="range"]::-webkit-slider-thumb { @apply appearance-none w-5 h-5 bg-raspberry-500 rounded-full cursor-pointer; }
+input[type="range"]::-moz-range-thumb { @apply w-5 h-5 bg-raspberry-500 rounded-full border-none cursor-pointer; }
+
+/* Expand/accordion transition */
+.expand-enter-active, .expand-leave-active { transition: all 0.2s ease; overflow: hidden; }
+.expand-enter-from, .expand-leave-to { opacity: 0; max-height: 0; }
+.expand-enter-to, .expand-leave-from { opacity: 1; max-height: 2000px; }
+
+/* PDF Header - hidden on screen, shown when generating PDF */
+.pdf-header {
+  display: none;
+}
+
+/* Print Styles for PDF Reports */
+@media print {
+  /* Hide navigation, footer, preview banner */
+  nav,
+  footer,
+  [class*="PreviewBanner"] {
+    display: none !important;
+  }
+
+  /* Hide elements marked no-print */
+  .no-print {
+    display: none !important;
+  }
+
+  /* Show print-only elements */
+  .print-only {
+    display: block !important;
+  }
+
+  /* Remove shadows */
+  .shadow-lg,
+  .shadow-md,
+  .shadow-sm,
+  .shadow {
+    box-shadow: none !important;
+  }
+
+  /* Full width for print */
+  .max-w-7xl {
+    max-width: 100% !important;
+    padding: 0 !important;
+  }
+
+  /* White background */
+  body,
+  .bg-eggshell-500 {
+    background: white !important;
+  }
+
+  /* Page setup */
+  @page {
+    margin: 1cm 1.5cm;
+    size: A4;
+  }
+
+  /* Prevent page breaks inside cards/sections */
+  .card,
+  .grid > div,
+  .space-y-4 > div,
+  .space-y-6 > div,
+  .gap-6 > div {
+    break-inside: avoid;
+    page-break-inside: avoid;
+  }
+
+  /* Preserve background colors */
+  [class*="bg-gradient"],
+  .bg-blue-50,
+  .bg-green-50,
+  .bg-red-50,
+  .bg-purple-50,
+  .bg-indigo-50,
+  .bg-emerald-50 {
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+}

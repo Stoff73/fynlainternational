@@ -1,0 +1,22 @@
+{
+  "env": {
+    "CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS": "1"
+  },
+  "enabledPlugins": {
+    "superpowers@claude-plugins-official": true
+  },
+  "hooks": {
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash /Users/CSJ/Desktop/fynla/.claude/hooks/tax-hardcode-check.sh",
+            "timeout": 15,
+            "statusMessage": "Checking for hardcoded tax values..."
+          }
+        ]
+      }
+    ]
+  }
+}

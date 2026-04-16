@@ -1,0 +1,110 @@
+<template>
+  <div class="bg-white rounded-lg shadow-sm border border-light-gray p-6 mb-6">
+    <!-- Greeting -->
+    <p class="text-horizon-500 leading-relaxed mb-4">{{ summary.greeting }}</p>
+
+    <!-- Opening -->
+    <p v-if="summary.opening" class="text-horizon-500 leading-relaxed mb-4">{{ summary.opening }}</p>
+
+    <!-- Introduction -->
+    <p class="text-horizon-500 leading-relaxed mb-5">{{ summary.introduction }}</p>
+
+    <!-- Coverage Summary Table -->
+    <div v-if="summary.coverage_summary && summary.coverage_summary.length > 0" class="mb-5">
+      <h4 class="text-sm font-semibold text-horizon-500 mb-2">Your Coverage Summary</h4>
+      <div class="overflow-x-auto border border-light-gray rounded-lg">
+        <table class="min-w-full divide-y divide-light-gray">
+          <thead class="bg-eggshell-500">
+            <tr>
+              <th scope="col" class="px-4 py-2.5 text-left text-xs font-medium text-neutral-500 uppercase tracking-wider">Name</th>
+              <th scope="col" class="px-4 py-2.5 text-left text-xs font-medium text-neutral-500 uppercase tracking-wider">Need</th>
+              <th scope="col" class="px-4 py-2.5 text-left text-xs font-medium text-neutral-500 uppercase tracking-wider">Coverage</th>
+              <th scope="col" class="px-4 py-2.5 text-left text-xs font-medium text-neutral-500 uppercase tracking-wider">Gap</th>
+              <th scope="col" class="px-4 py-2.5 text-left text-xs font-medium text-neutral-500 uppercase tracking-wider">Status</th>
+            </tr>
+          </thead>
+          <tbody class="bg-white divide-y divide-light-gray">
+            <tr v-for="item in summary.coverage_summary" :key="item.name">
+              <td class="px-4 py-2.5 text-sm text-horizon-500">{{ item.name }}</td>
+              <td class="px-4 py-2.5 text-sm text-horizon-500">{{ formatCurrency(item.need) }}</td>
+              <td class="px-4 py-2.5 text-sm text-horizon-500">{{ formatCurrency(item.coverage) }}</td>
+              <td class="px-4 py-2.5 text-sm text-horizon-500">{{ formatCurrency(item.gap) }}</td>
+              <td class="px-4 py-2.5">
+                <span
+                  class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium"
+                  :class="item.status === 'Adequate' ? 'bg-spring-100 text-spring-800' : 'bg-raspberry-100 text-raspberry-800'"
+                >
+                  {{ item.status }}
+                </span>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Key Actions Summary -->
+    <div v-if="summary.actions_summary && summary.actions_summary.length > 0" class="mb-5">
+      <h4 class="text-sm font-semibold text-horizon-500 mb-2">Key Actions</h4>
+      <div class="overflow-x-auto border border-light-gray rounded-lg">
+        <table class="min-w-full divide-y divide-light-gray">
+          <thead class="bg-eggshell-500">
+            <tr>
+              <th scope="col" class="px-4 py-2.5 text-left text-xs font-medium text-neutral-500 uppercase tracking-wider">Action</th>
+              <th scope="col" class="px-4 py-2.5 text-left text-xs font-medium text-neutral-500 uppercase tracking-wider">Priority</th>
+            </tr>
+          </thead>
+          <tbody class="bg-white divide-y divide-light-gray">
+            <tr v-for="(action, index) in summary.actions_summary" :key="index">
+              <td class="px-4 py-2.5 text-sm text-horizon-500">{{ action.title }}</td>
+              <td class="px-4 py-2.5">
+                <span
+                  class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium"
+                  :class="priorityClass(action.priority)"
+                >
+                  {{ capitalise(action.priority) }}
+                </span>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <p v-if="summary.total_actions > summary.actions_summary.length" class="text-xs text-neutral-500 mt-1.5">
+        Showing top {{ summary.actions_summary.length }} of {{ summary.total_actions }} actions. See the full list below.
+      </p>
+    </div>
+
+    <!-- Closing Statement -->
+    <p v-if="summary.closing" class="text-horizon-500 leading-relaxed">{{ summary.closing }}</p>
+  </div>
+</template>
+
+<script>
+import { currencyMixin } from '@/mixins/currencyMixin';
+
+export default {
+  name: 'ProtectionExecutiveSummary',
+  mixins: [currencyMixin],
+  props: {
+    summary: {
+      type: Object,
+      required: true,
+    },
+  },
+  methods: {
+    priorityClass(priority) {
+      const classes = {
+        critical: 'bg-raspberry-100 text-raspberry-800',
+        high: 'bg-violet-100 text-violet-800',
+        medium: 'bg-savannah-100 text-horizon-500',
+        low: 'bg-savannah-100 text-neutral-500',
+      };
+      return classes[priority] || classes.medium;
+    },
+    capitalise(str) {
+      if (!str) return '';
+      return str.charAt(0).toUpperCase() + str.slice(1);
+    },
+  },
+};
+</script>

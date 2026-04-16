@@ -1,0 +1,88 @@
+{
+  "name": "fynla-marketplace",
+  "owner": {
+    "name": "Fynla Development Team",
+    "email": "chris@fynla.org"
+  },
+  "metadata": {
+    "description": "Official marketplace for Fynla financial planning application — skills, agents, and tools for the development team",
+    "version": "1.0.0"
+  },
+  "plugins": [
+    {
+      "name": "fynla-dev-skills",
+      "source": {
+        "source": "git-subdir",
+        "url": "Stoff73/fynla",
+        "path": "plugins/fynla-dev-skills"
+      },
+      "description": "Core development skills: session management (start/end), systematic debugging, feature scaffolding, tech debt auditing, deployment notes/checklists, shipping (commit/push/PR), cost estimation, and skill creation.",
+      "version": "1.2.0",
+      "author": {
+        "name": "Fynla Development Team"
+      },
+      "category": "development",
+      "keywords": ["debugging", "scaffolding", "tech-debt", "deployment", "skills", "fynla", "session", "shipping"]
+    },
+    {
+      "name": "fynla-compliance",
+      "source": {
+        "source": "git-subdir",
+        "url": "Stoff73/fynla",
+        "path": "plugins/fynla-compliance"
+      },
+      "description": "UK tax compliance and security review agents — HMRC tax calculation verification and financial data security auditing",
+      "version": "1.0.0",
+      "author": {
+        "name": "Fynla Development Team"
+      },
+      "category": "compliance",
+      "keywords": ["tax", "hmrc", "security", "compliance", "audit", "fynla"]
+    },
+    {
+      "name": "fynla-design",
+      "source": {
+        "source": "git-subdir",
+        "url": "Stoff73/fynla",
+        "path": "plugins/fynla-design"
+      },
+      "description": "Premium UI design and UX writing agents — elevate interfaces and craft user-centred microcopy",
+      "version": "1.0.0",
+      "author": {
+        "name": "Fynla Development Team"
+      },
+      "category": "design",
+      "keywords": ["ui", "ux", "design", "animations", "microcopy", "fynla"]
+    },
+    {
+      "name": "fynla-ops",
+      "source": {
+        "source": "git-subdir",
+        "url": "Stoff73/fynla",
+        "path": "plugins/fynla-ops"
+      },
+      "description": "Operations agents: Laravel deployment, MySQL optimisation, and product management",
+      "version": "1.0.0",
+      "author": {
+        "name": "Fynla Development Team"
+      },
+      "category": "operations",
+      "keywords": ["deployment", "database", "mysql", "product", "devops", "fynla"]
+    },
+    {
+      "name": "fynla-windows",
+      "source": {
+        "source": "git-subdir",
+        "url": "Stoff73/fynla",
+        "path": "plugins/fynla-windows"
+      },
+      "description": "Windows-compatible development skills for Fynla. PowerShell equivalents of session management, deployment notes, tech debt auditing, and cost estimation — with port management, Windows path conventions, and dev.ps1 integration.",
+      "version": "1.0.0",
+      "author": {
+        "name": "Fynla Development Team"
+      },
+      "category": "windows",
+      "keywords": ["windows", "powershell", "session", "tech-debt", "deployment", "fynla"]
+    }
+  ]
+}

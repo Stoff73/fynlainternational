@@ -1,0 +1,35 @@
+{
+    "name": "fynla/pack-country-xx-smoke",
+    "type": "library",
+    "description": "Fynla synthetic smoke-test pack — verifies multi-pack loading",
+    "license": "proprietary",
+    "require": {
+        "php": "^8.2",
+        "illuminate/support": "^10.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "Fynla\\Packs\\XXSmoke\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Fynla\\Packs\\XXSmoke\\Tests\\": "tests/"
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Fynla\\Packs\\XXSmoke\\Providers\\CountryPackServiceProvider"
+            ]
+        },
+        "fynla": {
+            "pack": {
+                "code": "xx",
+                "currency": "XXX",
+                "locale": "en-XX",
+                "table_prefix": "xx_"
+            }
+        }
+    }
+}
