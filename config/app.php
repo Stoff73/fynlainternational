@@ -175,6 +175,7 @@ return [
          * Fynla Core (Multi-Country Architecture)
          */
         Fynla\Core\Providers\CoreServiceProvider::class,
+        App\Providers\GbPackServiceProvider::class,
     ])->toArray(),
 
     /*
