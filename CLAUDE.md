@@ -12,8 +12,9 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 | PHP Services | 234 |
 | Controllers | 94 |
 | Models | 94 |
-| Vuex Stores | 32 |
+| Vuex Stores | 33 |
 | Agents | 9 |
+| Country Packs | 2 |
 
 **Production**: https://fynla.org | **Version**: v1.0
 

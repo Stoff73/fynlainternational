@@ -32,14 +32,37 @@ uses(
 // BaseAgentTest is pure unit tests, no database needed
 uses(Tests\TestCase::class)->in('Unit/Agents/BaseAgentTest.php');
 
-// Core DB-backed tests (Jurisdiction models, TaxYearResolver, ActiveJurisdictions)
+// Core DB-backed tests (Jurisdiction models, TaxYearResolver, ActiveJurisdictions,
+// JurisdictionDetectionObserver)
 uses(
     Tests\TestCase::class,
     Illuminate\Foundation\Testing\RefreshDatabase::class,
-)->in('Unit/Core/Models', 'Unit/Core/TaxYear/TaxYearResolverDbTest.php', 'Unit/Core/Jurisdiction/ActiveJurisdictionsDbTest.php');
+)->in(
+    'Unit/Core/Models',
+    'Unit/Core/TaxYear/TaxYearResolverDbTest.php',
+    'Unit/Core/Jurisdiction/ActiveJurisdictionsDbTest.php',
+    'Unit/Core/Observers',
+);
 
 // Core middleware tests need the app but not the database
 uses(Tests\TestCase::class)->in('Unit/Core/Http/Middleware');
+
+// Architecture tests that use Laravel helpers (base_path, app) — Pest's arch()
+// macro handles the helper-free cases; files using describe/it + base_path()
+// need the Laravel application bootstrapped.
+uses(Tests\TestCase::class)->in('Architecture');
+
+// Country-pack feature tests live under packs/*/tests/Feature and need both
+// the Laravel TestCase (for getJson) and RefreshDatabase (so pack-owned
+// tables can be touched in isolation).
+uses(
+    Tests\TestCase::class,
+    Illuminate\Foundation\Testing\RefreshDatabase::class,
+)->in(
+    __DIR__ . '/../packs/country-xx-smoke/tests/Feature',
+    __DIR__ . '/../packs/country-za/tests/Unit',
+    __DIR__ . '/../packs/country-za/tests/Feature',
+);
 
 uses(
     Tests\TestCase::class,
