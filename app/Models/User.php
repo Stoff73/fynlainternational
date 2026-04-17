@@ -5,8 +5,10 @@ declare(strict_types=1);
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
+use Fynla\Core\Models\Jurisdiction;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -709,5 +711,38 @@ class User extends Authenticatable
         }
 
         return 'Domicile status not set. Please update your profile.';
+    }
+
+    /**
+     * Jurisdictions this user is currently active in.
+     */
+    public function jurisdictions(): BelongsToMany
+    {
+        return $this->belongsToMany(
+            Jurisdiction::class,
+            'user_jurisdictions',
+            'user_id',
+            'jurisdiction_id'
+        )
+            ->withPivot(['is_primary', 'activated_at'])
+            ->withTimestamps();
+    }
+
+    /**
+     * The user's primary jurisdiction (the single row with is_primary = true).
+     */
+    public function primaryJurisdiction(): ?Jurisdiction
+    {
+        return $this->jurisdictions()->wherePivot('is_primary', true)->first();
+    }
+
+    /**
+     * ISO code of the primary jurisdiction (e.g. "GB", "ZA").
+     *
+     * Returns null only for users created before the jurisdiction backfill ran.
+     */
+    public function primaryJurisdictionCode(): ?string
+    {
+        return $this->primaryJurisdiction()?->code;
     }
 }
