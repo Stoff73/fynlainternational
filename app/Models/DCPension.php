@@ -26,6 +26,7 @@ class DCPension extends Model
     protected $table = 'dc_pensions';
 
     protected $fillable = [
+        'country_code',
         'user_id',
         'scheme_name',
         'scheme_type',

@@ -19,6 +19,7 @@ class Property extends Model
     use Auditable, HasFactory, HasJointOwnership, SoftDeletes;
 
     protected $fillable = [
+        'country_code',
         'user_id',
         'household_id',
         'trust_id',

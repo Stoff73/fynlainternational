@@ -26,6 +26,7 @@ class InvestmentAccount extends Model
     protected $auditExcludeFields = ['updated_at', 'created_at'];
 
     protected $fillable = [
+        'country_code',
         'user_id',
         'account_name',
         'joint_owner_id',

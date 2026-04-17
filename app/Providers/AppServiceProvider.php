@@ -42,5 +42,21 @@ class AppServiceProvider extends ServiceProvider
     {
         // Prevent lazy loading in non-production environments to catch N+1 query issues
         Model::preventLazyLoading(! app()->isProduction());
+
+        // Workstream 0.6 — wire the jurisdiction-detection observer on every
+        // asset-bearing model that carries a country_code column. The
+        // observer auto-activates a user's jurisdictions from asset
+        // location; users never see the word "jurisdiction" in the UI.
+        $assetModels = [
+            \App\Models\Investment\InvestmentAccount::class,
+            \App\Models\DCPension::class,
+            \App\Models\DBPension::class,
+            \App\Models\SavingsAccount::class,
+            \App\Models\Property::class,
+            \App\Models\Estate\Asset::class,
+        ];
+        foreach ($assetModels as $modelClass) {
+            $modelClass::observe(\Fynla\Core\Observers\JurisdictionDetectionObserver::class);
+        }
     }
 }

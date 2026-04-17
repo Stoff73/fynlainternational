@@ -19,6 +19,7 @@ class SavingsAccount extends Model
     use Auditable, HasFactory, HasJointOwnership, SoftDeletes;
 
     protected $fillable = [
+        'country_code',
         'user_id',
         'account_name',
         'account_type',

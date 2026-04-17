@@ -24,6 +24,7 @@ class DBPension extends Model
     protected $table = 'db_pensions';
 
     protected $fillable = [
+        'country_code',
         'user_id',
         'scheme_name',
         'scheme_type',

@@ -16,6 +16,7 @@ class Asset extends Model
     use Auditable, HasFactory, SoftDeletes;
 
     protected $fillable = [
+        'country_code',
         'user_id',
         'asset_type',
         'asset_name',
