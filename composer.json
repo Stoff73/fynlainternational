@@ -6,6 +6,7 @@
     "license": "proprietary",
     "repositories": [
         { "type": "path", "url": "packs/country-xx-smoke", "options": { "symlink": true } },
+        { "type": "path", "url": "packs/country-za", "options": { "symlink": true } },
         { "type": "path", "url": "packs/_template", "options": { "symlink": true } }
     ],
     "require": {
@@ -25,6 +26,7 @@
     "require-dev": {
         "fakerphp/faker": "^1.9.1",
         "fynla/pack-country-xx-smoke": "*@dev",
+        "fynla/pack-country-za": "*@dev",
         "laravel/pint": "^1.0",
         "mockery/mockery": "^1.4.4",
         "nunomaduro/collision": "^7.0",

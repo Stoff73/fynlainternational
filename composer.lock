@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "376058a8d3a24d85ce26eeaeb51b96dc",
+    "content-hash": "483852642593f5c387df99380703bd2f",
     "packages": [
         {
             "name": "anthropic-ai/sdk",
@@ -7417,7 +7417,7 @@
         },
         {
             "name": "fynla/pack-country-xx-smoke",
-            "version": "dev-main",
+            "version": "dev-master",
             "dist": {
                 "type": "path",
                 "url": "packs/country-xx-smoke",
@@ -7457,6 +7457,55 @@
                 "proprietary"
             ],
             "description": "Fynla synthetic smoke-test pack — verifies multi-pack loading",
+            "transport-options": {
+                "symlink": true,
+                "relative": true
+            }
+        },
+        {
+            "name": "fynla/pack-country-za",
+            "version": "dev-master",
+            "dist": {
+                "type": "path",
+                "url": "packs/country-za",
+                "reference": "cf6620d504b75b9ffd0f40c13921d8fa34bc6059"
+            },
+            "require": {
+                "illuminate/database": "^10.0",
+                "illuminate/support": "^10.0",
+                "php": "^8.2"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "Fynla\\Packs\\Za\\Providers\\ZaPackServiceProvider"
+                    ]
+                },
+                "fynla": {
+                    "pack": {
+                        "code": "za",
+                        "currency": "ZAR",
+                        "locale": "en_ZA",
+                        "table_prefix": "za_"
+                    }
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Fynla\\Packs\\Za\\": "src/",
+                    "Fynla\\Packs\\Za\\Database\\Seeders\\": "database/seeders/"
+                }
+            },
+            "autoload-dev": {
+                "psr-4": {
+                    "Fynla\\Packs\\Za\\Tests\\": "tests/"
+                }
+            },
+            "license": [
+                "proprietary"
+            ],
+            "description": "Fynla South Africa country pack — SARS 2026/27 tax engine, Section 11F / Section 10C trackers, and za_tax_configurations schema.",
             "transport-options": {
                 "symlink": true,
                 "relative": true
@@ -10487,7 +10536,8 @@
     "aliases": [],
     "minimum-stability": "dev",
     "stability-flags": {
-        "fynla/pack-country-xx-smoke": 20
+        "fynla/pack-country-xx-smoke": 20,
+        "fynla/pack-country-za": 20
     },
     "prefer-stable": true,
     "prefer-lowest": false,
