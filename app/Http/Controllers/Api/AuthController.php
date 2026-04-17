@@ -336,7 +336,7 @@ class AuthController extends Controller
         $user = $request->user();
 
         // Load spouse and role relationships
-        $relations = ['role.permissions'];
+        $relations = ['role.permissions', 'jurisdictions'];
         if ($user->spouse_id) {
             $relations[] = 'spouse';
         }
@@ -349,6 +349,21 @@ class AuthController extends Controller
             $dataCompletedSteps = $lifeStageService->getDataCompleteness($user);
         }
 
+        // Jurisdiction state — lower-cased ISO codes per ADR-006. Cross-border
+        // is derived (not a stored flag): true iff the user holds 2+ active
+        // jurisdictions. No stored denormalised column, no UI jurisdiction
+        // management — activation flows from asset location in Workstream 0.6.
+        $activeJurisdictions = $user->jurisdictions
+            ->map(fn ($j) => strtolower((string) $j->code))
+            ->values()
+            ->all();
+
+        $primaryJurisdiction = $user->jurisdictions
+            ->firstWhere('pivot.is_primary', true);
+        $primaryCode = $primaryJurisdiction
+            ? strtolower((string) $primaryJurisdiction->code)
+            : null;
+
         return response()->json([
             'success' => true,
             'data' => [
@@ -356,6 +371,9 @@ class AuthController extends Controller
                 'role' => $user->role?->name ?? ($user->is_admin ? 'admin' : null),
                 'permissions' => $user->role?->permissions?->pluck('name')->toArray() ?? [],
                 'data_completed_steps' => $dataCompletedSteps,
+                'active_jurisdictions' => $activeJurisdictions,
+                'primary_jurisdiction' => $primaryCode,
+                'cross_border' => count($activeJurisdictions) > 1,
             ],
         ]);
     }

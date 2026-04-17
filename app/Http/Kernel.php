@@ -50,6 +50,13 @@ class Kernel extends HttpKernel
             \App\Http\Middleware\AdvisorImpersonationMiddleware::class, // Swap auth user when advisor is impersonating
             \App\Http\Middleware\PreviewWriteInterceptor::class, // Intercept writes for preview users
             \App\Http\Middleware\CheckSubscription::class, // Feature-flagged subscription enforcement
+            // No-op for routes without a {cc} parameter; enforces pack and
+            // user entitlement on jurisdictional /api/{cc}/* routes once they
+            // exist. LegacyApiRewrite is NOT wired here: it would rewrite
+            // every /api/{module} request to /api/gb/{module} which has no
+            // matching route today. Wire it only when the /api/gb/* routes
+            // land (Workstream 0.6+).
+            \Fynla\Core\Http\Middleware\ActiveJurisdictionMiddleware::class,
         ],
     ];
 
