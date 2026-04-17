@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Services;
 
 use App\Models\TaxConfiguration;
+use Fynla\Core\Contracts\TaxEngine;
 use Illuminate\Support\Arr;
 use RuntimeException;
 
@@ -14,12 +15,24 @@ use RuntimeException;
  * Provides centralized access to the active UK tax configuration.
  * Request-scoped singleton - loads active config once per request and caches in memory.
  *
+ * Implements the Fynla\Core\Contracts\TaxEngine contract. The UK-specific lookup
+ * methods (getIncomeTax(), getInheritanceTax(), etc.) are the primary UK surface;
+ * the TaxEngine contract methods at the bottom of this class provide the
+ * cross-jurisdiction surface the PackRegistry routes through.
+ *
+ * SA-only contract methods (calculateLumpSumTax, calculateRetirementDeduction,
+ * calculateDividendsWithholdingTax, calculateMedicalCredits) are deliberate stubs
+ * here — the UK tax system has no equivalent of SARS lump-sum tables, Section 11F
+ * carry-forward, local vs foreign dividend withholding, or medical scheme tax
+ * credits. Stubs return 0 / ['not_applicable' => true] so the contract is satisfied
+ * without side effects.
+ *
  * Usage:
  *   $taxConfig = app(TaxConfigService::class);
  *   $personalAllowance = $taxConfig->get('income_tax.personal_allowance');
  *   $incomeTax = $taxConfig->getIncomeTax();
  */
-class TaxConfigService
+class TaxConfigService implements TaxEngine
 {
     /**
      * Cached active tax configuration (request-scoped)
@@ -656,5 +669,191 @@ class TaxConfigService
             'universal_15hrs' => ['hours_per_week' => 15, 'weeks_per_year' => 38, 'income_test' => false],
             'working_parents_30hrs' => ['hours_per_week' => 30, 'weeks_per_year' => 38, 'max_income_threshold' => 100000],
         ]);
+    }
+
+    // ------------------------------------------------------------------
+    // TaxEngine contract surface
+    // ------------------------------------------------------------------
+    //
+    // The methods below satisfy Fynla\Core\Contracts\TaxEngine so this
+    // service can be bound as pack.gb.tax via the GbPackServiceProvider
+    // (Phase 0 Workstream 0.2). UK-relevant calculations are stubs for now
+    // — full implementations land when the UK engine graduates into a
+    // Composer pack post-Phase 2 per Implementation_Plan_v2.md § 5.1.
+    // SA-only methods return ['not_applicable' => true] / 0.
+    //
+
+    /**
+     * {@inheritDoc}
+     */
+    public function calculateIncomeTax(int $grossMinor, string $taxYear): array
+    {
+        // UK income tax calculation is handled by UKTaxCalculator / module
+        // services today. A stub here preserves the contract until the UK
+        // engine graduates to a pack.
+        return [
+            'tax_due' => 0,
+            'effective_rate' => 0.0,
+            'marginal_rate' => 0.0,
+            'breakdown' => [],
+            'not_applicable' => true,
+        ];
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function calculateCGT(int $gainMinor, string $taxYear, array $options = []): array
+    {
+        return [
+            'tax_due' => 0,
+            'exemption_used' => 0,
+            'taxable_gain' => 0,
+            'breakdown' => [],
+            'not_applicable' => true,
+        ];
+    }
+
+    /**
+     * {@inheritDoc}
+     *
+     * UK has no cumulative lump-sum table analogous to SARS. UK pension
+     * lump-sum tax is handled via income-tax bracketing on the non-PCLS
+     * portion in the Retirement module services.
+     */
+    public function calculateLumpSumTax(
+        int $amountMinor,
+        string $taxYear,
+        int $priorCumulativeMinor,
+        string $tableType
+    ): array {
+        return [
+            'tax_due_minor' => 0,
+            'cumulative_tax_minor' => 0,
+            'prior_tax_minor' => 0,
+            'table_applied' => $tableType,
+            'not_applicable' => true,
+        ];
+    }
+
+    /**
+     * {@inheritDoc}
+     *
+     * UK has no carry-forward mechanism analogous to Section 11F. Annual
+     * Allowance unused amounts are handled by the Retirement module
+     * services against the 3-year AA carry-forward rules.
+     */
+    public function calculateRetirementDeduction(
+        int $grossMinor,
+        string $taxYear,
+        int $carryForwardMinor
+    ): array {
+        return [
+            'deductible_minor' => 0,
+            'carry_forward_minor' => 0,
+            'cap_applied_minor' => 0,
+            'not_applicable' => true,
+        ];
+    }
+
+    /**
+     * {@inheritDoc}
+     *
+     * UK does not withhold tax on dividends at source (the dividend
+     * allowance and marginal-rate bracketing are applied via self-assessment).
+     */
+    public function calculateDividendsWithholdingTax(
+        int $amountMinor,
+        string $taxYear,
+        string $source
+    ): int {
+        return 0;
+    }
+
+    /**
+     * {@inheritDoc}
+     *
+     * UK has no medical-scheme tax credit analogous to SARS.
+     */
+    public function calculateMedicalCredits(
+        int $mainPlusFirstDependant,
+        int $additionalDependants,
+        string $taxYear
+    ): int {
+        return 0;
+    }
+
+    /**
+     * {@inheritDoc}
+     *
+     * UK personal allowance is a flat amount; the $age parameter is ignored.
+     */
+    public function getPersonalAllowance(string $taxYear, ?int $age = null): int
+    {
+        $allowance = $this->get('income_tax.personal_allowance', 0);
+
+        // Stored in whole pounds per the UK JSON config; convert to pence
+        // (minor units) to satisfy the contract.
+        return (int) round(((float) $allowance) * 100);
+    }
+
+    /**
+     * {@inheritDoc}
+     *
+     * Returns the UK income-tax bands from the active configuration,
+     * converted to minor units.
+     */
+    public function getTaxBrackets(string $taxYear): array
+    {
+        $bands = $this->get('income_tax.bands', []);
+
+        if (! is_array($bands)) {
+            return [];
+        }
+
+        $brackets = [];
+        foreach ($bands as $name => $band) {
+            if (! is_array($band)) {
+                continue;
+            }
+
+            $lower = isset($band['from']) ? (int) round(((float) $band['from']) * 100) : 0;
+            $upper = isset($band['to']) && $band['to'] !== null
+                ? (int) round(((float) $band['to']) * 100)
+                : null;
+            $rate = isset($band['rate']) ? (float) $band['rate'] : 0.0;
+
+            $brackets[] = [
+                'name' => is_string($name) ? $name : (string) ($band['name'] ?? ''),
+                'lower' => $lower,
+                'upper' => $upper,
+                'rate' => $rate,
+            ];
+        }
+
+        return $brackets;
+    }
+
+    /**
+     * {@inheritDoc}
+     *
+     * Returns key UK annual exemptions in minor units.
+     */
+    public function getAnnualExemptions(string $taxYear): array
+    {
+        $pence = static fn (mixed $v): int => (int) round(((float) $v) * 100);
+
+        $cgt = $this->getCapitalGainsTax();
+        $iht = $this->getInheritanceTax();
+        $isa = $this->getISAAllowances();
+        $div = $this->getDividendTax();
+
+        return [
+            'cgt_annual_exemption' => $pence($cgt['annual_exemption'] ?? 0),
+            'iht_nil_rate_band' => $pence($iht['nil_rate_band'] ?? 0),
+            'iht_residence_nil_rate_band' => $pence($iht['residence_nil_rate_band'] ?? 0),
+            'isa_annual_allowance' => $pence($isa['annual_allowance'] ?? 0),
+            'dividend_allowance' => $pence($div['allowance'] ?? 0),
+        ];
     }
 }

@@ -27,7 +27,7 @@ class TaxEngine implements TaxEngineContract
     /**
      * {@inheritDoc}
      */
-    public function calculateCGT(int $gainMinor, string $taxYear): array
+    public function calculateCGT(int $gainMinor, string $taxYear, array $options = []): array
     {
         throw new \RuntimeException('Not implemented: TaxEngine::calculateCGT');
     }
@@ -35,7 +35,52 @@ class TaxEngine implements TaxEngineContract
     /**
      * {@inheritDoc}
      */
-    public function getPersonalAllowance(string $taxYear): int
+    public function calculateLumpSumTax(
+        int $amountMinor,
+        string $taxYear,
+        int $priorCumulativeMinor,
+        string $tableType
+    ): array {
+        throw new \RuntimeException('Not implemented: TaxEngine::calculateLumpSumTax');
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function calculateRetirementDeduction(
+        int $grossMinor,
+        string $taxYear,
+        int $carryForwardMinor
+    ): array {
+        throw new \RuntimeException('Not implemented: TaxEngine::calculateRetirementDeduction');
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function calculateDividendsWithholdingTax(
+        int $amountMinor,
+        string $taxYear,
+        string $source
+    ): int {
+        throw new \RuntimeException('Not implemented: TaxEngine::calculateDividendsWithholdingTax');
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function calculateMedicalCredits(
+        int $mainPlusFirstDependant,
+        int $additionalDependants,
+        string $taxYear
+    ): int {
+        throw new \RuntimeException('Not implemented: TaxEngine::calculateMedicalCredits');
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getPersonalAllowance(string $taxYear, ?int $age = null): int
     {
         throw new \RuntimeException('Not implemented: TaxEngine::getPersonalAllowance');
     }
