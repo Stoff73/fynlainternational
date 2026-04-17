@@ -114,6 +114,7 @@ const actions = {
       dispatch('netWorth/resetState', null, { root: true }).catch(() => {});
       dispatch('taxConfig/clear', null, { root: true }).catch(() => {});
       dispatch('aiChat/reset', null, { root: true }).catch(() => {});
+      dispatch('jurisdiction/reset', null, { root: true }).catch(() => {});
     } catch (error) {
       logger.error('Logout error:', error);
       commit('clearAuth');
@@ -153,6 +154,12 @@ const actions = {
       commit('setUser', data.user);
       commit('setRole', data.role);
       commit('setPermissions', data.permissions || []);
+
+      // Hydrate the jurisdiction module from the session response. Uses the
+      // active_jurisdictions / primary_jurisdiction / cross_border fields
+      // returned by /api/auth/user. Users never see the word "jurisdiction"
+      // — this drives sidebar composition and route guards silently.
+      dispatch('jurisdiction/hydrateFromSession', data, { root: true });
 
       // Always sync life stage from the authenticated user's data.
       // This ensures stale state from a previous user is cleared on login,
