@@ -229,4 +229,18 @@ describe('Pack Isolation', function () {
         expect(class_implements(\Fynla\Packs\Za\Protection\ZaProtectionEngine::class))
             ->toContain(\Fynla\Core\Contracts\ProtectionEngine::class);
     });
+
+    it('UkEstateEngine implements the core EstateEngine contract', function () {
+        expect(class_implements(\App\Services\Estate\UkEstateEngine::class))
+            ->toContain(\Fynla\Core\Contracts\EstateEngine::class);
+    });
+
+    it('ZaEstateEngine implements the core EstateEngine contract', function () {
+        if (! class_exists(\Fynla\Packs\Za\Estate\ZaEstateEngine::class)) {
+            $this->markTestSkipped('ZaEstateEngine not yet loaded (WS 1.6 in progress)');
+        }
+
+        expect(class_implements(\Fynla\Packs\Za\Estate\ZaEstateEngine::class))
+            ->toContain(\Fynla\Core\Contracts\EstateEngine::class);
+    });
 });

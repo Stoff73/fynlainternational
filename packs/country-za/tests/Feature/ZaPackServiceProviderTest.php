@@ -84,6 +84,12 @@ describe('ZaPackServiceProvider — FR-M7', function () {
             ->toBeInstanceOf(\Fynla\Packs\Za\Protection\ZaProtectionEngine::class)
             ->toBeInstanceOf(\Fynla\Core\Contracts\ProtectionEngine::class);
     });
+
+    it('registers estate engine binding (WS 1.6)', function () {
+        expect(app('pack.za.estate'))
+            ->toBeInstanceOf(\Fynla\Packs\Za\Estate\ZaEstateEngine::class)
+            ->toBeInstanceOf(\Fynla\Core\Contracts\EstateEngine::class);
+    });
 });
 
 describe('ZaTaxConfigurationSeeder — FR-M9 idempotency', function () {

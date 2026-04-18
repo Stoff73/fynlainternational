@@ -92,6 +92,9 @@ class ZaPackServiceProvider extends ServiceProvider
 
         // WS 1.5 — Protection
         $this->app->bind('pack.za.protection', \Fynla\Packs\Za\Protection\ZaProtectionEngine::class);
+
+        // WS 1.6 — Estate
+        $this->app->bind('pack.za.estate', \Fynla\Packs\Za\Estate\ZaEstateEngine::class);
     }
 
     public function boot(): void
