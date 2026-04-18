@@ -89,6 +89,9 @@ class ZaPackServiceProvider extends ServiceProvider
 
         // WS 1.4c — Reg 28 Monitor
         $this->app->bind('pack.za.reg28.monitor', \Fynla\Packs\Za\Retirement\ZaReg28Monitor::class);
+
+        // WS 1.5 — Protection
+        $this->app->bind('pack.za.protection', \Fynla\Packs\Za\Protection\ZaProtectionEngine::class);
     }
 
     public function boot(): void

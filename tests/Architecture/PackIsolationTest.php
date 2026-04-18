@@ -215,4 +215,18 @@ describe('Pack Isolation', function () {
         expect(class_implements(\Fynla\Packs\Za\Retirement\ZaRetirementEngine::class))
             ->toContain(\Fynla\Core\Contracts\RetirementEngine::class);
     });
+
+    it('UkProtectionEngine implements the core ProtectionEngine contract', function () {
+        expect(class_implements(\App\Services\Protection\UkProtectionEngine::class))
+            ->toContain(\Fynla\Core\Contracts\ProtectionEngine::class);
+    });
+
+    it('ZaProtectionEngine implements the core ProtectionEngine contract', function () {
+        if (! class_exists(\Fynla\Packs\Za\Protection\ZaProtectionEngine::class)) {
+            $this->markTestSkipped('ZaProtectionEngine not yet loaded (WS 1.5 in progress)');
+        }
+
+        expect(class_implements(\Fynla\Packs\Za\Protection\ZaProtectionEngine::class))
+            ->toContain(\Fynla\Core\Contracts\ProtectionEngine::class);
+    });
 });

@@ -78,6 +78,12 @@ describe('ZaPackServiceProvider — FR-M7', function () {
         expect(app('pack.za.reg28.monitor'))
             ->toBeInstanceOf(\Fynla\Packs\Za\Retirement\ZaReg28Monitor::class);
     });
+
+    it('registers protection engine binding (WS 1.5)', function () {
+        expect(app('pack.za.protection'))
+            ->toBeInstanceOf(\Fynla\Packs\Za\Protection\ZaProtectionEngine::class)
+            ->toBeInstanceOf(\Fynla\Core\Contracts\ProtectionEngine::class);
+    });
 });
 
 describe('ZaTaxConfigurationSeeder — FR-M9 idempotency', function () {
