@@ -102,6 +102,11 @@ class ZaPackServiceProvider extends ServiceProvider
             'pack.za.goals.severance',
             \Fynla\Packs\Za\Goals\ZaSeveranceBenefitCalculator::class,
         );
+
+        // WS 1.8 — Localisation + Identity + Banking
+        $this->app->bind('pack.za.localisation', \Fynla\Packs\Za\Localisation\ZaLocalisation::class);
+        $this->app->bind('pack.za.identity', \Fynla\Packs\Za\Identity\ZaIdValidator::class);
+        $this->app->bind('pack.za.banking', \Fynla\Packs\Za\Banking\ZaBankingValidator::class);
     }
 
     public function boot(): void

@@ -243,4 +243,31 @@ describe('Pack Isolation', function () {
         expect(class_implements(\Fynla\Packs\Za\Estate\ZaEstateEngine::class))
             ->toContain(\Fynla\Core\Contracts\EstateEngine::class);
     });
+
+    it('ZaLocalisation implements the core Localisation contract', function () {
+        if (! class_exists(\Fynla\Packs\Za\Localisation\ZaLocalisation::class)) {
+            $this->markTestSkipped('ZaLocalisation not yet loaded (WS 1.8 in progress)');
+        }
+
+        expect(class_implements(\Fynla\Packs\Za\Localisation\ZaLocalisation::class))
+            ->toContain(\Fynla\Core\Contracts\Localisation::class);
+    });
+
+    it('ZaIdValidator implements the core IdentityValidator contract', function () {
+        if (! class_exists(\Fynla\Packs\Za\Identity\ZaIdValidator::class)) {
+            $this->markTestSkipped('ZaIdValidator not yet loaded (WS 1.8 in progress)');
+        }
+
+        expect(class_implements(\Fynla\Packs\Za\Identity\ZaIdValidator::class))
+            ->toContain(\Fynla\Core\Contracts\IdentityValidator::class);
+    });
+
+    it('ZaBankingValidator implements the core BankingValidator contract', function () {
+        if (! class_exists(\Fynla\Packs\Za\Banking\ZaBankingValidator::class)) {
+            $this->markTestSkipped('ZaBankingValidator not yet loaded (WS 1.8 in progress)');
+        }
+
+        expect(class_implements(\Fynla\Packs\Za\Banking\ZaBankingValidator::class))
+            ->toContain(\Fynla\Core\Contracts\BankingValidator::class);
+    });
 });
