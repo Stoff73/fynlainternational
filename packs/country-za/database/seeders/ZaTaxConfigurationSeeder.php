@@ -83,6 +83,8 @@ class ZaTaxConfigurationSeeder extends Seeder
             $this->retirementLumpSumRows(),
             $this->estateDutyRows(),
             $this->donationsRows(),
+            $this->tfsaRows(),
+            $this->endowmentRows(),
         );
     }
 
@@ -177,6 +179,41 @@ class ZaTaxConfigurationSeeder extends Seeder
         return [
             ['interest.exemption_under_65_minor', 2_380_000, 'R23,800 interest exemption (under 65)'],
             ['interest.exemption_65_plus_minor', 3_450_000, 'R34,500 interest exemption (65+)'],
+        ];
+    }
+
+    /**
+     * TFSA — Tax-Free Savings Account (section 12T). WS 1.2a.
+     *
+     * 2026/27 figures from National Treasury / SARS:
+     *   annual contribution cap R46,000 (from 1 March 2026)
+     *   lifetime cap R500,000 (unchanged)
+     *   40% flat penalty on excess contributions (Schedule 2 s12T(7))
+     *
+     * @return array<int, array{0: string, 1: int, 2: ?string}>
+     */
+    private function tfsaRows(): array
+    {
+        return [
+            ['tfsa.annual_limit_minor', 4_600_000, 'R46,000 annual TFSA contribution cap'],
+            ['tfsa.lifetime_limit_minor', 50_000_000, 'R500,000 lifetime TFSA contribution cap'],
+            ['tfsa.over_contribution_penalty_bps', 4_000, '40% penalty rate on excess TFSA contributions (basis points)'],
+        ];
+    }
+
+    /**
+     * Endowment (section 29A) — WS 1.2a seeds the two income-tax / period
+     * rows that WS 1.3 (Investment) will consume. The CGT rate for endowment
+     * wrappers stays under cgt.endowment_wrapper_rate_bps (already in
+     * cgtRows()) — do NOT duplicate under endowment.cgt_rate_bps.
+     *
+     * @return array<int, array{0: string, 1: int, 2: ?string}>
+     */
+    private function endowmentRows(): array
+    {
+        return [
+            ['endowment.income_tax_rate_bps', 3_000, '30% effective income tax rate inside endowment wrapper'],
+            ['endowment.restriction_period_years', 5, 'Section 29A 5-year restriction window'],
         ];
     }
 
