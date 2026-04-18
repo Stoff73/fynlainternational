@@ -187,4 +187,18 @@ describe('Pack Isolation', function () {
         expect(class_implements(\Fynla\Packs\Za\Investment\ZaInvestmentEngine::class))
             ->toContain(\Fynla\Core\Contracts\InvestmentEngine::class);
     });
+
+    it('UkExchangeControl implements the core ExchangeControl contract', function () {
+        expect(class_implements(\App\Services\ExchangeControl\UkExchangeControl::class))
+            ->toContain(\Fynla\Core\Contracts\ExchangeControl::class);
+    });
+
+    it('ZaExchangeControl implements the core ExchangeControl contract', function () {
+        if (! class_exists(\Fynla\Packs\Za\ExchangeControl\ZaExchangeControl::class)) {
+            $this->markTestSkipped('ZaExchangeControl not yet loaded (WS 1.3b in progress)');
+        }
+
+        expect(class_implements(\Fynla\Packs\Za\ExchangeControl\ZaExchangeControl::class))
+            ->toContain(\Fynla\Core\Contracts\ExchangeControl::class);
+    });
 });
