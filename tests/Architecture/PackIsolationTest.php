@@ -201,4 +201,18 @@ describe('Pack Isolation', function () {
         expect(class_implements(\Fynla\Packs\Za\ExchangeControl\ZaExchangeControl::class))
             ->toContain(\Fynla\Core\Contracts\ExchangeControl::class);
     });
+
+    it('UkRetirementEngine implements the core RetirementEngine contract', function () {
+        expect(class_implements(\App\Services\Retirement\UkRetirementEngine::class))
+            ->toContain(\Fynla\Core\Contracts\RetirementEngine::class);
+    });
+
+    it('ZaRetirementEngine implements the core RetirementEngine contract', function () {
+        if (! class_exists(\Fynla\Packs\Za\Retirement\ZaRetirementEngine::class)) {
+            $this->markTestSkipped('ZaRetirementEngine not yet loaded (WS 1.4a in progress)');
+        }
+
+        expect(class_implements(\Fynla\Packs\Za\Retirement\ZaRetirementEngine::class))
+            ->toContain(\Fynla\Core\Contracts\RetirementEngine::class);
+    });
 });

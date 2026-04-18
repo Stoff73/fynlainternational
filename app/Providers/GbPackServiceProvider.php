@@ -27,7 +27,11 @@ class GbPackServiceProvider extends ServiceProvider
     public function register(): void
     {
         $this->app->bind('pack.gb.tax', \App\Services\TaxConfigService::class);
-        $this->app->bind('pack.gb.retirement', \App\Agents\RetirementAgent::class);
+        // Pre-WS-1.4a this was RetirementAgent (an orchestrator, not a
+        // contract implementation). UkRetirementEngine is the thin
+        // contract stub; RetirementAgent stays bound to its own class
+        // name for callers that need the orchestrator.
+        $this->app->bind('pack.gb.retirement', \App\Services\Retirement\UkRetirementEngine::class);
         $this->app->bind('pack.gb.investment', \App\Services\Investment\UkInvestmentEngine::class);
         $this->app->bind('pack.gb.protection', \App\Agents\ProtectionAgent::class);
         $this->app->bind('pack.gb.estate', \App\Agents\EstateAgent::class);
