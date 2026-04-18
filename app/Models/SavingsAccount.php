@@ -37,6 +37,13 @@ class SavingsAccount extends Model
         'isa_type',
         'isa_subscription_year',
         'isa_subscription_amount',
+        // SA TFSA fields — activated when country_code = 'ZA'
+        'is_tfsa',
+        'tfsa_subscription_year',
+        'tfsa_subscription_amount_minor',
+        'tfsa_subscription_amount_ccy',
+        'tfsa_lifetime_contributed_minor',
+        'tfsa_lifetime_contributed_ccy',
         // ISA regular contribution fields
         'regular_contribution_amount',
         'contribution_frequency',
@@ -67,6 +74,9 @@ class SavingsAccount extends Model
         'maturity_date' => 'date',
         'is_emergency_fund' => 'boolean',
         'is_isa' => 'boolean',
+        'is_tfsa' => 'boolean',
+        'tfsa_subscription_amount_minor' => 'integer',
+        'tfsa_lifetime_contributed_minor' => 'integer',
         'isa_subscription_amount' => 'decimal:2',
         'regular_contribution_amount' => 'decimal:2',
         'planned_lump_sum_amount' => 'decimal:2',
