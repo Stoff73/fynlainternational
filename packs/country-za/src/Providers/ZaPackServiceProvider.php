@@ -95,6 +95,13 @@ class ZaPackServiceProvider extends ServiceProvider
 
         // WS 1.6 — Estate
         $this->app->bind('pack.za.estate', \Fynla\Packs\Za\Estate\ZaEstateEngine::class);
+
+        // WS 1.7 — Goals & Life Events
+        $this->app->bind('pack.za.goals.defaults', \Fynla\Packs\Za\Goals\ZaGoalsDefaults::class);
+        $this->app->bind(
+            'pack.za.goals.severance',
+            \Fynla\Packs\Za\Goals\ZaSeveranceBenefitCalculator::class,
+        );
     }
 
     public function boot(): void

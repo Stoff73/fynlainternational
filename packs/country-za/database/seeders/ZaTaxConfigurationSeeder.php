@@ -89,6 +89,7 @@ class ZaTaxConfigurationSeeder extends Seeder
             $this->retirementRows(),
             $this->annuityRows(),
             $this->reg28Rows(),
+            $this->goalsRows(),
         );
     }
 
@@ -293,6 +294,23 @@ class ZaTaxConfigurationSeeder extends Seeder
             ['reg28.hedge_funds_max_bps', 1_000, '10% max hedge funds'],
             ['reg28.other_max_bps', 250, '2.5% max other/alternative assets'],
             ['reg28.single_entity_max_bps', 2_500, '25% max exposure to a single entity'],
+        ];
+    }
+
+    /**
+     * Goals & Life Events defaults (WS 1.7). SA bond norms, tuition,
+     * severance tax-free threshold, emigration trigger age.
+     *
+     * @return array<int, array{0: string, 1: int, 2: ?string}>
+     */
+    private function goalsRows(): array
+    {
+        return [
+            ['goals.bond.deposit_pct_bps', 1_000, 'Typical SA bond deposit (10%)'],
+            ['goals.bond.default_term_years', 20, 'Standard SA bond term'],
+            ['goals.tuition.public_tertiary_annual_minor', 7_500_000, 'R75k/yr avg SA public tertiary'],
+            ['goals.tuition.private_tertiary_annual_minor', 15_000_000, 'R150k/yr avg SA private tertiary'],
+            ['goals.severance.tax_free_threshold_minor', 50_000_000, 'R500,000 severance benefit tax-free threshold (retrenchment)'],
         ];
     }
 
