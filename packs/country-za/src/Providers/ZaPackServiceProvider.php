@@ -25,6 +25,17 @@ class ZaPackServiceProvider extends ServiceProvider
     {
         $this->app->singleton(ZaTaxConfigService::class);
         $this->app->bind('pack.za.tax', ZaTaxEngine::class);
+
+        // WS 1.2a — Savings
+        $this->app->bind('pack.za.savings', \Fynla\Packs\Za\Savings\ZaSavingsEngine::class);
+        $this->app->bind(
+            'pack.za.tfsa.tracker',
+            \Fynla\Packs\Za\Savings\ZaTfsaContributionTracker::class,
+        );
+        $this->app->bind(
+            'pack.za.savings.emergency_fund',
+            \Fynla\Packs\Za\Savings\ZaEmergencyFundCalculator::class,
+        );
     }
 
     public function boot(): void
