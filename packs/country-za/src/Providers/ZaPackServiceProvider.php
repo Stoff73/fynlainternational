@@ -57,6 +57,21 @@ class ZaPackServiceProvider extends ServiceProvider
             'pack.za.exchange_control.ledger',
             \Fynla\Packs\Za\ExchangeControl\ZaExchangeControlLedger::class,
         );
+
+        // WS 1.4a — Retirement
+        $this->app->bind('pack.za.retirement', \Fynla\Packs\Za\Retirement\ZaRetirementEngine::class);
+        $this->app->bind(
+            'pack.za.retirement.contribution_split',
+            \Fynla\Packs\Za\Retirement\ZaContributionSplitService::class,
+        );
+        $this->app->bind(
+            'pack.za.retirement.savings_pot_simulator',
+            \Fynla\Packs\Za\Retirement\ZaSavingsPotWithdrawalSimulator::class,
+        );
+        $this->app->bind(
+            'pack.za.retirement.buckets',
+            \Fynla\Packs\Za\Retirement\ZaRetirementFundBucketRepository::class,
+        );
     }
 
     public function boot(): void

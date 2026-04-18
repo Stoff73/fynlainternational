@@ -52,6 +52,18 @@ describe('ZaPackServiceProvider — FR-M7', function () {
         expect(app('pack.za.exchange_control.ledger'))
             ->toBeInstanceOf(\Fynla\Packs\Za\ExchangeControl\ZaExchangeControlLedger::class);
     });
+
+    it('registers retirement container bindings (WS 1.4a)', function () {
+        expect(app('pack.za.retirement'))
+            ->toBeInstanceOf(\Fynla\Packs\Za\Retirement\ZaRetirementEngine::class)
+            ->toBeInstanceOf(\Fynla\Core\Contracts\RetirementEngine::class);
+        expect(app('pack.za.retirement.contribution_split'))
+            ->toBeInstanceOf(\Fynla\Packs\Za\Retirement\ZaContributionSplitService::class);
+        expect(app('pack.za.retirement.savings_pot_simulator'))
+            ->toBeInstanceOf(\Fynla\Packs\Za\Retirement\ZaSavingsPotWithdrawalSimulator::class);
+        expect(app('pack.za.retirement.buckets'))
+            ->toBeInstanceOf(\Fynla\Packs\Za\Retirement\ZaRetirementFundBucketRepository::class);
+    });
 });
 
 describe('ZaTaxConfigurationSeeder — FR-M9 idempotency', function () {
