@@ -34,6 +34,16 @@ describe('ZaPackServiceProvider — FR-M7', function () {
         expect(app('pack.za.savings.emergency_fund'))
             ->toBeInstanceOf(\Fynla\Packs\Za\Savings\ZaEmergencyFundCalculator::class);
     });
+
+    it('registers investment container bindings (WS 1.3a)', function () {
+        expect(app('pack.za.investment'))
+            ->toBeInstanceOf(\Fynla\Packs\Za\Investment\ZaInvestmentEngine::class)
+            ->toBeInstanceOf(\Fynla\Core\Contracts\InvestmentEngine::class);
+        expect(app('pack.za.investment.cgt'))
+            ->toBeInstanceOf(\Fynla\Packs\Za\Investment\ZaCgtCalculator::class);
+        expect(app('pack.za.investment.lot_tracker'))
+            ->toBeInstanceOf(\Fynla\Packs\Za\Investment\ZaBaseCostTracker::class);
+    });
 });
 
 describe('ZaTaxConfigurationSeeder — FR-M9 idempotency', function () {

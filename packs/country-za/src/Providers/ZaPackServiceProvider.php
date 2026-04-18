@@ -36,6 +36,17 @@ class ZaPackServiceProvider extends ServiceProvider
             'pack.za.savings.emergency_fund',
             \Fynla\Packs\Za\Savings\ZaEmergencyFundCalculator::class,
         );
+
+        // WS 1.3a — Investment
+        $this->app->bind('pack.za.investment', \Fynla\Packs\Za\Investment\ZaInvestmentEngine::class);
+        $this->app->bind(
+            'pack.za.investment.cgt',
+            \Fynla\Packs\Za\Investment\ZaCgtCalculator::class,
+        );
+        $this->app->bind(
+            'pack.za.investment.lot_tracker',
+            \Fynla\Packs\Za\Investment\ZaBaseCostTracker::class,
+        );
     }
 
     public function boot(): void
