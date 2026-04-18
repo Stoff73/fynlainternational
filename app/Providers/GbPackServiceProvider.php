@@ -31,6 +31,7 @@ class GbPackServiceProvider extends ServiceProvider
         $this->app->bind('pack.gb.investment', \App\Agents\InvestmentAgent::class);
         $this->app->bind('pack.gb.protection', \App\Agents\ProtectionAgent::class);
         $this->app->bind('pack.gb.estate', \App\Agents\EstateAgent::class);
+        $this->app->bind('pack.gb.savings', \App\Services\Savings\UkSavingsEngine::class);
     }
 
     public function boot(PackRegistry $registry): void
