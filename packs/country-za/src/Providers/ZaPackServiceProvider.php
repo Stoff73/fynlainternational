@@ -47,6 +47,16 @@ class ZaPackServiceProvider extends ServiceProvider
             'pack.za.investment.lot_tracker',
             \Fynla\Packs\Za\Investment\ZaBaseCostTracker::class,
         );
+
+        // WS 1.3b — Exchange Control
+        $this->app->bind(
+            'pack.za.exchange_control',
+            \Fynla\Packs\Za\ExchangeControl\ZaExchangeControl::class,
+        );
+        $this->app->bind(
+            'pack.za.exchange_control.ledger',
+            \Fynla\Packs\Za\ExchangeControl\ZaExchangeControlLedger::class,
+        );
     }
 
     public function boot(): void
