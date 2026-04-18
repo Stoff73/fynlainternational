@@ -72,6 +72,20 @@ class ZaPackServiceProvider extends ServiceProvider
             'pack.za.retirement.buckets',
             \Fynla\Packs\Za\Retirement\ZaRetirementFundBucketRepository::class,
         );
+
+        // WS 1.4b — Annuity mechanics
+        $this->app->bind(
+            'pack.za.retirement.living_annuity',
+            \Fynla\Packs\Za\Retirement\ZaLivingAnnuityCalculator::class,
+        );
+        $this->app->bind(
+            'pack.za.retirement.life_annuity',
+            \Fynla\Packs\Za\Retirement\ZaLifeAnnuityCalculator::class,
+        );
+        $this->app->bind(
+            'pack.za.retirement.compulsory_annuitisation',
+            \Fynla\Packs\Za\Retirement\ZaCompulsoryAnnuitisationService::class,
+        );
     }
 
     public function boot(): void

@@ -87,6 +87,7 @@ class ZaTaxConfigurationSeeder extends Seeder
             $this->endowmentRows(),
             $this->exchangeControlRows(),
             $this->retirementRows(),
+            $this->annuityRows(),
         );
     }
 
@@ -254,6 +255,23 @@ class ZaTaxConfigurationSeeder extends Seeder
             ['retirement.savings_pot_minimum_withdrawal_minor', 200_000, 'R2,000 minimum single Savings-Pot withdrawal'],
             ['retirement.savings_pot_split_bps', 3_333, 'Two-Pot 1/3 Savings share (33.33%)'],
             ['retirement.retirement_pot_split_bps', 6_667, 'Two-Pot 2/3 Retirement share (66.67%)'],
+        ];
+    }
+
+    /**
+     * Annuity mechanics (WS 1.4b).
+     *   - Living annuity drawdown band 2.5%–17.5% of capital (Reg 39)
+     *   - Compulsory annuitisation de minimis: R165,000 commutable
+     *     subset allows full commutation
+     *
+     * @return array<int, array{0: string, 1: int, 2: ?string}>
+     */
+    private function annuityRows(): array
+    {
+        return [
+            ['annuity.living.drawdown_min_bps', 250, '2.5% minimum living annuity drawdown'],
+            ['annuity.living.drawdown_max_bps', 1_750, '17.5% maximum living annuity drawdown'],
+            ['annuity.de_minimis_threshold_minor', 16_500_000, 'R165,000 full-commutation threshold at retirement'],
         ];
     }
 

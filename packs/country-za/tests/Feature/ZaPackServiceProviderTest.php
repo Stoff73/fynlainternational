@@ -64,6 +64,15 @@ describe('ZaPackServiceProvider — FR-M7', function () {
         expect(app('pack.za.retirement.buckets'))
             ->toBeInstanceOf(\Fynla\Packs\Za\Retirement\ZaRetirementFundBucketRepository::class);
     });
+
+    it('registers annuity container bindings (WS 1.4b)', function () {
+        expect(app('pack.za.retirement.living_annuity'))
+            ->toBeInstanceOf(\Fynla\Packs\Za\Retirement\ZaLivingAnnuityCalculator::class);
+        expect(app('pack.za.retirement.life_annuity'))
+            ->toBeInstanceOf(\Fynla\Packs\Za\Retirement\ZaLifeAnnuityCalculator::class);
+        expect(app('pack.za.retirement.compulsory_annuitisation'))
+            ->toBeInstanceOf(\Fynla\Packs\Za\Retirement\ZaCompulsoryAnnuitisationService::class);
+    });
 });
 
 describe('ZaTaxConfigurationSeeder — FR-M9 idempotency', function () {
