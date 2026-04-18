@@ -137,7 +137,7 @@ When adding new auth-related POST routes, add them to `EXCLUDED_ROUTES` in `app/
 The amber (`amber-*`) and orange (`orange-*`) colors are banned from the application. Use violet (`violet-*`) for warnings and caution states, raspberry (`raspberry-*`) for errors/danger, spring (`spring-*`) for success. All colors must come from the palette defined in `fynlaDesignGuide.md` v1.2.0. Use Tailwind tokens (`raspberry-*`, `horizon-*`, `spring-*`, `violet-*`, `savannah-*`, `eggshell-*`) — never hardcode hex.
 
 ### 10. No Acronyms in User-Facing Text
-All acronyms must be spelled out in user-facing text. Write "Annual Allowance" not "AA", "Stocks & Shares" not "S&S", "Defined Benefit" not "DB", "Defined Contribution" not "DC", "Money Purchase Annual Allowance" not "MPAA", etc. The only exception is **ISA**, which may remain abbreviated.
+All acronyms must be spelled out in user-facing text. Write "Annual Allowance" not "AA", "Stocks & Shares" not "S&S", "Defined Benefit" not "DB", "Defined Contribution" not "DC", "Money Purchase Annual Allowance" not "MPAA", etc. The only exceptions are **ISA** (UK) and **TFSA** (South Africa), which may remain abbreviated. Other SA acronyms (RA, PF, PvF, SDA, FIA, AIT, DTA, QROPS, POPIA, FAIS) must still be spelled out on first use.
 
 ### 11. Design System Compliance
 **CRITICAL:** Before changing, updating, or implementing anything related to the UI, you MUST read and follow `fynlaDesignGuide.md` (v1.2.0). This includes:

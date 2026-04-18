@@ -97,6 +97,24 @@
           <SideMenuItem icon="lightning-bolt" label="Actions" to="/actions" :collapsed="effectiveCollapsed" :active="isActive('/actions')" :active-colour="currentStage ? stageColour : ''" @navigate="closeMobile" />
         </SideMenuSection>
 
+        <!-- South Africa — data-driven from jurisdiction/zaModules (WS 1.2b).
+             Later SA UI workstreams (1.3c, 1.4d, 1.5b, 1.6b) append entries
+             to MODULES_BY_JURISDICTION.za and the items appear here without
+             further edits. -->
+        <SideMenuSection v-if="hasZa" label="South Africa" :collapsed="effectiveCollapsed" :expanded="isSectionExpanded('zaSection')" @toggle="toggleSection('zaSection')">
+          <SideMenuItem
+            v-for="mod in zaModules"
+            :key="mod.key"
+            :icon="mod.icon"
+            :label="mod.label"
+            :to="{ path: mod.route }"
+            :collapsed="effectiveCollapsed"
+            :active="currentPath.startsWith(mod.route)"
+            :active-colour="currentStage ? stageColour : ''"
+            @navigate="closeMobile"
+          />
+        </SideMenuSection>
+
         <!-- Advisor (conditional) -->
         <SideMenuSection v-if="isAdvisor" label="Advisor" :collapsed="effectiveCollapsed" :expanded="isSectionExpanded('advisorPanel')" @toggle="toggleSection('advisorPanel')">
           <SideMenuItem icon="briefcase" label="Advisor Dashboard" to="/advisor" :collapsed="effectiveCollapsed" :active="isActive('/advisor')" @navigate="closeMobile" />
@@ -220,6 +238,12 @@ export default {
     const isAdmin = computed(() => store.getters['auth/isAdmin']);
     const isAdvisor = computed(() => store.getters['auth/isAdvisor']);
     const isPreviewMode = computed(() => store.getters['preview/isPreviewMode']);
+    // WS 1.2b — data-driven ZA sidebar. zaModules returns config objects
+    // ({ key, label, route, icon, section }) from the jurisdiction store.
+    // Later SA workstreams append entries to MODULES_BY_JURISDICTION.za
+    // and the sidebar picks them up without further edits here.
+    const zaModules = computed(() => store.getters['jurisdiction/zaModules']);
+    const hasZa = computed(() => zaModules.value.length > 0);
     const hasSpouse = computed(() => {
       if (isPreviewMode.value) {
         return store.getters['preview/hasSpouse'];
@@ -428,6 +452,10 @@ export default {
       if (path.startsWith('/admin')) {
         return 'adminPanel';
       }
+      // WS 1.2b — auto-expand ZA section when on any /za/* route.
+      if (path.startsWith('/za/')) {
+        return 'zaSection';
+      }
       return null;
     });
 
@@ -538,6 +566,8 @@ export default {
       isAdmin,
       isAdvisor,
       hasSpouse,
+      zaModules,
+      hasZa,
       effectiveCollapsed,
       menuWidthClass,
       showBugReportModal,

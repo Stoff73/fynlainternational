@@ -31,10 +31,13 @@ final class PackRegistry
      */
     public function register(PackManifest $manifest): void
     {
-        if (isset($this->packs[$manifest->code])) {
-            throw new RuntimeException(
-                "Country pack '{$manifest->code}' ({$manifest->name}) is already registered."
-            );
+        // Case-insensitive duplicate check so 'GB' and 'gb' don't both register.
+        foreach (array_keys($this->packs) as $existingCode) {
+            if (strcasecmp($existingCode, $manifest->code) === 0) {
+                throw new RuntimeException(
+                    "Country pack '{$manifest->code}' ({$manifest->name}) is already registered."
+                );
+            }
         }
 
         $this->packs[$manifest->code] = $manifest;
@@ -51,7 +54,7 @@ final class PackRegistry
     }
 
     /**
-     * Retrieve a pack manifest by its country code.
+     * Retrieve a pack manifest by its country code (case-insensitive).
      *
      * @param string $code ISO 3166-1 alpha-2 country code
      *
@@ -59,11 +62,20 @@ final class PackRegistry
      */
     public function byCountryCode(string $code): ?PackManifest
     {
-        return $this->packs[$code] ?? null;
+        foreach ($this->packs as $registeredCode => $manifest) {
+            if (strcasecmp($registeredCode, $code) === 0) {
+                return $manifest;
+            }
+        }
+        return null;
     }
 
     /**
      * Check whether a pack is registered for a given country code.
+     *
+     * Case-insensitive: callers passing 'GB', 'gb', or 'Gb' all resolve.
+     * Packs register with their own case (typically lowercase); lookups
+     * may come from URL params (varied case) or middleware (uppercased).
      *
      * @param string $code ISO 3166-1 alpha-2 country code
      *
@@ -71,7 +83,12 @@ final class PackRegistry
      */
     public function isEnabled(string $code): bool
     {
-        return isset($this->packs[$code]);
+        foreach (array_keys($this->packs) as $registeredCode) {
+            if (strcasecmp($registeredCode, $code) === 0) {
+                return true;
+            }
+        }
+        return false;
     }
 
     /**

@@ -1218,3 +1218,43 @@ Route::middleware(['auth:sanctum', 'advisor'])
 // Bug Report route (works for both authenticated and guest users)
 Route::post('/bug-report', [BugReportController::class, 'store'])
     ->middleware('throttle:bug-reports');
+
+/*
+ |-----------------------------------------------------------------------
+ | ZA Pack Routes (WS 1.2b)
+ |-----------------------------------------------------------------------
+ |
+ | All SA-specific endpoints are grouped under /api/za/*. The
+ | active.jurisdiction middleware validates pack registration and (when
+ | authenticated) user entitlement against FYNLA_ACTIVE_PACKS. The
+ | pack.enabled:za middleware is a belt-and-braces check that the pack
+ | has booted — useful for routes that don't have {cc} in the URL.
+ |
+ | Contracts resolved via pack.za.* container bindings registered in
+ | packs/country-za/src/Providers/ZaPackServiceProvider.php.
+ |
+ | TODO(WS-D): /api/za/* currently has installation-level gating only
+ | (pack.enabled:za). active.jurisdiction is a no-op without {cc} in the
+ | URL (ActiveJurisdictionMiddleware L42-46). When user_jurisdictions
+ | becomes a row-based check, refactor this group to /api/{cc=za}/* so
+ | per-user entitlement enforces. See architect audit §2 (2026-04-18).
+ */
+Route::middleware(['auth:sanctum', 'active.jurisdiction', 'pack.enabled:za'])
+    ->prefix('za')
+    ->as('za.')
+    ->group(function () {
+        Route::prefix('savings')->as('savings.')->group(function () {
+            Route::get('dashboard', [\App\Http\Controllers\Api\Za\ZaSavingsController::class, 'dashboard'])
+                ->name('dashboard');
+            Route::get('contributions', [\App\Http\Controllers\Api\Za\ZaSavingsController::class, 'listContributions'])
+                ->name('contributions.index');
+            Route::post('contributions', [\App\Http\Controllers\Api\Za\ZaSavingsController::class, 'storeContribution'])
+                ->name('contributions.store');
+            Route::post('emergency-fund/assess', [\App\Http\Controllers\Api\Za\ZaSavingsController::class, 'assessEmergencyFund'])
+                ->name('emergency-fund.assess');
+            Route::get('accounts', [\App\Http\Controllers\Api\Za\ZaSavingsController::class, 'listAccounts'])
+                ->name('accounts.index');
+            Route::post('accounts', [\App\Http\Controllers\Api\Za\ZaSavingsController::class, 'storeAccount'])
+                ->name('accounts.store');
+        });
+    });

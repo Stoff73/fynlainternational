@@ -105,6 +105,9 @@ const JointAccountHistory = () => import('@/components/NetWorth/JointAccountHist
 const ProtectionDashboard = () => import('@/views/Protection/ProtectionDashboard.vue');
 const PolicyDetail = () => import('@/components/Protection/PolicyDetail.vue');
 const SavingsDashboard = () => import('@/views/Savings/SavingsDashboard.vue');
+// ZA pages — lazy-loaded; only fetched when user has 'za' jurisdiction
+// (see jurisdiction guard in router.beforeEach).
+const ZaSavingsDashboard = () => import('@/views/ZA/ZaSavingsDashboard.vue');
 const SavingsAccountDetail = () => import('@/views/Savings/SavingsAccountDetail.vue');
 const GoalsDashboard = () => import('@/views/Goals/GoalsDashboard.vue');
 const CashOverview = () => import('@/views/NetWorth/CashOverview.vue');
@@ -671,6 +674,19 @@ const routes = [
         { label: 'Home', path: '/dashboard' },
         { label: 'Savings', path: '/savings' },
         { label: 'Account', path: '' },
+      ],
+    },
+  },
+  {
+    path: '/za/savings',
+    name: 'za-savings',
+    component: ZaSavingsDashboard,
+    meta: {
+      requiresAuth: true,
+      requiresJurisdiction: 'za',
+      breadcrumb: [
+        { label: 'Home', path: '/dashboard' },
+        { label: 'South Africa — Savings', path: '/za/savings' },
       ],
     },
   },
@@ -1346,6 +1362,36 @@ router.beforeEach(async (to, from, next) => {
         }
       }
     }
+
+    // Jurisdiction guard (WS 1.2b). Routes with meta.requiresJurisdiction
+    // must be in the user's active jurisdictions. Uses to.matched because
+    // Vue Router doesn't inherit meta across nested routes by default.
+    //
+    // Boot-race handling: on a hard reload to a ZA route, persistedState
+    // restores auth.user but NOT the jurisdiction store (it's hydrated by
+    // auth/fetchUser via jurisdiction/hydrateFromSession). If authed but
+    // jurisdictions haven't hydrated yet, await fetchUser (idempotent).
+    if (requiresAuth && isAuthenticated && !isPreviewMode) {
+      const requiredJurisdiction = to.matched
+        .map((r) => r.meta?.requiresJurisdiction)
+        .find((j) => !!j);
+      if (requiredJurisdiction) {
+        let active = store.getters['jurisdiction/activeJurisdictions'] || [];
+        if (active.length === 0) {
+          try {
+            await store.dispatch('auth/fetchUser');
+            active = store.getters['jurisdiction/activeJurisdictions'] || [];
+          } catch {
+            // fetchUser failed — fall through to the dashboard redirect
+          }
+        }
+        if (!active.includes(requiredJurisdiction)) {
+          next({ name: 'Dashboard' });
+          return;
+        }
+      }
+    }
+
     next();
   }
 });

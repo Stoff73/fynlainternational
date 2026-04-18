@@ -35,6 +35,12 @@ import whatIf from './modules/whatIf';
 import aiFormFill from './modules/aiFormFill';
 import toast from './modules/toast';
 import jurisdiction from './modules/jurisdiction';
+import zaSavings from './modules/zaSavings';
+import zaInvestment from './modules/zaInvestment';
+import zaRetirement from './modules/zaRetirement';
+import zaProtection from './modules/zaProtection';
+import zaEstate from './modules/zaEstate';
+import zaExchangeControl from './modules/zaExchangeControl';
 
 /**
  * Create a storage backend that uses Capacitor Preferences on native
@@ -93,6 +99,12 @@ const store = createStore({
     aiFormFill,
     toast,
     jurisdiction,
+    zaSavings,
+    zaInvestment,
+    zaRetirement,
+    zaProtection,
+    zaEstate,
+    zaExchangeControl,
   },
   plugins: [
     createPersistedState({

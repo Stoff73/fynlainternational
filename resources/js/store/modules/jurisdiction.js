@@ -18,7 +18,19 @@
  * opt-in (ADR: product model memory).
  */
 
-// Module registry. Add SA entries in Phase 1 as those modules ship.
+// Module registry, keyed by jurisdiction code. UK entries are bare
+// module-name strings (UK sidebar composition is hardcoded today). ZA
+// entries carry the full sidebar config needed by the data-driven ZA
+// section in SideMenu.vue — added this way from the start so later SA
+// workstreams (WS 1.3c / 1.4d / 1.5b / 1.6b) only need to append one
+// entry here and their sidebar item appears.
+//
+// ZA entry shape: { key, label, route, icon, section }
+//   - key: stable identifier, prefix 'za-' to avoid UK name collision
+//   - label: user-facing label (British spelling; TFSA abbreviation allowed)
+//   - route: absolute SPA path under /za/*
+//   - icon: name from resources/js/components/SideMenuIcon.vue allow-list
+//   - section: section key (must exist in SideMenu.vue expandedSections)
 const MODULES_BY_JURISDICTION = {
   gb: [
     'protection',
@@ -28,6 +40,20 @@ const MODULES_BY_JURISDICTION = {
     'estate',
     'goals',
     'coordination',
+  ],
+  za: [
+    {
+      key: 'za-savings',
+      label: 'Savings (TFSA)',
+      route: '/za/savings',
+      icon: 'banknotes',
+      section: 'zaSection',
+    },
+    // WS 1.3c will add za-investment here
+    // WS 1.3c will add za-exchange-control here
+    // WS 1.4d will add za-retirement here
+    // WS 1.5b will add za-protection here
+    // WS 1.6b will add za-estate here
   ],
 };
 
@@ -53,7 +79,9 @@ const getters = {
     for (const code of state.activeJurisdictions) {
       const jurisdictionModules = MODULES_BY_JURISDICTION[code];
       if (jurisdictionModules) {
-        modules.push(...jurisdictionModules);
+        for (const entry of jurisdictionModules) {
+          modules.push(typeof entry === 'string' ? entry : entry.key);
+        }
       }
     }
     if (state.crossBorder) {
@@ -61,6 +89,17 @@ const getters = {
     }
     // De-duplicate in case two jurisdictions share a module name.
     return [...new Set(modules)];
+  },
+
+  /**
+   * The ZA sidebar-config objects for the current user. Empty array
+   * when the user isn't ZA-active. Consumed by SideMenu.vue to render
+   * the ZA section via v-for.
+   */
+  zaModules: (state) => {
+    if (!state.activeJurisdictions.includes('za')) return [];
+    const entries = MODULES_BY_JURISDICTION.za || [];
+    return entries.filter((e) => typeof e === 'object');
   },
 
   /**
