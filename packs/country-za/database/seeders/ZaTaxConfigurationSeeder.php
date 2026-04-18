@@ -85,6 +85,7 @@ class ZaTaxConfigurationSeeder extends Seeder
             $this->donationsRows(),
             $this->tfsaRows(),
             $this->endowmentRows(),
+            $this->exchangeControlRows(),
         );
     }
 
@@ -214,6 +215,25 @@ class ZaTaxConfigurationSeeder extends Seeder
         return [
             ['endowment.income_tax_rate_bps', 3_000, '30% effective income tax rate inside endowment wrapper'],
             ['endowment.restriction_period_years', 5, 'Section 29A 5-year restriction window'],
+        ];
+    }
+
+    /**
+     * Exchange control allowances (WS 1.3b).
+     *
+     * Per-person per-calendar-year, resetting on 1 January. Amounts in
+     * cents (R2,000,000 = 200,000,000 cents). Sources: SARS / SARB
+     * Exchange Control Regulations, 2026 update doubling SDA from R1m
+     * to R2m.
+     *
+     * @return array<int, array{0: string, 1: int, 2: ?string}>
+     */
+    private function exchangeControlRows(): array
+    {
+        return [
+            ['excon.sda_annual_limit_minor', 200_000_000, 'Single Discretionary Allowance — R2,000,000 per calendar year'],
+            ['excon.fia_annual_limit_minor', 1_000_000_000, 'Foreign Investment Allowance — R10,000,000 per calendar year (requires AIT)'],
+            ['excon.sarb_special_approval_threshold_minor', 1_200_000_000, 'Combined SDA+FIA above this triggers SARB special approval'],
         ];
     }
 
