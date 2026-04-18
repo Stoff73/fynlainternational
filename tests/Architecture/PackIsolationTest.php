@@ -173,4 +173,18 @@ describe('Pack Isolation', function () {
         expect(class_implements(\Fynla\Packs\Za\Savings\ZaSavingsEngine::class))
             ->toContain(\Fynla\Core\Contracts\SavingsEngine::class);
     });
+
+    it('UkInvestmentEngine implements the core InvestmentEngine contract', function () {
+        expect(class_implements(\App\Services\Investment\UkInvestmentEngine::class))
+            ->toContain(\Fynla\Core\Contracts\InvestmentEngine::class);
+    });
+
+    it('ZaInvestmentEngine implements the core InvestmentEngine contract', function () {
+        if (! class_exists(\Fynla\Packs\Za\Investment\ZaInvestmentEngine::class)) {
+            $this->markTestSkipped('ZaInvestmentEngine not yet loaded (WS 1.3a in progress)');
+        }
+
+        expect(class_implements(\Fynla\Packs\Za\Investment\ZaInvestmentEngine::class))
+            ->toContain(\Fynla\Core\Contracts\InvestmentEngine::class);
+    });
 });
