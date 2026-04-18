@@ -73,6 +73,11 @@ describe('ZaPackServiceProvider — FR-M7', function () {
         expect(app('pack.za.retirement.compulsory_annuitisation'))
             ->toBeInstanceOf(\Fynla\Packs\Za\Retirement\ZaCompulsoryAnnuitisationService::class);
     });
+
+    it('registers Reg 28 monitor binding (WS 1.4c)', function () {
+        expect(app('pack.za.reg28.monitor'))
+            ->toBeInstanceOf(\Fynla\Packs\Za\Retirement\ZaReg28Monitor::class);
+    });
 });
 
 describe('ZaTaxConfigurationSeeder — FR-M9 idempotency', function () {

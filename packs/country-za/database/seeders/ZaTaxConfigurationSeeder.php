@@ -88,6 +88,7 @@ class ZaTaxConfigurationSeeder extends Seeder
             $this->exchangeControlRows(),
             $this->retirementRows(),
             $this->annuityRows(),
+            $this->reg28Rows(),
         );
     }
 
@@ -272,6 +273,26 @@ class ZaTaxConfigurationSeeder extends Seeder
             ['annuity.living.drawdown_min_bps', 250, '2.5% minimum living annuity drawdown'],
             ['annuity.living.drawdown_max_bps', 1_750, '17.5% maximum living annuity drawdown'],
             ['annuity.de_minimis_threshold_minor', 16_500_000, 'R165,000 full-commutation threshold at retirement'],
+        ];
+    }
+
+    /**
+     * Regulation 28 asset-class limits (WS 1.4c). Pre-retirement funds
+     * only — living annuities are exempt (spec § 9.4).
+     *
+     * @return array<int, array{0: string, 1: int, 2: ?string}>
+     */
+    private function reg28Rows(): array
+    {
+        return [
+            ['reg28.offshore_max_bps', 4_500, '45% max offshore (all foreign including Africa)'],
+            ['reg28.equity_max_bps', 7_500, '75% max equities (local + foreign combined)'],
+            ['reg28.property_max_bps', 2_500, '25% max property'],
+            ['reg28.private_equity_max_bps', 1_500, '15% max private equity'],
+            ['reg28.commodities_max_bps', 1_000, '10% max commodities (incl. gold)'],
+            ['reg28.hedge_funds_max_bps', 1_000, '10% max hedge funds'],
+            ['reg28.other_max_bps', 250, '2.5% max other/alternative assets'],
+            ['reg28.single_entity_max_bps', 2_500, '25% max exposure to a single entity'],
         ];
     }
 

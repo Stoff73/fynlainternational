@@ -86,6 +86,9 @@ class ZaPackServiceProvider extends ServiceProvider
             'pack.za.retirement.compulsory_annuitisation',
             \Fynla\Packs\Za\Retirement\ZaCompulsoryAnnuitisationService::class,
         );
+
+        // WS 1.4c — Reg 28 Monitor
+        $this->app->bind('pack.za.reg28.monitor', \Fynla\Packs\Za\Retirement\ZaReg28Monitor::class);
     }
 
     public function boot(): void
