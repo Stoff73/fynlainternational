@@ -388,21 +388,71 @@ The SA Research & Mapping document (SA_Research_and_Mapping.md) is the specifica
 - Full Pest test coverage of every calculation
 - Section 10C tax-free annuity rollover tracking
 
-**Workstream 1.2: SA Savings + TFSA (1 week)** [SA Research doc section 7]
-- TFSA model: R46k annual limit, R500k lifetime limit, 40% over-contribution penalty
-- `za_tfsa_contributions` table for tracking
-- Savings products: transactional, notice deposit, fixed deposit, money market
-- Emergency fund calculator with SA defaults (3-6 months, weighted for unemployment risk)
-- Vue components: TFSA dashboard, contribution tracker, savings forms
+**Amendment 17 April 2026 — decisions from Workstream 1.1 PRD codebase audit:**
 
-**Workstream 1.3: SA Investment + Exchange Control (2 weeks)** [SA Research doc sections 8, 13.2]
-- `ZaInvestmentEngine`: discretionary (unit trusts/ETFs), endowment (section 29A), offshore
-- CGT tracking: base cost per lot, 40% inclusion, annual exclusion
-- `ZaExchangeControl`: SDA (R2m/calendar year), FIA (R10m/calendar year)
-- `za_exchange_control_ledger` table keyed by CALENDAR year (not tax year)
-- AIT workflow stubs (document checklist, tax compliance status)
-- Reg 28 Monitor: look-through asset allocation, breach detection
-- Vue components: investment dashboard, exchange control widget, Reg 28 compliance
+*Contract extensions* (land in `core/app/Core/Contracts/TaxEngine.php` before Workstream 1.1 code begins; GB keeps no-op/table-specific overrides):
+- `calculateLumpSumTax(int $amountMinor, string $taxYear, int $priorCumulativeMinor, string $tableType): array` — `$tableType` is `'retirement'` or `'withdrawal'`; ZA applies the cumulative-since-Oct-2007 table, GB stubs
+- `calculateRetirementDeduction(int $grossMinor, string $taxYear, int $carryForwardMinor): array` — ZA applies Section 11F (27.5%, R350k cap, carry-forward); GB stubs
+- `calculateDividendsWithholdingTax(int $amountMinor, string $taxYear, string $source): int` — `$source` is `'local'` or `'foreign'`; ZA returns 20% local, effective 20% via s10B (25/45 of gross) foreign
+- `calculateMedicalCredits(int $mainPlusFirstDependant, int $additionalDependants, string $taxYear): int` — returns annual credit in cents; flat `getAnnualExemptions()` is too thin for SA's per-dependant rates
+- `calculateCGT()` gains `array $options = []` — supports `['wrapper' => 'endowment']` for Workstream 1.3's 30% endowment flat rate
+
+*Architecture:*
+- `ZaTaxEngine` is a **pure calculator**. State (Section 11F carry-forward, Section 10C non-deductible pool) is held by dedicated thin trackers `ZaSection11fTracker` and `ZaSection10cTracker`, each owning its own table (`za_section_11f_carry_forward`, `za_section_10c_ledger`) in `packs/country-za/database/migrations/`. Engine takes state as a parameter. Satisfies ADR-003 and keeps the engine unit-testable without the database.
+- `za_tax_configurations` stores **minor units (cents)** in **normalised rows** — `(tax_year, key_path, value_cents, effective_from, notes)`. Not JSON blob, not whole rands. The UK JSON-blob pattern predates ADR-005 and is not replicated.
+- `getPersonalAllowance(string $taxYear, ?int $age = null)` returns the rebate-implied threshold for SA (R99,000 default / R148,217 age 65–74 / R165,689 age 75+); GB returns the flat allowance. Contract signature gains optional `$age`.
+- `ZaTaxConfigurationSeeder` chains three inserts: (i) `$this->call(ZaJurisdictionSeeder::class)` first — inserts `{code:'za', name:'South Africa', currency:'ZAR', locale:'en_ZA', table_prefix:'za_'}` into `jurisdictions`; (ii) inserts the 2026/27 row into `tax_years` linked to the ZA jurisdiction (`calendar_type = 'tax_year'`); (iii) seeds `za_tax_configurations` rows.
+- `PackManifest` for ZA uses `PackManifest::fromArray(['code'=>'za', 'name'=>'South Africa', 'currency'=>'ZAR', 'locale'=>'en_ZA', 'table_prefix'=>'za_', 'navigation'=>[...], 'routes'=>[...]])` — tax-year start/end is NOT on the manifest; it lives in `tax_years` per ADR-006.
+- `ZaTaxConfigurationSeeder` SARS table format: stores **accumulated base values** from the published SARS tables (e.g. `R44,118 + 26% above R245,100` as `{rate:26, lower_bound_cents:24_510_000, accumulated_base_cents:4_411_800}`) — matches SARS wording and avoids rounding divergence from rate-only derivation.
+
+*Cross-workstream dependencies:*
+- Two-Pot savings-pot withdrawal (Workstream 1.4) uses `ZaTaxEngine::calculateIncomeTax($currentTaxableIncome + $withdrawalAmount)` and reports the delta as the withdrawal tax impact. No new method needed in 1.1.
+- Endowment 30% flat CGT (Workstream 1.3) uses `calculateCGT($gain, $taxYear, ['wrapper' => 'endowment'])`.
+- `UIF` and `SDL` are payroll taxes, explicitly **out of scope** for Workstream 1.1.
+
+*Schema prerequisite (lands in Phase 0.3 addendum, not Phase 1):*
+- `tax_years` table gains a `calendar_type` CHAR(16) column defaulting to `'tax_year'`. Needed so Workstream 1.3 can add calendar-year rows for SA SDA/FIA. See `April/April17Updates/Consolidated_Plan.md` § 5a.
+
+See `April/April17Updates/PRD-za-tax-engine.md` (when written) for the full PRD.
+
+**Workstream 1.2: SA Savings + TFSA** [SA Research doc section 7]
+
+*Amendment 18 April 2026 — split into backend and frontend sub-workstreams after codebase audit revealed that SA has no frontend scaffold yet and the first SA-UI plan needs to establish lazy-load, routing, and jurisdiction-aware layout conventions that all of WS 1.2–1.7 frontend work will depend on.*
+
+**Workstream 1.2a — Backend (1 week):**
+- Define `core/app/Core/Contracts/SavingsEngine.php` (13th contract — closes the "Savings is the odd-one-out" gap; mirrors WS 1.1 FR-M1 prep-PR pattern)
+- GB-side stub: extend `App\Services\Savings\ISATracker` (or a sibling class) to `implements SavingsEngine` with ZA-only methods stubbed
+- `packs/country-za/src/Savings/ZaSavingsEngine implements SavingsEngine` — pure calculator: TFSA penalty, interest-tax-with-exemption, emergency fund target
+- `ZaTfsaContributionTracker` — thin persistence over `za_tfsa_contributions` (keyed by `user_id` or `beneficiary_id` for minor TFSAs)
+- `ZaEmergencyFundCalculator` — SA heuristic (3–6 months, single-earner → 6, UIF-ineligible → +1)
+- `za_tfsa_contributions` table: `user_id`, nullable `beneficiary_id` (FK to `family_members` for minor TFSAs), `savings_account_id`, `tax_year`, `amount_minor`, `amount_ccy` (default `'ZAR'`), `source_type` (`contribution` | `transfer_in`), `contribution_date`, `notes`
+- `savings_accounts` gains four nullable fields: `is_tfsa`, `tfsa_subscription_year`, `tfsa_subscription_amount_minor` + `tfsa_subscription_amount_ccy`, `tfsa_lifetime_contributed_minor` + `tfsa_lifetime_contributed_ccy` (follows WS 0.6 shadow-column pattern)
+- Tax-config seeder additions: `tfsa.annual_limit_minor` (R46,000), `tfsa.lifetime_limit_minor` (R500,000), `tfsa.over_contribution_penalty_bps` (4000), `endowment.income_tax_rate_bps` (3000), `endowment.restriction_period_years` (5). **The endowment CGT rate stays at its existing key `cgt.endowment_wrapper_rate_bps`** — no duplicate seeded.
+- Container bindings: `pack.gb.savings`, `pack.za.savings`, `pack.za.tfsa.tracker`, `pack.za.savings.emergency_fund`
+- Full Pest coverage including minor-TFSA (parent + child separate caps) integration test
+
+**Workstream 1.2b — Frontend (follow-up plan, 1 week):**
+- SA frontend scaffold: `resources/js/components/ZA/` directory, ZA route lazy-loading, jurisdiction-aware sidebar composition, ZA Vuex module organisation (this is the foundation plan all later SA-frontend workstreams build on)
+- Vue components: TFSA dashboard, contribution tracker, SA savings forms, SA emergency fund gauge
+- Savings agent coordination (SA-aware aggregation for the dashboard)
+
+**Workstream 1.3: SA Investment + Exchange Control** [SA Research doc sections 8, 13.2]
+
+*Amendment 18 April 2026 — split into backend-only 1.3a/1.3b plus a deferred 1.3c frontend, mirroring the WS 1.2a/b pattern. Reg 28 Monitor moves to WS 1.4 (Retirement) because Reg 28 applies to retirement funds (RA / PF / PvF / Preservation), not to the discretionary / endowment / TFSA wrappers that `ZaInvestmentEngine` represents — confirmed by SA Research § 13.3 which locates Reg 28 inside the retirement-fund look-through. This also matches `SA_Research_and_Mapping.md` line 432.*
+
+**Workstream 1.3a — Investment backend (1 week):**
+- `ZaInvestmentEngine implements InvestmentEngine` — discretionary (unit trusts / ETFs), endowment (section 29A), TFSA-routing. Delegates interest tax to `ZaSavingsEngine` (shipped WS 1.2a).
+- `ZaCgtCalculator` — discretionary (40% inclusion × marginal rate, R40,000 annual exclusion) + endowment (30% flat, no exclusion).
+- `ZaBaseCostTracker` — weighted-average lot ledger over `za_holding_lots`. On disposal, writes back updated cost basis to the main-app `holdings` row so the main-app record stays in sync with the lot ledger.
+- GB-side stub: `App\Services\Investment\UkInvestmentEngine implements InvestmentEngine` at `pack.gb.investment`.
+- Container bindings: `pack.gb.investment`, `pack.za.investment`, `pack.za.investment.cgt`, `pack.za.investment.lot_tracker`.
+
+**Workstream 1.3b — Exchange Control backend (1 week):**
+- `ZaExchangeControl implements ExchangeControl`: SDA (R2m/calendar year), FIA (R10m/calendar year).
+- `za_exchange_control_ledger` table keyed by CALENDAR year (not tax year).
+- AIT workflow stubs (document checklist, tax compliance status).
+
+**Workstream 1.3c — Frontend (follow-up plan, 1 week):** Investment dashboard, exchange control widget. Pairs with the SA-frontend scaffold from WS 1.2b.
 
 **Workstream 1.4: SA Retirement (2 weeks)** [SA Research doc section 9]
 - `ZaRetirementEngine`: RA, Pension Fund, Provident Fund, Preservation Fund
@@ -415,7 +465,8 @@ The SA Research & Mapping document (SA_Research_and_Mapping.md) is the specifica
 - Life annuity with Section 10C exemption
 - Section 11F deduction carry-forward tracking
 - SASSA Old Age Grant data field
-- Vue components: retirement dashboard, Two-Pot tracker, annuity planner
+- **Reg 28 Monitor (moved from WS 1.3 per 18 April 2026 split):** look-through asset allocation on retirement fund holdings, breach detection (30% offshore, 75% equity, 25% property, 15% private equity, 5% single-entity), `reg28_snapshots` table per SA Research § 13.3.
+- Vue components: retirement dashboard, Two-Pot tracker, annuity planner, Reg 28 compliance view
 
 **Workstream 1.5: SA Protection (1 week)** [SA Research doc section 6]
 - `ZaProtectionEngine`: life, dread disease (severity tiers), disability (lump + income), funeral
