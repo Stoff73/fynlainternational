@@ -86,6 +86,7 @@ class ZaTaxConfigurationSeeder extends Seeder
             $this->tfsaRows(),
             $this->endowmentRows(),
             $this->exchangeControlRows(),
+            $this->retirementRows(),
         );
     }
 
@@ -234,6 +235,25 @@ class ZaTaxConfigurationSeeder extends Seeder
             ['excon.sda_annual_limit_minor', 200_000_000, 'Single Discretionary Allowance — R2,000,000 per calendar year'],
             ['excon.fia_annual_limit_minor', 1_000_000_000, 'Foreign Investment Allowance — R10,000,000 per calendar year (requires AIT)'],
             ['excon.sarb_special_approval_threshold_minor', 1_200_000_000, 'Combined SDA+FIA above this triggers SARB special approval'],
+        ];
+    }
+
+    /**
+     * Retirement — Two-Pot system constants (WS 1.4a).
+     *
+     * Two-Pot effective date: 1 September 2024 (hardcoded in service).
+     * Savings-Pot withdrawal minimum: R2,000 per SARS Regulation.
+     * Split: 1/3 Savings / 2/3 Retirement (bps rounded; the service uses
+     * integer division to preserve the cent regardless).
+     *
+     * @return array<int, array{0: string, 1: int, 2: ?string}>
+     */
+    private function retirementRows(): array
+    {
+        return [
+            ['retirement.savings_pot_minimum_withdrawal_minor', 200_000, 'R2,000 minimum single Savings-Pot withdrawal'],
+            ['retirement.savings_pot_split_bps', 3_333, 'Two-Pot 1/3 Savings share (33.33%)'],
+            ['retirement.retirement_pot_split_bps', 6_667, 'Two-Pot 2/3 Retirement share (66.67%)'],
         ];
     }
 
