@@ -1,7 +1,8 @@
 # =============================================================================
-# Fynla v0.4.5 - Production .htaccess for SUBDIRECTORY Deployment
+# Fynla International - Production .htaccess for SUBDIRECTORY Deployment
 # =============================================================================
-# Configured for: https://csjones.co/fynla (subdirectory deployment)
+# Configured for: https://csjones.co/fynla_inter (subdirectory deployment)
+# Sits alongside the UK Fynla at https://csjones.co/fynla without clashing.
 # =============================================================================
 
 <IfModule mod_rewrite.c>
@@ -12,9 +13,9 @@
     RewriteEngine On
 
     # =============================================================================
-    # SUBDIRECTORY Deployment - /fynla prefix required
+    # SUBDIRECTORY Deployment - /fynla_inter prefix required
     # =============================================================================
-    RewriteBase /fynla/
+    RewriteBase /fynla_inter/
 
     # =============================================================================
     # Handle Authorization Header
@@ -78,7 +79,7 @@ RewriteRule ^\.git - [F,L]
 # =============================================================================
 # Block Direct Access to Storage Directory
 # =============================================================================
-RedirectMatch 403 ^/fynla/storage/
+RedirectMatch 403 ^/fynla_inter/storage/
 
 # =============================================================================
 # Disable Directory Listing

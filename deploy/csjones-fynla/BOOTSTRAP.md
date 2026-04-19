@@ -1,6 +1,8 @@
-# csjones.co/fynla — One-Time Bootstrap Guide
+# csjones.co/fynla_inter — One-Time Bootstrap Guide
 
-This is the **first-time setup** for the dev environment at `https://csjones.co/fynla`. Run this once to stand up the dev site; every subsequent deploy is just upload + migrate + clear cache (see `deploy/README.md` for the ongoing flow).
+This is the **first-time setup** for the Fynla International dev environment at `https://csjones.co/fynla_inter`. Run this once to stand up the dev site; every subsequent deploy is just upload + migrate + clear cache (see `deploy/README.md` for the ongoing flow).
+
+Fynla International deploys to `/fynla_inter` so it sits alongside the UK Fynla at `/fynla` without clashing — separate app directory, separate symlink, separate database.
 
 **Ongoing dev deploys:** after bootstrap, use the standard `./deploy/csjones-fynla/build.sh` → upload `public/build/` → SSH clear-cache flow. This guide is for the one-time standing-up.
 
@@ -12,7 +14,7 @@ This is the **first-time setup** for the dev environment at `https://csjones.co/
 
 You need:
 - SSH access to csjones.co (key at `~/.ssh/fynlaDev` or whatever you've configured)
-- A new empty MySQL database on csjones.co (provision via SiteGround Site Tools → MySQL → Databases)
+- A new empty MySQL database on csjones.co (provision via SiteGround Site Tools → MySQL → Databases) — **do not reuse the UK Fynla dev DB**
 - Revolut sandbox API keys (see `/Users/CSJ/Desktop/fynla/revolut/implementation-plan.md`)
 - Anthropic API key (can share with production, or rotate)
 
@@ -38,28 +40,30 @@ These go into the server `.env` in step 5 below. Never commit them.
 
 ## 2. Create the app directory on the server (sibling layout)
 
-Fynla follows the same sibling-directory pattern as the existing `tengo-app`
-on this server — Laravel code lives OUTSIDE `public_html/`, and only the
-`public/` folder is exposed to the web via a symlink. This keeps app
-source, vendor, storage etc. out of the document root.
+Fynla International follows the same sibling-directory pattern as the existing
+UK `fynla-app` and `tengo-app` on this server — Laravel code lives OUTSIDE
+`public_html/`, and only the `public/` folder is exposed to the web via a
+symlink. This keeps app source, vendor, storage etc. out of the document root.
 
 Layout:
 
 ```
 ~/www/csjones.co/
   tengo-app/               ← existing sibling Laravel app (leave alone)
-  fynla-app/               ← NEW: Fynla dev install goes here
+  fynla-app/               ← existing UK Fynla dev install (leave alone)
+  fynla_inter-app/         ← NEW: Fynla International dev install goes here
      app/ config/ public/ ...
   public_html/
-     tengo → ../tengo-app/public    ← existing symlink (leave alone)
-     fynla → ../fynla-app/public    ← NEW symlink (created in step 7)
+     tengo → ../tengo-app/public              ← existing symlink (leave alone)
+     fynla → ../fynla-app/public              ← existing UK symlink (leave alone)
+     fynla_inter → ../fynla_inter-app/public  ← NEW symlink (created in step 7)
 ```
 
 ```bash
 ssh -p 18765 -i ~/.ssh/fynlaDev u163-ptanegf9edny@ssh.csjones.co
-mkdir -p ~/www/csjones.co/fynla-app
-cd ~/www/csjones.co/fynla-app
-pwd  # should print /home/u163-.../www/csjones.co/fynla-app
+mkdir -p ~/www/csjones.co/fynla_inter-app
+cd ~/www/csjones.co/fynla_inter-app
+pwd  # should print /home/u163-.../www/csjones.co/fynla_inter-app
 ```
 
 Leave the SSH session open — you'll come back to it in step 6.
@@ -68,27 +72,27 @@ Leave the SSH session open — you'll come back to it in step 6.
 
 ## 3. Build the frontend locally
 
-From your Mac, in the fynla repo on the `dev` branch:
+From your Mac, in the fynlaInternational repo on the `dev` branch:
 
 ```bash
-cd /Users/CSJ/Desktop/fynla
+cd /Users/CSJ/Desktop/fynlaInternational
 git checkout dev
 git pull origin dev
 ./deploy/csjones-fynla/build.sh
 ```
 
-Expected output: `public/build/` populated with hashed asset filenames. The build script sets `VITE_BASE_PATH=/fynla/build/` and `VITE_ROUTER_BASE=/fynla/` so the SPA routes correctly under the subdirectory.
+Expected output: `public/build/` populated with hashed asset filenames. The build script sets `VITE_BASE_PATH=/fynla_inter/build/` and `VITE_ROUTER_BASE=/fynla_inter/` so the SPA routes correctly under the subdirectory.
 
 ---
 
 ## 4. Upload the code (first-time only — entire project)
 
-For the **first** upload, send the whole project (minus vendor, node_modules, env, storage caches) to `~/www/csjones.co/fynla-app/`.
+For the **first** upload, send the whole project (minus vendor, node_modules, env, storage caches) to `~/www/csjones.co/fynla_inter-app/`.
 
 The easiest way from macOS is `rsync` over SSH:
 
 ```bash
-cd /Users/CSJ/Desktop/fynla
+cd /Users/CSJ/Desktop/fynlaInternational
 
 rsync -avz --delete \
   -e "ssh -p 18765 -i ~/.ssh/fynlaDev" \
@@ -106,7 +110,7 @@ rsync -avz --delete \
   --exclude="April/" \
   --exclude=".claude/" \
   ./ \
-  u163-ptanegf9edny@ssh.csjones.co:www/csjones.co/fynla-app/
+  u163-ptanegf9edny@ssh.csjones.co:www/csjones.co/fynla_inter-app/
 ```
 
 **Important:** the `-p 18765` non-standard port is passed via the inner `-e "ssh -p 18765 ..."` string. Test with a small file first if you're nervous — `rsync` respects `--dry-run`.
@@ -118,10 +122,10 @@ Alternatively, zip the project locally and upload via SiteGround File Manager, t
 The `public/.htaccess` in the repo is the **production** (root-deployment) version. You must overwrite it on the server with the **subdirectory** version:
 
 ```bash
-# From your Mac, still in the fynla repo
+# From your Mac, still in the fynlaInternational repo
 scp -P 18765 -i ~/.ssh/fynlaDev \
     deploy/csjones-fynla/.htaccess \
-    u163-ptanegf9edny@ssh.csjones.co:www/csjones.co/fynla-app/public/.htaccess
+    u163-ptanegf9edny@ssh.csjones.co:www/csjones.co/fynla_inter-app/public/.htaccess
 ```
 
 **Verify this happens.** The wrong `.htaccess` silently breaks routing.
@@ -134,7 +138,7 @@ SSH back in:
 
 ```bash
 ssh -p 18765 -i ~/.ssh/fynlaDev u163-ptanegf9edny@ssh.csjones.co
-cd ~/www/csjones.co/fynla-app
+cd ~/www/csjones.co/fynla_inter-app
 ```
 
 Copy the template and edit:
@@ -149,7 +153,7 @@ Fill in every `YOUR_*` placeholder with real values from step 1, the Revolut san
 
 - `APP_ENV=staging`
 - `APP_DEBUG=true`
-- `APP_URL=https://csjones.co/fynla`
+- `APP_URL=https://csjones.co/fynla_inter`
 - `DB_DATABASE` / `DB_USERNAME` / `DB_PASSWORD` — the ones from step 1
 - `REVOLUT_SANDBOX=true`
 - `REVOLUT_API_KEY` / `REVOLUT_PUBLIC_KEY` / `REVOLUT_WEBHOOK_SECRET` — from the Revolut sandbox dashboard
@@ -163,7 +167,7 @@ Save and exit.
 
 ## 6. Install Composer dependencies and finalise Laravel
 
-Still SSH'd in at `~/www/csjones.co/fynla-app`:
+Still SSH'd in at `~/www/csjones.co/fynla_inter-app`:
 
 ```bash
 # Check PHP version — must be 8.2 or higher
@@ -181,7 +185,7 @@ php artisan migrate --force
 # Seed the database (tax config, preview personas, test users, etc.)
 php artisan db:seed --force
 
-# Link storage so uploads are accessible via /fynla/storage/...
+# Link storage so uploads are accessible via /fynla_inter/storage/...
 php artisan storage:link
 
 # Build the autoloader and caches for speed
@@ -210,25 +214,25 @@ Option B is sometimes necessary on tight memory limits. If you use it, run `comp
 ## 7. Create the public symlink
 
 Expose the Laravel `public/` folder to the web by creating a symlink from
-`public_html/fynla` to `fynla-app/public`. This matches the existing
-`tengo-app` setup on the same server.
+`public_html/fynla_inter` to `fynla_inter-app/public`. This matches the existing
+`tengo-app` and `fynla-app` (UK) setups on the same server.
 
 ```bash
 cd ~/www/csjones.co/public_html
-ln -s ../fynla-app/public fynla
-ls -la fynla
-# expected: lrwxrwxrwx ... fynla -> ../fynla-app/public
+ln -s ../fynla_inter-app/public fynla_inter
+ls -la fynla_inter
+# expected: lrwxrwxrwx ... fynla_inter -> ../fynla_inter-app/public
 ```
 
 Apache follows the symlink automatically — no SiteGround admin panel
-changes needed. The URL `https://csjones.co/fynla` now serves
-`~/www/csjones.co/fynla-app/public/index.php`, which is Laravel's
+changes needed. The URL `https://csjones.co/fynla_inter` now serves
+`~/www/csjones.co/fynla_inter-app/public/index.php`, which is Laravel's
 front controller.
 
 **Verify the symlink target is correct** by listing the symlinked path:
 
 ```bash
-ls ~/www/csjones.co/public_html/fynla/index.php
+ls ~/www/csjones.co/public_html/fynla_inter/index.php
 # expected: the file exists (symlink resolves)
 ```
 
@@ -236,7 +240,7 @@ If you ever need to remove the symlink (e.g. to clean up), delete it
 without touching the target:
 
 ```bash
-rm ~/www/csjones.co/public_html/fynla   # removes the symlink only
+rm ~/www/csjones.co/public_html/fynla_inter   # removes the symlink only
 ```
 
 `rm -rf` would also work since `rm` doesn't follow the symlink, but
@@ -248,19 +252,21 @@ prefer the plain `rm` to keep the blast radius obvious.
 
 From your browser:
 
-1. Visit `https://csjones.co/fynla`
-2. Expect: the Fynla landing page loads
-3. Open DevTools Network → confirm JS/CSS come from `/fynla/build/*.js` and `/fynla/build/*.css` (not `/build/`)
+1. Visit `https://csjones.co/fynla_inter`
+2. Expect: the Fynla International landing page loads
+3. Open DevTools Network → confirm JS/CSS come from `/fynla_inter/build/*.js` and `/fynla_inter/build/*.css` (not `/build/` or `/fynla/build/`)
 4. Try registering a new user or logging in as a seeded test user
 5. Verify you can reach the dashboard
+6. Confirm the UK Fynla at `https://csjones.co/fynla` is still working — the two deployments must not interfere
 
 Common failure modes:
 
 | Symptom | Fix |
 |---|---|
 | Blank page, 500 Internal Server Error | Wrong `.htaccess` — re-upload `deploy/csjones-fynla/.htaccess` |
-| 404 on `/fynla/build/*.js` | `VITE_BASE_PATH` wasn't `/fynla/build/` during build — re-run `./deploy/csjones-fynla/build.sh` |
-| Login works but dashboard is blank | `VITE_ROUTER_BASE` wasn't `/fynla/` — re-run the build |
+| 404 on `/fynla_inter/build/*.js` | `VITE_BASE_PATH` wasn't `/fynla_inter/build/` during build — re-run `./deploy/csjones-fynla/build.sh` |
+| Login works but dashboard is blank | `VITE_ROUTER_BASE` wasn't `/fynla_inter/` — re-run the build |
+| Requests land on the UK `/fynla` app | Symlink points to the wrong app directory — recheck step 7 |
 | DB errors on first visit | Migrations didn't run — rerun `php artisan migrate --force` |
 | "No application encryption key" | `php artisan key:generate --force` wasn't run |
 | 500 on every request | Check `storage/logs/laravel.log` on the server — almost always a missing env var or permission issue |
@@ -273,7 +279,7 @@ In the sandbox merchant dashboard at `https://sandbox-merchant.revolut.com`:
 
 1. Navigate to **Developer → API → Webhooks**
 2. Click **Add webhook**
-3. URL: `https://csjones.co/fynla/api/payment/webhook`
+3. URL: `https://csjones.co/fynla_inter/api/payment/webhook`
 4. Events: select all subscription / order events
 5. Copy the `signing_secret` (starts with `wsk_`)
 6. SSH into csjones.co, edit `.env`, paste into `REVOLUT_WEBHOOK_SECRET=`
@@ -314,7 +320,7 @@ If any of these return the wrong value, fix the `.env` and `php artisan config:c
 Same fix as production — SiteGround doesn't run Laravel's scheduler automatically, you have to set up a system cron entry. The command that runs every minute is:
 
 ```
-cd /home/u163-ptanegf9edny/www/csjones.co/public_html/fynla && /usr/local/php83/bin/php-cli artisan schedule:run >> /dev/null 2>&1
+cd /home/u163-ptanegf9edny/www/csjones.co/public_html/fynla_inter && /usr/local/php83/bin/php-cli artisan schedule:run >> /dev/null 2>&1
 ```
 
 Set it via SiteGround Site Tools → **Devs → Cron Jobs** → **Create Cron Job**:
@@ -322,6 +328,8 @@ Set it via SiteGround Site Tools → **Devs → Cron Jobs** → **Create Cron Jo
 - Command: (as above)
 
 Save. Verify the next day that scheduled commands have fired (e.g. `trial_reminder_log` table gets new rows, `lifecycle_email_log` gets entries after 08:30 UTC).
+
+Note: the UK Fynla has its own cron entry pointing at `.../public_html/fynla`. Leave that one alone — adding the `fynla_inter` entry does not replace it.
 
 ---
 
@@ -333,7 +341,7 @@ Dev env is live. Going forward:
 2. Merge `dev` locally
 3. `./deploy/csjones-fynla/build.sh` → upload `public/build/` + changed PHP files
 4. SSH → `php artisan migrate --force && php artisan cache:clear && php artisan config:clear && php artisan view:clear && php artisan route:clear && php artisan optimize`
-5. Test on `https://csjones.co/fynla`
+5. Test on `https://csjones.co/fynla_inter`
 6. When ready for production: `dev → main` merge → production deploy via `./deploy/fynla-org/build.sh`
 
 See `CLAUDE.md § Deployment` for the ongoing flow.

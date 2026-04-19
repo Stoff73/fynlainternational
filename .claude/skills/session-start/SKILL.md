@@ -1,6 +1,6 @@
 ---
 name: session-start
-description: Bootstrap a new Fynla development session with full project context. Syncs git, loads the fynlaBrain vault (design system, past bugs, feedback rules, deployment history), reads all memory files, seeds the database, and starts the dev server. This skill exists because Claude repeatedly makes the same mistakes across sessions — skipping tests, ignoring the design system, claiming work is done without browser verification. Running this skill prevents that cycle. Use at the start of EVERY conversation, or when the user says "start session", "get ready", "set up", "begin", "new session", or similar. Also use if you notice you're missing project context mid-session.
+description: Bootstrap a new Fynla development session with full project context. Syncs git, loads the FynlaInter vault (design system, past bugs, feedback rules, deployment history), reads all memory files, seeds the database, and starts the dev server. This skill exists because Claude repeatedly makes the same mistakes across sessions — skipping tests, ignoring the design system, claiming work is done without browser verification. Running this skill prevents that cycle. Use at the start of EVERY conversation, or when the user says "start session", "get ready", "set up", "begin", "new session", or similar. Also use if you notice you're missing project context mid-session.
 ---
 
 # Session Start — Full Context Bootstrap
@@ -81,7 +81,7 @@ This is the critical phase. Read these files and **internalise their content** �
 Read every file in the memory directory:
 
 ```
-/Users/CSJ/.claude/projects/-Users-CSJ-Desktop-fynla/memory/
+/Users/CSJ/.claude/projects/-Users-CSJ-Desktop-fynlaInternational/memory/
 ```
 
 Start with `MEMORY.md` (the index), then read every `feedback_*.md`, `project_*.md`, `reference_*.md`, and `critical_*.md` file.
@@ -140,7 +140,7 @@ cat CSJTODO.md 2>/dev/null || echo "No TODO file"
 If it exists, present outstanding items to the user. Also check the vault for a potentially newer version:
 
 ```bash
-ls -t /Users/CSJ/Desktop/fynlaBrain/April/April*Updates/CSJTODO.md 2>/dev/null | head -1
+ls -t /Users/CSJ/Desktop/FynlaInter/April/April*Updates/CSJTODO.md 2>/dev/null | head -1
 ```
 
 ### 2d. Read recent vault session notes
@@ -148,7 +148,7 @@ ls -t /Users/CSJ/Desktop/fynlaBrain/April/April*Updates/CSJTODO.md 2>/dev/null |
 Check the 3 most recent session update folders for deploy notes, bug fixes, and outstanding issues:
 
 ```bash
-ls -d /Users/CSJ/Desktop/fynlaBrain/April/April*Updates 2>/dev/null | sort -V | tail -3
+ls -d /Users/CSJ/Desktop/FynlaInter/April/April*Updates 2>/dev/null | sort -V | tail -3
 ```
 
 For each folder, look for:
@@ -161,7 +161,7 @@ This gives you the narrative of recent work so you don't repeat fixed bugs or re
 ### 2e. Read recent reports (if any)
 
 ```bash
-find /Users/CSJ/Desktop/fynlaBrain/Reports -name "*.md" -mtime -7 2>/dev/null
+find /Users/CSJ/Desktop/FynlaInter/Reports -name "*.md" -mtime -7 2>/dev/null
 ```
 
 If any reports from the last 7 days, read key findings (tech debt, security, code review issues).

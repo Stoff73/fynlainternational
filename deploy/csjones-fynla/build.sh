@@ -1,10 +1,13 @@
 #!/bin/bash
 # =============================================================================
-# Fynla Build Script - csjones.co/fynla (SUBDIRECTORY deployment)
+# Fynla International Build Script - csjones.co/fynla_inter (SUBDIRECTORY)
 # =============================================================================
 # Usage: ./deploy/csjones-fynla/build.sh
 # Output: Builds frontend assets in public/build/
 # =============================================================================
+# Deploys alongside the UK Fynla (at csjones.co/fynla) in a separate
+# subdirectory (csjones.co/fynla_inter) so the two dev instances do not clash.
+#
 # IMPORTANT: The server does not have enough memory to run npm build.
 # This script builds locally. You then manually upload changed files via
 # SiteGround File Manager.
@@ -19,7 +22,7 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 PROJECT_ROOT="$(cd "$SCRIPT_DIR/../.." && pwd)"
 
 echo "============================================="
-echo "Fynla Build - csjones.co/fynla (SUBDIRECTORY)"
+echo "Fynla International Build - csjones.co/fynla_inter"
 echo "============================================="
 echo ""
 
@@ -27,10 +30,10 @@ cd "$PROJECT_ROOT"
 
 # Set environment variables for subdirectory deployment
 export NODE_ENV=production
-export VITE_BASE_PATH=/fynla/build/
-export VITE_ROUTER_BASE=/fynla/
-export VITE_APP_NAME="Fynla"
-export VITE_API_BASE_URL=https://csjones.co/fynla
+export VITE_BASE_PATH=/fynla_inter/build/
+export VITE_ROUTER_BASE=/fynla_inter/
+export VITE_APP_NAME="Fynla International"
+export VITE_API_BASE_URL=https://csjones.co/fynla_inter
 
 # Awin affiliate tracking — staging defaults to disabled. Flip to true here
 # (and set AWIN_ENABLED=true on the server .env) only for an attribution
@@ -72,12 +75,12 @@ echo "Manual Upload via SiteGround File Manager:"
 echo "============================================="
 echo ""
 echo "1. Upload public/build/ directory to:"
-echo "   ~/www/csjones.co/public_html/fynla/public/build/"
+echo "   ~/www/csjones.co/public_html/fynla_inter/public/build/"
 echo ""
 echo "2. Upload any changed PHP files (check deployment notes)"
 echo ""
 echo "3. SSH to server and clear caches:"
-echo "   cd ~/www/csjones.co/public_html/fynla"
+echo "   cd ~/www/csjones.co/public_html/fynla_inter"
 echo "   php artisan cache:clear && php artisan route:clear && php artisan config:clear"
 echo ""
 echo "DO NOT run 'npm install' or 'npm run build' on the server!"
