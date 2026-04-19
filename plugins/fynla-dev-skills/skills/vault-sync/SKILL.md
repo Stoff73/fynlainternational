@@ -1,7 +1,7 @@
 ---
 name: vault-sync
 description: Sync project documentation and session transcripts to the FynlaInter Obsidian vault. Captures the full AI conversation (user prompts + Claude responses), updates git history and indexes, detects orphaned notes and links them from the appropriate index, then audits the vault against Obsidian formatting standards (frontmatter, wikilinks, callouts, file-name conventions, broken links, tag vocabulary) so the graph stays connected and navigable. Use when the user says "sync vault", "update vault", "sync docs", "audit vault", "find vault orphans", "clean up vault", or at session end.
-disable-model-invocation: true
+disable-model-invocation: false
 ---
 
 # Vault Sync — Full Documentation & Session Capture
