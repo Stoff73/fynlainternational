@@ -1257,4 +1257,37 @@ Route::middleware(['auth:sanctum', 'active.jurisdiction', 'pack.enabled:za'])
             Route::post('accounts', [\App\Http\Controllers\Api\Za\ZaSavingsController::class, 'storeAccount'])
                 ->name('accounts.store');
         });
+
+        // WS 1.3c — Investment
+        Route::prefix('investments')->as('investments.')->group(function () {
+            Route::get('dashboard', [\App\Http\Controllers\Api\Za\ZaInvestmentController::class, 'dashboard'])
+                ->name('dashboard');
+            Route::get('accounts', [\App\Http\Controllers\Api\Za\ZaInvestmentController::class, 'listAccounts'])
+                ->name('accounts.index');
+            Route::post('accounts', [\App\Http\Controllers\Api\Za\ZaInvestmentController::class, 'storeAccount'])
+                ->name('accounts.store');
+            Route::get('holdings', [\App\Http\Controllers\Api\Za\ZaInvestmentController::class, 'listHoldings'])
+                ->name('holdings.index');
+            Route::get('holdings/{holdingId}/lots', [\App\Http\Controllers\Api\Za\ZaInvestmentController::class, 'listLots'])
+                ->whereNumber('holdingId')
+                ->name('holdings.lots');
+            Route::post('holdings/purchase', [\App\Http\Controllers\Api\Za\ZaInvestmentController::class, 'storePurchase'])
+                ->name('holdings.purchase');
+            Route::post('holdings/disposal', [\App\Http\Controllers\Api\Za\ZaInvestmentController::class, 'recordDisposal'])
+                ->name('holdings.disposal');
+            Route::post('cgt/calculate', [\App\Http\Controllers\Api\Za\ZaInvestmentController::class, 'calculateCgt'])
+                ->name('cgt.calculate');
+        });
+
+        // WS 1.3c — Exchange Control
+        Route::prefix('exchange-control')->as('exchange-control.')->group(function () {
+            Route::get('dashboard', [\App\Http\Controllers\Api\Za\ZaExchangeControlController::class, 'dashboard'])
+                ->name('dashboard');
+            Route::get('transfers', [\App\Http\Controllers\Api\Za\ZaExchangeControlController::class, 'listTransfers'])
+                ->name('transfers.index');
+            Route::post('transfers', [\App\Http\Controllers\Api\Za\ZaExchangeControlController::class, 'storeTransfer'])
+                ->name('transfers.store');
+            Route::post('check-approval', [\App\Http\Controllers\Api\Za\ZaExchangeControlController::class, 'checkApproval'])
+                ->name('check-approval');
+        });
     });

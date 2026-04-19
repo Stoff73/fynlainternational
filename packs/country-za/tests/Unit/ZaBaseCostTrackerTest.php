@@ -119,6 +119,19 @@ it('rejects disposal exceeding open quantity', function () {
     ))->toThrow(InvalidArgumentException::class);
 });
 
+it('syncs holdings.cost_basis after a purchase', function () {
+    $this->tracker->recordPurchase(
+        userId: $this->user->id,
+        holdingId: $this->holdingId,
+        quantity: 10.0,
+        costMinor: 5_000_000,
+        acquisitionDate: '2026-04-01',
+    );
+
+    $holding = \DB::table('holdings')->where('id', $this->holdingId)->first();
+    expect((float) $holding->cost_basis)->toEqual(50000.00);
+});
+
 it('isolates lots by holding_id', function () {
     $otherHolding = zaLotsCreateHolding($this->user->id);
 

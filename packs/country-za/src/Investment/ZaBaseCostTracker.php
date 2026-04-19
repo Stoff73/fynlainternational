@@ -49,7 +49,26 @@ class ZaBaseCostTracker
             'notes' => $notes,
         ]);
 
+        $this->syncCostBasis($holdingId);
+
         return (int) $lot->id;
+    }
+
+    /**
+     * Write the current open cost basis from the lot ledger back to
+     * the main-app holdings row. Called from both recordPurchase and
+     * recordDisposal so the holdings.cost_basis column never drifts
+     * from the authoritative ledger.
+     *
+     * holdings.cost_basis is decimal(15,2) storing major units (rand, not cents),
+     * so divide minor units by 100 before writing.
+     */
+    public function syncCostBasis(int $holdingId): void
+    {
+        $openCostMinor = $this->openCostBasisMinor($holdingId);
+        DB::table('holdings')
+            ->where('id', $holdingId)
+            ->update(['cost_basis' => round($openCostMinor / 100, 2)]);
     }
 
     /**
@@ -118,14 +137,7 @@ class ZaBaseCostTracker
             }
         }
 
-        // Write back the new open-cost basis to the main-app holding row
-        // so the ledger and the holdings row never drift. `holdings.cost_basis`
-        // is decimal(15,2) in the UK-era schema (stored as pounds/rand, not
-        // minor units) — divide cents by 100.
-        $openCostMinor = $this->openCostBasisMinor($holdingId);
-        DB::table('holdings')
-            ->where('id', $holdingId)
-            ->update(['cost_basis' => round($openCostMinor / 100, 2)]);
+        $this->syncCostBasis($holdingId);
 
         return [
             'units_disposed' => $quantity,

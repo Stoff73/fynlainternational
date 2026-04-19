@@ -49,8 +49,20 @@ const MODULES_BY_JURISDICTION = {
       icon: 'banknotes',
       section: 'zaSection',
     },
-    // WS 1.3c will add za-investment here
-    // WS 1.3c will add za-exchange-control here
+    {
+      key: 'za-investment',
+      label: 'Investments',
+      route: '/za/investments',
+      icon: 'trending-up',
+      section: 'zaSection',
+    },
+    {
+      key: 'za-exchange-control',
+      label: 'Exchange Control',
+      route: '/za/exchange-control',
+      icon: 'map',
+      section: 'zaSection',
+    },
     // WS 1.4d will add za-retirement here
     // WS 1.5b will add za-protection here
     // WS 1.6b will add za-estate here

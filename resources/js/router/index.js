@@ -108,6 +108,8 @@ const SavingsDashboard = () => import('@/views/Savings/SavingsDashboard.vue');
 // ZA pages — lazy-loaded; only fetched when user has 'za' jurisdiction
 // (see jurisdiction guard in router.beforeEach).
 const ZaSavingsDashboard = () => import('@/views/ZA/ZaSavingsDashboard.vue');
+const ZaInvestmentDashboard = () => import('@/views/ZA/ZaInvestmentDashboard.vue');
+const ZaExchangeControlDashboard = () => import('@/views/ZA/ZaExchangeControlDashboard.vue');
 const SavingsAccountDetail = () => import('@/views/Savings/SavingsAccountDetail.vue');
 const GoalsDashboard = () => import('@/views/Goals/GoalsDashboard.vue');
 const CashOverview = () => import('@/views/NetWorth/CashOverview.vue');
@@ -687,6 +689,32 @@ const routes = [
       breadcrumb: [
         { label: 'Home', path: '/dashboard' },
         { label: 'South Africa — Savings', path: '/za/savings' },
+      ],
+    },
+  },
+  {
+    path: '/za/investments',
+    name: 'za-investments',
+    component: ZaInvestmentDashboard,
+    meta: {
+      requiresAuth: true,
+      requiresJurisdiction: 'za',
+      breadcrumb: [
+        { label: 'Home', path: '/dashboard' },
+        { label: 'South Africa — Investments', path: '/za/investments' },
+      ],
+    },
+  },
+  {
+    path: '/za/exchange-control',
+    name: 'za-exchange-control',
+    component: ZaExchangeControlDashboard,
+    meta: {
+      requiresAuth: true,
+      requiresJurisdiction: 'za',
+      breadcrumb: [
+        { label: 'Home', path: '/dashboard' },
+        { label: 'South Africa — Exchange Control', path: '/za/exchange-control' },
       ],
     },
   },

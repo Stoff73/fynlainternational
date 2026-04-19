@@ -87,6 +87,7 @@ class PreviewWriteInterceptor
         '#/monte-carlo#',          // Monte Carlo simulation endpoints
         '#/rebalance-preview$#',   // Rebalance preview (read-only)
         '#/recalculate$#',         // Risk profile recalculation (read + write, needed for risk page)
+        '#/check-approval$#',      // ZA exchange-control what-if approval check (read-only, POST-shaped)
     ];
 
     /**
