@@ -6,14 +6,27 @@
     "superpowers@claude-plugins-official": true
   },
   "hooks": {
+    "PostToolUse": [
+      {
+        "matcher": "Write|Edit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash \"$CLAUDE_PROJECT_DIR/.claude/hooks/tax-hardcode-check.sh\"",
+            "timeout": 15,
+            "statusMessage": "Checking for hardcoded tax values..."
+          }
+        ]
+      }
+    ],
     "Stop": [
       {
         "hooks": [
           {
             "type": "command",
-            "command": "bash /Users/CSJ/Desktop/fynla/.claude/hooks/tax-hardcode-check.sh",
+            "command": "bash \"$CLAUDE_PROJECT_DIR/.claude/hooks/tax-hardcode-check.sh\"",
             "timeout": 15,
-            "statusMessage": "Checking for hardcoded tax values..."
+            "statusMessage": "Final tax-hardcode sweep..."
           }
         ]
       }

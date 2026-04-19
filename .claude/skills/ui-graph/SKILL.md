@@ -1,3 +1,8 @@
+---
+name: ui-graph
+description: Apply consistent Fynla chart styling to ApexCharts components — donut, pie, line, sparkline, area, bar. Codifies the `CHART_DEFAULTS` spread pattern, palette imports from `resources/js/constants/designSystem.js` (`CHART_COLORS`, `SPENDING_COLORS`, `ASSET_COLORS`, `TEXT_COLORS`, `BORDER_COLORS`, `SECONDARY_COLORS`, semantic success/error/warning), axis/grid/tooltip conventions, British currency formatting, and the anti-flash `chartReady` render pattern. Use whenever the user creates, styles, refactors, audits, or fixes any chart — especially in Vue components under `resources/js/components/` or `resources/js/views/`, or when the user mentions ApexCharts, VueApexCharts, dashboard sparkline, donut, pie, projection chart, module chart, graph styling, chart colors, chart palette, or when a chart renders with the wrong font, hardcoded hex, or missing `CHART_DEFAULTS` spread.
+---
+
 # UI Graph Styling — Fynla Chart Conventions
 
 Apply consistent chart styling across all Fynla ApexCharts components. This skill codifies the standard graph configuration so every chart looks unified.

@@ -1,186 +1,236 @@
 ---
 name: deploy-notes
-description: Auto-generate deployment documentation from git diff. Categorises changed files, determines if a frontend build is needed, generates SiteGround upload checklist with server paths, SSH commands, and warnings. Saves to both project and Obsidian vault. Use when the user says "deploy notes", "generate deploy", "what needs deploying", "deployment docs", or after completing a feature that needs production deployment.
+description: Auto-generate deployment documentation from `git diff` for Fynla's SiteGround environments (prod `fynla.org` and dev `csjones.co/fynla`). Categorises changed files, decides whether a Vite build is needed, maps local paths to server paths, generates the SSH command sequence (cache clears, migrations, seeders, composer install), flags high-risk changes (middleware, observers, routes, PreviewWriteInterceptor), and saves a dated deploy note to both the repo (`<Month>/<Month>DDUpdates/deploy-<date>.md`) and the FynlaInter vault. Use whenever the user says "deploy notes", "deployment checklist", "generate deploy", "what needs deploying", "deploy this", "deploy to dev", "deploy to prod", "deployment docs", "ship this to production", or after completing a feature that needs to reach a live environment. Covers both the pre-deploy "what am I shipping" checklist and the post-session "record of what shipped" note in one skill.
 disable-model-invocation: true
 ---
 
-# Deploy Notes Generator
+# Deploy Notes
 
-Auto-generate deployment documentation by analysing git changes. Saves to both the project and Obsidian vault.
+Generate deployment documentation for Fynla's two SiteGround environments:
 
-## Step 1: Determine Comparison Range
+| Env | URL | Branch | Server path | SSH alias |
+|-----|-----|--------|-------------|-----------|
+| **Production** | `https://fynla.org` | `main` | `~/www/fynla.org/public_html/` | `ssh.fynla.org:18765` as `u2783-hrf1k8bpfg02` |
+| **Dev / staging** | `https://csjones.co/fynla` | `dev` (when it exists) or `main` | `~/www/csjones.co/public_html/fynla/` | `ssh.csjones.co:18765` as `u163-ptanegf9edny` |
 
-Find what has changed since the last deployment or merge to main:
+If the user doesn't specify which environment, ask once. Default to prod if they say "deploy" without qualification AND the branch is `main`.
+
+---
+
+## Step 1: Determine the comparison range
+
+Find what has changed since the last deploy or merge to main:
 
 ```bash
-# If on a feature branch, compare against main
+# On a feature branch → compare against main
 git diff --name-only origin/main...HEAD 2>/dev/null
 
-# If on main, compare against the last merge commit or tag
+# On main → compare against the previous commit or last deploy tag
 git diff --name-only HEAD~1...HEAD 2>/dev/null
+
+# User-specified ranges ("since last deploy", "last 3 commits") win
 ```
 
-If the user specifies a range (e.g., "since last deploy", "last 3 commits"), use that instead.
+If there are no changed files, report "nothing to deploy" and stop.
 
-If there are no changed files, tell the user and stop.
+---
 
-## Step 2: Categorise Changed Files
+## Step 2: Categorise changed files
 
-Read the full list of changed files and sort into categories:
+| Category | Pattern | Deploy action |
+|----------|---------|---------------|
+| PHP backend | `app/**/*.php`, `config/*.php`, `routes/*.php` | Upload via SiteGround File Manager |
+| Frontend | `resources/js/**`, `resources/css/**`, `resources/views/**/*.blade.php` | Build + upload `public/build/` |
+| Migrations | `database/migrations/*.php` | Upload + SSH `php artisan migrate --force` |
+| Seeders | `database/seeders/*.php` | Upload + SSH `php artisan db:seed --class=XSeeder --force` |
+| Deploy config | `deploy/**`, `.htaccess` | Upload |
+| Composer | `composer.json`, `composer.lock` | SSH `composer install --no-dev --optimize-autoloader` |
+| Docs only | `*.md`, `docs/**`, `.claude/**`, `<Month>/<Month>*Updates/**` | No deploy |
+| Tests only | `tests/**` | No deploy |
+| Vendored | `vendor/**`, `node_modules/**` | Never upload — managed server-side |
 
-| Category | Patterns | Deploy Action |
-|----------|----------|---------------|
-| **PHP Backend** | `app/**/*.php`, `config/*.php`, `routes/*.php` | Upload via SiteGround File Manager |
-| **Frontend** | `resources/js/**`, `resources/css/**` | Run `./deploy/fynla-org/build.sh` then upload `public/build/` |
-| **Migrations** | `database/migrations/*.php` | Upload + SSH `php artisan migrate --force` |
-| **Seeders** | `database/seeders/*.php` | Upload + SSH `php artisan db:seed --class=XSeeder --force` |
-| **Deploy Config** | `deploy/**`, `.htaccess` | Upload to server |
-| **Composer** | `composer.json`, `composer.lock` | SSH `composer install --no-dev` on server |
-| **Docs Only** | `*.md`, `docs/**`, `.claude/**`, `March/**` | No deployment needed |
-| **Tests Only** | `tests/**` | No deployment needed |
+If **all** changes are docs-only or tests-only, report "no deployment needed" and stop.
 
-Count files per category. If ALL changes are docs/tests only, report "No deployment needed" and stop.
+---
 
-## Step 3: Determine Build Requirements
+## Step 3: Decide whether a Vite build is required
 
-**Frontend build needed?**
-Check if ANY file matches: `resources/js/**` or `resources/css/**`
+If any file matches `resources/js/**`, `resources/css/**`, or `resources/views/**/*.blade.php`:
 
-If yes:
-```
-Build command: ./deploy/fynla-org/build.sh
-Upload: public/build/ → ~/www/fynla.org/public_html/public/build/
-```
+| Target env | Build command | Reason |
+|------------|---------------|--------|
+| `fynla.org` | `./deploy/fynla-org/build.sh` | Vite `base=/build/`, `RewriteBase=/` |
+| `csjones.co/fynla` | `./deploy/csjones-fynla/build.sh` | Vite `base=/fynla/build/`, `RewriteBase=/fynla/`, sandbox flags |
 
-**NEVER suggest `npx vite build`, `npm run build`, or raw vite commands.**
+**Never** suggest `npx vite build`, `npm run build`, or raw Vite commands — they bypass the per-environment config and produce the wrong router base. Also **never** build for one env and upload to the other — the SPA will render a blank page with no useful error.
 
-## Step 4: Generate Upload List
+---
 
-For each PHP/config file, map the local path to the server path:
+## Step 4: Generate the upload list
 
-```
-Base server path: ~/www/fynla.org/public_html/
-```
+Base server path per env:
 
-Example:
+- Prod: `~/www/fynla.org/public_html/`
+- Dev: `~/www/csjones.co/public_html/fynla/`
+
+Map each file's local path to the server path. Group by directory so the user can batch-upload. Example (prod):
+
 ```
 app/Services/Estate/IHTCalculator.php
   → ~/www/fynla.org/public_html/app/Services/Estate/IHTCalculator.php
+
+resources/js/components/Investment/...  (multiple files)
+  → rebuild locally, upload public/build/ entirely
 ```
 
-Group files by directory for easier batch uploading.
+If frontend was built, the upload target is the whole `public/build/` directory, not individual files inside it — Vite's manifest depends on the full set.
 
-## Step 5: Generate SSH Commands
+---
+
+## Step 5: Generate SSH commands
 
 Always include the connection and cache clear:
 
 ```bash
+# Prod
 ssh -p 18765 -i ~/.ssh/production u2783-hrf1k8bpfg02@ssh.fynla.org
 cd ~/www/fynla.org/public_html
+
+# Dev
+ssh -p 18765 -i ~/.ssh/fynlaDev u163-ptanegf9edny@ssh.csjones.co
+cd ~/www/csjones.co/public_html/fynla
+
+# Both — always
 php artisan cache:clear && php artisan config:clear && php artisan view:clear && php artisan route:clear && php artisan optimize
 ```
 
-Add conditional commands:
+Conditional commands:
 
-- If migrations present: `php artisan migrate --force`
-- If seeders present: list each specific seeder command
-- If composer changed: `composer install --no-dev --optimize-autoloader`
+- Migrations present → `php artisan migrate --force`
+- Seeders present → list each explicitly: `php artisan db:seed --class=<Seeder> --force`
+- Composer changed → `composer install --no-dev --optimize-autoloader`
 
-## Step 6: Check for Warnings
+---
 
-Flag any of these:
+## Step 6: Flag warnings
 
-| Warning | Condition |
-|---------|-----------|
+| Warning | Trigger |
+|---------|---------|
 | Migration requires SSH | `database/migrations/*.php` changed |
-| Environment config change | `config/*.php` changed (may need `.env` update on server) |
+| Env/config drift risk | `config/*.php` changed (check if `.env` on server needs updating) |
 | New composer dependencies | `composer.json` or `composer.lock` changed |
-| Route changes | `routes/*.php` changed (must clear route cache) |
-| Middleware changes | `app/Http/Middleware/*.php` changed |
-| PreviewWriteInterceptor | `PreviewWriteInterceptor.php` changed (verify excluded routes) |
-| Seeder changes | `database/seeders/*.php` changed (must run specific seeder on server) |
-| Observer changes | `app/Observers/*.php` changed (verify no side effects) |
+| Route cache invalidated | `routes/*.php` changed (cache clear is mandatory) |
+| Middleware changed | `app/Http/Middleware/*.php` changed |
+| PreviewWriteInterceptor | `PreviewWriteInterceptor.php` changed — verify `EXCLUDED_ROUTES` covers any new auth routes (per CLAUDE.md rule 8) |
+| Seeder run required | `database/seeders/*.php` changed |
+| Observer side-effects | `app/Observers/*.php` changed (risk-recalc / goal-tracking / Monte Carlo observers run on every save — verify intended) |
+| Design-system violation | Grep built artefacts for banned classes (`amber-`, `orange-`, `primary-`, `secondary-`, `gray-`) before uploading — they should have been blocked pre-build but verify |
 
-## Step 7: Generate and Save Deploy Notes
+---
 
-Determine today's date and generate the filename:
+## Step 7: Generate and save the deploy note
+
+Compute date/folder dynamically:
 
 ```bash
-date +"%d"  # Day of month for folder name
+MONTH=$(date +%B)
+DAY=$(date +%-d)
+DATE_FULL=$(date +%Y-%m-%d)
+FOLDER="${MONTH}/${MONTH}${DAY}Updates"
+FNAME="deploy-${DATE_FULL}.md"
+mkdir -p "$FOLDER"
+mkdir -p "/Users/CSJ/Desktop/FynlaInter/FynlaInter/$FOLDER"
 ```
 
-**Output format:**
+Write to both locations:
+
+- Repo: `<Month>/<Month>DDUpdates/deploy-YYYY-MM-DD.md`
+- Vault: `/Users/CSJ/Desktop/FynlaInter/FynlaInter/<Month>/<Month>DDUpdates/deploy-YYYY-MM-DD.md`
+
+Output template:
 
 ```markdown
-# Deployment Notes - [DD Month YYYY]
+---
+type: deploy
+env: <prod | dev>
+date: <YYYY-MM-DD>
+branch: <current branch>
+commits: <count since last deploy>
+---
+
+# Deployment Notes — <DD Month YYYY> — <prod|dev>
+
+Back to [[Home]] | [[<Month>/<Month> Index|<Month> Index]]
 
 ## Summary
-- **Files changed:** X
-- **Frontend build required:** Yes/No
-- **Migrations:** Yes/No
-- **Seeders:** [list or None]
+- **Target:** <fynla.org | csjones.co/fynla>
+- **Files changed:** <N>
+- **Frontend build:** Yes / No
+- **Migrations:** <count>
+- **Seeders:** <list or None>
+- **Composer changes:** Yes / No
 
-## PHP Files to Upload
+## PHP files to upload
 
-### [Directory Group]
-- [ ] `path/to/file.php` → `~/www/fynla.org/public_html/path/to/file.php`
+### <directory group>
+- [ ] `path/to/file.php` → `<server-base>/path/to/file.php`
 
-## Frontend Build
-- [ ] Run `./deploy/fynla-org/build.sh`
-- [ ] Upload `public/build/` → `~/www/fynla.org/public_html/public/build/`
+## Frontend build
+- [ ] Run `<build script>`
+- [ ] Upload `public/build/` → `<server-base>/public/build/`
 
 ## Migrations
 - [ ] `database/migrations/xxxx_migration.php`
 
 ## Seeders
-- [ ] `php artisan db:seed --class=XSeeder --force`
+- [ ] `php artisan db:seed --class=<Seeder> --force`
 
-## Post-Upload SSH Commands
+## Post-upload SSH
 
 ```bash
-ssh -p 18765 -i ~/.ssh/production u2783-hrf1k8bpfg02@ssh.fynla.org
-cd ~/www/fynla.org/public_html
+<ssh command for target env>
+cd <server-base>
 php artisan cache:clear && php artisan config:clear && php artisan view:clear && php artisan route:clear && php artisan optimize
-[additional commands if needed]
+<additional commands if needed>
 ```
 
 ## Warnings
-- [Any warnings from Step 6]
+- <from Step 6, or "None">
 
 ## Verification
-- [ ] Visit https://fynla.org and verify no blank page
-- [ ] Check a preview persona loads correctly
-- [ ] Verify changed feature works as expected
+- [ ] Visit `<env URL>` — no blank page
+- [ ] Load a preview persona — renders correctly
+- [ ] Exercise the changed feature in the browser
+- [ ] Tail `storage/logs/laravel.log` for 5 minutes after upload — no new ERRORs
 ```
 
-**Save to both locations:**
+Use `> [!warning]`, `> [!note]`, `> [!tip]` callouts for anything that needs emphasis, not emoji-quotes.
 
-1. Project: `March/March[DD]Updates/deploy.md`
-2. Vault: `/Users/CSJ/Desktop/fynlaBrain/March/March[DD]Updates/deploy.md`
+---
 
-Create directories if they don't exist:
-```bash
-mkdir -p "March/March$(date +%d)Updates"
-mkdir -p "/Users/CSJ/Desktop/fynlaBrain/March/March$(date +%d)Updates"
-```
+## Step 8: Display summary
 
-## Step 8: Display Summary
-
-After saving, show a concise summary to the user:
+After saving, give the user a scannable summary:
 
 ```
-Deploy notes saved to:
-  - March/March[DD]Updates/deploy.md
-  - fynlaBrain/March/March[DD]Updates/deploy.md
+Deploy notes saved:
+  - <Month>/<Month>DDUpdates/deploy-<date>.md
+  - FynlaInter vault mirror
 
-Summary: X PHP files, [build needed/not needed], [N migrations], [N seeders]
-Warnings: [list any]
+Target: <env>
+Summary: <N> PHP files · <build/no-build> · <N> migrations · <N> seeders
+Warnings: <list or none>
+
+Next: upload the listed files via SiteGround File Manager, then run the SSH block.
 ```
 
-## Important
+---
 
-- NEVER suggest `npx vite build` or `npm run build` — always use `./deploy/fynla-org/build.sh`
-- NEVER include docs, tests, or `.claude/` files in the upload list — they don't go to production
-- NEVER include `vendor/` or `node_modules/` — these are managed on server via composer
-- Always include the verification checklist at the end
-- If the user asks to deploy to csjones.co/fynla instead, use `./deploy/csjones-fynla/build.sh` and adjust the base path to `~/www/csjones.co/public_html/fynla/`
+## Rules
+
+- Deploy notes come from `git diff`, never from memory — Claude will miss files otherwise.
+- Never build for one environment and upload to the other — the router base paths don't match and the SPA silently breaks.
+- Never include `vendor/`, `node_modules/`, `*.md`, `docs/`, `.claude/`, or the `<Month>Updates/` folders in the upload list.
+- Never suggest `npx vite build` / `npm run build`.
+- Always include the verification checklist — the last line of defence before user-visible regressions.
+- `.env` changes on the server are manual — flag when `config/*.php` drifts so the user knows to check.

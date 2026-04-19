@@ -1,7 +1,7 @@
 {
   "name": "fynla-design",
-  "description": "Premium UI design and UX writing agents for Fynla. Elevate interfaces with sophisticated animations and micro-interactions, and craft clear user-centred microcopy following UK English standards",
-  "version": "1.0.0",
+  "description": "Design surface for Fynla: premium-ui-designer agent (sophisticated animations, micro-interactions), ux-writing-expert agent (user-centred microcopy, UK English), and the ui-graph skill (ApexCharts styling conventions — CHART_DEFAULTS spread, designSystem.js palette imports, sparkline/donut/area/bar recipes, British currency formatting).",
+  "version": "1.1.0",
   "author": {
     "name": "Fynla Development Team",
     "email": "chris@fynla.org"
