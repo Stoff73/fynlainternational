@@ -1,7 +1,7 @@
 ---
 name: deploy-notes
 description: Auto-generate deployment documentation from `git diff` for Fynla's SiteGround environments (prod `fynla.org` and dev `csjones.co/fynla`). Categorises changed files, decides whether a Vite build is needed, maps local paths to server paths, generates the SSH command sequence (cache clears, migrations, seeders, composer install), flags high-risk changes (middleware, observers, routes, PreviewWriteInterceptor), and saves a dated deploy note to both the repo (`<Month>/<Month>DDUpdates/deploy-<date>.md`) and the FynlaInter vault. Use whenever the user says "deploy notes", "deployment checklist", "generate deploy", "what needs deploying", "deploy this", "deploy to dev", "deploy to prod", "deployment docs", "ship this to production", or after completing a feature that needs to reach a live environment. Covers both the pre-deploy "what am I shipping" checklist and the post-session "record of what shipped" note in one skill.
-disable-model-invocation: true
+disable-model-invocation: false
 ---
 
 # Deploy Notes

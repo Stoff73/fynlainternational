@@ -1,7 +1,7 @@
 ---
 name: ship
 description: Atomic git pipeline — commit, push, and optionally create a PR or merge. Handles staging, commit message generation, branch management, and PR creation in one command. Use when the user says "ship", "ship it", "commit and push", "push and PR", "push pr and merge", "send it", or any variation of committing + pushing + PR creation.
-disable-model-invocation: true
+disable-model-invocation: false
 ---
 
 # Ship — Atomic Git Pipeline

@@ -1,7 +1,7 @@
 ---
 name: scaffold-feature
 description: Scaffold a new feature with all required files following Fynla conventions. Creates controller, service, model, migration, Vue component, store module, API service, route, form request, and test files.
-disable-model-invocation: true
+disable-model-invocation: false
 ---
 
 # Scaffold Feature
