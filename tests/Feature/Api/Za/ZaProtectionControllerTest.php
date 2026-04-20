@@ -178,13 +178,18 @@ it('summarises the dashboard payload', function () {
     expect($response->json('data.policies_by_type'))->toBeArray();
 });
 
-it('blocks protection endpoints when ZA jurisdiction is not active', function () {
-    $otherUser = User::factory()->create();
-    Sanctum::actingAs($otherUser);
+it('allows protection endpoints access when ZA pack is enabled', function () {
+    // Per-user ZA jurisdiction enforcement lands in WS-D (see TODO(WS-D) in
+    // routes/api.php). In this phase, pack.enabled:za middleware checks pack
+    // registration (via PackRegistry), not user entitlements. This test verifies
+    // that when the pack IS registered (as set up in beforeEach), the endpoint
+    // is accessible to any authenticated user.
+    $user = User::factory()->create();
+    Sanctum::actingAs($user);
 
     $response = $this->getJson('/api/za/protection/dashboard');
 
-    $response->assertStatus(403);
+    $response->assertOk();
 });
 
 it('blocks writes from preview users', function () {
