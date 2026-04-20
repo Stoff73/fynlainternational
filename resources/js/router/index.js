@@ -110,6 +110,7 @@ const SavingsDashboard = () => import('@/views/Savings/SavingsDashboard.vue');
 const ZaSavingsDashboard = () => import('@/views/ZA/ZaSavingsDashboard.vue');
 const ZaInvestmentDashboard = () => import('@/views/ZA/ZaInvestmentDashboard.vue');
 const ZaExchangeControlDashboard = () => import('@/views/ZA/ZaExchangeControlDashboard.vue');
+const ZaRetirementDashboard = () => import('@/views/ZA/ZaRetirementDashboard.vue');
 const SavingsAccountDetail = () => import('@/views/Savings/SavingsAccountDetail.vue');
 const GoalsDashboard = () => import('@/views/Goals/GoalsDashboard.vue');
 const CashOverview = () => import('@/views/NetWorth/CashOverview.vue');
@@ -715,6 +716,19 @@ const routes = [
       breadcrumb: [
         { label: 'Home', path: '/dashboard' },
         { label: 'South Africa — Exchange Control', path: '/za/exchange-control' },
+      ],
+    },
+  },
+  {
+    path: '/za/retirement',
+    name: 'za-retirement',
+    component: ZaRetirementDashboard,
+    meta: {
+      requiresAuth: true,
+      requiresJurisdiction: 'za',
+      breadcrumb: [
+        { label: 'Home', path: '/dashboard' },
+        { label: 'South Africa — Retirement', path: '/za/retirement' },
       ],
     },
   },
