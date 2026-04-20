@@ -70,6 +70,7 @@
 <script>
 import { mapActions, mapState } from 'vuex';
 import zaCurrencyMixin from '@/mixins/zaCurrencyMixin';
+import { toMinorZAR } from '@/utils/zaCurrency';
 
 export default {
   name: 'ZaLifeAnnuityQuote',
@@ -99,8 +100,8 @@ export default {
       this.error = null;
       try {
         await this.quoteLifeAnnuity({
-          annual_annuity_minor: Math.round((this.form.annual_annuity || 0) * 100),
-          declared_section_10c_pool_minor: Math.round((this.form.section_10c_pool || 0) * 100),
+          annual_annuity_minor: toMinorZAR(this.form.annual_annuity),
+          declared_section_10c_pool_minor: toMinorZAR(this.form.section_10c_pool),
           age: this.form.age,
           tax_year: this.form.tax_year,
         });

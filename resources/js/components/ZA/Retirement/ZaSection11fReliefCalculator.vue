@@ -54,6 +54,7 @@
 <script>
 import { mapActions, mapState } from 'vuex';
 import zaCurrencyMixin from '@/mixins/zaCurrencyMixin';
+import { toMinorZAR } from '@/utils/zaCurrency';
 
 export default {
   name: 'ZaSection11fReliefCalculator',
@@ -78,8 +79,8 @@ export default {
       this.loading = true;
       try {
         await this.calculateTaxRelief({
-          contribution_minor: Math.round((this.form.contribution || 0) * 100),
-          gross_income_minor: Math.round((this.form.gross_income || 0) * 100),
+          contribution_minor: toMinorZAR(this.form.contribution),
+          gross_income_minor: toMinorZAR(this.form.gross_income),
           tax_year: this.form.tax_year,
         });
       } catch (e) {

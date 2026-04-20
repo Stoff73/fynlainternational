@@ -81,6 +81,8 @@
 </template>
 
 <script>
+import { toMinorZAR } from '@/utils/zaCurrency';
+
 export default {
   name: 'ZaRetirementFundForm',
   emits: ['save', 'close'],
@@ -111,12 +113,12 @@ export default {
         provider: this.form.provider.trim(),
         scheme_name: this.form.scheme_name.trim() || null,
         member_number: this.form.member_number.trim() || null,
-        starting_vested_minor: Math.round((this.form.starting_vested || 0) * 100),
-        starting_savings_minor: Math.round((this.form.starting_savings || 0) * 100),
-        starting_retirement_minor: Math.round((this.form.starting_retirement || 0) * 100),
+        starting_vested_minor: toMinorZAR(this.form.starting_vested),
+        starting_savings_minor: toMinorZAR(this.form.starting_savings),
+        starting_retirement_minor: toMinorZAR(this.form.starting_retirement),
       };
       if (this.form.fund_type === 'provident_fund') {
-        payload.provident_vested_pre2021_minor = Math.round((this.form.provident_vested_pre2021 || 0) * 100);
+        payload.provident_vested_pre2021_minor = toMinorZAR(this.form.provident_vested_pre2021);
       }
       this.$emit('save', payload);
     },

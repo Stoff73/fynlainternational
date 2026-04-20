@@ -76,6 +76,7 @@
 <script>
 import { mapActions, mapState } from 'vuex';
 import zaCurrencyMixin from '@/mixins/zaCurrencyMixin';
+import { toMinorZAR } from '@/utils/zaCurrency';
 
 export default {
   name: 'ZaLivingAnnuitySlider',
@@ -123,7 +124,7 @@ export default {
       this.loading = true;
       try {
         await this.quoteLivingAnnuity({
-          capital_minor: Math.round(this.form.capital * 100),
+          capital_minor: toMinorZAR(this.form.capital),
           drawdown_rate_bps: this.form.drawdown_bps,
           age: this.form.age,
           tax_year: this.form.tax_year,

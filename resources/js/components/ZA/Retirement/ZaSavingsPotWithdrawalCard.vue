@@ -86,6 +86,7 @@
 <script>
 import { mapActions, mapState } from 'vuex';
 import zaCurrencyMixin from '@/mixins/zaCurrencyMixin';
+import { toMinorZAR } from '@/utils/zaCurrency';
 
 export default {
   name: 'ZaSavingsPotWithdrawalCard',
@@ -113,8 +114,8 @@ export default {
     payload() {
       return {
         fund_holding_id: this.form.fund_holding_id,
-        amount_minor: Math.round((this.form.amount || 0) * 100),
-        current_annual_income_minor: Math.round((this.form.income || 0) * 100),
+        amount_minor: toMinorZAR(this.form.amount),
+        current_annual_income_minor: toMinorZAR(this.form.income),
         age: this.form.age,
         tax_year: this.form.tax_year,
       };

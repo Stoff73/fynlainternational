@@ -53,6 +53,7 @@
 
 <script>
 import zaCurrencyMixin from '@/mixins/zaCurrencyMixin';
+import { toMinorZAR } from '@/utils/zaCurrency';
 
 export default {
   name: 'ZaContributionModal',
@@ -71,7 +72,7 @@ export default {
   },
   computed: {
     today() { return new Date().toISOString().slice(0, 10); },
-    amountMinor() { return Math.round((this.form.amount || 0) * 100); },
+    amountMinor() { return toMinorZAR(this.form.amount); },
     isPostTwoPot() { return this.form.contribution_date >= '2024-09-01'; },
     savingsMinor() {
       if (!this.isPostTwoPot) return 0;

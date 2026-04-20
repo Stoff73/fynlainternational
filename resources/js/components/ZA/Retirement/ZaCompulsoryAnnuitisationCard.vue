@@ -63,6 +63,7 @@
 <script>
 import { mapActions, mapState } from 'vuex';
 import zaCurrencyMixin from '@/mixins/zaCurrencyMixin';
+import { toMinorZAR } from '@/utils/zaCurrency';
 
 export default {
   name: 'ZaCompulsoryAnnuitisationCard',
@@ -92,9 +93,9 @@ export default {
       this.error = null;
       try {
         await this.apportionCompulsory({
-          vested_minor: Math.round((this.form.vested || 0) * 100),
-          provident_vested_pre2021_minor: Math.round((this.form.provident_pre2021 || 0) * 100),
-          retirement_minor: Math.round((this.form.retirement || 0) * 100),
+          vested_minor: toMinorZAR(this.form.vested),
+          provident_vested_pre2021_minor: toMinorZAR(this.form.provident_pre2021),
+          retirement_minor: toMinorZAR(this.form.retirement),
           tax_year: this.form.tax_year,
         });
       } catch (e) {
