@@ -137,5 +137,55 @@ class TestUsersSeeder extends Seeder
                 );
             }
         }
+
+        // ZA Protection test user
+        $zaProtectionUser = User::updateOrCreate(
+            ['email' => 'za-protection-test@example.com'],
+            [
+                'first_name' => 'ZA',
+                'surname' => 'Protection Test',
+                'password' => Hash::make('password'),
+                'household_id' => $smithHousehold->id,
+                'is_primary_account' => true,
+                'role_id' => \App\Models\Role::findByName(\App\Models\Role::ROLE_USER)?->id,
+                'date_of_birth' => '1975-01-01',
+                'gender' => 'male',
+                'marital_status' => 'married',
+                'national_insurance_number' => 'ZA123456Z',
+                'address_line_1' => '789 Test Street',
+                'city' => 'Cape Town',
+                'postcode' => 'SA00001',
+                'phone' => '07700900999',
+                'occupation' => 'Financial Planner',
+                'employer' => 'Test Corp',
+                'industry' => 'Finance',
+                'employment_status' => 'employed',
+                'annual_employment_income' => 480000.00,
+                'trial_ends_at' => $trialEnd,
+            ],
+        );
+
+        // Create dependants for ZA Protection test user
+        $zaProtectionUser->update(['trial_ends_at' => $trialEnd]);
+        \App\Models\FamilyMember::factory()->for($zaProtectionUser)->count(2)->create(['is_dependent' => true]);
+
+        // Create property and mortgage for ZA Protection test user
+        $property = \App\Models\Property::factory()->for($zaProtectionUser)->create();
+        \App\Models\Mortgage::factory()->for($zaProtectionUser)->for($property)->create(['outstanding_balance' => 800000.00]);
+
+        // Trial subscription for ZA Protection test user
+        Subscription::updateOrCreate(
+            ['user_id' => $zaProtectionUser->id],
+            [
+                'plan' => 'standard',
+                'billing_cycle' => 'monthly',
+                'status' => 'trialing',
+                'amount' => 0,
+                'trial_started_at' => now(),
+                'trial_ends_at' => $trialEnd,
+                'current_period_start' => now(),
+                'current_period_end' => $trialEnd,
+            ]
+        );
     }
 }
