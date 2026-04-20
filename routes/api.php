@@ -1318,4 +1318,23 @@ Route::middleware(['auth:sanctum', 'active.jurisdiction', 'pack.enabled:za'])
                 Route::post('snapshots', [\App\Http\Controllers\Api\Za\ZaRetirementController::class, 'storeReg28Snapshot'])->name('snapshots.store');
             });
         });
+
+        // WS 1.5b — Protection
+        Route::prefix('protection')->as('protection.')->group(function () {
+            Route::get('dashboard', [\App\Http\Controllers\Api\Za\ZaProtectionController::class, 'dashboard'])->name('dashboard');
+
+            Route::get('policies', [\App\Http\Controllers\Api\Za\ZaProtectionController::class, 'listPolicies'])->name('policies.index');
+            Route::post('policies', [\App\Http\Controllers\Api\Za\ZaProtectionController::class, 'storePolicy'])->name('policies.store');
+            Route::get('policies/{id}', [\App\Http\Controllers\Api\Za\ZaProtectionController::class, 'showPolicy'])->whereNumber('id')->name('policies.show');
+            Route::put('policies/{id}', [\App\Http\Controllers\Api\Za\ZaProtectionController::class, 'updatePolicy'])->whereNumber('id')->name('policies.update');
+            Route::delete('policies/{id}', [\App\Http\Controllers\Api\Za\ZaProtectionController::class, 'deletePolicy'])->whereNumber('id')->name('policies.destroy');
+
+            Route::get('policy-types', [\App\Http\Controllers\Api\Za\ZaProtectionController::class, 'policyTypes'])->name('policy-types');
+            Route::get('tax-treatment/{type}', [\App\Http\Controllers\Api\Za\ZaProtectionController::class, 'taxTreatment'])->name('tax-treatment');
+
+            Route::get('coverage-gap', [\App\Http\Controllers\Api\Za\ZaProtectionController::class, 'coverageGap'])->name('coverage-gap');
+
+            Route::get('beneficiaries/{policyId}', [\App\Http\Controllers\Api\Za\ZaProtectionController::class, 'listBeneficiaries'])->whereNumber('policyId')->name('beneficiaries.index');
+            Route::post('beneficiaries/{policyId}', [\App\Http\Controllers\Api\Za\ZaProtectionController::class, 'storeBeneficiaries'])->whereNumber('policyId')->name('beneficiaries.store');
+        });
     });
