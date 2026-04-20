@@ -2,7 +2,9 @@
 
 > **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
 
-**Goal:** Ship the SA Protection module (6 policy types, coverage-gap analysis, beneficiaries with estate-duty awareness) at `/za/protection`, full-stack, plus retire tech-debt W1 (shared modal a11y) and W2 (`toMinorZAR` reuse) across prior ZA workstreams.
+**Goal:** Ship the SA Protection module (6 policy types, coverage-gap analysis, beneficiaries with estate-duty awareness + `is_dutiable` forward-compat for WS 1.6) at `/za/protection`, full-stack, plus retire tech-debt W2 (`toMinorZAR` reuse) across prior ZA workstreams.
+
+**Status:** Amended 2026-04-20 after PRD audit. W1 (DialogContainer refactor) extracted to a separate follow-up PR to reduce regression surface on shipped WS 1.2b/1.3c/1.4d code. See PRD-ws-1-5b-za-protection-frontend.md for the audit findings and resolutions.
 
 **Architecture:** Single-page dashboard with 3 tabs. Fresh ZA-native pack tables (`za_protection_policies` + `za_protection_beneficiaries`). Controller in `app/Http/Controllers/Api/Za/` delegates to the existing `ZaProtectionEngine` in the pack; aggregate coverage-gap method added. Frontend mirrors WS 1.4d `/za/retirement` shape: one Vue view, 3 tabs, Vuex module, axios service, one sidebar entry.
 
@@ -208,6 +210,7 @@ return new class extends Migration
             $t->string('relationship', 80)->nullable();
             $t->decimal('allocation_percentage', 5, 2);
             $t->string('id_number', 20)->nullable();
+            $t->boolean('is_dutiable')->default(false);
             $t->timestamps();
         });
     }
@@ -381,15 +384,28 @@ class ZaProtectionBeneficiary extends Model
         'relationship',
         'allocation_percentage',
         'id_number',
+        'is_dutiable',
     ];
 
     protected $casts = [
         'allocation_percentage' => 'decimal:2',
+        'is_dutiable' => 'boolean',
     ];
 
     public function policy(): BelongsTo
     {
         return $this->belongsTo(ZaProtectionPolicy::class, 'policy_id');
+    }
+
+    /**
+     * Auto-set is_dutiable when beneficiary_type is assigned. Payable-to-estate
+     * policies are dutiable under Estate Duty Act s3(3)(a)(ii). WS 1.6 Estate
+     * will consume this flag.
+     */
+    public function setBeneficiaryTypeAttribute(string $value): void
+    {
+        $this->attributes['beneficiary_type'] = $value;
+        $this->attributes['is_dutiable'] = ($value === 'estate');
     }
 
     protected static function newFactory()
@@ -1077,6 +1093,7 @@ class ZaProtectionBeneficiaryResource extends JsonResource
             'relationship' => $this->relationship,
             'allocation_percentage' => (float) $this->allocation_percentage,
             'id_number' => $this->id_number,
+            'is_dutiable' => (bool) $this->is_dutiable,
         ];
     }
 }
@@ -1096,21 +1113,18 @@ use Illuminate\Http\Resources\Json\JsonResource;
 
 /**
  * Transforms the engine's 4-category coverage-gap payload for the API.
- * The resource is wrapped around the full array, NOT a single category.
+ * Wrapped around the full array returned by calculateAggregateCoverageGap().
+ * Uses the standard JsonResource constructor (resource = mixed) — no
+ * custom constructor signature, consistent with WS 1.4d resources.
  */
 class ZaCoverageGapResource extends JsonResource
 {
-    /**
-     * @param  array<string, array{recommended_cover: int, minimum_cover: int, existing_cover: int, shortfall: int, rationale: string, missing_inputs: array<int,string>}>  $resource
-     */
-    public function __construct(public array $resource)
-    {
-        parent::__construct($resource);
-    }
-
     public function toArray(Request $request): array
     {
-        return collect($this->resource)
+        /** @var array<string, array{recommended_cover: int, minimum_cover: int, existing_cover: int, shortfall: int, rationale: string, missing_inputs: array<int,string>}> $payload */
+        $payload = $this->resource;
+
+        return collect($payload)
             ->map(fn (array $cat, string $key) => [
                 'category' => $key,
                 'recommended_cover_minor' => $cat['recommended_cover'],
@@ -1157,14 +1171,18 @@ use Fynla\Packs\Za\Models\ZaProtectionPolicy;
 use Laravel\Sanctum\Sanctum;
 
 beforeEach(function () {
-    $this->seed(\Database\Seeders\TaxConfigurationSeeder::class);
-    (new \Fynla\Packs\Za\Database\Seeders\ZaTaxConfigurationSeeder())->run();
-    (new \Database\Seeders\ZaJurisdictionSeeder())->run();
+    // Mirrors WS 1.4d ZaRetirementControllerTest pattern.
+    // pack.enabled:za middleware reads FYNLA_ACTIVE_PACKS env var,
+    // NOT user_jurisdictions rows. ZaTaxConfigurationSeeder internally
+    // chains ZaJurisdictionSeeder, so no separate call needed.
+    putenv('FYNLA_ACTIVE_PACKS=GB,ZA');
+    $this->seed(\Fynla\Packs\Za\Database\Seeders\ZaTaxConfigurationSeeder::class);
     $this->user = User::factory()->create();
-    $this->user->jurisdictions()->syncWithoutDetaching([
-        \App\Models\Jurisdiction::where('country_code', 'ZA')->first()->id => ['is_active' => true],
-    ]);
     Sanctum::actingAs($this->user);
+});
+
+afterEach(function () {
+    putenv('FYNLA_ACTIVE_PACKS');
 });
 
 it('lists protection policies for the authenticated user', function () {
@@ -1281,9 +1299,7 @@ it('passes through tax-treatment for a policy type', function () {
 });
 
 it('computes coverage-gap happy path with policies and user context', function () {
-    \App\Models\IncomeSource::factory()->for($this->user)->create([
-        'annual_amount' => 480_000,
-    ]);
+    $this->user->update(['annual_employment_income' => 480_000]);
 
     ZaProtectionPolicy::factory()->for($this->user)->life()->create([
         'cover_amount_minor' => 2_000_000_00,
@@ -1421,8 +1437,8 @@ use App\Http\Requests\Za\Protection\UpdateZaProtectionPolicyRequest;
 use App\Http\Resources\Za\Protection\ZaCoverageGapResource;
 use App\Http\Resources\Za\Protection\ZaProtectionBeneficiaryResource;
 use App\Http\Resources\Za\Protection\ZaProtectionPolicyResource;
-use App\Models\IncomeSource;
-use App\Models\HouseholdMember;
+use App\Models\FamilyMember;
+use App\Models\Mortgage;
 use Fynla\Packs\Za\Models\ZaProtectionBeneficiary;
 use Fynla\Packs\Za\Models\ZaProtectionPolicy;
 use Fynla\Packs\Za\Protection\ZaProtectionEngine;
@@ -1588,11 +1604,23 @@ class ZaProtectionController extends Controller
             ])
             ->all();
 
-        $annualIncome = (int) round(
-            (float) IncomeSource::query()->where('user_id', $userId)->sum('annual_amount')
-        );
+        // Annual income from User columns (app/Traits/ResolvesIncome.php pattern).
+        // Engine expects MINOR units (R-cents), so multiply by 100.
+        $user = $request->user();
+        $annualIncomeMajor = (float) ($user->annual_employment_income ?? 0)
+            + (float) ($user->annual_self_employment_income ?? 0)
+            + (float) ($user->annual_rental_income ?? 0)
+            + (float) ($user->annual_dividend_income ?? 0)
+            + (float) ($user->annual_interest_income ?? 0)
+            + (float) ($user->annual_other_income ?? 0)
+            + (float) ($user->annual_trust_income ?? 0);
+        $annualIncome = (int) round($annualIncomeMajor * 100);
+
         $outstandingDebts = $this->outstandingDebts($userId);
-        $dependants = HouseholdMember::query()->where('user_id', $userId)->count();
+        $dependants = FamilyMember::query()
+            ->where('user_id', $userId)
+            ->where('is_dependent', true)
+            ->count();
 
         /** @var ZaProtectionEngine $engine */
         $engine = app('pack.za.protection');
@@ -1676,16 +1704,15 @@ class ZaProtectionController extends Controller
 
     private function outstandingDebts(int $userId): int
     {
-        // Sum outstanding mortgage + other liability balances for the
-        // user. Uses simple SUM rather than money-VO to stay robust
-        // against partially-seeded test data; engine calculators accept
-        // 0 gracefully.
-        $mortgages = DB::table('mortgages')
+        // Sum outstanding mortgage balances for the user via Eloquent
+        // (architecture test blocks DB facade in controllers). The
+        // `mortgages.outstanding_balance` column is decimal(15,2) in
+        // MAJOR units; engine expects MINOR units, so convert.
+        $mortgagesMajor = (float) Mortgage::query()
             ->where('user_id', $userId)
-            ->whereNull('deleted_at')
             ->sum('outstanding_balance');
 
-        return (int) round((float) $mortgages);
+        return (int) round($mortgagesMajor * 100);
     }
 }
 ```
@@ -1841,7 +1868,7 @@ git commit -m "test(za-protection): beneficiary controller feature tests (WS 1.5
 ## Task 12: Integration workflow tests
 
 **Files:**
-- Create: `tests/Integration/ZaProtectionWorkflowTest.php`
+- Create: `tests/Integration/Za/ZaProtectionWorkflowTest.php` *(under `Za/` subfolder per WS 1.4d convention)*
 
 - [ ] **Step 1: Write tests**
 
@@ -1850,21 +1877,19 @@ git commit -m "test(za-protection): beneficiary controller feature tests (WS 1.5
 
 declare(strict_types=1);
 
-use App\Models\IncomeSource;
 use App\Models\User;
 use Fynla\Packs\Za\Models\ZaProtectionPolicy;
 use Laravel\Sanctum\Sanctum;
 
 beforeEach(function () {
-    $this->seed(\Database\Seeders\TaxConfigurationSeeder::class);
-    (new \Fynla\Packs\Za\Database\Seeders\ZaTaxConfigurationSeeder())->run();
-    (new \Database\Seeders\ZaJurisdictionSeeder())->run();
-    $this->user = User::factory()->create();
-    $this->user->jurisdictions()->syncWithoutDetaching([
-        \App\Models\Jurisdiction::where('country_code', 'ZA')->first()->id => ['is_active' => true],
-    ]);
-    IncomeSource::factory()->for($this->user)->create(['annual_amount' => 480_000]);
+    putenv('FYNLA_ACTIVE_PACKS=GB,ZA');
+    $this->seed(\Fynla\Packs\Za\Database\Seeders\ZaTaxConfigurationSeeder::class);
+    $this->user = User::factory()->create(['annual_employment_income' => 480_000]);
     Sanctum::actingAs($this->user);
+});
+
+afterEach(function () {
+    putenv('FYNLA_ACTIVE_PACKS');
 });
 
 it('updates the coverage-gap after creating a policy', function () {
@@ -1907,7 +1932,7 @@ it('updates the coverage-gap after deleting a policy', function () {
 
 - [ ] **Step 2: Run tests**
 
-Run: `./vendor/bin/pest tests/Integration/ZaProtectionWorkflowTest.php`
+Run: `./vendor/bin/pest tests/Integration/Za/ZaProtectionWorkflowTest.php`
 Expected: 2 pass.
 
 - [ ] **Step 3: Run full suite to confirm zero regressions**
@@ -1918,13 +1943,21 @@ Expected: 2,777+ passing (2,747 baseline + ~30 new), 4 pre-existing failures (Pr
 - [ ] **Step 4: Commit**
 
 ```bash
-git add tests/Integration/ZaProtectionWorkflowTest.php
+git add tests/Integration/Za/ZaProtectionWorkflowTest.php
 git commit -m "test(za-protection): integration workflow tests (create/delete → coverage gap updates) (WS 1.5b)"
 ```
 
 ---
 
-## Task 13: Shared `DialogContainer` component (tech-debt W1)
+## ~~Task 13: Shared `DialogContainer` component (tech-debt W1)~~ — DEFERRED
+
+**Deferred to a separate follow-up PR per PRD audit Q-A.** Rationale: refactoring 4 prior-WS modals inside this workstream expands the regression surface and rollback complexity. The follow-up PR will ship `DialogContainer` and refactor WS 1.2b + 1.3c + 1.4d + 1.5b modals together, with targeted Playwright tests for each.
+
+**In WS 1.5b**, the new `ZaProtectionPolicyModal.vue` uses a hand-rolled modal shell matching the existing WS 1.4d pattern (`role="dialog"`, click-outside backdrop, simple close button). See Task 17 Step 4 for the exact markup.
+
+Skip Tasks 13 and 14. Proceed directly to Task 15.
+
+## ~~Task 13 (old): `DialogContainer` component~~
 
 **Files:**
 - Create: `resources/js/components/Common/DialogContainer.vue`
@@ -2041,7 +2074,7 @@ git commit -m "feat(common): shared DialogContainer with a11y (role/aria/focus-t
 
 ---
 
-## Task 14: Refactor 4 prior-WS modals to use `DialogContainer` (tech-debt W1)
+## ~~Task 14: Refactor 4 prior-WS modals to use `DialogContainer`~~ — DEFERRED TO FOLLOW-UP PR
 
 **Files (modify):**
 - `resources/js/components/ZA/Savings/ZaContributionModal.vue`
@@ -2318,26 +2351,35 @@ git commit -m "feat(za-protection): axios service + Vuex module (WS 1.5b)"
 - Modify: `resources/js/router/index.js`
 - Modify: `resources/js/store/modules/jurisdiction.js`
 
-- [ ] **Step 1: Add route (mirrors `/za/retirement` meta)**
+- [ ] **Step 1: Add route (mirrors `/za/retirement` meta exactly)**
 
-Locate the `/za/retirement` route in `router/index.js`. Directly after it, add:
+Locate the `/za/retirement` route in `router/index.js` (around line 726). Directly after it, add:
 
 ```js
 {
   path: '/za/protection',
   name: 'ZaProtection',
   component: () => import('@/views/ZA/ZaProtectionDashboard.vue'),
-  meta: { /* copy meta object from ZaRetirement route */ },
+  meta: {
+    requiresAuth: true,
+    requiresJurisdiction: 'za',
+    breadcrumb: [
+      { label: 'Home', path: '/dashboard' },
+      { label: 'South Africa — Protection', path: '/za/protection' },
+    ],
+  },
 },
 ```
 
-- [ ] **Step 2: Append sidebar entry**
+- [ ] **Step 2: Append sidebar entry (correct shape per `jurisdiction.js:45-52`)**
 
-In `resources/js/store/modules/jurisdiction.js`, append to the `MODULES_BY_JURISDICTION.za` array:
+In `resources/js/store/modules/jurisdiction.js`, append to `MODULES_BY_JURISDICTION.za` (replacing the `// WS 1.5b will add za-protection here` comment):
 
 ```js
-{ label: 'Protection', path: '/za/protection', icon: 'shield' /* or match existing ZA icon convention */ },
+{ key: 'za-protection', label: 'Protection', route: '/za/protection', icon: 'shield', section: 'zaSection' },
 ```
+
+Note: `key` and `section` are REQUIRED; the property is `route`, NOT `path`.
 
 - [ ] **Step 3: Verify build**
 
@@ -2477,7 +2519,7 @@ export default {
       </table>
     </div>
     <ZaProtectionPolicyModal
-      v-model:open="modalOpen"
+      :open="modalOpen"
       :policy="editing"
       @save="handleSave"
       @close="modalOpen = false"
@@ -2659,37 +2701,55 @@ export default {
 </script>
 ```
 
-- [ ] **Step 4: `ZaProtectionPolicyModal.vue` (uses DialogContainer)**
+- [ ] **Step 4: `ZaProtectionPolicyModal.vue` (hand-rolled modal — DialogContainer deferred to follow-up PR)**
 
 ```vue
 <template>
-  <DialogContainer :model-value="open" :title="title" @update:model-value="$emit('update:open', $event)">
-    <ZaProtectionPolicyForm
-      :existing-policy="policy"
-      @save="(payload) => $emit('save', payload)"
-      @close="$emit('close')"
-    />
-  </DialogContainer>
+  <teleport to="body">
+    <div v-if="open" class="fixed inset-0 z-50 flex items-center justify-center" @click.self="$emit('close')">
+      <div class="absolute inset-0 bg-horizon-500/40" aria-hidden="true" />
+      <div role="dialog" aria-modal="true" :aria-labelledby="titleId"
+           class="relative bg-white rounded-xl shadow-xl max-w-2xl w-full mx-4 max-h-[90vh] overflow-hidden flex flex-col"
+           @keydown.esc="$emit('close')">
+        <header class="px-6 py-4 border-b border-savannah-100 flex justify-between items-center">
+          <h2 :id="titleId" class="text-xl font-bold text-horizon-500">{{ title }}</h2>
+          <button type="button" class="text-horizon-300 hover:text-horizon-500 text-2xl leading-none"
+                  aria-label="Close dialog" @click="$emit('close')">×</button>
+        </header>
+        <div class="overflow-y-auto flex-1">
+          <ZaProtectionPolicyForm
+            :existing-policy="policy"
+            @save="(payload) => $emit('save', payload)"
+            @close="$emit('close')"
+          />
+        </div>
+      </div>
+    </div>
+  </teleport>
 </template>
 
 <script>
-import DialogContainer from '@/components/Common/DialogContainer.vue';
 import ZaProtectionPolicyForm from './ZaProtectionPolicyForm.vue';
 
 export default {
   name: 'ZaProtectionPolicyModal',
-  components: { DialogContainer, ZaProtectionPolicyForm },
+  components: { ZaProtectionPolicyForm },
   props: {
     open: { type: Boolean, required: true },
     policy: { type: Object, default: null },
   },
   emits: ['update:open', 'save', 'close'],
+  data() {
+    return { titleId: `dialog-title-${Math.random().toString(36).slice(2, 9)}` };
+  },
   computed: {
     title() { return this.policy ? 'Edit policy' : 'Add policy'; },
   },
 };
 </script>
 ```
+
+Note: this markup is what the follow-up DialogContainer PR will replace — keeping the `role="dialog"` / `aria-modal` / Escape handler inline matches the existing WS 1.4d modal conventions exactly.
 
 - [ ] **Step 5: `ZaPolicyDetailCard.vue`** (minimal — shows read-only policy detail + tax-treatment text)
 
@@ -3132,6 +3192,29 @@ git commit -m "refactor(za-retirement): replace inline Math.round(x*100) with to
 
 **Files:** none (uses existing dev server)
 
+- [ ] **Step 0: Seed a ZA-ready test user**
+
+`za-retirement-test@example.com` referenced in the WS 1.4d handover was never actually seeded. Before Playwright, add a test user with ZA income + FamilyMember dependants.
+
+Edit `database/seeders/TestUsersSeeder.php` — append a record:
+
+```php
+$zaProtectionUser = User::updateOrCreate(
+    ['email' => 'za-protection-test@example.com'],
+    [
+        'name' => 'ZA Protection Test',
+        'password' => bcrypt('password'),
+        'email_verified_at' => now(),
+        'annual_employment_income' => 480_000,
+    ],
+);
+\App\Models\FamilyMember::factory()->for($zaProtectionUser)->count(2)->create(['is_dependent' => true]);
+\App\Models\Mortgage::factory()->for($zaProtectionUser)->create(['outstanding_balance' => 800_000]);
+```
+
+Run: `php artisan db:seed --class=TestUsersSeeder --force`
+Expected: user `za-protection-test@example.com` exists with income + 2 family members + 1 mortgage.
+
 - [ ] **Step 1: Rebuild + clear cache**
 
 Run: `npm run build && php artisan cache:clear && php artisan config:clear && php artisan route:clear`
@@ -3147,7 +3230,7 @@ If not up, start: `./dev.sh` (or run on alternate ports if 8001/5174 are owned b
 - [ ] **Step 3: Run the Playwright smoke scenario**
 
 Follow spec § 5.2 (6 steps):
-1. Login as `za-retirement-test@example.com` / `password`; fetch MFA code from DB as per CLAUDE.md local-dev recipe.
+1. Login as `za-protection-test@example.com` / `password` (seeded in step 0); fetch MFA code from DB as per CLAUDE.md local-dev recipe.
 2. Verify sidebar shows "South Africa" → "Protection".
 3. Navigate to `/za/protection`; verify all 3 tab headers.
 4. **Tab 1:** add a life policy (Discovery Life, R5,000,000, R1,500/month, start date 2026-01-01, one spouse beneficiary @ 100%); verify row appears; edit cover to R6,000,000; verify update; delete; verify removal.

@@ -2,7 +2,7 @@
 title: WS 1.5b — SA Protection Module Design
 workstream: 1.5b
 date: 2026-04-20
-status: draft
+status: amended 2026-04-20 — conflicts resolved against codebase audit
 authors: [Claude Opus 4.7, CSJ]
 predecessors:
   - 2026-04-17-ws-1-1-za-tax-engine-design
@@ -22,14 +22,16 @@ predecessors:
 - **Patterns reused:** WS 1.2b sidebar data-driven approach, WS 1.3c service baseURL + `response.data` convention, WS 1.4d 3-tab page structure.
 - **Open tech debt to address:** `tech-debt-report.md` W1 (shared DialogContainer for modal a11y across WS 1.2b/1.3c/1.4d/1.5b) and W2 (`toMinorZAR` reuse across 15 existing inline sites).
 
-## Decisions locked via brainstorm (2026-04-20 session 3)
+## Decisions locked via brainstorm + PRD audit (2026-04-20 session 3)
 
 | # | Question | Decision |
 |---|----------|----------|
 | Q1 | Scope boundary | **A — Full-stack WS 1.5b** (backend controller + routes + form requests + resources + pack migrations + Vue + Vuex + tests). Matches WS 1.3c/1.4d precedent. |
 | Q2 | Data model | **A — Fresh ZA-native pack tables** (`za_protection_policies` + `za_protection_beneficiaries`). Zero UK churn. UK's split `life_insurance_policies` / `income_protection_policies` / `protection_profiles` tables untouched. |
 | Q3 | Information architecture | **A — Single `/za/protection` page with 3 tabs** (Policies, Coverage gap, Beneficiaries). Matches WS 1.4d convention. |
-| Q4 | Coverage-gap UX inputs | **A — Auto-pull from app state** (IncomeSource, liabilities, HouseholdMember, policy totals). No user-editable assumptions form. Empty-state deep-links to source module forms when inputs are missing. |
+| Q4 | Coverage-gap UX inputs | **A — Auto-pull from app state** (User income columns via `ResolvesIncome` pattern, `Mortgage::sum`, `FamilyMember::where('is_dependent', true)->count()`, policy totals). No user-editable assumptions form. Empty-state deep-links to source module forms when inputs are missing. |
+| Q-A | Tech-debt W1 scope | **Option 1 — Extract W1 (shared `DialogContainer` refactor of 4 prior-WS modals) to a separate PR** immediately before/after WS 1.5b. W2 (`toMinorZAR` sweep across WS 1.4d components) remains in 1.5b. Rationale: regression risk to shipped WS 1.2b/1.3c/1.4d reduces rollback surface. |
+| Q-B | `is_dutiable` column on beneficiaries | **Option 1 — Include now** as forward-compat for WS 1.6 Estate Planning. Stored boolean on `za_protection_beneficiaries`, auto-set by mutator when `beneficiary_type === 'estate'`. Exposed on resource. Prevents breaking schema migration in WS 1.6. |
 
 ## 1. Architecture overview
 
@@ -86,6 +88,7 @@ Many-to-one with policies; one policy may have 1..N beneficiaries whose `allocat
 | `relationship` | string(80) nullable | |
 | `allocation_percentage` | decimal(5,2) | 0.01–100.00; sum per policy must equal 100.00 |
 | `id_number` | string(20) nullable | SA ID (13 digits) for `nominated_individual` |
+| `is_dutiable` | boolean default false | true when `beneficiary_type = 'estate'` (paid-to-estate policies are dutiable under Estate Duty Act s3(3)(a)(ii)). Auto-set by model mutator. Forward-compat for WS 1.6 Estate Planning. |
 | `created_at` / `updated_at` | timestamps | |
 
 Index on `policy_id` (implicit via FK).
@@ -249,6 +252,7 @@ All components use `toMinorZAR()` from `@/utils/zaCurrency` for major→minor co
 - Typography: Segoe UI / Inter fallback; h1=900, h2-h5=700.
 - No scores anywhere (root CLAUDE.md rule 13). Use currency values + descriptive prose instead.
 - User-facing copy: British spelling, acronyms spelled out except `TFSA` (rule 10 — but N/A for Protection; no acronyms needed here).
+- Design guide version: `fynlaDesignGuide.md` v1.2.0 (current version in the FynlaInter vault).
 
 ## 5. Testing
 
@@ -280,8 +284,9 @@ Factories needed: `ZaProtectionPolicyFactory`, `ZaProtectionBeneficiaryFactory` 
 
 ## 6. Tech-debt targets addressed
 
-- **W1 — Modal accessibility** (`tech-debt-report.md` WS 1.4d): ship `DialogContainer` wrapper + refactor 4 existing ZA modals from WS 1.2b / 1.3c / 1.4d. Closes W1 across all ZA UI workstreams.
 - **W2 — `toMinorZAR` reuse**: WS 1.5b's own components use the util; bonus sweep refactors the 15 existing `Math.round(x * 100)` sites in WS 1.4d components to use `toMinorZAR` (zero behaviour change).
+
+**Deferred to separate PR (per PRD audit Q-A):** W1 — shared `DialogContainer` a11y wrapper + refactor of 4 prior-WS modals (WS 1.2b/1.3c/1.4d). Extracted to reduce WS 1.5b regression surface and rollback complexity. WS 1.5b's own `ZaProtectionPolicyModal` uses hand-rolled a11y matching the existing WS 1.4d pattern; the follow-up PR will refactor WS 1.5b together with WS 1.2b/1.3c/1.4d in one atomic change.
 
 ## 7. Scope non-goals (explicitly deferred)
 
