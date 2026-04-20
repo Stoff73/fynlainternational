@@ -39,7 +39,7 @@
       </div>
     </div>
     <div v-if="form.product_type === 'dread'">
-      <label class="block text-sm font-bold text-horizon-500 mb-1">Severity tier (ASISA SCIDEP)</label>
+      <label class="block text-sm font-bold text-horizon-500 mb-1">Severity tier (Critical Illness classification)</label>
       <select v-model="form.severity_tier" required class="w-full border border-savannah-200 rounded-md p-2">
         <option value="A">A — Most severe (100% payout)</option>
         <option value="B">B — Severe (75%)</option>
