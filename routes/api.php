@@ -1290,4 +1290,32 @@ Route::middleware(['auth:sanctum', 'active.jurisdiction', 'pack.enabled:za'])
             Route::post('check-approval', [\App\Http\Controllers\Api\Za\ZaExchangeControlController::class, 'checkApproval'])
                 ->name('check-approval');
         });
+
+        // WS 1.4d — Retirement
+        Route::prefix('retirement')->as('retirement.')->group(function () {
+            Route::get('dashboard', [\App\Http\Controllers\Api\Za\ZaRetirementController::class, 'dashboard'])->name('dashboard');
+
+            Route::get('funds', [\App\Http\Controllers\Api\Za\ZaRetirementController::class, 'listFunds'])->name('funds.index');
+            Route::post('funds', [\App\Http\Controllers\Api\Za\ZaRetirementController::class, 'storeFund'])->name('funds.store');
+            Route::get('funds/{fundId}/buckets', [\App\Http\Controllers\Api\Za\ZaRetirementController::class, 'showBuckets'])->name('funds.buckets');
+
+            Route::post('contributions', [\App\Http\Controllers\Api\Za\ZaRetirementController::class, 'storeContribution'])->name('contributions.store');
+
+            Route::post('savings-pot/simulate', [\App\Http\Controllers\Api\Za\ZaRetirementController::class, 'simulateSavingsPotWithdrawal'])->name('savings-pot.simulate');
+            Route::post('savings-pot/withdraw', [\App\Http\Controllers\Api\Za\ZaRetirementController::class, 'withdrawSavingsPot'])->name('savings-pot.withdraw');
+
+            Route::post('tax-relief/calculate', [\App\Http\Controllers\Api\Za\ZaRetirementController::class, 'calculateTaxRelief'])->name('tax-relief.calculate');
+
+            Route::prefix('annuities')->as('annuities.')->group(function () {
+                Route::post('living/quote', [\App\Http\Controllers\Api\Za\ZaRetirementController::class, 'quoteLivingAnnuity'])->name('living.quote');
+                Route::post('life/quote', [\App\Http\Controllers\Api\Za\ZaRetirementController::class, 'quoteLifeAnnuity'])->name('life.quote');
+                Route::post('compulsory-apportion', [\App\Http\Controllers\Api\Za\ZaRetirementController::class, 'apportionCompulsory'])->name('compulsory-apportion');
+            });
+
+            Route::prefix('reg28')->as('reg28.')->group(function () {
+                Route::match(['get', 'post'], 'check', [\App\Http\Controllers\Api\Za\ZaRetirementController::class, 'checkReg28'])->name('check');
+                Route::get('snapshots', [\App\Http\Controllers\Api\Za\ZaRetirementController::class, 'listReg28Snapshots'])->name('snapshots.index');
+                Route::post('snapshots', [\App\Http\Controllers\Api\Za\ZaRetirementController::class, 'storeReg28Snapshot'])->name('snapshots.store');
+            });
+        });
     });

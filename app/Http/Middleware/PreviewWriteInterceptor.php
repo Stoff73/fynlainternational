@@ -88,6 +88,13 @@ class PreviewWriteInterceptor
         '#/rebalance-preview$#',   // Rebalance preview (read-only)
         '#/recalculate$#',         // Risk profile recalculation (read + write, needed for risk page)
         '#/check-approval$#',      // ZA exchange-control what-if approval check (read-only, POST-shaped)
+        // WS 1.4d — ZA Retirement what-if endpoints (read-only POST-shaped)
+        '#/za/retirement/savings-pot/simulate$#',
+        '#/za/retirement/tax-relief/calculate$#',
+        '#/za/retirement/annuities/living/quote$#',
+        '#/za/retirement/annuities/life/quote$#',
+        '#/za/retirement/annuities/compulsory-apportion$#',
+        '#/za/retirement/reg28/check$#',
     ];
 
     /**
