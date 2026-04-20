@@ -70,7 +70,7 @@ const MODULES_BY_JURISDICTION = {
       icon: 'briefcase',
       section: 'zaSection',
     },
-    // WS 1.5b will add za-protection here
+    { key: 'za-protection', label: 'Protection', route: '/za/protection', icon: 'shield', section: 'zaSection' },
     // WS 1.6b will add za-estate here
   ],
 };

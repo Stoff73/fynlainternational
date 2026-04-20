@@ -733,6 +733,19 @@ const routes = [
     },
   },
   {
+    path: '/za/protection',
+    name: 'ZaProtection',
+    component: () => import('@/views/ZA/ZaProtectionDashboard.vue'),
+    meta: {
+      requiresAuth: true,
+      requiresJurisdiction: 'za',
+      breadcrumb: [
+        { label: 'Home', path: '/dashboard' },
+        { label: 'South Africa — Protection', path: '/za/protection' },
+      ],
+    },
+  },
+  {
     path: '/goals',
     name: 'Goals',
     component: GoalsDashboard,
