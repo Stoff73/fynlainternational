@@ -140,34 +140,28 @@ class PreviewWriteInterceptor
     }
 
     /**
-     * Resolve the authenticated user.
+     * Resolve the user from the Bearer token.
      *
-     * Tries Bearer-token resolution first (standard API path) then falls back
-     * to the Sanctum session guard (cookie-based stateful requests and test
-     * helpers that use Sanctum::actingAs without a real token).
+     * Since this middleware runs before auth:sanctum, we need to manually
+     * resolve the user from the Authorization header.
      */
     private function resolveUserFromToken(Request $request): ?\App\Models\User
     {
         $token = $request->bearerToken();
 
-        if ($token) {
-            // Sanctum tokens are in format: "id|token"
-            $accessToken = PersonalAccessToken::findToken($token);
-            if ($accessToken) {
-                return $accessToken->tokenable;
-            }
+        if (! $token) {
+            return null;
         }
 
-        // Fallback: stateful / session-based requests (cookie auth, test helpers).
-        // EnsureFrontendRequestsAreStateful runs earlier in the api group and
-        // configures the Sanctum guard for cookie-based callers; test helpers
-        // populate it via Sanctum::actingAs().
-        $guardUser = auth('sanctum')->user();
-        if ($guardUser instanceof \App\Models\User) {
-            return $guardUser;
+        // Sanctum tokens are in format: "id|token"
+        // We need to find the token and get its owner
+        $accessToken = PersonalAccessToken::findToken($token);
+
+        if (! $accessToken) {
+            return null;
         }
 
-        return null;
+        return $accessToken->tokenable;
     }
 
     /**

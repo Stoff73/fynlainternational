@@ -193,19 +193,20 @@ it('allows protection endpoints access when ZA pack is enabled', function () {
 });
 
 it('blocks writes from preview users', function () {
-    $this->user->is_preview_user = true;
-    $this->user->save();
+    $previewUser = User::factory()->create(['is_preview_user' => true]);
+    $token = $previewUser->createToken('test')->plainTextToken;
 
-    $response = $this->postJson('/api/za/protection/policies', [
-        'product_type' => 'life',
-        'provider' => 'Discovery Life',
-        'cover_amount_minor' => 5_000_000_00,
-        'premium_amount_minor' => 1_500_00,
-        'premium_frequency' => 'monthly',
-        'start_date' => '2026-01-01',
-    ]);
+    $response = $this->withHeader('Authorization', "Bearer {$token}")
+        ->postJson('/api/za/protection/policies', [
+            'product_type' => 'life',
+            'provider' => 'Discovery Life',
+            'cover_amount_minor' => 5_000_000_00,
+            'premium_amount_minor' => 1_500_00,
+            'premium_frequency' => 'monthly',
+            'start_date' => '2026-01-01',
+        ]);
 
-    // PreviewWriteInterceptor returns 200 with is_preview=true, not 403 or a row creation.
+    // PreviewWriteInterceptor returns 200 with preview_mode=true, not 403 or a row creation.
     $response->assertOk();
     expect(ZaProtectionPolicy::count())->toBe(0);
 });
