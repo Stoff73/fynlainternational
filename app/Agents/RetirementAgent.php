@@ -456,7 +456,9 @@ class RetirementAgent extends BaseAgent
     private function getDCPensions(int $userId): Collection
     {
         if ($this->dcPensions === null) {
-            $this->dcPensions = DCPension::where('user_id', $userId)->get();
+            $this->dcPensions = DCPension::where('user_id', $userId)
+                ->where(fn ($q) => $q->whereNull('country_code')->orWhere('country_code', 'GB'))
+                ->get();
         }
 
         return $this->dcPensions;

@@ -91,7 +91,10 @@ class RetirementController extends Controller
 
         $data = [
             'profile' => $profile,
-            'dc_pensions' => DCPension::where('user_id', $user->id)->with('holdings')->get(),
+            'dc_pensions' => DCPension::where('user_id', $user->id)
+                ->where(fn ($q) => $q->whereNull('country_code')->orWhere('country_code', 'GB'))
+                ->with('holdings')
+                ->get(),
             'db_pensions' => DBPension::where('user_id', $user->id)->get(),
             'state_pension' => StatePension::where('user_id', $user->id)->first(),
             'life_events' => $lifeEvents,
@@ -378,7 +381,9 @@ class RetirementController extends Controller
     public function updateDCPension(StoreDCPensionRequest $request, int $id): JsonResponse
     {
         $user = $request->user();
-        $pension = DCPension::where('user_id', $user->id)->findOrFail($id);
+        $pension = DCPension::where('user_id', $user->id)
+            ->where(fn ($q) => $q->whereNull('country_code')->orWhere('country_code', 'GB'))
+            ->findOrFail($id);
 
         $data = $request->validated();
 
@@ -450,7 +455,9 @@ class RetirementController extends Controller
     public function destroyDCPension(Request $request, int $id): JsonResponse
     {
         $user = $request->user();
-        $pension = DCPension::where('user_id', $user->id)->findOrFail($id);
+        $pension = DCPension::where('user_id', $user->id)
+            ->where(fn ($q) => $q->whereNull('country_code')->orWhere('country_code', 'GB'))
+            ->findOrFail($id);
 
         $pension->delete();
 
@@ -562,7 +569,9 @@ class RetirementController extends Controller
 
         // If a specific pension ID is provided, verify ownership
         if ($dcPensionId) {
-            $pension = DCPension::where('user_id', $user->id)->findOrFail($dcPensionId);
+            $pension = DCPension::where('user_id', $user->id)
+                ->where(fn ($q) => $q->whereNull('country_code')->orWhere('country_code', 'GB'))
+                ->findOrFail($dcPensionId);
         }
 
         $analysis = $this->agent->analyzeDCPensionPortfolio($user->id, $dcPensionId);
@@ -781,7 +790,9 @@ class RetirementController extends Controller
         $this->cacheInvalidation->invalidateForUser($userId);
 
         // Clear individual pension portfolio caches (resource-specific keys)
-        $dcPensions = DCPension::where('user_id', $userId)->get();
+        $dcPensions = DCPension::where('user_id', $userId)
+            ->where(fn ($q) => $q->whereNull('country_code')->orWhere('country_code', 'GB'))
+            ->get();
         foreach ($dcPensions as $pension) {
             Cache::forget("dc_pension_{$pension->id}_portfolio");
         }
