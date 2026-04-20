@@ -11,6 +11,7 @@
     "autoload": {
         "psr-4": {
             "Fynla\\Packs\\Za\\": "src/",
+            "Fynla\\Packs\\Za\\Database\\Factories\\": "database/factories/",
             "Fynla\\Packs\\Za\\Database\\Seeders\\": "database/seeders/"
         }
     },
