@@ -4,6 +4,8 @@
 >
 > **MANDATORY GATE:** Before implementation begins, this plan MUST be passed through `/prd-writer` to produce a canonical PRD. Rule: `feedback_workflow_spec_plan_prd.md` — never skip.
 
+**Status:** Amended — 20 April 2026 — conflicts resolved against codebase audit (code-explorer + code-architect). Changes: (1) `dc_pensions.pension_type` is a MySQL ENUM — new pack migration converts to `VARCHAR(60)` as prerequisite (new Task 0.5); (2) sidebar entry uses `route` key (not `path`) + includes `section: 'zaSection'` (Task 0 fix); (3) `LifeAnnuityQuoteRequest` field renamed `section_10c_pool_minor` → `declared_section_10c_pool_minor` for v1.1 tracker-threading survivability; (4) UK `RetirementController` + `RetirementAgent` patched to filter `country_code != 'ZA'` — prevents ZA funds leaking into the UK retirement view (new Task 3.5); (5) six new `EXCLUDED_PATTERNS` prefixed with `/za/` to prevent UK namespace collision; (6) `CalculateTaxReliefRequest` response omits `carry_forward_minor` in v1 (engine is stateless; v1.1 threads `ZaSection11fTracker`).
+
 **Goal:** Ship the third SA frontend surface — a single `/za/retirement` page with three tabs (Accumulation, Decumulation, Compliance) — consuming the WS 1.4a/b/c backends (`pack.za.retirement*`, `pack.za.reg28.monitor`). Adds one HTTP controller (`ZaRetirementController`) exposing 13 endpoints, one Vuex module, one axios service, one view, and 13 Vue components. Zero `SideMenu.vue` edits (sidebar stays data-driven).
 
 **Architecture:** Thin HTTP adapter over pack container bindings; business logic stays in the pack. Routes extend the existing `/api/za/*` middleware group (`auth:sanctum + active.jurisdiction + pack.enabled:za`). ZA retirement funds live on the existing `dc_pensions` table (scoped by `country_code='ZA'`) with Two-Pot bucket balances on the pack-owned `za_retirement_fund_buckets`. Reg 28 snapshots live on the pack-owned `za_reg28_snapshots`. What-if endpoints (`simulate`, `quote`, `check`, `tax-relief/calculate`, `compulsory-apportion`) are read-only and added to `PreviewWriteInterceptor::EXCLUDED_PATTERNS` so preview users see real calculated responses.
@@ -31,12 +33,14 @@
 - Section 11F carry-forward auto-threading via `ZaSection11fTracker` — v1 tax-relief endpoint returns the single-year deduction; carry-forward is a v1.1 enhancement.
 - Section 10C pool auto-threading via `ZaSection10cTracker` — v1 UI accepts a user-declared pool as an input.
 
-**Resolved assumptions (to be re-validated by `/prd-writer`):**
-1. ZA retirement funds reuse the existing `dc_pensions` table with `country_code='ZA'` discriminator. `pension_type` column stores SA fund type: `retirement_annuity | pension_fund | provident_fund | preservation_fund` (column is `varchar` without DB-level enum).
+**Resolved assumptions (validated by `/prd-writer` 20 April 2026):**
+1. ZA retirement funds reuse the existing `dc_pensions` table with `country_code='ZA'` discriminator. **`pension_type` is a MySQL ENUM** (`occupational|sipp|personal|stakeholder`) per `database/schema/mysql-schema.sql:322` — a new pack migration (Task 0.5) converts it to `VARCHAR(60)` to accept the 4 SA values.
 2. `za_retirement_fund_buckets` holds the Two-Pot balances, keyed by `(user_id, fund_holding_id)` — one row per ZA `dc_pensions` row.
 3. `za_reg28_snapshots` schema matches `ZaReg28Monitor::snapshot()` writes: `user_id, fund_holding_id (nullable), as_at_date, allocation (json), offshore_compliant, equity_compliant, property_compliant, private_equity_compliant, commodities_compliant, hedge_funds_compliant, other_compliant, single_entity_compliant, compliant, breaches (json)`.
-4. Reg 28 allocation input uses **7 asset-class percentages 0–100 summing to 100** (`offshore, equity, property, private_equity, commodities, hedge_funds, other`) plus **one standalone `single_entity` max-exposure percentage**. Backend `ZaReg28Monitor::check()` accepts the associative array and does NOT itself validate sum-to-100 (callers validate).
-5. No database migrations required for this workstream — all tables already exist from WS 1.4a/c.
+4. Reg 28 allocation input uses **7 asset-class percentages 0–100 summing to 100** (`offshore, equity, property, private_equity, commodities, hedge_funds, other`) plus **one standalone `single_entity` max-exposure percentage**. Backend `ZaReg28Monitor::check()` accepts the associative array and does NOT itself validate sum-to-100 (`Reg28CheckRequest` validates).
+5. One new pack-owned migration required (Task 0.5) — converts `dc_pensions.pension_type` ENUM → VARCHAR(60). No other schema changes needed; `za_retirement_fund_buckets` and `za_reg28_snapshots` already exist from WS 1.4a/c.
+6. `scheme_type` column is an ENUM (`workplace|sipp|personal`) — SA funds safely write `scheme_type='personal'` since `'personal'` is a valid existing value.
+7. UK `RetirementController` + `RetirementAgent` currently fetch all `DCPension` rows without `country_code` filter. Task 3.5 patches this so ZA funds don't leak into the UK retirement view.
 
 ---
 
@@ -134,10 +138,13 @@ Open `resources/js/store/modules/jurisdiction.js`, locate the `MODULES_BY_JURISD
 {
   key: 'za-retirement',
   label: 'Retirement',
-  path: '/za/retirement',
+  route: '/za/retirement',
+  section: 'zaSection',
   icon: 'briefcase',
 },
 ```
+
+**Amendment A1:** `route` (not `path`) — `SideMenu.vue:110` reads `mod.route`. `section: 'zaSection'` — required so the ZA sidebar section auto-expands when the user navigates to `/za/retirement`.
 
 - [ ] **Step 3: Smoke-check sidebar renders the new entry**
 
@@ -148,6 +155,83 @@ Run: `./vendor/bin/pest tests/Feature/Api/Za/ZaSavingsControllerTest.php -v` —
 ```bash
 git add resources/js/store/modules/jurisdiction.js
 git commit -m "feat(za-retirement): add sidebar entry for WS 1.4d"
+```
+
+---
+
+## Task 0.5 — Pack migration: extend `dc_pensions.pension_type` ENUM
+
+**Files:**
+- Create: `packs/country-za/database/migrations/2026_04_20_000001_extend_pension_type_for_za_fund_types.php`
+
+**Why:** Per the codebase audit, `dc_pensions.pension_type` is a MySQL ENUM at `database/schema/mysql-schema.sql:322`: `enum('occupational','sipp','personal','stakeholder') NOT NULL DEFAULT 'occupational'`. The plan writes SA values (`retirement_annuity`, etc.) which are not in the enum — MySQL would silently truncate to empty string or throw in strict mode. Converting to `VARCHAR(60)` removes the UK-specific constraint and is forward-compatible for all future country packs.
+
+- [ ] **Step 1: Create the migration**
+
+```php
+<?php
+
+declare(strict_types=1);
+
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Schema;
+
+/**
+ * Convert dc_pensions.pension_type ENUM → VARCHAR(60).
+ *
+ * The original UK ENUM (occupational|sipp|personal|stakeholder) is
+ * UK-specific. SA funds use retirement_annuity / pension_fund /
+ * provident_fund / preservation_fund. Future country packs will bring
+ * their own fund type vocabularies. VARCHAR removes the DB-level
+ * country-specific constraint; request-level validation stays
+ * jurisdiction-aware via form requests.
+ */
+return new class extends Migration
+{
+    public function up(): void
+    {
+        if (! Schema::hasTable('dc_pensions')) {
+            return;
+        }
+
+        DB::statement("ALTER TABLE dc_pensions MODIFY COLUMN pension_type VARCHAR(60) NOT NULL DEFAULT 'occupational'");
+    }
+
+    public function down(): void
+    {
+        if (! Schema::hasTable('dc_pensions')) {
+            return;
+        }
+
+        // Reverting: any SA row would violate the ENUM. Don't attempt the conversion
+        // automatically — require a manual data migration first.
+        DB::statement("ALTER TABLE dc_pensions MODIFY COLUMN pension_type ENUM('occupational','sipp','personal','stakeholder') NOT NULL DEFAULT 'occupational'");
+    }
+};
+```
+
+- [ ] **Step 2: Run migration**
+
+```bash
+php artisan migrate
+```
+
+Expected: one new migration row executes. Pack migrations auto-load via `ZaPackServiceProvider::boot()`'s `loadMigrationsFrom` — no config change needed.
+
+- [ ] **Step 3: Verify column type**
+
+```bash
+php artisan tinker --execute="echo \Schema::getColumnType('dc_pensions', 'pension_type');"
+```
+Expected: `string`.
+
+- [ ] **Step 4: Commit**
+
+```bash
+git add packs/country-za/database/migrations/2026_04_20_000001_extend_pension_type_for_za_fund_types.php
+git commit -m "feat(za-retirement): convert dc_pensions.pension_type ENUM to VARCHAR(60) for SA fund types"
 ```
 
 ---
@@ -324,6 +408,8 @@ Note: backend enforces the 250–1750 band via `InvalidArgumentException` → 42
 
 - [ ] **Step 6: Create `LifeAnnuityQuoteRequest`**
 
+**Amendment A2:** Field is `declared_section_10c_pool_minor` — not `section_10c_pool_minor`. This flags that v1 accepts a user declaration; v1.1 will thread `ZaSection10cTracker` as an authoritative default while keeping this field as an override. Renaming now avoids a breaking change later.
+
 ```php
 <?php
 
@@ -344,7 +430,7 @@ class LifeAnnuityQuoteRequest extends FormRequest
     {
         return [
             'annual_annuity_minor' => ['required', 'integer', 'min:1'],
-            'section_10c_pool_minor' => ['required', 'integer', 'min:0'],
+            'declared_section_10c_pool_minor' => ['required', 'integer', 'min:0'],
             'age' => ['required', 'integer', 'between:18,125'],
             'tax_year' => ['required', 'string', 'regex:/^\d{4}\/\d{2}$/'],
         ];
@@ -661,15 +747,17 @@ git commit -m "feat(za-retirement): API resources for WS 1.4d"
 
 - [ ] **Step 1: Extend `EXCLUDED_PATTERNS` in `PreviewWriteInterceptor`**
 
+**Amendment A3:** Patterns are prefixed with `/za/` so they don't match a future UK `/api/retirement/*` endpoint.
+
 Open `app/Http/Middleware/PreviewWriteInterceptor.php`. Locate the `EXCLUDED_PATTERNS` array constant. Append these 6 entries (keep existing entries untouched):
 
 ```php
-'#/retirement/savings-pot/simulate$#',
-'#/retirement/tax-relief/calculate$#',
-'#/retirement/annuities/living/quote$#',
-'#/retirement/annuities/life/quote$#',
-'#/retirement/annuities/compulsory-apportion$#',
-'#/retirement/reg28/check$#',
+'#/za/retirement/savings-pot/simulate$#',
+'#/za/retirement/tax-relief/calculate$#',
+'#/za/retirement/annuities/living/quote$#',
+'#/za/retirement/annuities/life/quote$#',
+'#/za/retirement/annuities/compulsory-apportion$#',
+'#/za/retirement/reg28/check$#',
 ```
 
 - [ ] **Step 2: Create `ZaRetirementController`**
@@ -1002,7 +1090,7 @@ class ZaRetirementController extends Controller
         try {
             $result = $this->lifeAnnuity->calculate(
                 (int) $data['annual_annuity_minor'],
-                (int) $data['section_10c_pool_minor'],
+                (int) $data['declared_section_10c_pool_minor'],
                 (int) $data['age'],
                 $data['tax_year'],
             );
@@ -1178,7 +1266,119 @@ git commit -m "feat(za-retirement): ZaRetirementController + routes + preview in
 
 ---
 
-## Task 4 — ZaRetirementControllerTest (16 tests)
+## Task 3.5 — Prevent ZA funds leaking into the UK retirement view
+
+**Files:**
+- Modify: `app/Http/Controllers/Api/RetirementController.php`
+- Modify: `app/Agents/RetirementAgent.php`
+
+**Why:** Without this patch, once a user creates a ZA retirement fund via `/za/retirement`, the UK `RetirementController::index` and `RetirementAgent` queries return that ZA fund in the UK retirement view — because they fetch all `DCPension` rows for the user without a `country_code` filter. Before WS 0.6, `country_code` was NULL for all rows; now it's `'ZA'` for SA funds. The fix is one `where` clause per query.
+
+- [ ] **Step 1: Patch `app/Http/Controllers/Api/RetirementController.php`**
+
+Find every `DCPension::where('user_id', ...)` query in the file (there will be 2–3). Add `->where(fn($q) => $q->whereNull('country_code')->orWhere('country_code', 'GB'))` to each. Example:
+
+```php
+// Before:
+'dc_pensions' => DCPension::where('user_id', $user->id)->with('holdings')->get(),
+
+// After:
+'dc_pensions' => DCPension::where('user_id', $user->id)
+    ->where(fn ($q) => $q->whereNull('country_code')->orWhere('country_code', 'GB'))
+    ->with('holdings')
+    ->get(),
+```
+
+- [ ] **Step 2: Patch `app/Agents/RetirementAgent.php`**
+
+Same treatment for every `DCPension::where('user_id', ...)` query. The WS 1.4a PRD shipped `country_code` on `dc_pensions`; this filter was never added because there were no ZA funds to exclude yet.
+
+- [ ] **Step 3: Add a regression test**
+
+Create `tests/Feature/Api/RetirementControllerIsolationTest.php`:
+
+```php
+<?php
+
+declare(strict_types=1);
+
+use App\Models\DCPension;
+use App\Models\User;
+use Illuminate\Foundation\Testing\RefreshDatabase;
+
+uses(RefreshDatabase::class);
+
+beforeEach(function () {
+    putenv('FYNLA_ACTIVE_PACKS=GB,ZA');
+    $this->user = User::factory()->create();
+});
+
+afterEach(function () {
+    putenv('FYNLA_ACTIVE_PACKS');
+});
+
+it('excludes ZA-coded DC pensions from the UK retirement index', function () {
+    DCPension::create([
+        'user_id' => $this->user->id,
+        'pension_type' => 'occupational',
+        'scheme_type' => 'workplace',
+        'provider' => 'UK Plc Ltd',
+        'country_code' => 'GB',
+    ]);
+
+    DCPension::create([
+        'user_id' => $this->user->id,
+        'pension_type' => 'retirement_annuity',
+        'scheme_type' => 'personal',
+        'provider' => 'Allan Gray',
+        'country_code' => 'ZA',
+    ]);
+
+    $response = $this->actingAs($this->user)->getJson('/api/retirement');
+
+    $response->assertOk();
+    $body = $response->json('data');
+    // The UK response structure varies; the critical assertion is that ZA funds are absent.
+    $serialised = json_encode($body);
+    expect($serialised)->not->toContain('Allan Gray');
+});
+
+it('includes NULL-country-code DC pensions in the UK retirement index (legacy rows)', function () {
+    DCPension::create([
+        'user_id' => $this->user->id,
+        'pension_type' => 'occupational',
+        'scheme_type' => 'workplace',
+        'provider' => 'Legacy Provider',
+        'country_code' => null,
+    ]);
+
+    $response = $this->actingAs($this->user)->getJson('/api/retirement');
+
+    $response->assertOk();
+    $body = json_encode($response->json('data'));
+    expect($body)->toContain('Legacy Provider');
+});
+```
+
+- [ ] **Step 4: Run the regression tests**
+
+```bash
+./vendor/bin/pest tests/Feature/Api/RetirementControllerIsolationTest.php -v
+```
+Expected: 2 passing.
+
+- [ ] **Step 5: Commit**
+
+```bash
+git add app/Http/Controllers/Api/RetirementController.php app/Agents/RetirementAgent.php tests/Feature/Api/RetirementControllerIsolationTest.php
+git commit -m "fix(uk-retirement): filter DCPension queries by country_code to exclude ZA funds (WS 1.4d cross-contamination fix)"
+```
+
+**Note on test count:** Task 4 has 15 tests (16 in spec included an aspirational "Jurisdiction gate 403" test that cannot be written with current env-var-gated middleware — see PRD § 8). Task 5 has 6. Task 3.5 adds 2. Total new: 23. New baseline: 2,746 (2,723 + 23).
+
+---
+
+## Task 4 — ZaRetirementControllerTest (15 tests)
 
 **Files:**
 - Create: `tests/Feature/Api/Za/ZaRetirementControllerTest.php`
@@ -1416,7 +1616,7 @@ it('returns 422 for living annuity drawdown outside 2.5-17.5 percent band', func
 it('quotes a life annuity with Section 10C exemption applied', function () {
     $response = $this->actingAs($this->user)->postJson('/api/za/retirement/annuities/life/quote', [
         'annual_annuity_minor' => 6_000_000,
-        'section_10c_pool_minor' => 2_000_000,
+        'declared_section_10c_pool_minor' => 2_000_000,
         'age' => 65,
         'tax_year' => '2026/27',
     ]);

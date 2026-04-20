@@ -1,7 +1,8 @@
 ---
 title: WS 1.4d — SA Retirement Frontend
-status: approved
+status: amended
 date: 2026-04-20
+amended: 2026-04-20 — codebase audit resolved
 workstream: 1.4d
 predecessors: [WS 1.2b, WS 1.3c, WS 1.4a, WS 1.4b, WS 1.4c]
 spec_sources:
@@ -9,6 +10,8 @@ spec_sources:
   - Plans/SA_Research_and_Mapping.md § 9 (Retirement)
   - April/April18Updates/PRD-ws-1-4a-za-retirement.md
 ---
+
+> **Amendments (20 April 2026):** (1) `LifeAnnuityQuoteRequest` field is `declared_section_10c_pool_minor` (not `section_10c_pool_minor`) — flags user override, v1.1-survivable. (2) `LifeAnnuityQuoteRequest` does NOT take `capital_minor` — the backend calculator doesn't need it. (3) `CompulsoryApportionRequest` takes three separate bucket amounts (`vested_minor`, `provident_vested_pre2021_minor`, `retirement_minor`) — not a combined `total_balance_minor`. (4) `Reg28CheckRequest.allocation` is a flat associative map of float percentages (matches `ZaReg28Monitor::check()`) — not an indexed array of `{asset_class, weight_bps}`. (5) Pack migration required: `dc_pensions.pension_type` ENUM → VARCHAR(60) (Task 0.5 in plan). (6) UK `RetirementController` + `RetirementAgent` patched to filter ZA funds (Task 3.5 in plan). (7) `PreviewWriteInterceptor` patterns prefixed with `/za/`.
 
 # WS 1.4d — SA Retirement Frontend Design
 
@@ -22,7 +25,9 @@ Goal: a single `/za/retirement` page with three tabs (Accumulation, Decumulation
 
 **In scope**
 - One `ZaRetirementController` exposing 13 endpoints under `/api/za/retirement/*`.
-- 7 form requests, 4 resources.
+- One pack migration converting `dc_pensions.pension_type` ENUM → VARCHAR(60).
+- Patch to UK `RetirementController` + `RetirementAgent` filtering out ZA-coded DC pensions from the UK retirement view.
+- 8 form requests, 4 resources.
 - One functional Vuex module (`zaRetirement`) replacing the WS 1.2b placeholder.
 - One axios service (`zaRetirementService`).
 - One view (`ZaRetirementDashboard`) + 13 components split across three tabs.
@@ -31,7 +36,6 @@ Goal: a single `/za/retirement` page with three tabs (Accumulation, Decumulation
 - Playwright browser smoke test end-to-end.
 
 **Out of scope (deferred)**
-- UK retirement view changes — ZA funds show only on `/za/retirement`. UK views continue to filter `country_code != 'ZA'` implicitly (they already fetch via services that return user-scoped data; the new columns on `dc_pensions` are nullable and ignored by UK code).
 - Savings-Pot once-per-tax-year frequency enforcement — deferred per WS 1.4a PRD § 5 (backend doesn't enforce it; neither will v1 UI).
 - SASSA Old Age Grant capture — data field only, no dedicated UI widget in v1.
 - Reg 28 look-through roll-up from individual fund holdings — v1 accepts manual allocation input; automatic look-through from `za_investment_holdings` is a WS 1.4d.v1.1 enhancement.
@@ -89,9 +93,9 @@ All routes live inside the existing `/api/za/*` group in `routes/api.php` (middl
 - **SimulateSavingsPotWithdrawalRequest** — `fund_holding_id`, `amount_minor` (int ≥200_000 per R2,000 backend minimum), `current_annual_income_minor` (int ≥0), `age` (int 18–125), `tax_year` (string, regex: `/^\d{4}\/\d{2}$/`).
 - **CalculateTaxReliefRequest** — `contribution_minor` (int ≥1), `gross_income_minor` (int ≥0), `tax_year`.
 - **LivingAnnuityQuoteRequest** — `capital_minor` (int ≥1), `drawdown_rate_bps` (int 250–1750), `age` (int 18–125), `tax_year`.
-- **LifeAnnuityQuoteRequest** — `capital_minor`, `annual_annuity_minor` (int ≥1), `age`, `tax_year`.
-- **CompulsoryApportionRequest** — `total_balance_minor` (int ≥0), `provident_pre2021_minor` (int ≥0), `tax_year`.
-- **Reg28CheckRequest** — `tax_year`, `allocation` (array, exactly-8 items), each `{ asset_class: enum[equity,property,local_cash,local_bonds,local_other,offshore,private_equity,commodities], weight_bps: 0–10000 }`, `sum(weight_bps) = 10000` via custom rule.
+- **LifeAnnuityQuoteRequest** — `annual_annuity_minor` (int ≥1), `declared_section_10c_pool_minor` (int ≥0), `age`, `tax_year`. (No `capital_minor` — backend calculator doesn't require it.)
+- **CompulsoryApportionRequest** — `vested_minor` (int ≥0), `provident_vested_pre2021_minor` (int ≥0), `retirement_minor` (int ≥0), `tax_year`. Backend `ZaCompulsoryAnnuitisationService::apportion()` takes three separate bucket amounts.
+- **Reg28CheckRequest** — `tax_year`, `allocation` (associative map of float percentages), keys: `offshore`, `equity`, `property`, `private_equity`, `commodities`, `hedge_funds`, `other`, `single_entity`. Each 0–100. The 7 asset-class keys must sum to 100% (custom rule); `single_entity` is an independent max-exposure measure. Matches `ZaReg28Monitor::check()` input shape.
 
 ## 6. Resources (4)
 
