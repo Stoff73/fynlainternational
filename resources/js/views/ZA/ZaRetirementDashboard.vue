@@ -112,7 +112,7 @@ export default {
     async handleSaveContribution(payload) {
       await this.storeContribution(payload);
       this.contributingFund = null;
-      await this.fetchDashboard({});
+      await Promise.all([this.fetchDashboard({}), this.fetchFunds()]);
     },
   },
 };
