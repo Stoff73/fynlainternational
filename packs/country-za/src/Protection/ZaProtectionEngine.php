@@ -171,4 +171,125 @@ class ZaProtectionEngine implements ProtectionEngine
             'rationale' => "R30,000 per life × {$lives} lives (member + {$dependants} dependants).",
         ];
     }
+
+    /**
+     * Aggregate coverage-gap analysis across the four primary categories
+     * (life, idisability_income, dread, funeral) for a user.
+     *
+     * idisability_lump rolls into the dread bucket (same calculation
+     * shape, both return lump-sum needs).
+     *
+     * If required inputs are missing or zero, the corresponding category
+     * returns a `missing_inputs` array listing what's needed. Other
+     * categories still compute.
+     *
+     * @param  array<int, array{product_type: string, cover_amount_minor: int}>  $userPolicies
+     * @param  array{annual_income: int, outstanding_debts: int, dependants: int}  $userContext
+     * @return array<string, array{recommended_cover: int, minimum_cover: int, existing_cover: int, shortfall: int, rationale: string, missing_inputs: array<int,string>}>
+     */
+    public function calculateAggregateCoverageGap(array $userPolicies, array $userContext): array
+    {
+        $income = (int) ($userContext['annual_income'] ?? 0);
+        $debts = (int) ($userContext['outstanding_debts'] ?? 0);
+        $dependants = (int) ($userContext['dependants'] ?? 0);
+
+        $sumByType = [
+            'life' => 0,
+            'whole_of_life' => 0,
+            'dread' => 0,
+            'idisability_lump' => 0,
+            'idisability_income' => 0,
+            'funeral' => 0,
+        ];
+        foreach ($userPolicies as $p) {
+            $type = $p['product_type'] ?? '';
+            if (isset($sumByType[$type])) {
+                $sumByType[$type] += (int) ($p['cover_amount_minor'] ?? 0);
+            }
+        }
+
+        $lifeExisting = $sumByType['life'] + $sumByType['whole_of_life'];
+        $dreadExisting = $sumByType['dread'] + $sumByType['idisability_lump'];
+        $incomeProtectionExisting = $sumByType['idisability_income'];
+        $funeralExisting = $sumByType['funeral'];
+
+        return [
+            'life' => $this->wrapGap(
+                $income > 0
+                    ? $this->calculateCoverageNeeds([
+                        'policy_type' => 'life',
+                        'annual_income' => $income,
+                        'outstanding_debts' => $debts,
+                        'dependants' => $dependants,
+                        'existing_coverage' => $lifeExisting,
+                    ])
+                    : null,
+                $lifeExisting,
+                missing: $income > 0 ? [] : ['annual_income'],
+            ),
+            'idisability_income' => $this->wrapGap(
+                $income > 0
+                    ? $this->calculateCoverageNeeds([
+                        'policy_type' => 'idisability_income',
+                        'annual_income' => $income,
+                        'existing_coverage' => $incomeProtectionExisting,
+                    ])
+                    : null,
+                $incomeProtectionExisting,
+                missing: $income > 0 ? [] : ['annual_income'],
+            ),
+            'dread' => $this->wrapGap(
+                $income > 0
+                    ? $this->calculateCoverageNeeds([
+                        'policy_type' => 'dread',
+                        'annual_income' => $income,
+                        'existing_coverage' => $dreadExisting,
+                    ])
+                    : null,
+                $dreadExisting,
+                missing: $income > 0 ? [] : ['annual_income'],
+            ),
+            'funeral' => $this->wrapGap(
+                $this->calculateCoverageNeeds([
+                    'policy_type' => 'funeral',
+                    'dependants' => $dependants,
+                    'existing_coverage' => $funeralExisting,
+                ]),
+                $funeralExisting,
+                missing: [],
+            ),
+        ];
+    }
+
+    /**
+     * Normalise a calculator result or missing-inputs state into the
+     * shape consumers expect, including `existing_cover` and
+     * `missing_inputs`.
+     *
+     * @param  array{recommended_cover: int, minimum_cover: int, shortfall: int, rationale: string}|null  $needs
+     * @param  array<int,string>  $missing
+     * @return array{recommended_cover: int, minimum_cover: int, existing_cover: int, shortfall: int, rationale: string, missing_inputs: array<int,string>}
+     */
+    private function wrapGap(?array $needs, int $existing, array $missing): array
+    {
+        if ($needs === null) {
+            return [
+                'recommended_cover' => 0,
+                'minimum_cover' => 0,
+                'existing_cover' => $existing,
+                'shortfall' => 0,
+                'rationale' => 'Required inputs missing. Complete the prompted module to compute this gap.',
+                'missing_inputs' => $missing,
+            ];
+        }
+
+        return [
+            'recommended_cover' => $needs['recommended_cover'],
+            'minimum_cover' => $needs['minimum_cover'],
+            'existing_cover' => $existing,
+            'shortfall' => $needs['shortfall'],
+            'rationale' => $needs['rationale'],
+            'missing_inputs' => $missing,
+        ];
+    }
 }
