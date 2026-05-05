@@ -17,7 +17,7 @@
       <div>
         <p class="text-xs uppercase tracking-wide text-horizon-500">Section 11F annual cap</p>
         <p class="text-2xl font-bold text-horizon-900 mt-1">{{ formatZARMinor(annualAllowanceMinor) }}</p>
-        <p class="text-xs text-horizon-500 mt-1">SARS absolute cap on deductible retirement contributions.</p>
+        <p class="text-xs text-horizon-500 mt-1">South African Revenue Service (SARS) absolute cap on deductible retirement contributions.</p>
       </div>
       <div>
         <p class="text-xs uppercase tracking-wide text-horizon-500">Funds recorded</p>

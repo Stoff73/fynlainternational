@@ -35,13 +35,13 @@ class ZaInvestmentEngine implements InvestmentEngine
                 'code' => 'tfsa',
                 'name' => 'Tax-Free Savings Account',
                 'description' => 'Tax-free wrapper with annual and lifetime caps',
-                'tax_treatment' => 'No income tax, CGT, or dividend withholding',
+                'tax_treatment' => 'No income tax, Capital Gains Tax (CGT), or dividend withholding',
             ],
             [
                 'code' => 'discretionary',
                 'name' => 'Discretionary portfolio',
-                'description' => 'Unwrapped unit trusts, ETFs, direct equities',
-                'tax_treatment' => 'Interest at marginal rate (after exemption); 40% CGT inclusion; 20% local DWT',
+                'description' => 'Unwrapped unit trusts, Exchange-Traded Funds (ETFs), direct equities',
+                'tax_treatment' => 'Interest at marginal rate (after exemption); 40% CGT inclusion; 20% local Dividend Withholding Tax (DWT)',
             ],
             [
                 'code' => 'endowment',
@@ -107,7 +107,7 @@ class ZaInvestmentEngine implements InvestmentEngine
             'interest_tax' => 0,
             'breakdown' => [
                 'wrapper_code' => $wrapper,
-                'note' => 'Tax-free wrapper — no income, CGT, or DWT liability.',
+                'note' => 'Tax-free wrapper — no income, Capital Gains Tax (CGT), or Dividend Withholding Tax (DWT) liability.',
             ],
         ];
     }

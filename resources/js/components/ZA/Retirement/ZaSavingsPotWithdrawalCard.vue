@@ -3,7 +3,7 @@
     <header class="mb-4">
       <h3 class="text-lg font-bold text-horizon-900">Savings-Pot withdrawal simulator</h3>
       <p class="text-sm text-horizon-500 mt-1">
-        Preview the marginal-tax impact of withdrawing from your Savings Pot. Minimum R 2 000,00 per SARS regulation.
+        Preview the marginal-tax impact of withdrawing from your Savings Pot. Minimum R 2 000,00 per South African Revenue Service (SARS) regulation.
       </p>
     </header>
 

@@ -2,7 +2,7 @@
   <section class="space-y-4">
     <header class="flex items-end justify-between">
       <div>
-        <h1 class="text-3xl font-black text-horizon-700">Investments</h1>
+        <h1 class="text-3xl font-black text-horizon-500">Investments</h1>
         <p class="text-sm text-horizon-500 mt-1">
           Tax year {{ taxYear || '2026/27' }} — Tax-Free Savings Account, Discretionary, and Endowment wrappers.
         </p>

@@ -3,7 +3,7 @@
     <header class="mb-4">
       <h3 class="text-lg font-bold text-horizon-900">Section 11F tax relief — what-if</h3>
       <p class="text-sm text-horizon-500 mt-1">
-        Estimate how much income tax a retirement contribution would save. Section 11F caps the annual deduction at the SARS absolute cap.
+        Estimate how much income tax a retirement contribution would save. Section 11F caps the annual deduction at the South African Revenue Service (SARS) absolute cap.
       </p>
     </header>
 
