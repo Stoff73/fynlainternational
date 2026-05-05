@@ -57,7 +57,7 @@
           </button>
           <button
             type="button"
-            class="mt-3 w-full inline-flex justify-center rounded-md border border-horizon-200 shadow-sm px-4 py-2 bg-white text-base font-medium text-horizon-500 hover:bg-savannah-100 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-horizon-500 sm:mt-0 sm:col-start-1 sm:text-sm"
+            class="mt-3 w-full inline-flex justify-center rounded-md border border-horizon-200 shadow-sm px-4 py-2 bg-white text-base font-medium text-horizon-500 hover:bg-savannah-100 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-violet-500 sm:mt-0 sm:col-start-1 sm:text-sm"
             @click="$emit('cancel')"
           >
             {{ cancelLabel }}
@@ -96,8 +96,8 @@ export default {
     },
     confirmButtonClass() {
       return this.variant === 'danger'
-        ? 'bg-raspberry-600 hover:bg-raspberry-700 focus:ring-raspberry-500'
-        : 'bg-raspberry-500 hover:bg-raspberry-600 focus:ring-raspberry-500';
+        ? 'bg-raspberry-600 hover:bg-raspberry-700 focus:ring-violet-500'
+        : 'bg-raspberry-500 hover:bg-raspberry-600 focus:ring-violet-500';
     },
   },
 };
