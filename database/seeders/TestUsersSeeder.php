@@ -165,13 +165,17 @@ class TestUsersSeeder extends Seeder
             ],
         );
 
-        // Create dependants for ZA Protection test user
         $zaProtectionUser->update(['trial_ends_at' => $trialEnd]);
-        \App\Models\FamilyMember::factory()->for($zaProtectionUser)->count(2)->create(['is_dependent' => true]);
 
-        // Create property and mortgage for ZA Protection test user
-        $property = \App\Models\Property::factory()->for($zaProtectionUser)->create();
-        \App\Models\Mortgage::factory()->for($zaProtectionUser)->for($property)->create(['outstanding_balance' => 800000.00]);
+        if (\App\Models\FamilyMember::where('user_id', $zaProtectionUser->id)->where('is_dependent', true)->doesntExist()) {
+            \App\Models\FamilyMember::factory()->for($zaProtectionUser)->count(2)->create(['is_dependent' => true]);
+        }
+
+        $property = \App\Models\Property::where('user_id', $zaProtectionUser->id)->first();
+        if (! $property) {
+            $property = \App\Models\Property::factory()->for($zaProtectionUser)->create();
+            \App\Models\Mortgage::factory()->for($zaProtectionUser)->for($property)->create(['outstanding_balance' => 800000.00]);
+        }
 
         // Trial subscription for ZA Protection test user
         Subscription::updateOrCreate(
