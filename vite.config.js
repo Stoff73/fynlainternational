@@ -22,7 +22,9 @@ export default defineConfig({
     base: process.env.VITE_BASE_PATH || '/',
     server: {
         host: useLocalDomain ? 'local.fynla.org' : '127.0.0.1',
-        port: 5174,
+        // Port is overridable via VITE_PORT env var so dev.sh can fall back to
+        // 5173 if the sibling fynla repo's Vite has 5174 (or vice versa).
+        port: parseInt(process.env.VITE_PORT, 10) || 5174,
         strictPort: true,
         cors: true,
         ...(useLocalDomain && hasLocalCerts ? {

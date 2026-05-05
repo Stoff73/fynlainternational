@@ -7,11 +7,16 @@ namespace Database\Seeders;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 
+/**
+ * Seeds the GB (United Kingdom) jurisdiction row.
+ *
+ * Idempotent via DB::updateOrInsert keyed on the ISO code.
+ * Pairs with ZaJurisdictionSeeder which seeds South Africa.
+ */
 class JurisdictionSeeder extends Seeder
 {
     public function run(): void
     {
-        // GB — United Kingdom (launch jurisdiction)
         DB::table('jurisdictions')->updateOrInsert(
             ['code' => 'GB'],
             [
@@ -23,7 +28,5 @@ class JurisdictionSeeder extends Seeder
                 'updated_at' => now(),
             ]
         );
-
-        // ZA — South Africa will be added in Phase 2
     }
 }

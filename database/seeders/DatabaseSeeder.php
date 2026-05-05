@@ -30,10 +30,13 @@ class DatabaseSeeder extends Seeder
         // and essential user accounts
         // ============================================================
         $this->call([
+            // Jurisdictions (GB / ZA) — must run before any seeder that references jurisdiction_id.
+            JurisdictionSeeder::class,
+
             // Tax configuration - rates, allowances, thresholds
             TaxConfigurationSeeder::class,
 
-            // SA tax configuration - jurisdiction row, 2026/27 tax_years row, za_tax_configurations
+            // SA tax configuration - 2026/27 tax_years row, za_tax_configurations
             // (cascades to ZaJurisdictionSeeder; idempotent via updateOrInsert).
             ZaTaxConfigurationSeeder::class,
 
@@ -114,6 +117,7 @@ class DatabaseSeeder extends Seeder
     public function seedRequiredDataOnly(): void
     {
         $this->call([
+            JurisdictionSeeder::class,
             TaxConfigurationSeeder::class,
             ZaTaxConfigurationSeeder::class,
             TaxProductReferenceSeeder::class,
