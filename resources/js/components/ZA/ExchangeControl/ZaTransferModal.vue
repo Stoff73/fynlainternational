@@ -7,7 +7,7 @@
       <header class="mb-6">
         <h2 class="text-2xl font-black text-horizon-700">Record an offshore transfer</h2>
         <p class="text-sm text-horizon-500 mt-1">
-          The Single Discretionary Allowance covers any purpose under R2m. The Foreign Investment Allowance covers R2m–R10m and requires a South African Revenue Service Approval for International Transfer (AIT).
+          The Single Discretionary Allowance covers any purpose under R2m. The Foreign Investment Allowance covers R2m–R10m and requires a South African Revenue Service (SARS) Approval for International Transfer (AIT).
         </p>
       </header>
 
