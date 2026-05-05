@@ -65,7 +65,7 @@ describe('jurisdiction store module', () => {
   });
 
   describe('sidebarModules getter', () => {
-    it('returns UK modules for a GB user', () => {
+    it('returns UK module keys for a GB user', () => {
       store.dispatch('jurisdiction/hydrateFromSession', {
         active_jurisdictions: ['gb'],
         primary_jurisdiction: 'gb',
@@ -73,11 +73,33 @@ describe('jurisdiction store module', () => {
       });
 
       const modules = store.getters['jurisdiction/sidebarModules'];
-      expect(modules).toContain('protection');
-      expect(modules).toContain('savings');
-      expect(modules).toContain('investment');
-      expect(modules).toContain('retirement');
-      expect(modules).toContain('estate');
+      // Manifest keys are pack-prefixed so GB and ZA can coexist without
+      // colliding on shared names like 'protection' or 'retirement'.
+      expect(modules).toContain('gb-protection');
+      expect(modules).toContain('gb-investments');
+      expect(modules).toContain('gb-retirement');
+      expect(modules).toContain('gb-estate');
+      expect(modules).toContain('gb-dashboard');
+      expect(modules).toContain('gb-net-worth');
+      // No SA leakage in a UK-only session.
+      expect(modules.some((k) => k.startsWith('za-'))).toBe(false);
+    });
+
+    it('returns SA module keys for a ZA user with no UK leakage', () => {
+      store.dispatch('jurisdiction/hydrateFromSession', {
+        active_jurisdictions: ['za'],
+        primary_jurisdiction: 'za',
+        cross_border: false,
+      });
+
+      const modules = store.getters['jurisdiction/sidebarModules'];
+      expect(modules).toContain('za-savings');
+      expect(modules).toContain('za-investments');
+      expect(modules).toContain('za-retirement');
+      expect(modules).toContain('za-protection');
+      expect(modules).toContain('za-exchange-control');
+      // A pure SA user must not see any UK modules — that's the contract.
+      expect(modules.some((k) => k.startsWith('gb-'))).toBe(false);
     });
 
     it('adds cross-border modules when the flag is on', () => {
@@ -90,10 +112,9 @@ describe('jurisdiction store module', () => {
       expect(store.getters['jurisdiction/sidebarModules']).toContain('cross-border');
     });
 
-    it('de-duplicates if two jurisdictions overlap on module names', () => {
-      // The module registry is UK-only today; this test proves the Set-based
-      // de-duplication works. Once SA ships, a shared module (e.g. goals)
-      // should appear once, not twice.
+    it('de-duplicates if two jurisdictions overlap on module keys', () => {
+      // Pack-prefixed keys make collisions unlikely, but if a future pack ever
+      // contributes a duplicate key the Set-based de-dup keeps each entry once.
       store.dispatch('jurisdiction/hydrateFromSession', {
         active_jurisdictions: ['gb', 'gb'],
         primary_jurisdiction: 'gb',
@@ -103,6 +124,48 @@ describe('jurisdiction store module', () => {
       const modules = store.getters['jurisdiction/sidebarModules'];
       const unique = [...new Set(modules)];
       expect(modules.length).toBe(unique.length);
+    });
+  });
+
+  describe('sidebarSections getter', () => {
+    it('returns no sections when the user has no jurisdiction', () => {
+      expect(store.getters['jurisdiction/sidebarSections']).toEqual([]);
+    });
+
+    it('groups GB items under shared section keys', () => {
+      store.dispatch('jurisdiction/hydrateFromSession', {
+        active_jurisdictions: ['gb'],
+        primary_jurisdiction: 'gb',
+        cross_border: false,
+      });
+
+      const sections = store.getters['jurisdiction/sidebarSections'];
+      const sectionKeys = sections.map((s) => s.key);
+      expect(sectionKeys).toEqual(['cashManagement', 'finances', 'family', 'planning']);
+    });
+
+    it('GB and ZA users see the same section structure (the two-apps contract)', () => {
+      store.dispatch('jurisdiction/hydrateFromSession', {
+        active_jurisdictions: ['gb'],
+        primary_jurisdiction: 'gb',
+        cross_border: false,
+      });
+      const gbSections = store.getters['jurisdiction/sidebarSections'].map((s) => s.key);
+
+      store.dispatch('jurisdiction/reset');
+      store.dispatch('jurisdiction/hydrateFromSession', {
+        active_jurisdictions: ['za'],
+        primary_jurisdiction: 'za',
+        cross_border: false,
+      });
+      const zaSections = store.getters['jurisdiction/sidebarSections'].map((s) => s.key);
+
+      // ZA today has no cashManagement or planning items — so those sections
+      // are correctly hidden. The sections ZA does have must use the same
+      // section keys as GB (no SA-specific 'zaSection' bucket).
+      for (const key of zaSections) {
+        expect(gbSections).toContain(key);
+      }
     });
   });
 

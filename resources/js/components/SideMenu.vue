@@ -49,78 +49,61 @@
       <!-- Navigation items -->
       <div class="flex-1 overflow-y-auto py-2 scrollbar-hide">
 
-        <!-- Dashboard & Net Worth (no section heading) -->
-        <div class="mb-1">
+        <!-- Root items (no section heading) — Dashboard, Net Worth, etc.
+             Sourced from sidebarRootItems so each pack contributes its own
+             top-level entries; empty for packs that don't have any. -->
+        <div v-if="sidebarRootItems.length" class="mb-1">
           <div class="flex flex-col pt-1">
-            <SideMenuItem icon="home" label="Dashboard" to="/dashboard" :collapsed="effectiveCollapsed" :active="isExactActive('/dashboard')" :active-colour="currentStage ? stageColour : ''" @navigate="closeMobile" />
-            <SideMenuItem icon="chart-bar" label="Net Worth" to="/net-worth/wealth-summary" :collapsed="effectiveCollapsed" :active="isNetWorthActive" :active-colour="currentStage ? stageColour : ''" @navigate="closeMobile" />
+            <SideMenuItem
+              v-for="item in sidebarRootItems"
+              :key="item.key"
+              :icon="item.icon"
+              :label="resolveLabel(item)"
+              :to="item.to"
+              :collapsed="effectiveCollapsed"
+              :active="isItemActive(item)"
+              :active-colour="currentStage ? stageColour : ''"
+              :locked="isItemLocked(item)"
+              :required-plan="formatRequiredPlan(item.requiredPlan)"
+              @navigate="closeMobile"
+            />
           </div>
           <div v-if="effectiveCollapsed" class="mx-3 my-2 border-t border-light-gray"></div>
         </div>
 
-        <!-- Cash Management -->
-        <SideMenuSection label="Cash Management" :collapsed="effectiveCollapsed" :expanded="isSectionExpanded('cashManagement')" @toggle="toggleSection('cashManagement')">
-          <SideMenuItem icon="banknotes" label="Bank Accounts" to="/net-worth/cash" :collapsed="effectiveCollapsed" :active="isActive('/net-worth/cash')" :active-colour="currentStage ? stageColour : ''" @navigate="closeMobile" />
-          <SideMenuItem icon="currency-pound" label="Income" :to="{ path: '/valuable-info', query: { section: 'income' } }" :collapsed="effectiveCollapsed" :active="isValuableInfoSection('income')" :active-colour="currentStage ? stageColour : ''" @navigate="closeMobile" />
-          <SideMenuItem icon="arrow-up-tray" label="Expenditure" :to="{ path: '/valuable-info', query: { section: 'expenditure' } }" :collapsed="effectiveCollapsed" :active="isValuableInfoSection('expenditure')" :active-colour="currentStage ? stageColour : ''" @navigate="closeMobile" />
-        </SideMenuSection>
-
-        <!-- Finances -->
-        <SideMenuSection label="Finances" :collapsed="effectiveCollapsed" :expanded="isSectionExpanded('finances')" @toggle="toggleSection('finances')">
-          <SideMenuItem icon="trending-up" label="Investments" to="/net-worth/investments" :collapsed="effectiveCollapsed" :active="isInvestmentsActive" :active-colour="currentStage ? stageColour : ''" @navigate="closeMobile" />
-          <SideMenuItem icon="clock" label="Retirement" to="/net-worth/retirement" :collapsed="effectiveCollapsed" :active="isActive('/net-worth/retirement')" :active-colour="currentStage ? stageColour : ''" @navigate="closeMobile" />
-          <SideMenuItem icon="home-modern" label="Property" to="/net-worth/property" :collapsed="effectiveCollapsed" :active="isActive('/net-worth/property')" :active-colour="currentStage ? stageColour : ''" :locked="isLocked('standard')" requiredPlan="Standard" @navigate="closeMobile" />
-          <SideMenuItem icon="credit-card" label="Liabilities" to="/net-worth/liabilities" :collapsed="effectiveCollapsed" :active="isLiabilitiesActive" :active-colour="currentStage ? stageColour : ''" :locked="isLocked('standard')" requiredPlan="Standard" @navigate="closeMobile" />
-          <SideMenuItem icon="cube" label="Personal Valuables" to="/net-worth/chattels" :collapsed="effectiveCollapsed" :active="isActive('/net-worth/chattels')" :active-colour="currentStage ? stageColour : ''" :locked="isLocked('standard')" requiredPlan="Standard" @navigate="closeMobile" />
-          <SideMenuItem icon="chart-pie" label="Risk Profile" to="/risk-profile" :collapsed="effectiveCollapsed" :active="isActive('/risk-profile')" :active-colour="currentStage ? stageColour : ''" @navigate="closeMobile" />
-          <SideMenuItem icon="briefcase" label="Business" to="/net-worth/business" :collapsed="effectiveCollapsed" :active="isActive('/net-worth/business')" :active-colour="currentStage ? stageColour : ''" :locked="isLocked('standard')" requiredPlan="Standard" @navigate="closeMobile" />
-        </SideMenuSection>
-
-        <!-- Family (has spouse) / Admin (no spouse) -->
-        <SideMenuSection :label="hasSpouse ? 'Family' : 'Personal Affairs'" :collapsed="effectiveCollapsed" :expanded="isSectionExpanded('family')" @toggle="toggleSection('family')">
-          <SideMenuItem icon="shield-check" label="Protection" to="/protection" :collapsed="effectiveCollapsed" :active="isActive('/protection')" :active-colour="currentStage ? stageColour : ''" @navigate="closeMobile" />
-          <SideMenuItem icon="document-check" label="Will" to="/estate/will-builder" :collapsed="effectiveCollapsed" :active="isWillBuilderActive" :active-colour="currentStage ? stageColour : ''" :locked="isLocked('pro')" requiredPlan="Pro" @navigate="closeMobile" />
-          <SideMenuItem icon="envelope" :label="hasSpouse ? 'Letter to Spouse' : 'Expression of Wishes'" :to="{ path: '/valuable-info', query: { section: 'letter' } }" :collapsed="effectiveCollapsed" :active="isValuableInfoSection('letter')" :active-colour="currentStage ? stageColour : ''" :locked="isLocked('standard')" requiredPlan="Standard" @navigate="closeMobile" />
-          <SideMenuItem icon="building-library" label="Trusts" to="/trusts" :collapsed="effectiveCollapsed" :active="isActive('/trusts')" :active-colour="currentStage ? stageColour : ''" :locked="isLocked('pro')" requiredPlan="Pro" @navigate="closeMobile" />
-          <SideMenuItem icon="document-text" label="Estate Planning" to="/estate" :collapsed="effectiveCollapsed" :active="isEstateActive" :active-colour="currentStage ? stageColour : ''" :locked="isLocked('pro')" requiredPlan="Pro" @navigate="closeMobile" />
-          <SideMenuItem icon="key" label="Power of Attorney" to="/estate/power-of-attorney" :collapsed="effectiveCollapsed" :active="isLpaActive" :active-colour="currentStage ? stageColour : ''" :locked="isLocked('pro')" requiredPlan="Pro" @navigate="closeMobile" />
-        </SideMenuSection>
-
-        <!-- Planning -->
-        <SideMenuSection label="Planning" :collapsed="effectiveCollapsed" :expanded="isSectionExpanded('planning')" @toggle="toggleSection('planning')">
-          <SideMenuItem icon="puzzle-piece" label="Holistic Plan" to="/holistic-plan" :collapsed="effectiveCollapsed" :active="isActive('/holistic-plan')" :active-colour="currentStage ? stageColour : ''" :locked="isLocked('pro')" requiredPlan="Pro" @navigate="closeMobile" />
-          <SideMenuItem icon="clipboard-list" label="Plans" to="/plans" :collapsed="effectiveCollapsed" :active="isActive('/plans')" :active-colour="currentStage ? stageColour : ''" @navigate="closeMobile" />
-          <SideMenuItem icon="map" label="Journeys" to="/planning/journeys" :collapsed="effectiveCollapsed" :active="isActive('/planning/journeys')" :active-colour="currentStage ? stageColour : ''" @navigate="closeMobile" />
-          <SideMenuItem icon="beaker" label="What If Scenarios" to="/planning/what-if" :collapsed="effectiveCollapsed" :active="isActive('/planning/what-if')" :active-colour="currentStage ? stageColour : ''" :locked="isLocked('standard')" requiredPlan="Standard" @navigate="closeMobile" />
-          <SideMenuItem icon="flag" label="Goals" to="/goals" :collapsed="effectiveCollapsed" :active="isGoalsOverviewActive" :active-colour="currentStage ? stageColour : ''" @navigate="closeMobile" />
-          <SideMenuItem icon="calendar" label="Life Events" :to="{ path: '/goals', query: { tab: 'events' } }" :collapsed="effectiveCollapsed" :active="isGoalsEventsActive" :active-colour="currentStage ? stageColour : ''" @navigate="closeMobile" />
-          <SideMenuItem icon="lightning-bolt" label="Actions" to="/actions" :collapsed="effectiveCollapsed" :active="isActive('/actions')" :active-colour="currentStage ? stageColour : ''" @navigate="closeMobile" />
-        </SideMenuSection>
-
-        <!-- South Africa — data-driven from jurisdiction/zaModules (WS 1.2b).
-             Later SA UI workstreams (1.3c, 1.4d, 1.5b, 1.6b) append entries
-             to MODULES_BY_JURISDICTION.za and the items appear here without
-             further edits. -->
-        <SideMenuSection v-if="hasZa" label="South Africa" :collapsed="effectiveCollapsed" :expanded="isSectionExpanded('zaSection')" @toggle="toggleSection('zaSection')">
+        <!-- Module sections — every section comes from sidebarSections, which
+             merges items from each active pack (gb, za, …) into shared
+             section keys. A pure UK user and a pure SA user see the same
+             section structure with country-appropriate items inside. -->
+        <SideMenuSection
+          v-for="section in sidebarSections"
+          :key="section.key"
+          :label="resolveSectionLabel(section)"
+          :collapsed="effectiveCollapsed"
+          :expanded="isSectionExpanded(section.key)"
+          @toggle="toggleSection(section.key)"
+        >
           <SideMenuItem
-            v-for="mod in zaModules"
-            :key="mod.key"
-            :icon="mod.icon"
-            :label="mod.label"
-            :to="{ path: mod.route }"
+            v-for="item in section.items"
+            :key="item.key"
+            :icon="item.icon"
+            :label="resolveLabel(item)"
+            :to="item.to"
             :collapsed="effectiveCollapsed"
-            :active="currentPath.startsWith(mod.route)"
+            :active="isItemActive(item)"
             :active-colour="currentStage ? stageColour : ''"
+            :locked="isItemLocked(item)"
+            :required-plan="formatRequiredPlan(item.requiredPlan)"
             @navigate="closeMobile"
           />
         </SideMenuSection>
 
-        <!-- Advisor (conditional) -->
+        <!-- Advisor (conditional, role-gated — not part of any jurisdiction pack) -->
         <SideMenuSection v-if="isAdvisor" label="Advisor" :collapsed="effectiveCollapsed" :expanded="isSectionExpanded('advisorPanel')" @toggle="toggleSection('advisorPanel')">
           <SideMenuItem icon="briefcase" label="Advisor Dashboard" to="/advisor" :collapsed="effectiveCollapsed" :active="isActive('/advisor')" @navigate="closeMobile" />
         </SideMenuSection>
 
-        <!-- Admin (conditional) -->
+        <!-- Admin (conditional, role-gated — not part of any jurisdiction pack) -->
         <SideMenuSection v-if="isAdmin" label="Admin" :collapsed="effectiveCollapsed" :expanded="isSectionExpanded('adminPanel')" @toggle="toggleSection('adminPanel')">
           <SideMenuItem icon="shield-exclamation" label="Admin Panel" to="/admin" :collapsed="effectiveCollapsed" :active="isActive('/admin')" @navigate="closeMobile" />
         </SideMenuSection>
@@ -190,7 +173,7 @@
 </template>
 
 <script>
-import { ref, computed, watch, onMounted, onBeforeUnmount } from 'vue';
+import { ref, computed, onMounted, onBeforeUnmount } from 'vue';
 import { useStore } from 'vuex';
 import { useRoute, useRouter } from 'vue-router';
 import SideMenuItem from './SideMenuItem.vue';
@@ -238,18 +221,19 @@ export default {
     const isAdmin = computed(() => store.getters['auth/isAdmin']);
     const isAdvisor = computed(() => store.getters['auth/isAdvisor']);
     const isPreviewMode = computed(() => store.getters['preview/isPreviewMode']);
-    // WS 1.2b — data-driven ZA sidebar. zaModules returns config objects
-    // ({ key, label, route, icon, section }) from the jurisdiction store.
-    // Later SA workstreams append entries to MODULES_BY_JURISDICTION.za
-    // and the sidebar picks them up without further edits here.
-    const zaModules = computed(() => store.getters['jurisdiction/zaModules']);
-    const hasZa = computed(() => zaModules.value.length > 0);
     const hasSpouse = computed(() => {
       if (isPreviewMode.value) {
         return store.getters['preview/hasSpouse'];
       }
       return store.getters['spousePermission/hasSpouse'];
     });
+
+    // Sidebar entries come from the jurisdiction store, which merges items
+    // from every active pack (gb, za, …) into shared section keys. Adding a
+    // new module to a pack's manifest is enough to surface it here — no
+    // template edits needed.
+    const sidebarRootItems = computed(() => store.getters['jurisdiction/sidebarRootItems']);
+    const sidebarSections = computed(() => store.getters['jurisdiction/sidebarSections']);
 
     // ---------------------------------------------------------------
     // Life stage getters
@@ -261,38 +245,6 @@ export default {
     const progressPercentage = computed(() => store.getters['lifeStage/progressPercentage']);
     // Only show progress section once data has loaded to prevent 0% flash
     const showProgress = computed(() => currentStage.value && !lifeStageLoading.value);
-
-    // Colour class mappings — Tailwind JIT needs full class names
-    const COLOUR_CLASSES = {
-      text: {
-        'violet': 'text-violet-500',
-        'spring': 'text-spring-500',
-        'raspberry': 'text-raspberry-500',
-        'light-blue': 'text-light-blue-500',
-        'horizon': 'text-horizon-500',
-      },
-      bg: {
-        'violet': 'bg-violet-500',
-        'spring': 'bg-spring-500',
-        'raspberry': 'bg-raspberry-500',
-        'light-blue': 'bg-light-blue-500',
-        'horizon': 'bg-horizon-500',
-      },
-      stroke: {
-        'violet': 'stroke-violet-500',
-        'spring': 'stroke-spring-500',
-        'raspberry': 'stroke-raspberry-500',
-        'light-blue': 'stroke-light-blue-500',
-        'horizon': 'stroke-horizon-500',
-      },
-      activeFlyout: {
-        'violet': 'bg-violet-50 text-violet-700',
-        'spring': 'bg-spring-50 text-spring-700',
-        'raspberry': 'bg-raspberry-50 text-raspberry-700',
-        'light-blue': 'bg-light-blue-100 text-horizon-700',
-        'horizon': 'bg-horizon-100 text-horizon-700',
-      },
-    };
 
     const stageLabelColourClass = computed(() => 'text-horizon-500');
     const progressBarColourClass = computed(() => 'bg-raspberry-500');
@@ -312,8 +264,6 @@ export default {
     });
 
     const currentPath = computed(() => route.path);
-
-    const isExactActive = (path) => currentPath.value === path;
 
     const isActive = (prefix) => currentPath.value.startsWith(prefix);
 
@@ -383,13 +333,69 @@ export default {
       return currentPath.value.startsWith('/goals') && route.query.tab === 'events';
     });
 
+    // Bespoke active-state matchers, keyed by the `match` field on a sidebar
+    // entry. Items that don't set `match` fall through to the default prefix
+    // match against the entry's `to` path.
+    const ROUTE_MATCHERS = {
+      netWorth: () => isNetWorthActive.value,
+      investments: () => isInvestmentsActive.value,
+      liabilities: () => isLiabilitiesActive.value,
+      estate: () => isEstateActive.value,
+      willBuilder: () => isWillBuilderActive.value,
+      lpa: () => isLpaActive.value,
+      goalsOverview: () => isGoalsOverviewActive.value,
+      goalsEvents: () => isGoalsEventsActive.value,
+    };
+
+    const itemPath = (item) => (typeof item.to === 'string' ? item.to : (item.to && item.to.path) || '');
+
+    const isItemActive = (item) => {
+      const m = item.match;
+      if (m === 'exact') return currentPath.value === itemPath(item);
+      if (typeof m === 'string' && m.startsWith('valuableInfo:')) {
+        return isValuableInfoSection(m.slice('valuableInfo:'.length));
+      }
+      if (m && ROUTE_MATCHERS[m]) return ROUTE_MATCHERS[m]();
+      const path = itemPath(item);
+      return path ? currentPath.value.startsWith(path) : false;
+    };
+
+    // Labels that depend on runtime state (hasSpouse). The manifest sets
+    // `dynamicLabel: 'letter'` (or `dynamicLabel: 'family'` on a section) and
+    // SideMenu resolves to the actual string here.
+    const dynamicLabels = {
+      letter: () => (hasSpouse.value ? 'Letter to Spouse' : 'Expression of Wishes'),
+      family: () => (hasSpouse.value ? 'Family' : 'Personal Affairs'),
+    };
+
+    const resolveLabel = (item) => {
+      if (item.label) return item.label;
+      if (item.dynamicLabel && dynamicLabels[item.dynamicLabel]) {
+        return dynamicLabels[item.dynamicLabel]();
+      }
+      return '';
+    };
+
+    const resolveSectionLabel = (section) => {
+      if (section.label) return section.label;
+      if (section.dynamicLabel && dynamicLabels[section.dynamicLabel]) {
+        return dynamicLabels[section.dynamicLabel]();
+      }
+      return '';
+    };
+
+    const formatRequiredPlan = (plan) => {
+      if (!plan) return '';
+      return plan.charAt(0).toUpperCase() + plan.slice(1);
+    };
+
+    const isItemLocked = (item) => (item.requiredPlan ? isLocked(item.requiredPlan) : false);
+
     // ---------------------------------------------------------------
     // Section expand/collapse state
     // ---------------------------------------------------------------
     const STORAGE_KEY = 'sideMenuExpandedSections';
     const expandedSections = ref({});
-
-    const INIT_KEY = 'sideMenuInitialised';
 
     const loadExpandedState = () => {
       try {
@@ -411,51 +417,20 @@ export default {
       }
     };
 
-    // Determine which section the current route belongs to
+    // Determine which section the current route belongs to. Walk the manifest
+    // first — whichever section owns the active item is the right one.
+    // Account / advisor / admin have no jurisdiction-pack items so handle
+    // their paths explicitly.
     const activeSectionKey = computed(() => {
+      for (const section of sidebarSections.value) {
+        for (const item of section.items) {
+          if (isItemActive(item)) return section.key;
+        }
+      }
       const path = currentPath.value;
-      const section = route.query.section;
-
-      if (path.startsWith('/net-worth/cash') ||
-          (path.startsWith('/valuable-info') && (section === 'income' || section === 'expenditure'))) {
-        return 'cashManagement';
-      }
-      if (isInvestmentsActive.value ||
-          path.startsWith('/net-worth/retirement') ||
-          path.startsWith('/net-worth/property') ||
-          path.startsWith('/net-worth/liabilities') ||
-          path.startsWith('/net-worth/chattels') ||
-          path.startsWith('/risk-profile') ||
-          path.startsWith('/net-worth/business')) {
-        return 'finances';
-      }
-      if (path.startsWith('/protection') ||
-          isEstateActive.value ||
-          isWillBuilderActive.value ||
-          path.startsWith('/trusts') ||
-          (path.startsWith('/valuable-info') && section === 'letter')) {
-        return 'family';
-      }
-      if (path.startsWith('/holistic-plan') ||
-          path.startsWith('/plans') ||
-          path.startsWith('/planning/') ||
-          path.startsWith('/goals') ||
-          path.startsWith('/actions')) {
-        return 'planning';
-      }
-      if (path.startsWith('/profile') || path.startsWith('/settings')) {
-        return 'account';
-      }
-      if (path.startsWith('/advisor')) {
-        return 'advisorPanel';
-      }
-      if (path.startsWith('/admin')) {
-        return 'adminPanel';
-      }
-      // WS 1.2b — auto-expand ZA section when on any /za/* route.
-      if (path.startsWith('/za/')) {
-        return 'zaSection';
-      }
+      if (path.startsWith('/profile') || path.startsWith('/settings')) return 'account';
+      if (path.startsWith('/advisor')) return 'advisorPanel';
+      if (path.startsWith('/admin')) return 'adminPanel';
       return null;
     });
 
@@ -566,8 +541,8 @@ export default {
       isAdmin,
       isAdvisor,
       hasSpouse,
-      zaModules,
-      hasZa,
+      sidebarRootItems,
+      sidebarSections,
       effectiveCollapsed,
       menuWidthClass,
       showBugReportModal,
@@ -583,17 +558,14 @@ export default {
       progressBarColourClass,
       progressRingColourClass,
       // Active state
-      isExactActive,
       isActive,
-      isNetWorthActive,
-      isInvestmentsActive,
-      isLiabilitiesActive,
-      isEstateActive,
-      isWillBuilderActive,
-      isLpaActive,
-      isGoalsOverviewActive,
-      isGoalsEventsActive,
-      isValuableInfoSection,
+      isItemActive,
+
+      // Manifest helpers
+      resolveLabel,
+      resolveSectionLabel,
+      formatRequiredPlan,
+      isItemLocked,
 
       // Section state
       toggleSection,
