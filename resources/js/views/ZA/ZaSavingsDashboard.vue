@@ -1,19 +1,23 @@
 <template>
   <AppLayout>
-    <div class="max-w-6xl mx-auto space-y-8 py-6">
-      <TfsaDashboard />
-      <ZaEmergencyFundGauge />
+    <div class="module-gradient py-2 sm:py-6">
+      <ModuleStatusBar />
+      <div class="max-w-7xl mx-auto space-y-8 px-4 py-6">
+        <TfsaDashboard />
+        <ZaEmergencyFundGauge />
+      </div>
     </div>
   </AppLayout>
 </template>
 
 <script>
 import AppLayout from '@/layouts/AppLayout.vue';
+import ModuleStatusBar from '@/components/Shared/ModuleStatusBar.vue';
 import TfsaDashboard from '@/components/ZA/Savings/TfsaDashboard.vue';
 import ZaEmergencyFundGauge from '@/components/ZA/Savings/ZaEmergencyFundGauge.vue';
 
 export default {
   name: 'ZaSavingsDashboard',
-  components: { AppLayout, TfsaDashboard, ZaEmergencyFundGauge },
+  components: { AppLayout, ModuleStatusBar, TfsaDashboard, ZaEmergencyFundGauge },
 };
 </script>

@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Fynla\Packs\Za\Protection;
 
 use Fynla\Core\Contracts\ProtectionEngine;
+use Fynla\Packs\Za\Localisation\ZaLocalisation;
 use Fynla\Packs\Za\Tax\ZaTaxConfigService;
 use InvalidArgumentException;
 
@@ -120,7 +121,7 @@ class ZaProtectionEngine implements ProtectionEngine
             'recommended_cover' => $recommended,
             'minimum_cover' => $minimum,
             'shortfall' => max(0, $recommended - $existing),
-            'rationale' => "Capitalise {$dependants} dependants at 10× annual income plus outstanding debts. Existing cover {$existing} applied.",
+            'rationale' => "Capitalise {$dependants} dependants at 10× annual income plus outstanding debts. Existing cover {$this->formatRand($existing)} applied.",
         ];
     }
 
@@ -291,5 +292,10 @@ class ZaProtectionEngine implements ProtectionEngine
             'rationale' => $needs['rationale'],
             'missing_inputs' => $missing,
         ];
+    }
+
+    private function formatRand(int $minorUnits): string
+    {
+        return (new ZaLocalisation())->formatMoney($minorUnits);
     }
 }

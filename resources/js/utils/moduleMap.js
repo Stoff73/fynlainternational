@@ -23,6 +23,12 @@ const moduleMap = {
   '/estate': 'estate',
   '/trusts': 'trusts',
   '/risk-profile': 'investment',
+  // South Africa modules
+  '/za/protection': 'protection',
+  '/za/savings': 'savings',
+  '/za/investments': 'investment',
+  '/za/retirement': 'retirement',
+  '/za/exchange-control': 'investment',
   // Planning
   '/holistic-plan': 'coordination',
   '/plans': 'coordination',

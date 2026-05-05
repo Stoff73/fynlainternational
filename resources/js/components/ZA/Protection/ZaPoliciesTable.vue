@@ -1,5 +1,5 @@
 <template>
-  <section>
+  <section class="bg-white rounded-lg border border-light-gray p-6">
     <div class="flex justify-between items-center mb-4">
       <h2 class="text-xl font-bold text-horizon-500">Your policies</h2>
       <button
@@ -16,7 +16,7 @@
       <h3 class="text-lg font-bold text-horizon-500 mb-2">{{ typeLabel(type) }}</h3>
       <table class="w-full border-collapse">
         <thead>
-          <tr class="border-b border-savannah-100 text-horizon-300 text-sm">
+          <tr class="border-b border-horizon-200 text-horizon-300 text-sm">
             <th class="text-left py-2">Provider</th>
             <th class="text-right py-2">Cover</th>
             <th class="text-right py-2">Premium</th>
@@ -25,14 +25,14 @@
           </tr>
         </thead>
         <tbody>
-          <tr v-for="p in group" :key="p.id" class="border-b border-savannah-100">
+          <tr v-for="p in group" :key="p.id" class="border-b border-horizon-200">
             <td class="py-3">{{ p.provider }}</td>
             <td class="py-3 text-right">{{ formatZAR(p.cover_amount_major) }}</td>
             <td class="py-3 text-right">{{ formatZAR(p.premium_amount_major) }} / {{ p.premium_frequency }}</td>
             <td class="py-3 text-right">{{ (p.beneficiaries || []).length }}</td>
             <td class="py-3 text-right">
               <button v-preview-disabled type="button" class="text-raspberry-500 hover:underline mr-2" @click="openEdit(p)">Edit</button>
-              <button v-preview-disabled="'delete'" type="button" class="text-raspberry-500 hover:underline" @click="confirmDelete(p)">Delete</button>
+              <button v-preview-disabled="'delete'" type="button" class="text-raspberry-500 hover:underline" @click="askDelete(p)">Delete</button>
             </td>
           </tr>
         </tbody>
@@ -44,6 +44,16 @@
       @save="handleSave"
       @close="modalOpen = false"
     />
+    <ConfirmModal
+      :open="!!pendingDelete"
+      title="Delete policy?"
+      :message="pendingDelete ? `This will permanently remove ${pendingDelete.provider} ${typeLabel(pendingDelete.product_type)}. This cannot be undone.` : ''"
+      confirm-label="Delete"
+      cancel-label="Cancel"
+      variant="danger"
+      @confirm="confirmDelete"
+      @cancel="pendingDelete = null"
+    />
   </section>
 </template>
 
@@ -51,13 +61,14 @@
 import { mapActions, mapGetters } from 'vuex';
 import zaCurrencyMixin from '@/mixins/zaCurrencyMixin';
 import ZaProtectionPolicyModal from './ZaProtectionPolicyModal.vue';
+import ConfirmModal from '@/components/Shared/ConfirmModal.vue';
 
 export default {
   name: 'ZaPoliciesTable',
-  components: { ZaProtectionPolicyModal },
+  components: { ZaProtectionPolicyModal, ConfirmModal },
   mixins: [zaCurrencyMixin],
   data() {
-    return { modalOpen: false, editing: null };
+    return { modalOpen: false, editing: null, pendingDelete: null };
   },
   computed: {
     ...mapGetters('zaProtection', ['policiesByType']),
@@ -72,9 +83,12 @@ export default {
     },
     openAdd() { this.editing = null; this.modalOpen = true; },
     openEdit(p) { this.editing = p; this.modalOpen = true; },
-    async confirmDelete(p) {
-      if (!confirm(`Delete ${p.provider} ${this.typeLabel(p.product_type)}?`)) return;
-      await this.deletePolicy(p.id);
+    askDelete(p) { this.pendingDelete = p; },
+    async confirmDelete() {
+      const target = this.pendingDelete;
+      this.pendingDelete = null;
+      if (!target) return;
+      await this.deletePolicy(target.id);
     },
     async handleSave(payload) {
       if (this.editing) {

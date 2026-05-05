@@ -1,6 +1,8 @@
 <template>
   <AppLayout>
-    <div class="max-w-7xl mx-auto px-4 py-6">
+    <div class="module-gradient py-2 sm:py-6">
+      <ModuleStatusBar />
+      <div class="max-w-7xl mx-auto px-4 py-6">
       <ZaRetirementSummary />
 
       <ZaRetirementTabs :active="activeTab" @change="switchTab" />
@@ -36,6 +38,7 @@
         <ZaReg28AllocationForm />
         <ZaReg28SnapshotHistory />
       </section>
+      </div>
     </div>
   </AppLayout>
 </template>
@@ -43,6 +46,7 @@
 <script>
 import { mapActions } from 'vuex';
 import AppLayout from '@/layouts/AppLayout.vue';
+import ModuleStatusBar from '@/components/Shared/ModuleStatusBar.vue';
 import ZaRetirementSummary from '@/components/ZA/Retirement/ZaRetirementSummary.vue';
 import ZaRetirementTabs from '@/components/ZA/Retirement/ZaRetirementTabs.vue';
 import ZaRetirementFundsList from '@/components/ZA/Retirement/ZaRetirementFundsList.vue';
@@ -62,6 +66,7 @@ export default {
   name: 'ZaRetirementDashboard',
   components: {
     AppLayout,
+    ModuleStatusBar,
     ZaRetirementSummary,
     ZaRetirementTabs,
     ZaRetirementFundsList,

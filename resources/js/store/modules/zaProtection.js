@@ -106,9 +106,10 @@ const actions = {
     const response = await zaProtectionService.listBeneficiaries(policyId);
     commit('setBeneficiaries', { policyId, list: response.data });
   },
-  async saveBeneficiaries({ commit }, { policyId, beneficiaries }) {
+  async saveBeneficiaries({ commit, dispatch }, { policyId, beneficiaries }) {
     const response = await zaProtectionService.saveBeneficiaries(policyId, beneficiaries);
     commit('setBeneficiaries', { policyId, list: response.data });
+    await dispatch('fetchPolicies');
     return response.data;
   },
   reset({ commit }) { commit('reset'); },
