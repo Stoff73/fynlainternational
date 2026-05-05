@@ -9,6 +9,8 @@ previous_session: 2026-04-21 session 1 (WS 1.5b SA Protection shipped, Task 21 P
 
 # Context Clear Handover — 2026-05-05, Session 1
 
+[[May Index]] | [[Home]]
+
 ## Immediate state
 
 Just finished a design-system audit of all 5 SA pages, written and committed to `May/May5Updates/sa-pages-design-audit-2026-05-05.md` (+ 6 reference screenshots). User is clearing context **so the next instance can pick up the rework PR**. Working tree clean, branch `main` is 3 commits ahead of `origin/main` (no remote configured for this repo — local-only per `Implementation_Plan_v2.md`).

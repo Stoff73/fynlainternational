@@ -8,6 +8,8 @@ test_user: za-protection-test@example.com / password
 servers: Laravel :8001, Vite :5173 (5174 was held by sibling fynla repo)
 ---
 
+[[May Index]] | [[Home]]
+
 # WS 1.5b Task 21 — SA Protection Playwright smoke
 
 3 scenarios run end-to-end as `za-protection-test@example.com` (R 480 000 income, 2 dependants, R 800 000 mortgage seeded — actual fixture inflated to 4 dependants + R 1.6M mortgages because TestUsersSeeder ran twice during DB recovery — see findings § F4 below).

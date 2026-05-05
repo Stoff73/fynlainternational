@@ -9,6 +9,8 @@ status: AUDIT ONLY — no code changed
 
 # SA Pages — Design-System Compliance Audit
 
+[[May Index]] | [[Home]]
+
 This report compares the 5 SA module pages against `fynlaDesignGuide.md` v1.3.0 and the UK module-page conventions, after WS 1.2b → 1.5b shipped them across 18–21 April. Audit is screenshot-based + source-read; no code was changed.
 
 Side-by-side screenshots in this folder:

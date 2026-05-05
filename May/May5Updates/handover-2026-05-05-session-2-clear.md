@@ -9,6 +9,8 @@ previous_session: 2026-05-05 session 1 (audit + Playwright smoke + tech-debt swe
 
 # Context Clear Handover — 2026-05-05, Session 2
 
+[[May Index]] | [[Home]]
+
 ## Immediate state
 
 SA pages design rework PR has shipped. Two commits pushed to `origin/main`: `63763ae` (chrome + ConfirmModal + F1 + F3) and `0f883a8` (W1 follow-up — focus rings to violet per Rule 9). Working tree clean except for the 5 pre-existing `.claude/skills/*` dirty files we've been carrying since session 1. Browser-verified end-to-end as `za-protection-test@example.com` across all 5 SA pages. ZA pack tests 207 passing, Feature/Api/Za 72 passing.
