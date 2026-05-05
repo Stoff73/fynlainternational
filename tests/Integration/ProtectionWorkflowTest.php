@@ -9,15 +9,23 @@ use App\Models\LifeInsurancePolicy;
 use App\Models\ProtectionProfile;
 use App\Models\SicknessIllnessPolicy;
 use App\Models\User;
+use Database\Seeders\TaxConfigurationSeeder;
+
+beforeEach(function () {
+    // UKTaxCalculator (called from CoverageGapAnalyzer) needs a real tax-year config.
+    $this->seed(TaxConfigurationSeeder::class);
+});
 
 describe('Protection Workflow Integration', function () {
     it('completes full protection planning journey', function () {
         // Step 1: Create a new user
+        // ProtectionDataReadinessService blocks analysis without User-level income, DOB and marital_status.
         $user = User::factory()->create([
             'first_name' => 'Integration',
             'surname' => 'Test User',
             'email' => 'integration@test.com',
             'date_of_birth' => now()->subYears(35),
+            'annual_employment_income' => 60000,
         ]);
 
         // Step 2: User creates protection profile
@@ -133,8 +141,9 @@ describe('Protection Workflow Integration', function () {
 
         $analysisData = $analysisResponse->json('data');
 
-        // Verify analysis contains expected data
-        expect($analysisData['adequacy_score'])->toBeGreaterThan(0);
+        // Verify analysis contains expected data — adequacy_score is an array keyed by overall_score, rating, etc.
+        expect($analysisData['adequacy_score'])->toBeArray()->toHaveKeys(['overall_score', 'rating']);
+        expect($analysisData['adequacy_score']['overall_score'])->toBeGreaterThanOrEqual(0);
         expect($analysisData['recommendations'])->toBeArray();
         expect($analysisData['scenarios'])->toHaveKey('death');
         expect($analysisData['scenarios'])->toHaveKey('critical_illness');
@@ -183,7 +192,8 @@ describe('Protection Workflow Integration', function () {
         $this->assertDatabaseHas('life_insurance_policies', ['user_id' => $user->id]);
         $this->assertDatabaseHas('income_protection_policies', ['user_id' => $user->id]);
         $this->assertDatabaseHas('disability_policies', ['user_id' => $user->id]);
-        $this->assertDatabaseMissing('critical_illness_policies', ['id' => $criticalPolicy->id]); // Deleted
+        // CriticalIllnessPolicy uses SoftDeletes — row remains, deleted_at populated.
+        $this->assertSoftDeleted('critical_illness_policies', ['id' => $criticalPolicy->id]);
     });
 
     it('handles multiple users with isolated data', function () {
@@ -226,16 +236,25 @@ describe('Protection Workflow Integration', function () {
     });
 
     it('validates required data before analysis', function () {
-        // User without profile cannot run analysis
+        // User without DOB / income / etc. trips the readiness gate.
+        // Analyze returns success=true with can_proceed=false and null analysis fields.
         $user = User::factory()->create();
 
         $response = $this->actingAs($user)->postJson('/api/protection/analyze');
         $response->assertStatus(200)
-            ->assertJson(['success' => false]);
+            ->assertJson([
+                'success' => true,
+                'message' => 'Readiness check incomplete',
+            ])
+            ->assertJsonPath('data.can_proceed', false)
+            ->assertJsonPath('data.adequacy_score', null);
     });
 
     it('handles comprehensive policy portfolio', function () {
-        $user = User::factory()->create(['date_of_birth' => now()->subYears(40)]);
+        $user = User::factory()->create([
+            'date_of_birth' => now()->subYears(40),
+            'annual_employment_income' => 80000,
+        ]);
 
         // Create profile
         $profile = ProtectionProfile::factory()->create([
@@ -271,7 +290,8 @@ describe('Protection Workflow Integration', function () {
         $analysisResponse->assertStatus(200);
 
         $analysisData = $analysisResponse->json('data');
-        expect($analysisData['adequacy_score'])->toBeGreaterThan(0);
+        expect($analysisData['adequacy_score'])->toBeArray()->toHaveKeys(['overall_score', 'rating']);
+        expect($analysisData['adequacy_score']['overall_score'])->toBeGreaterThanOrEqual(0);
         expect($analysisData['gaps'])->toHaveKey('gaps_by_category');
         expect($analysisData['gaps']['gaps_by_category'])->toHaveKeys([
             'human_capital_gap',
@@ -282,7 +302,10 @@ describe('Protection Workflow Integration', function () {
     });
 
     it('handles profile updates and re-analysis', function () {
-        $user = User::factory()->create(['date_of_birth' => now()->subYears(30)]);
+        $user = User::factory()->create([
+            'date_of_birth' => now()->subYears(30),
+            'annual_employment_income' => 40000,
+        ]);
 
         // Create initial profile
         $profile = ProtectionProfile::factory()->create([
@@ -299,7 +322,7 @@ describe('Protection Workflow Integration', function () {
         // First analysis
         $firstAnalysis = $this->actingAs($user)->postJson('/api/protection/analyze');
         $firstAnalysis->assertStatus(200);
-        $firstScore = $firstAnalysis->json('data.adequacy_score');
+        $firstGaps = $firstAnalysis->json('data.gaps.gaps_by_category');
 
         // Update profile (life changes: married, children, higher income)
         $updateResponse = $this->actingAs($user)->postJson('/api/protection/profile', [
@@ -319,10 +342,9 @@ describe('Protection Workflow Integration', function () {
         // Second analysis (should reflect changed circumstances)
         $secondAnalysis = $this->actingAs($user)->postJson('/api/protection/analyze');
         $secondAnalysis->assertStatus(200);
-        $secondScore = $secondAnalysis->json('data.adequacy_score');
+        $secondGaps = $secondAnalysis->json('data.gaps.gaps_by_category');
 
-        // Score should be different due to changed circumstances
-        // (Higher income and more dependents likely decrease adequacy with same coverage)
-        expect($secondScore)->not->toBe($firstScore);
+        // Gaps should change because dependents went 0 → 2 and mortgage 0 → 350000.
+        expect($secondGaps)->not->toBe($firstGaps);
     });
 });

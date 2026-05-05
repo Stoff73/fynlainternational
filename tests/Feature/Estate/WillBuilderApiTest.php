@@ -16,6 +16,7 @@ describe('Will Builder API', function () {
         it('returns pre-populated data for authenticated user', function () {
             $user = User::factory()->create([
                 'first_name' => 'James',
+                'middle_name' => null,
                 'surname' => 'Carter',
                 'occupation' => 'Engineer',
             ]);

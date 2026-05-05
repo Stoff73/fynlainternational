@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Database\Seeders;
 
+use Fynla\Packs\Za\Database\Seeders\ZaTaxConfigurationSeeder;
 use Illuminate\Database\Seeder;
 
 /**
@@ -31,6 +32,10 @@ class DatabaseSeeder extends Seeder
         $this->call([
             // Tax configuration - rates, allowances, thresholds
             TaxConfigurationSeeder::class,
+
+            // SA tax configuration - jurisdiction row, 2026/27 tax_years row, za_tax_configurations
+            // (cascades to ZaJurisdictionSeeder; idempotent via updateOrInsert).
+            ZaTaxConfigurationSeeder::class,
 
             // Tax product reference - ISA/GIA/Bond tax treatment info
             TaxProductReferenceSeeder::class,
@@ -110,6 +115,7 @@ class DatabaseSeeder extends Seeder
     {
         $this->call([
             TaxConfigurationSeeder::class,
+            ZaTaxConfigurationSeeder::class,
             TaxProductReferenceSeeder::class,
             ActuarialLifeTablesSeeder::class,
             RolesPermissionsSeeder::class,
