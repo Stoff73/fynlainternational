@@ -1,7 +1,8 @@
 ---
 type: plan
 date: 2026-05-06
-status: awaiting PRD
+audited: 2026-05-06 (inline audit step, no formal PRD per user instruction)
+status: ready for R-0
 companion_spec: Plans/architecture-spec-v3.md
 supersedes:
   - Plans/Implementation_Plan_v2.md
@@ -16,6 +17,95 @@ This plan describes how the codebase moves from "UK in `app/`, SA in `packs/`" (
 The core infrastructure built in 2026-04 (Workstreams A–D — contracts, Money, TaxYear, Jurisdiction, PackRegistry, ActiveJurisdictionMiddleware, smoke pack, ZA pack scaffold) is unchanged and remains correct. This plan moves UK code into the architecture that already exists for SA.
 
 The plan is **execute the original `multi_country_architecture.md` § 15.2 ("Phase 1 — repackage UK logic into country-gb pack")** with the failed April approach replaced. Direct relocation, no compatibility aliases, one module per commit.
+
+---
+
+## 0. Audit Amendments (2026-05-06)
+
+The inline audit step (see `code-explorer` audit report, session 2026-05-06) surfaced gaps and corrections that this section captures. Each item below either changes a workstream's scope or adds a workstream. Effort estimates updated where reality demanded it; "hours not days" mandate held.
+
+### A. Live state corrections (R-0/R-1 already partially exist)
+
+- `app/Providers/GbPackServiceProvider.php` already exists and binds 7 of 13 contracts to UK engines (`UkTaxCalculator` adapter, `UkRetirementEngine`, `UkInvestmentEngine`, `UkProtectionEngine`, `UkEstateEngine`, `UkSavingsEngine`, `UkExchangeControl`). R-0 must **relocate** this provider to `packs/country-gb/src/Providers/GbPackServiceProvider.php` rather than create a new one. R-1 is ~70% pre-existing — its remaining work is the 4 missing contracts (Localisation, Identity, Banking, LifeTables) and the binding namespace updates as files move in R-3 → R-9.
+- The 4 missing contract bindings have **no Null implementations in core** today. The container will throw on resolution if anything tries to read them. R-0 must create `Fynla\Core\Localisation\NullLocalisation`, `Fynla\Core\Validation\NullIdentityValidator`, `Fynla\Core\Validation\NullBankingValidator`, `Fynla\Core\LifeTables\NullLifeTableProvider` BEFORE wiring R-1 stub bindings. R-11 then replaces these Null bindings with real GB implementations.
+- `tests/Architecture/PackIsolationTest.php` already exists with custom describe/it syntax. R-2 **extends** this file rather than creating `PackBoundaryTest.php`; the ratchet pattern is added as additional `it()` blocks in the same file.
+- `TaxOptimisationAgent` is injected into `CoordinatingAgent` but has no contract. Add a 14th contract `TaxOptimisationEngine` to `core/app/Core/Contracts/` in R-1, with `pack.gb.tax_optimisation` binding. Equivalent ZA implementation deferred to a future SA workstream.
+
+### B. Pre-flight workstream R-0a (NEW — SA pack cleanup, ~2 hr)
+
+The architecture fence cannot be erected while SA code is split between `app/` and `packs/country-za/`. The audit found:
+
+- `app/Http/Controllers/Api/Za/` (5 controllers) → must move to `packs/country-za/src/Http/Controllers/`
+- `app/Http/Requests/Za/` (21 requests) → must move to `packs/country-za/src/Http/Requests/`
+- `app/Http/Resources/Za/` (13 resources) → must move to `packs/country-za/src/Http/Resources/`
+- SA controllers currently import UK models (`App\Models\DCPension`, `App\Models\Investment\Holding`, `App\Models\Investment\InvestmentAccount`, `App\Models\SavingsAccount`, `App\Models\FamilyMember`, `App\Models\Mortgage`). Two paths: (1) add SA-equivalent models to `packs/country-za/src/Models/`, or (2) keep the cross-pack reads via core-mediated query layer. **Plan default: option (2) for now** — record the imports as known violations in the architecture test suite (skipped assertions ratcheted in R-15 once UK models have moved and SA can read them via `Fynla\Packs\Gb\Models\…` if absolutely needed; better, factor a core-mediated `AssetQueryService` that abstracts asset lookup. This decision is forced by R-9 and surfaces explicitly there.).
+- `database/seeders/ZaJurisdictionSeeder.php` → move to `packs/country-za/database/seeders/`
+- SA frontend in `resources/js/`: `components/ZA/` (44), `views/ZA/` (5), `store/modules/za*` (6 modules), `services/za*` (5 services) → relocate to `packs/country-za/resources/js/` as part of **new workstream R-13b** (split from R-13).
+
+R-0a runs after R-0 skeleton creation and before R-1 binding refresh.
+
+### C. Quantification corrections (numbers the plan handwaved)
+
+| Workstream | Plan said | Actual count | Effort delta |
+|---|---|---|---|
+| R-3 traits | 12 traits, simple split | 12 traits, **non-trivial split** — 5 are core, 4 are GB pack, 3 (`HasAiChat`, `HasAiGuardrails`, `ResolvesExpenditure`) require careful audit (CoordinatingAgent's AI tooling references UK models) | +0.5 hr |
+| R-3 constants | 3 files | 6 files (`TaxDefaults`, `EstateDefaults`, `ValidationLimits` to GB; `InvestmentDefaults`, `QuerySchemas` to **core** not GB; `FinancialPlanningKnowledge` to GB) | +0.5 hr |
+| R-4 models | 76+ | **91** model files (top-level 64 + Estate/ 12 + Investment/ 6 + Will/Trust models) | +1 hr |
+| R-4 polymorphic | "Trust + ProtectionPolicy" | **`Holding.holdable`** (targets InvestmentAccount, DCPension) + **`JointAccountLog.loggable`** (targets Property, Mortgage, InvestmentAccount, SavingsAccount) — 2 backfill data migrations required | already in scope |
+| R-6 services | "16 Investment files" | **35+ Investment files** in 10 nested subdirectories (`Recommendation/`, `Rebalancing/`, `Fees/`, `Goals/`, `ModelPortfolio/`, `Tax/`, `Utilities/`, `Performance/`, `Analytics/`, `AssetLocation/`) | +1.5 hr |
+| R-9 controllers | "~80 UK controllers" | **93 controllers** in `Api/` (63 flat + 30 across Estate/Investment/Retirement/Tax/Settings/Za) | +1 hr |
+| R-10 migrations | handwaved | **130+ UK migration files** since 2025-12 | already in scope |
+| R-13 frontend | 13 component dirs | **+ Trusts/, Risk/, WhatIf/, Advisor/, Public/ (30+), NetWorth/ views, Planning/ views** — 7 additional directories | +2 hr |
+| R-13 split | one workstream | **R-13a (UK frontend) + R-13b (SA frontend)** — SA relocation is a prerequisite for the architecture fence | R-13b adds 2 hr |
+
+### D. `app/Services/` directories not classified by the plan (X-2 in audit)
+
+The plan's R-5/R-6/R-7 named only the canonical module dirs. The audit identifies 23 additional `app/Services/` subdirectories. Classification table appended to R-5 (see § 7 below). Effort budget for unclassified-services relocation: **+2 hr**, distributed across R-5/R-6/R-7.
+
+### E. `CoordinatingAgent` AI coupling decision (high-impact)
+
+`CoordinatingAgent` uses `HasAiChat` + `HasAiGuardrails` traits. These traits reference `AiToolDefinitions` which encodes UK product structures (SIPP, ISA, IHT). Two paths:
+
+1. **Move `CoordinatingAgent` to GB pack now.** Simpler, faster, no architecture violation, defers core AI generalisation to Phase 2 when SA needs AI chat.
+2. **Keep `CoordinatingAgent` in core, generalise AI tools to a pack contract.** Architecturally cleaner long-term, requires designing an `AiToolProvider` contract per pack, adds ~3 hr scope to R-8.
+
+**Plan default (per "hours not days" mandate): Option 1 — `CoordinatingAgent` moves to GB pack as part of R-8.** Generalisation deferred to Phase 2. The existing `AiToolDefinitions` becomes UK-specific by being co-located with the UK agents.
+
+### F. Test relocation
+
+Defer to a follow-up after Phase 1. Tests stay in `tests/` for now; namespace references update as UK code moves. Decision recorded; no workstream change.
+
+### G. Updated total estimate
+
+Plan original total: **~39 hr**. After audit corrections: **~50 hr** broken down as:
+
+| WS | Was | Now |
+|---|---|---|
+| R-0 | 1 | 1.5 (Null impls) |
+| R-0a (new) | — | 2 |
+| R-1 | 1 | 1 (much already in place but contracts +1 + binding refresh as files move costs more later) |
+| R-2 | 1 | 1 |
+| R-3 | 2 | 3 |
+| R-4 | 4 | 5 |
+| R-5 | 3 | 3.5 |
+| R-6 | 3 | 4.5 |
+| R-7 | 2 | 3 |
+| R-8 | 1 | 1.5 (CoordinatingAgent move) |
+| R-9 | 4 | 6 |
+| R-10 | 1 | 1.5 |
+| R-11 | 2 | 2 |
+| R-12 | 2 | 2 |
+| R-13a (UK FE) | 6 | 7 |
+| R-13b (SA FE, new) | — | 3 |
+| R-14 | 3 | 3 |
+| R-15 | 3 | 3 |
+| **Total** | **39** | **~50** |
+
+The 11-hour delta reflects quantification, not scope creep. Actual file counts are larger than the original plan assumed; SA pack cleanup and SA frontend relocation are net-new prerequisites the plan failed to surface. Hours-not-days mandate still holds at workstream level — flag drift if any single workstream blows past its updated estimate.
+
+### H. Three plan defaults — confirmation deferred
+
+The three decision points in § 18 (URL strategy, table renames, branch strategy) are not blocking the audit or R-0. They surface to the user **before R-9** (URL strategy gates the route restructure) and **before R-14** (table renames). Branch strategy is already locked: single long-lived `refactor/uk-pack-relocation`.
 
 ---
 
@@ -637,8 +727,9 @@ These three are tactical and the plan defaults to one answer; flag if the user w
 
 ## 20. Next Step
 
-Per `feedback_workflow_spec_plan_prd.md` (memory): spec → plan → **PRD via `/prd-writer`** → implement.
+User-amended workflow for this refactor: spec → plan → **inline audit + amendments** → implement. (Formal PRD via `/prd-writer` skipped — user's explicit choice for this mechanical refactor; audit step replaces it.)
 
 **Spec:** `Plans/architecture-spec-v3.md` ✅
-**Plan:** this document ✅
-**Next:** Run `/prd-writer` against this plan + spec to produce the engineering-ready PRD. The PRD will validate this plan against the live codebase, surface conflicts/gaps, and amend before R-0 begins. Do not start R-0 until the PRD is written.
+**Plan:** this document ✅ (audit amendments captured in § 0 above)
+**Inline audit:** complete (2026-05-06 session 2, `feature-dev:code-explorer` report) ✅
+**Next:** Cut `refactor/uk-pack-relocation` from `main`. Cherry-pick TestUsersSeeder jurisdiction-pinning portion of `0adf82b`. Begin R-0.
