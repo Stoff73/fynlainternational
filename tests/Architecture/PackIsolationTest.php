@@ -11,7 +11,10 @@ describe('Pack Isolation', function () {
         }
 
         $violations = [];
-        $otherPackPattern = '/Fynla\\\\Packs\\\\(?!GB\\\\)/';  // Match any pack except GB
+        // Pack namespaces are Pascal-case (Fynla\Packs\Gb\…, Fynla\Packs\Za\…),
+        // mirroring composer.json autoload entries. Negative lookahead matches
+        // the actual namespace casing, not the ISO country code.
+        $otherPackPattern = '/Fynla\\\\Packs\\\\(?!Gb\\\\)/';  // Match any pack except Gb
 
         $iterator = new RecursiveIteratorIterator(
             new RecursiveDirectoryIterator($packDir)

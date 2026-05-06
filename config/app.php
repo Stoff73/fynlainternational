@@ -173,9 +173,12 @@ return [
 
         /*
          * Fynla Core (Multi-Country Architecture)
+         *
+         * Country packs (GB, ZA, etc.) are auto-discovered by Laravel
+         * via each pack's composer.json `extra.laravel.providers` entry —
+         * no explicit registration needed here.
          */
         Fynla\Core\Providers\CoreServiceProvider::class,
-        App\Providers\GbPackServiceProvider::class,
     ])->toArray(),
 
     /*

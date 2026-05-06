@@ -1,0 +1,38 @@
+{
+    "name": "fynla/pack-country-gb",
+    "type": "library",
+    "description": "Fynla United Kingdom country pack — UK tax engine (HMRC), IHT/CGT/Income Tax/Pension calculators, ISA/SIPP product wrappers, and gb_* schema (after deferred prefix migration).",
+    "license": "proprietary",
+    "require": {
+        "php": "^8.2",
+        "illuminate/support": "^10.0",
+        "illuminate/database": "^10.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "Fynla\\Packs\\Gb\\": "src/",
+            "Fynla\\Packs\\Gb\\Database\\Factories\\": "database/factories/",
+            "Fynla\\Packs\\Gb\\Database\\Seeders\\": "database/seeders/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Fynla\\Packs\\Gb\\Tests\\": "tests/"
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Fynla\\Packs\\Gb\\Providers\\GbPackServiceProvider"
+            ]
+        },
+        "fynla": {
+            "pack": {
+                "code": "gb",
+                "currency": "GBP",
+                "locale": "en_GB",
+                "table_prefix": ""
+            }
+        }
+    }
+}

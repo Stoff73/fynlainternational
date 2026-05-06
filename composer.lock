@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "483852642593f5c387df99380703bd2f",
+    "content-hash": "7e3342e723e6cb40050f8a97e3955358",
     "packages": [
         {
             "name": "anthropic-ai/sdk",
@@ -7416,8 +7416,58 @@
             "time": "2025-08-08T12:00:00+00:00"
         },
         {
+            "name": "fynla/pack-country-gb",
+            "version": "dev-refactor/uk-pack-relocation",
+            "dist": {
+                "type": "path",
+                "url": "packs/country-gb",
+                "reference": "5df469e48ccea4ae42e138be8a977071f1e50e01"
+            },
+            "require": {
+                "illuminate/database": "^10.0",
+                "illuminate/support": "^10.0",
+                "php": "^8.2"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "Fynla\\Packs\\Gb\\Providers\\GbPackServiceProvider"
+                    ]
+                },
+                "fynla": {
+                    "pack": {
+                        "code": "gb",
+                        "currency": "GBP",
+                        "locale": "en_GB",
+                        "table_prefix": ""
+                    }
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Fynla\\Packs\\Gb\\": "src/",
+                    "Fynla\\Packs\\Gb\\Database\\Factories\\": "database/factories/",
+                    "Fynla\\Packs\\Gb\\Database\\Seeders\\": "database/seeders/"
+                }
+            },
+            "autoload-dev": {
+                "psr-4": {
+                    "Fynla\\Packs\\Gb\\Tests\\": "tests/"
+                }
+            },
+            "license": [
+                "proprietary"
+            ],
+            "description": "Fynla United Kingdom country pack — UK tax engine (HMRC), IHT/CGT/Income Tax/Pension calculators, ISA/SIPP product wrappers, and gb_* schema (after deferred prefix migration).",
+            "transport-options": {
+                "symlink": true,
+                "relative": true
+            }
+        },
+        {
             "name": "fynla/pack-country-xx-smoke",
-            "version": "dev-master",
+            "version": "dev-refactor/uk-pack-relocation",
             "dist": {
                 "type": "path",
                 "url": "packs/country-xx-smoke",
@@ -7464,11 +7514,11 @@
         },
         {
             "name": "fynla/pack-country-za",
-            "version": "dev-master",
+            "version": "dev-refactor/uk-pack-relocation",
             "dist": {
                 "type": "path",
                 "url": "packs/country-za",
-                "reference": "cf6620d504b75b9ffd0f40c13921d8fa34bc6059"
+                "reference": "43da30b8969fac9764536dc130381b1ad9f09d4c"
             },
             "require": {
                 "illuminate/database": "^10.0",
@@ -7494,6 +7544,7 @@
             "autoload": {
                 "psr-4": {
                     "Fynla\\Packs\\Za\\": "src/",
+                    "Fynla\\Packs\\Za\\Database\\Factories\\": "database/factories/",
                     "Fynla\\Packs\\Za\\Database\\Seeders\\": "database/seeders/"
                 }
             },
@@ -10536,6 +10587,7 @@
     "aliases": [],
     "minimum-stability": "dev",
     "stability-flags": {
+        "fynla/pack-country-gb": 20,
         "fynla/pack-country-xx-smoke": 20,
         "fynla/pack-country-za": 20
     },
