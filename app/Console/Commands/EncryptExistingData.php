@@ -42,15 +42,15 @@ class EncryptExistingData extends Command
             ],
         ],
         'CashAccount' => [
-            'class' => \App\Models\CashAccount::class,
+            'class' => \Fynla\Packs\Gb\Models\CashAccount::class,
             'fields' => ['account_number', 'sort_code'],
         ],
         'SavingsAccount' => [
-            'class' => \App\Models\SavingsAccount::class,
+            'class' => \Fynla\Packs\Gb\Models\SavingsAccount::class,
             'fields' => ['current_balance'],
         ],
         'InvestmentAccount' => [
-            'class' => \App\Models\Investment\InvestmentAccount::class,
+            'class' => \Fynla\Packs\Gb\Models\Investment\InvestmentAccount::class,
             'fields' => ['current_value', 'account_number'],
         ],
         'FamilyMember' => [
@@ -58,27 +58,27 @@ class EncryptExistingData extends Command
             'fields' => ['national_insurance_number'],
         ],
         'DCPension' => [
-            'class' => \App\Models\DCPension::class,
+            'class' => \Fynla\Packs\Gb\Models\DCPension::class,
             'fields' => ['current_fund_value', 'monthly_contribution_amount', 'employer_contribution_amount'],
         ],
         'DBPension' => [
-            'class' => \App\Models\DBPension::class,
+            'class' => \Fynla\Packs\Gb\Models\DBPension::class,
             'fields' => ['accrued_annual_pension', 'lump_sum_entitlement'],
         ],
         'StatePension' => [
-            'class' => \App\Models\StatePension::class,
+            'class' => \Fynla\Packs\Gb\Models\StatePension::class,
             'fields' => ['current_annual_amount', 'forecast_full_amount'],
         ],
         'Property' => [
-            'class' => \App\Models\Property::class,
+            'class' => \Fynla\Packs\Gb\Models\Property::class,
             'fields' => ['current_value', 'purchase_price'],
         ],
         'Mortgage' => [
-            'class' => \App\Models\Mortgage::class,
+            'class' => \Fynla\Packs\Gb\Models\Mortgage::class,
             'fields' => ['current_balance', 'original_amount', 'monthly_payment', 'mortgage_account_number'],
         ],
         'Liability' => [
-            'class' => \App\Models\Estate\Liability::class,
+            'class' => \Fynla\Packs\Gb\Models\Estate\Liability::class,
             'fields' => ['current_balance', 'original_amount', 'monthly_payment'],
         ],
     ];

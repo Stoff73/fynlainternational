@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Database\Seeders;
 
-use App\Models\TaxActionDefinition;
+use Fynla\Packs\Gb\Models\TaxActionDefinition;
 use Illuminate\Database\Seeder;
 
 /**

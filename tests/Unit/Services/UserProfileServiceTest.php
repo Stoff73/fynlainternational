@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 use Fynla\Core\Models\FamilyMember;
 use App\Models\Household;
-use App\Models\Investment\InvestmentAccount;
-use App\Models\Property;
+use Fynla\Packs\Gb\Models\Investment\InvestmentAccount;
+use Fynla\Packs\Gb\Models\Property;
 use App\Models\User;
 use App\Services\Benefits\ChildBenefitService;
 use App\Services\Shared\CrossModuleAssetAggregator;

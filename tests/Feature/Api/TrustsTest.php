@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-use App\Models\BusinessInterest;
-use App\Models\CashAccount;
-use App\Models\Estate\Trust;
+use Fynla\Packs\Gb\Models\BusinessInterest;
+use Fynla\Packs\Gb\Models\CashAccount;
+use Fynla\Packs\Gb\Models\Estate\Trust;
 use App\Models\Household;
-use App\Models\Property;
+use Fynla\Packs\Gb\Models\Property;
 use App\Models\User;
 use Carbon\Carbon;
 use Database\Seeders\TaxConfigurationSeeder;

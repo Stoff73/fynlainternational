@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace App\Services\Protection;
 
 use App\Agents\ProtectionAgent;
-use App\Models\ProtectionProfile;
+use Fynla\Packs\Gb\Models\ProtectionProfile;
 use App\Models\User;
 use App\Traits\FormatsCurrency;
 

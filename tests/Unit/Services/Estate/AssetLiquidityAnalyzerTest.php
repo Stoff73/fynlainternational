@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-use App\Models\Estate\Asset;
+use Fynla\Packs\Gb\Models\Estate\Asset;
 use App\Services\Estate\AssetLiquidityAnalyzer;
 
 beforeEach(function () {

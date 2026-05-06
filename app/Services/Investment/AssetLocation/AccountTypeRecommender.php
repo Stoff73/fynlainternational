@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace App\Services\Investment\AssetLocation;
 
-use App\Models\Investment\Holding;
-use App\Models\Investment\InvestmentAccount;
+use Fynla\Packs\Gb\Models\Investment\Holding;
+use Fynla\Packs\Gb\Models\Investment\InvestmentAccount;
 
 /**
  * Account Type Recommender

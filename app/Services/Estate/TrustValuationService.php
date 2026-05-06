@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Services\Estate;
 
-use App\Models\Estate\Trust;
+use Fynla\Packs\Gb\Models\Estate\Trust;
 
 class TrustValuationService
 {

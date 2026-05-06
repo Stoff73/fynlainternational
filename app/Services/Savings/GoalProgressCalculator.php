@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Services\Savings;
 
-use App\Models\SavingsGoal;
+use Fynla\Packs\Gb\Models\SavingsGoal;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Collection;
 

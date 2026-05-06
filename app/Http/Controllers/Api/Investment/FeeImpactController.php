@@ -6,7 +6,7 @@ namespace App\Http\Controllers\Api\Investment;
 
 use App\Http\Controllers\Controller;
 use App\Http\Traits\SanitizedErrorResponse;
-use App\Models\Investment\Holding;
+use Fynla\Packs\Gb\Models\Investment\Holding;
 use App\Services\Investment\FeeAnalyzer;
 use App\Services\Investment\Fees\OCFImpactCalculator;
 use App\Services\Investment\Fees\PlatformComparator;

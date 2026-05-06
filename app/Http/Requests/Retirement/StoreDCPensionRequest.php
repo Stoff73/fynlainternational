@@ -21,7 +21,7 @@ class StoreDCPensionRequest extends FormRequest
         // For PUT/PATCH (update), check if user owns the pension
         $pensionId = $this->route('id');
         if ($pensionId) {
-            $pension = \App\Models\DCPension::find($pensionId);
+            $pension = \Fynla\Packs\Gb\Models\DCPension::find($pensionId);
             if ($pension && $pension->user_id !== $this->user()->id) {
                 return false;
             }

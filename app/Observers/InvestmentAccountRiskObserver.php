@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Observers;
 
-use App\Models\Investment\InvestmentAccount;
+use Fynla\Packs\Gb\Models\Investment\InvestmentAccount;
 
 /**
  * Observer that triggers risk recalculation when InvestmentAccount changes.

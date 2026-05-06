@@ -89,7 +89,7 @@ class ContributionOptimizerController extends Controller
 
         // Get current portfolio value
         $user = $request->user();
-        $currentValue = \App\Models\Investment\InvestmentAccount::where('user_id', $user->id)
+        $currentValue = \Fynla\Packs\Gb\Models\Investment\InvestmentAccount::where('user_id', $user->id)
             ->sum('current_value');
 
         $result = $this->contributionOptimizer->optimizeContributions(

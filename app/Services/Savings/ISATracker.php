@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace App\Services\Savings;
 
-use App\Models\Investment\InvestmentAccount;
-use App\Models\ISAAllowanceTracking;
-use App\Models\SavingsAccount;
+use Fynla\Packs\Gb\Models\Investment\InvestmentAccount;
+use Fynla\Packs\Gb\Models\ISAAllowanceTracking;
+use Fynla\Packs\Gb\Models\SavingsAccount;
 use App\Services\TaxConfigService;
 use Carbon\Carbon;
 

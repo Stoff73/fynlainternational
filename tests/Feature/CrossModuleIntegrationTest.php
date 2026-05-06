@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace Tests\Feature;
 
-use App\Models\DCPension;
-use App\Models\Estate\Asset;
-use App\Models\Estate\Liability;
-use App\Models\Investment\InvestmentAccount;
-use App\Models\SavingsAccount;
+use Fynla\Packs\Gb\Models\DCPension;
+use Fynla\Packs\Gb\Models\Estate\Asset;
+use Fynla\Packs\Gb\Models\Estate\Liability;
+use Fynla\Packs\Gb\Models\Investment\InvestmentAccount;
+use Fynla\Packs\Gb\Models\SavingsAccount;
 use App\Models\User;
 use Database\Seeders\TaxConfigurationSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;

@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace App\Services\Shared;
 
-use App\Models\Investment\InvestmentAccount;
-use App\Models\Mortgage;
-use App\Models\Property;
-use App\Models\SavingsAccount;
+use Fynla\Packs\Gb\Models\Investment\InvestmentAccount;
+use Fynla\Packs\Gb\Models\Mortgage;
+use Fynla\Packs\Gb\Models\Property;
+use Fynla\Packs\Gb\Models\SavingsAccount;
 use Fynla\Core\Traits\CalculatesOwnershipShare;
 use Illuminate\Support\Collection;
 

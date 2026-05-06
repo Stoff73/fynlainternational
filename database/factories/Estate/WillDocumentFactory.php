@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Database\Factories\Estate;
 
-use App\Models\Estate\WillDocument;
+use Fynla\Packs\Gb\Models\Estate\WillDocument;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 

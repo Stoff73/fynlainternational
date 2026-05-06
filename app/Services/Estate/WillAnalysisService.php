@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace App\Services\Estate;
 
-use App\Models\Estate\Bequest;
-use App\Models\Estate\Will;
+use Fynla\Packs\Gb\Models\Estate\Bequest;
+use Fynla\Packs\Gb\Models\Estate\Will;
 use App\Models\User;
 use App\Services\TaxConfigService;
 

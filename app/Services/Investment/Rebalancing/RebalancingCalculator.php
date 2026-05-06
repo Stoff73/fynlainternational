@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Services\Investment\Rebalancing;
 
-use App\Models\Investment\InvestmentAccount;
+use Fynla\Packs\Gb\Models\Investment\InvestmentAccount;
 use Illuminate\Support\Collection;
 
 /**

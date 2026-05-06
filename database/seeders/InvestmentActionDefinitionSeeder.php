@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Database\Seeders;
 
-use App\Models\InvestmentActionDefinition;
+use Fynla\Packs\Gb\Models\InvestmentActionDefinition;
 use Illuminate\Database\Seeder;
 
 /**

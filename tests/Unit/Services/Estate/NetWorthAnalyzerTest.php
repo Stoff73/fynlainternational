@@ -2,8 +2,8 @@
 
 declare(strict_types=1);
 
-use App\Models\Estate\Asset;
-use App\Models\Estate\Liability;
+use Fynla\Packs\Gb\Models\Estate\Asset;
+use Fynla\Packs\Gb\Models\Estate\Liability;
 use App\Models\User;
 use App\Services\Estate\NetWorthAnalyzer;
 use App\Services\Shared\CrossModuleAssetAggregator;

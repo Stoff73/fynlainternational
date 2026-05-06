@@ -4,15 +4,15 @@ declare(strict_types=1);
 
 namespace App\Services\NetWorth;
 
-use App\Models\BusinessInterest;
-use App\Models\Chattel;
-use App\Models\DBPension;
-use App\Models\DCPension;
-use App\Models\Estate\Liability;
-use App\Models\Investment\InvestmentAccount;
-use App\Models\Property;
-use App\Models\SavingsAccount;
-use App\Models\StatePension;
+use Fynla\Packs\Gb\Models\BusinessInterest;
+use Fynla\Packs\Gb\Models\Chattel;
+use Fynla\Packs\Gb\Models\DBPension;
+use Fynla\Packs\Gb\Models\DCPension;
+use Fynla\Packs\Gb\Models\Estate\Liability;
+use Fynla\Packs\Gb\Models\Investment\InvestmentAccount;
+use Fynla\Packs\Gb\Models\Property;
+use Fynla\Packs\Gb\Models\SavingsAccount;
+use Fynla\Packs\Gb\Models\StatePension;
 use App\Models\User;
 use App\Services\Shared\CrossModuleAssetAggregator;
 use Fynla\Core\Traits\CalculatesOwnershipShare;

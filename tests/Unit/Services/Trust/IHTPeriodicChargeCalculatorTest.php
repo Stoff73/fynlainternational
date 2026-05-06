@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-use App\Models\Estate\Trust;
+use Fynla\Packs\Gb\Models\Estate\Trust;
 use App\Models\Household;
-use App\Models\TaxConfiguration;
+use Fynla\Packs\Gb\Models\TaxConfiguration;
 use App\Models\User;
 use App\Services\Trust\IHTPeriodicChargeCalculator;
 use Carbon\Carbon;

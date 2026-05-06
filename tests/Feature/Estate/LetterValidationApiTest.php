@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-use App\Models\Estate\Will;
-use App\Models\LetterToSpouse;
-use App\Models\LifeInsurancePolicy;
+use Fynla\Packs\Gb\Models\Estate\Will;
+use Fynla\Packs\Gb\Models\LetterToSpouse;
+use Fynla\Packs\Gb\Models\LifeInsurancePolicy;
 use App\Models\User;
 use Database\Seeders\TaxConfigurationSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;

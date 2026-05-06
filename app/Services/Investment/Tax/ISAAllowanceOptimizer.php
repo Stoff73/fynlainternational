@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace App\Services\Investment\Tax;
 
-use App\Models\Investment\Holding;
-use App\Models\Investment\InvestmentAccount;
-use App\Models\SavingsAccount;
+use Fynla\Packs\Gb\Models\Investment\Holding;
+use Fynla\Packs\Gb\Models\Investment\InvestmentAccount;
+use Fynla\Packs\Gb\Models\SavingsAccount;
 use App\Services\Risk\RiskPreferenceService;
 use App\Services\TaxConfigService;
 use Illuminate\Support\Collection;

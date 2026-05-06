@@ -6,8 +6,8 @@ namespace App\Services\Plans;
 
 use App\Agents\InvestmentAgent;
 use App\Agents\SavingsAgent;
-use App\Models\Investment\InvestmentAccount;
-use App\Models\SavingsAccount;
+use Fynla\Packs\Gb\Models\Investment\InvestmentAccount;
+use Fynla\Packs\Gb\Models\SavingsAccount;
 use App\Models\User;
 use App\Services\Savings\SavingsActionDefinitionService;
 use App\Services\TaxConfigService;

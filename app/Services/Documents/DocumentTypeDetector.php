@@ -13,29 +13,29 @@ class DocumentTypeDetector
      */
     private const TYPE_MODEL_MAP = [
         Document::TYPE_PENSION_STATEMENT => [
-            'dc_pension' => \App\Models\DCPension::class,
-            'db_pension' => \App\Models\DBPension::class,
-            'state_pension' => \App\Models\StatePension::class,
+            'dc_pension' => \Fynla\Packs\Gb\Models\DCPension::class,
+            'db_pension' => \Fynla\Packs\Gb\Models\DBPension::class,
+            'state_pension' => \Fynla\Packs\Gb\Models\StatePension::class,
         ],
         Document::TYPE_INSURANCE_POLICY => [
-            'life_insurance' => \App\Models\LifeInsurancePolicy::class,
-            'critical_illness' => \App\Models\CriticalIllnessPolicy::class,
-            'income_protection' => \App\Models\IncomeProtectionPolicy::class,
-            'disability' => \App\Models\DisabilityPolicy::class,
-            'sickness_illness' => \App\Models\SicknessIllnessPolicy::class,
+            'life_insurance' => \Fynla\Packs\Gb\Models\LifeInsurancePolicy::class,
+            'critical_illness' => \Fynla\Packs\Gb\Models\CriticalIllnessPolicy::class,
+            'income_protection' => \Fynla\Packs\Gb\Models\IncomeProtectionPolicy::class,
+            'disability' => \Fynla\Packs\Gb\Models\DisabilityPolicy::class,
+            'sickness_illness' => \Fynla\Packs\Gb\Models\SicknessIllnessPolicy::class,
         ],
         Document::TYPE_INVESTMENT_STATEMENT => [
-            'investment_account' => \App\Models\Investment\InvestmentAccount::class,
+            'investment_account' => \Fynla\Packs\Gb\Models\Investment\InvestmentAccount::class,
         ],
         Document::TYPE_MORTGAGE_STATEMENT => [
-            'mortgage' => \App\Models\Mortgage::class,
+            'mortgage' => \Fynla\Packs\Gb\Models\Mortgage::class,
         ],
         Document::TYPE_SAVINGS_STATEMENT => [
-            'savings_account' => \App\Models\SavingsAccount::class,
-            'cash_account' => \App\Models\CashAccount::class,
+            'savings_account' => \Fynla\Packs\Gb\Models\SavingsAccount::class,
+            'cash_account' => \Fynla\Packs\Gb\Models\CashAccount::class,
         ],
         Document::TYPE_PROPERTY_DOCUMENT => [
-            'property' => \App\Models\Property::class,
+            'property' => \Fynla\Packs\Gb\Models\Property::class,
         ],
     ];
 

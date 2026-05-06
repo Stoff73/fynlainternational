@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Services\Investment\Goals;
 
-use App\Models\Investment\InvestmentGoal;
+use Fynla\Packs\Gb\Models\Investment\InvestmentGoal;
 use App\Services\Risk\RiskPreferenceService;
 
 /**

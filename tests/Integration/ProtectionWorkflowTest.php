@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-use App\Models\CriticalIllnessPolicy;
-use App\Models\DisabilityPolicy;
-use App\Models\IncomeProtectionPolicy;
-use App\Models\LifeInsurancePolicy;
-use App\Models\ProtectionProfile;
-use App\Models\SicknessIllnessPolicy;
+use Fynla\Packs\Gb\Models\CriticalIllnessPolicy;
+use Fynla\Packs\Gb\Models\DisabilityPolicy;
+use Fynla\Packs\Gb\Models\IncomeProtectionPolicy;
+use Fynla\Packs\Gb\Models\LifeInsurancePolicy;
+use Fynla\Packs\Gb\Models\ProtectionProfile;
+use Fynla\Packs\Gb\Models\SicknessIllnessPolicy;
 use App\Models\User;
 use Database\Seeders\TaxConfigurationSeeder;
 

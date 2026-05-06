@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-use App\Models\DCPension;
-use App\Models\RetirementActionDefinition;
-use App\Models\RetirementProfile;
+use Fynla\Packs\Gb\Models\DCPension;
+use Fynla\Packs\Gb\Models\RetirementActionDefinition;
+use Fynla\Packs\Gb\Models\RetirementProfile;
 use App\Models\User;
 use App\Services\Retirement\RetirementActionDefinitionService;
 use Database\Seeders\RetirementActionDefinitionSeeder;

@@ -2,8 +2,8 @@
 
 declare(strict_types=1);
 
-use App\Models\ISAAllowanceTracking;
-use App\Models\SavingsAccount;
+use Fynla\Packs\Gb\Models\ISAAllowanceTracking;
+use Fynla\Packs\Gb\Models\SavingsAccount;
 use App\Models\User;
 use App\Services\Savings\ISATracker;
 use App\Services\TaxConfigService;

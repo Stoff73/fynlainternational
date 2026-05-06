@@ -6,7 +6,7 @@ namespace App\Http\Controllers\Api\Investment;
 
 use App\Http\Controllers\Controller;
 use App\Http\Traits\SanitizedErrorResponse;
-use App\Models\Investment\InvestmentAccount;
+use Fynla\Packs\Gb\Models\Investment\InvestmentAccount;
 use App\Services\Investment\Rebalancing\RebalancingStrategyService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;

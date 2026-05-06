@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Tests\Unit\Services;
 
-use App\Models\Mortgage;
-use App\Models\Property;
+use Fynla\Packs\Gb\Models\Mortgage;
+use Fynla\Packs\Gb\Models\Property;
 use App\Models\User;
 use App\Services\Property\PropertyService;
 use Illuminate\Foundation\Testing\RefreshDatabase;

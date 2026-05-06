@@ -6,9 +6,9 @@ namespace App\Http\Controllers\Api\Plans;
 
 use App\Http\Controllers\Controller;
 use App\Http\Traits\SanitizedErrorResponse;
-use App\Models\Investment\InvestmentAccount;
-use App\Models\PlanActionFundingSelection;
-use App\Models\SavingsAccount;
+use Fynla\Packs\Gb\Models\Investment\InvestmentAccount;
+use Fynla\Packs\Gb\Models\PlanActionFundingSelection;
+use Fynla\Packs\Gb\Models\SavingsAccount;
 use App\Services\Cache\CacheInvalidationService;
 use App\Services\Plans\EstatePlanService;
 use App\Services\Plans\GoalPlanService;

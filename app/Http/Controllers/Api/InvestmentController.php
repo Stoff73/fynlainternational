@@ -20,10 +20,10 @@ use App\Http\Resources\HoldingResource;
 use App\Http\Resources\InvestmentAccountResource;
 use App\Http\Traits\SanitizedErrorResponse;
 use App\Jobs\RunMonteCarloSimulation;
-use App\Models\Investment\Holding;
-use App\Models\Investment\InvestmentAccount;
-use App\Models\Investment\InvestmentGoal;
-use App\Models\Investment\RiskProfile;
+use Fynla\Packs\Gb\Models\Investment\Holding;
+use Fynla\Packs\Gb\Models\Investment\InvestmentAccount;
+use Fynla\Packs\Gb\Models\Investment\InvestmentGoal;
+use Fynla\Packs\Gb\Models\Investment\RiskProfile;
 use App\Services\Goals\GoalStrategyService;
 use App\Services\Goals\LifeEventIntegrationService;
 use App\Services\Investment\DiversificationAnalyzer;
@@ -927,7 +927,7 @@ class InvestmentController extends Controller
             ],
         ];
 
-        \App\Models\JointAccountLog::logEdit(
+        \Fynla\Packs\Gb\Models\JointAccountLog::logEdit(
             $user->id,
             $account->joint_owner_id,
             $account,

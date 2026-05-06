@@ -33,7 +33,7 @@ class InvestmentAccountMapper extends AbstractFieldMapper
 
     public function getModelClass(): string
     {
-        return \App\Models\Investment\InvestmentAccount::class;
+        return \Fynla\Packs\Gb\Models\Investment\InvestmentAccount::class;
     }
 
     public function getSubtype(): string

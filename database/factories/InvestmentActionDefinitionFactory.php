@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Database\Factories;
 
-use App\Models\InvestmentActionDefinition;
+use Fynla\Packs\Gb\Models\InvestmentActionDefinition;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 class InvestmentActionDefinitionFactory extends Factory

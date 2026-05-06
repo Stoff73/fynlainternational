@@ -427,7 +427,7 @@ class OnboardingService
         }
 
         // Use updateOrCreate to handle both new and existing records
-        \App\Models\Estate\Will::updateOrCreate(
+        \Fynla\Packs\Gb\Models\Estate\Will::updateOrCreate(
             ['user_id' => $userId],
             $willData
         );
@@ -460,7 +460,7 @@ class OnboardingService
         if (isset($data['target_retirement_age'])) {
             $currentAge = $user->date_of_birth ? \Carbon\Carbon::parse($user->date_of_birth)->age : 30;
 
-            \App\Models\RetirementProfile::updateOrCreate(
+            \Fynla\Packs\Gb\Models\RetirementProfile::updateOrCreate(
                 ['user_id' => $userId],
                 [
                     'current_age' => $currentAge,
@@ -476,7 +476,7 @@ class OnboardingService
             $retirementAge = $retirementDate->diffInYears($birthDate);
             $currentAge = \Carbon\Carbon::now()->diffInYears($birthDate);
 
-            \App\Models\RetirementProfile::updateOrCreate(
+            \Fynla\Packs\Gb\Models\RetirementProfile::updateOrCreate(
                 ['user_id' => $userId],
                 [
                     'current_age' => $currentAge,
@@ -602,7 +602,7 @@ class OnboardingService
                 $monthlyRental = $propertyData['monthly_rental_income'] ?? 0;
 
                 // Create property record
-                $property = \App\Models\Property::create([
+                $property = \Fynla\Packs\Gb\Models\Property::create([
                     'user_id' => $userId,
                     'property_type' => $propertyData['property_type'],
                     'ownership_type' => $propertyData['ownership_type'] ?? 'individual',
@@ -624,7 +624,7 @@ class OnboardingService
 
                 // If property has a mortgage, create a mortgage record linked to this property
                 if (isset($propertyData['outstanding_mortgage']) && $propertyData['outstanding_mortgage'] > 0) {
-                    \App\Models\Mortgage::create([
+                    \Fynla\Packs\Gb\Models\Mortgage::create([
                         'property_id' => $property->id,
                         'user_id' => $userId,
                         'lender_name' => 'Mortgage Provider', // Default name from onboarding
@@ -683,7 +683,7 @@ class OnboardingService
                         ?? \App\Models\User::find($userId)?->familyMembers()->where('relationship', 'spouse')->first()?->linked_user_id;
                 }
 
-                \App\Models\Investment\InvestmentAccount::create([
+                \Fynla\Packs\Gb\Models\Investment\InvestmentAccount::create([
                     'user_id' => $userId,
                     'provider' => $investmentData['institution'],
                     'account_type' => $accountType,
@@ -716,7 +716,7 @@ class OnboardingService
                         ?? \App\Models\User::find($userId)?->familyMembers()->where('relationship', 'spouse')->first()?->linked_user_id;
                 }
 
-                \App\Models\SavingsAccount::create([
+                \Fynla\Packs\Gb\Models\SavingsAccount::create([
                     'user_id' => $userId,
                     'institution' => $cashData['institution'],
                     'account_type' => $cashData['account_type'],
@@ -797,7 +797,7 @@ class OnboardingService
                 : null;
 
             // Create liability record
-            \App\Models\Estate\Liability::create([
+            \Fynla\Packs\Gb\Models\Estate\Liability::create([
                 'user_id' => $userId,
                 'liability_type' => $liabilityData['type'],
                 'liability_name' => $liabilityData['lender'],
@@ -881,7 +881,7 @@ class OnboardingService
             $policyData['decreasing_rate'] = $data['decreasing_rate'] ?? null;
         }
 
-        \App\Models\LifeInsurancePolicy::create($policyData);
+        \Fynla\Packs\Gb\Models\LifeInsurancePolicy::create($policyData);
     }
 
     /**
@@ -900,7 +900,7 @@ class OnboardingService
             $termYears = $start->diffInYears($end);
         }
 
-        \App\Models\CriticalIllnessPolicy::create([
+        \Fynla\Packs\Gb\Models\CriticalIllnessPolicy::create([
             'user_id' => $userId,
             'policy_type' => 'standalone', // Default
             'provider' => $data['provider'],
@@ -920,7 +920,7 @@ class OnboardingService
     {
         $startDate = ! empty($data['start_date']) ? $data['start_date'] : now()->toDateString();
 
-        \App\Models\IncomeProtectionPolicy::create([
+        \Fynla\Packs\Gb\Models\IncomeProtectionPolicy::create([
             'user_id' => $userId,
             'provider' => $data['provider'],
             'policy_number' => $data['policy_number'] ?? null,

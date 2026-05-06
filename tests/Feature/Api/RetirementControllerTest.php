@@ -2,8 +2,8 @@
 
 declare(strict_types=1);
 
-use App\Models\DBPension;
-use App\Models\DCPension;
+use Fynla\Packs\Gb\Models\DBPension;
+use Fynla\Packs\Gb\Models\DCPension;
 use App\Models\Household;
 use App\Models\User;
 use Database\Seeders\TaxConfigurationSeeder;
@@ -93,7 +93,7 @@ describe('POST /api/retirement/pensions/dc', function () {
         $response = $this->postJson('/api/retirement/pensions/dc', []);
 
         $response->assertStatus(201);
-        expect(\App\Models\DCPension::where('user_id', $this->user->id)->count())->toBe(1);
+        expect(\Fynla\Packs\Gb\Models\DCPension::where('user_id', $this->user->id)->count())->toBe(1);
     });
 });
 

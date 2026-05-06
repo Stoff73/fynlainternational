@@ -4,6 +4,42 @@ declare(strict_types=1);
 
 namespace App\Models;
 
+use Fynla\Packs\Gb\Models\StatePension;
+
+use Fynla\Packs\Gb\Models\SicknessIllnessPolicy;
+
+use Fynla\Packs\Gb\Models\SavingsAccount;
+
+use Fynla\Packs\Gb\Models\RetirementProfile;
+
+use Fynla\Packs\Gb\Models\ProtectionProfile;
+
+use Fynla\Packs\Gb\Models\Property;
+
+use Fynla\Packs\Gb\Models\PersonalAccount;
+
+use Fynla\Packs\Gb\Models\Mortgage;
+
+use Fynla\Packs\Gb\Models\LifeInsurancePolicy;
+
+use Fynla\Packs\Gb\Models\LetterToSpouse;
+
+use Fynla\Packs\Gb\Models\IncomeProtectionPolicy;
+
+use Fynla\Packs\Gb\Models\DisabilityPolicy;
+
+use Fynla\Packs\Gb\Models\DCPension;
+
+use Fynla\Packs\Gb\Models\DBPension;
+
+use Fynla\Packs\Gb\Models\CriticalIllnessPolicy;
+
+use Fynla\Packs\Gb\Models\Chattel;
+
+use Fynla\Packs\Gb\Models\CashAccount;
+
+use Fynla\Packs\Gb\Models\BusinessInterest;
+
 use Fynla\Core\Models\FamilyMember;
 
 use Fynla\Core\Models\UserSession;
@@ -427,7 +463,7 @@ class User extends Authenticatable
      */
     public function liabilities(): HasMany
     {
-        return $this->hasMany(\App\Models\Estate\Liability::class);
+        return $this->hasMany(\Fynla\Packs\Gb\Models\Estate\Liability::class);
     }
 
     /**
@@ -435,7 +471,7 @@ class User extends Authenticatable
      */
     public function trusts(): HasMany
     {
-        return $this->hasMany(\App\Models\Estate\Trust::class);
+        return $this->hasMany(\Fynla\Packs\Gb\Models\Estate\Trust::class);
     }
 
     /**
@@ -443,7 +479,7 @@ class User extends Authenticatable
      */
     public function ihtProfile(): HasOne
     {
-        return $this->hasOne(\App\Models\Estate\IHTProfile::class);
+        return $this->hasOne(\Fynla\Packs\Gb\Models\Estate\IHTProfile::class);
     }
 
     /**
@@ -451,7 +487,7 @@ class User extends Authenticatable
      */
     public function assets(): HasMany
     {
-        return $this->hasMany(\App\Models\Estate\Asset::class);
+        return $this->hasMany(\Fynla\Packs\Gb\Models\Estate\Asset::class);
     }
 
     /**
@@ -459,7 +495,7 @@ class User extends Authenticatable
      */
     public function gifts(): HasMany
     {
-        return $this->hasMany(\App\Models\Estate\Gift::class);
+        return $this->hasMany(\Fynla\Packs\Gb\Models\Estate\Gift::class);
     }
 
     /**
@@ -467,7 +503,7 @@ class User extends Authenticatable
      */
     public function lastingPowersOfAttorney(): HasMany
     {
-        return $this->hasMany(\App\Models\Estate\LastingPowerOfAttorney::class);
+        return $this->hasMany(\Fynla\Packs\Gb\Models\Estate\LastingPowerOfAttorney::class);
     }
 
     /**
@@ -507,7 +543,7 @@ class User extends Authenticatable
      */
     public function investmentAccounts(): HasMany
     {
-        return $this->hasMany(\App\Models\Investment\InvestmentAccount::class);
+        return $this->hasMany(\Fynla\Packs\Gb\Models\Investment\InvestmentAccount::class);
     }
 
     /**

@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace App\Services\Estate;
 
 use Fynla\Packs\Gb\Constants\TaxDefaults;
-use App\Models\Estate\IHTProfile;
+use Fynla\Packs\Gb\Models\Estate\IHTProfile;
 use App\Models\User;
 use App\Services\Risk\RiskPreferenceService;
 use App\Services\Settings\AssumptionsService;

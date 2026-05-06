@@ -8,7 +8,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\StorePersonalAccountLineItemRequest;
 use App\Http\Requests\UpdatePersonalAccountLineItemRequest;
 use App\Http\Traits\SanitizedErrorResponse;
-use App\Models\PersonalAccount;
+use Fynla\Packs\Gb\Models\PersonalAccount;
 use App\Services\UserProfile\PersonalAccountsService;
 use Carbon\Carbon;
 use Illuminate\Http\JsonResponse;

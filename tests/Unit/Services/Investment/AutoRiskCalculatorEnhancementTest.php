@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-use App\Models\Investment\RiskProfile;
+use Fynla\Packs\Gb\Models\Investment\RiskProfile;
 use App\Models\User;
 use App\Services\NetWorth\NetWorthService;
 use App\Services\Risk\AutoRiskCalculator;

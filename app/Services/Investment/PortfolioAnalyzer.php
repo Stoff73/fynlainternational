@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace App\Services\Investment;
 
 use Fynla\Core\Constants\InvestmentDefaults;
-use App\Models\Investment\Holding;
-use App\Models\Investment\RiskProfile;
+use Fynla\Packs\Gb\Models\Investment\Holding;
+use Fynla\Packs\Gb\Models\Investment\RiskProfile;
 use Carbon\Carbon;
 use Illuminate\Support\Collection;
 

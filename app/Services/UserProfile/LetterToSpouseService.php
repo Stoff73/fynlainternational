@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace App\Services\UserProfile;
 
-use App\Models\LetterToSpouse;
-use App\Models\Property;
-use App\Models\SavingsAccount;
+use Fynla\Packs\Gb\Models\LetterToSpouse;
+use Fynla\Packs\Gb\Models\Property;
+use Fynla\Packs\Gb\Models\SavingsAccount;
 use App\Models\User;
 
 class LetterToSpouseService

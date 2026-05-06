@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Tests\Unit\Services;
 
-use App\Models\TaxConfiguration;
+use Fynla\Packs\Gb\Models\TaxConfiguration;
 use App\Services\TaxConfigService;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use RuntimeException;

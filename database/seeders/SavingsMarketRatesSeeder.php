@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Database\Seeders;
 
-use App\Models\SavingsMarketRate;
+use Fynla\Packs\Gb\Models\SavingsMarketRate;
 use Illuminate\Database\Seeder;
 
 class SavingsMarketRatesSeeder extends Seeder

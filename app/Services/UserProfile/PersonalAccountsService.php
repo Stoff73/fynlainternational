@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Services\UserProfile;
 
-use App\Models\SavingsAccount;
+use Fynla\Packs\Gb\Models\SavingsAccount;
 use App\Models\User;
 use App\Services\UKTaxCalculator;
 use Fynla\Core\Traits\CalculatesOwnershipShare;
@@ -304,7 +304,7 @@ class PersonalAccountsService
         }
 
         // Investment accounts - individual line items (include joint accounts)
-        $investmentAccounts = \App\Models\Investment\InvestmentAccount::forUserOrJoint($user->id)
+        $investmentAccounts = \Fynla\Packs\Gb\Models\Investment\InvestmentAccount::forUserOrJoint($user->id)
             ->get();
         foreach ($investmentAccounts as $account) {
             // Use trait to calculate user's share based on ownership_percentage
@@ -320,7 +320,7 @@ class PersonalAccountsService
         }
 
         // Properties - individual line items (include joint properties)
-        $properties = \App\Models\Property::forUserOrJoint($user->id)
+        $properties = \Fynla\Packs\Gb\Models\Property::forUserOrJoint($user->id)
             ->get();
         foreach ($properties as $property) {
             $propertyLabel = $property->address_line_1;
@@ -340,7 +340,7 @@ class PersonalAccountsService
         }
 
         // Business interests - individual line items (include joint business interests)
-        $businessInterests = \App\Models\BusinessInterest::forUserOrJoint($user->id)
+        $businessInterests = \Fynla\Packs\Gb\Models\BusinessInterest::forUserOrJoint($user->id)
             ->get();
         foreach ($businessInterests as $business) {
             // Use trait to calculate user's share based on ownership_percentage
@@ -356,7 +356,7 @@ class PersonalAccountsService
         }
 
         // Chattels - individual line items (include joint chattels)
-        $chattels = \App\Models\Chattel::forUserOrJoint($user->id)
+        $chattels = \Fynla\Packs\Gb\Models\Chattel::forUserOrJoint($user->id)
             ->get();
         foreach ($chattels as $chattel) {
             // Use trait to calculate user's share based on ownership_percentage
@@ -385,7 +385,7 @@ class PersonalAccountsService
         $liabilities = [];
 
         // Mortgages - individual line items (include joint mortgages)
-        $mortgages = \App\Models\Mortgage::forUserOrJoint($user->id)
+        $mortgages = \Fynla\Packs\Gb\Models\Mortgage::forUserOrJoint($user->id)
             ->get();
         foreach ($mortgages as $mortgage) {
             // Include property address to ensure uniqueness when multiple mortgages have same lender
@@ -413,7 +413,7 @@ class PersonalAccountsService
         }
 
         // Other liabilities - individual line items (include joint liabilities)
-        $userLiabilities = \App\Models\Estate\Liability::forUserOrJoint($user->id)
+        $userLiabilities = \Fynla\Packs\Gb\Models\Estate\Liability::forUserOrJoint($user->id)
             ->get();
         foreach ($userLiabilities as $liability) {
             $typeLabel = str_replace('_', ' ', ucwords($liability->liability_type, '_'));

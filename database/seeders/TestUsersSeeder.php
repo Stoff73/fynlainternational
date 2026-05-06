@@ -171,10 +171,10 @@ class TestUsersSeeder extends Seeder
             \Fynla\Core\Models\FamilyMember::factory()->for($zaProtectionUser)->count(2)->create(['is_dependent' => true]);
         }
 
-        $property = \App\Models\Property::where('user_id', $zaProtectionUser->id)->first();
+        $property = \Fynla\Packs\Gb\Models\Property::where('user_id', $zaProtectionUser->id)->first();
         if (! $property) {
-            $property = \App\Models\Property::factory()->for($zaProtectionUser)->create();
-            \App\Models\Mortgage::factory()->for($zaProtectionUser)->for($property)->create(['outstanding_balance' => 800000.00]);
+            $property = \Fynla\Packs\Gb\Models\Property::factory()->for($zaProtectionUser)->create();
+            \Fynla\Packs\Gb\Models\Mortgage::factory()->for($zaProtectionUser)->for($property)->create(['outstanding_balance' => 800000.00]);
         }
 
         // Trial subscription for ZA Protection test user

@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace App\Services\Retirement;
 
-use App\Models\DCPension;
-use App\Models\RetirementProfile;
-use App\Models\StatePension;
+use Fynla\Packs\Gb\Models\DCPension;
+use Fynla\Packs\Gb\Models\RetirementProfile;
+use Fynla\Packs\Gb\Models\StatePension;
 use App\Models\User;
 use App\Services\TaxConfigService;
 use Illuminate\Support\Collection;

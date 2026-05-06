@@ -10,7 +10,7 @@ use Fynla\Packs\Za\Http\Requests\Savings\StoreTfsaContributionRequest;
 use Fynla\Packs\Za\Http\Requests\Savings\StoreZaSavingsAccountRequest;
 use Fynla\Packs\Za\Http\Resources\TfsaContributionResource;
 use Fynla\Packs\Za\Http\Resources\ZaSavingsAccountResource;
-use App\Models\SavingsAccount;
+use Fynla\Packs\Gb\Models\SavingsAccount;
 use Fynla\Core\Contracts\SavingsEngine;
 use Fynla\Core\Money\Currency;
 use Fynla\Core\Money\Money;

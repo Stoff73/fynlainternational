@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Services\Investment\Analytics;
 
-use App\Models\Investment\InvestmentAccount;
+use Fynla\Packs\Gb\Models\Investment\InvestmentAccount;
 use App\Services\Investment\Utilities\StatisticalFunctions;
 use App\Services\Risk\RiskPreferenceService;
 use Illuminate\Support\Collection;

@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace App\Services\Retirement;
 
-use App\Models\DBPension;
-use App\Models\Investment\InvestmentAccount;
-use App\Models\RetirementProfile;
-use App\Models\SavingsAccount;
-use App\Models\StatePension;
+use Fynla\Packs\Gb\Models\DBPension;
+use Fynla\Packs\Gb\Models\Investment\InvestmentAccount;
+use Fynla\Packs\Gb\Models\RetirementProfile;
+use Fynla\Packs\Gb\Models\SavingsAccount;
+use Fynla\Packs\Gb\Models\StatePension;
 use App\Models\User;
 use App\Services\Investment\InvestmentProjectionService;
 use App\Services\TaxBandTracker;

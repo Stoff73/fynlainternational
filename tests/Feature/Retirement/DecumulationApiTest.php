@@ -2,8 +2,8 @@
 
 declare(strict_types=1);
 
-use App\Models\DCPension;
-use App\Models\RetirementProfile;
+use Fynla\Packs\Gb\Models\DCPension;
+use Fynla\Packs\Gb\Models\RetirementProfile;
 use App\Models\User;
 use Database\Seeders\TaxConfigurationSeeder;
 

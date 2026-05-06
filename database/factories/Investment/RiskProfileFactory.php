@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Database\Factories\Investment;
 
-use App\Models\Investment\RiskProfile;
+use Fynla\Packs\Gb\Models\Investment\RiskProfile;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 

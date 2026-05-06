@@ -5,7 +5,7 @@ namespace Database\Factories;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\CashAccount>
+ * @extends \Illuminate\Database\Eloquent\Factories\Factory<\Fynla\Packs\Gb\Models\CashAccount>
  */
 class CashAccountFactory extends Factory
 {

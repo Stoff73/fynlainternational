@@ -3,7 +3,7 @@
 declare(strict_types=1);
 
 use App\Agents\ProtectionAgent;
-use App\Models\ProtectionProfile;
+use Fynla\Packs\Gb\Models\ProtectionProfile;
 use App\Models\User;
 use App\Services\Coordination\RecommendationPersonaliser;
 use App\Services\Protection\AdequacyScorer;

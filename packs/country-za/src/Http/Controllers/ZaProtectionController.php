@@ -13,7 +13,7 @@ use Fynla\Packs\Za\Http\Resources\Protection\ZaCoverageGapResource;
 use Fynla\Packs\Za\Http\Resources\Protection\ZaProtectionBeneficiaryResource;
 use Fynla\Packs\Za\Http\Resources\Protection\ZaProtectionPolicyResource;
 use Fynla\Core\Models\FamilyMember;
-use App\Models\Mortgage;
+use Fynla\Packs\Gb\Models\Mortgage;
 use Fynla\Packs\Za\Models\ZaProtectionBeneficiary;
 use Fynla\Packs\Za\Models\ZaProtectionPolicy;
 use Fynla\Packs\Za\Protection\ZaProtectionEngine;

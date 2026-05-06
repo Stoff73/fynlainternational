@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-use App\Models\DBPension;
-use App\Models\DCPension;
-use App\Models\StatePension;
+use Fynla\Packs\Gb\Models\DBPension;
+use Fynla\Packs\Gb\Models\DCPension;
+use Fynla\Packs\Gb\Models\StatePension;
 use App\Models\User;
 use App\Services\Goals\LifeEventCashFlowService;
 use App\Services\Investment\MonteCarloSimulator;

@@ -72,9 +72,9 @@ uses(
 // Global setup for all tests that need TaxConfiguration
 beforeEach(function () {
     // Ensure active tax configuration exists for tests
-    if (class_exists(\App\Models\TaxConfiguration::class)) {
-        if (! \App\Models\TaxConfiguration::where('is_active', true)->exists()) {
-            \App\Models\TaxConfiguration::factory()->create(['is_active' => true]);
+    if (class_exists(\Fynla\Packs\Gb\Models\TaxConfiguration::class)) {
+        if (! \Fynla\Packs\Gb\Models\TaxConfiguration::where('is_active', true)->exists()) {
+            \Fynla\Packs\Gb\Models\TaxConfiguration::factory()->create(['is_active' => true]);
         }
     }
 })->in('Feature', 'Unit/Services', 'Unit/Observers', 'Unit/Agents/ProtectionAgentTest.php', 'Unit/Agents/SavingsAgentTest.php', 'Unit/Agents/GoalsAgentTest.php', 'Unit/Agents/SavingsAgentGoalsTest.php', 'Unit/Agents/ProtectionAgentGoalsTest.php', 'Unit/Agents/EstateAgentGoalsTest.php', 'Unit/Agents/RetirementAgentGoalsTest.php', 'Integration', 'Unit/Core/Models', 'Unit/Core/TaxYear/TaxYearResolverDbTest.php', 'Unit/Core/Jurisdiction/ActiveJurisdictionsDbTest.php');

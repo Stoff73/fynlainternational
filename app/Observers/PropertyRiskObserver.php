@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Observers;
 
-use App\Models\Property;
+use Fynla\Packs\Gb\Models\Property;
 
 /**
  * Observer for Property model that triggers risk profile recalculation

@@ -5,9 +5,9 @@ declare(strict_types=1);
 namespace App\Agents;
 
 use Fynla\Packs\Gb\Constants\TaxDefaults;
-use App\Models\Estate\Will;
+use Fynla\Packs\Gb\Models\Estate\Will;
 use App\Models\Goal;
-use App\Models\LifeInsurancePolicy;
+use Fynla\Packs\Gb\Models\LifeInsurancePolicy;
 use App\Models\User;
 use App\Services\Coordination\RecommendationPersonaliser;
 use App\Services\Estate\ComprehensiveEstatePlanService;

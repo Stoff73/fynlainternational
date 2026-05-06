@@ -8,7 +8,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\BusinessInterest\StoreBusinessInterestRequest;
 use App\Http\Requests\BusinessInterest\UpdateBusinessInterestRequest;
 use App\Http\Resources\BusinessInterestResource;
-use App\Models\BusinessInterest;
+use Fynla\Packs\Gb\Models\BusinessInterest;
 use App\Services\Business\BusinessInterestService;
 use App\Services\NetWorth\NetWorthService;
 use Fynla\Core\Traits\CalculatesOwnershipShare;

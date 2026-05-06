@@ -5,14 +5,14 @@ declare(strict_types=1);
 use App\Models\Goal;
 use App\Models\Household;
 use App\Models\LifeEvent;
-use App\Models\SavingsAccount;
+use Fynla\Packs\Gb\Models\SavingsAccount;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
 uses(RefreshDatabase::class);
 
 beforeEach(function () {
-    \App\Models\TaxConfiguration::factory()->create(['is_active' => true]);
+    \Fynla\Packs\Gb\Models\TaxConfiguration::factory()->create(['is_active' => true]);
     $this->household = Household::factory()->create();
     $this->user = User::factory()->create([
         'household_id' => $this->household->id,

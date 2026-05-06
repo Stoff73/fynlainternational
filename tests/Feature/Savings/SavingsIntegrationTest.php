@@ -3,8 +3,8 @@
 declare(strict_types=1);
 
 use Fynla\Core\Models\ExpenditureProfile;
-use App\Models\SavingsAccount;
-use App\Models\SavingsGoal;
+use Fynla\Packs\Gb\Models\SavingsAccount;
+use Fynla\Packs\Gb\Models\SavingsGoal;
 use App\Models\User;
 use Database\Seeders\TaxConfigurationSeeder;
 

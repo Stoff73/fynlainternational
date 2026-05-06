@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-use App\Models\BusinessInterest;
-use App\Models\Chattel;
-use App\Models\Investment\InvestmentAccount;
-use App\Models\Mortgage;
-use App\Models\Property;
-use App\Models\SavingsAccount;
+use Fynla\Packs\Gb\Models\BusinessInterest;
+use Fynla\Packs\Gb\Models\Chattel;
+use Fynla\Packs\Gb\Models\Investment\InvestmentAccount;
+use Fynla\Packs\Gb\Models\Mortgage;
+use Fynla\Packs\Gb\Models\Property;
+use Fynla\Packs\Gb\Models\SavingsAccount;
 use App\Models\User;
 use App\Services\NetWorth\NetWorthService;
 use Illuminate\Foundation\Testing\RefreshDatabase;

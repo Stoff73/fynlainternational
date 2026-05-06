@@ -37,7 +37,7 @@ class PropertyMapper extends AbstractFieldMapper
 
     public function getModelClass(): string
     {
-        return \App\Models\Property::class;
+        return \Fynla\Packs\Gb\Models\Property::class;
     }
 
     public function getSubtype(): string

@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-use App\Models\Estate\Asset;
-use App\Models\Estate\IHTProfile;
-use App\Models\TaxConfiguration;
+use Fynla\Packs\Gb\Models\Estate\Asset;
+use Fynla\Packs\Gb\Models\Estate\IHTProfile;
+use Fynla\Packs\Gb\Models\TaxConfiguration;
 use App\Models\User;
 use App\Services\Estate\AssetLiquidityAnalyzer;
 use App\Services\Estate\PersonalizedTrustStrategyService;

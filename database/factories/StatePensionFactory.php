@@ -5,11 +5,11 @@ namespace Database\Factories;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\StatePension>
+ * @extends \Illuminate\Database\Eloquent\Factories\Factory<\Fynla\Packs\Gb\Models\StatePension>
  */
 class StatePensionFactory extends Factory
 {
-    protected $model = \App\Models\StatePension::class;
+    protected $model = \Fynla\Packs\Gb\Models\StatePension::class;
 
     /**
      * Define the model's default state.

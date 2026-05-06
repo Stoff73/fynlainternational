@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Services\Settings;
 
-use App\Models\Investment\Holding;
+use Fynla\Packs\Gb\Models\Investment\Holding;
 use App\Models\User;
 use Fynla\Core\Models\UserAssumption;
 use App\Services\Risk\RiskPreferenceService;

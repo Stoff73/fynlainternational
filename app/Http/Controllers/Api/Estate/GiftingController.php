@@ -6,8 +6,8 @@ namespace App\Http\Controllers\Api\Estate;
 
 use App\Http\Controllers\Controller;
 use App\Http\Traits\SanitizedErrorResponse;
-use App\Models\Estate\Asset;
-use App\Models\Estate\IHTProfile;
+use Fynla\Packs\Gb\Models\Estate\Asset;
+use Fynla\Packs\Gb\Models\Estate\IHTProfile;
 use App\Services\Estate\CashFlowProjector;
 use App\Services\Estate\EstateAssetAggregatorService;
 use App\Services\Estate\GiftingStrategyOptimizer;

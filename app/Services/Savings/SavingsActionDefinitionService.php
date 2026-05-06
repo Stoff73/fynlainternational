@@ -7,8 +7,8 @@ namespace App\Services\Savings;
 use Fynla\Packs\Gb\Constants\TaxDefaults;
 use Fynla\Core\Models\FamilyMember;
 use App\Models\Goal;
-use App\Models\Mortgage;
-use App\Models\SavingsActionDefinition;
+use Fynla\Packs\Gb\Models\Mortgage;
+use Fynla\Packs\Gb\Models\SavingsActionDefinition;
 use App\Models\User;
 use App\Services\TaxConfigService;
 use App\Traits\FormatsCurrency;
@@ -3071,7 +3071,7 @@ class SavingsActionDefinitionService
         $taxYear = $this->taxConfig->getTaxYear();
 
         // Estimate spouse ISA usage from their savings accounts
-        $spouseIsaUsed = (float) \App\Models\SavingsAccount::where('user_id', $user->spouse_id)
+        $spouseIsaUsed = (float) \Fynla\Packs\Gb\Models\SavingsAccount::where('user_id', $user->spouse_id)
             ->where('is_isa', true)
             ->where('isa_subscription_year', $taxYear)
             ->sum('isa_subscription_amount');

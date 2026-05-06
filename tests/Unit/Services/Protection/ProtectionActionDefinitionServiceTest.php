@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-use App\Models\ProtectionActionDefinition;
+use Fynla\Packs\Gb\Models\ProtectionActionDefinition;
 use App\Services\Protection\ProtectionActionDefinitionService;
 use App\Services\TaxConfigService;
 use Database\Seeders\ProtectionActionDefinitionSeeder;

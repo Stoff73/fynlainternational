@@ -5,10 +5,10 @@ declare(strict_types=1);
 namespace App\Agents;
 
 use App\Models\Goal;
-use App\Models\Investment\InvestmentAccount;
+use Fynla\Packs\Gb\Models\Investment\InvestmentAccount;
 use App\Models\LifeEvent;
-use App\Models\SavingsAccount;
-use App\Models\SavingsGoal;
+use Fynla\Packs\Gb\Models\SavingsAccount;
+use Fynla\Packs\Gb\Models\SavingsGoal;
 use App\Models\User;
 use App\Services\Goals\GoalProgressService;
 use App\Services\Plans\PlanConfigService;

@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace App\Services\Protection;
 
-use App\Models\CriticalIllnessPolicy;
-use App\Models\IncomeProtectionPolicy;
-use App\Models\LifeInsurancePolicy;
-use App\Models\ProtectionActionDefinition;
-use App\Models\ProtectionProfile;
+use Fynla\Packs\Gb\Models\CriticalIllnessPolicy;
+use Fynla\Packs\Gb\Models\IncomeProtectionPolicy;
+use Fynla\Packs\Gb\Models\LifeInsurancePolicy;
+use Fynla\Packs\Gb\Models\ProtectionActionDefinition;
+use Fynla\Packs\Gb\Models\ProtectionProfile;
 use App\Models\User;
 use App\Services\TaxConfigService;
 use App\Traits\FormatsCurrency;

@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace App\Models;
 
+use Fynla\Packs\Gb\Models\SavingsAccount;
+
 use App\Services\Goals\GoalCalculationService;
 use Fynla\Core\Traits\Auditable;
 use Fynla\Core\Traits\HasJointOwnership;
@@ -142,7 +144,7 @@ class Goal extends Model
      */
     public function linkedInvestmentAccount(): BelongsTo
     {
-        return $this->belongsTo(\App\Models\Investment\InvestmentAccount::class, 'linked_investment_account_id');
+        return $this->belongsTo(\Fynla\Packs\Gb\Models\Investment\InvestmentAccount::class, 'linked_investment_account_id');
     }
 
     /**

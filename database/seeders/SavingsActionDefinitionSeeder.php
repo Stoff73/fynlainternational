@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Database\Seeders;
 
-use App\Models\SavingsActionDefinition;
+use Fynla\Packs\Gb\Models\SavingsActionDefinition;
 use Illuminate\Database\Seeder;
 
 /**
@@ -29,7 +29,7 @@ class SavingsActionDefinitionSeeder extends Seeder
         }
 
         // LAUNCH GATE: Disable overlapping Investment engine savings triggers
-        \App\Models\InvestmentActionDefinition::whereIn('key', [
+        \Fynla\Packs\Gb\Models\InvestmentActionDefinition::whereIn('key', [
             'emergency_fund_critical',
             'emergency_fund_grow',
             'switch_savings_rate',

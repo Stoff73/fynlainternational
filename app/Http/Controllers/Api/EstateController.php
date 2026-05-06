@@ -16,12 +16,12 @@ use App\Http\Resources\Estate\GiftResource;
 use App\Http\Resources\Estate\LiabilityResource;
 use App\Http\Resources\Estate\TrustResource;
 use App\Http\Traits\SanitizedErrorResponse;
-use App\Models\Estate\Asset;
-use App\Models\Estate\Gift;
-use App\Models\Estate\IHTProfile;
-use App\Models\Estate\Liability;
-use App\Models\Estate\Trust;
-use App\Models\Investment\InvestmentAccount;
+use Fynla\Packs\Gb\Models\Estate\Asset;
+use Fynla\Packs\Gb\Models\Estate\Gift;
+use Fynla\Packs\Gb\Models\Estate\IHTProfile;
+use Fynla\Packs\Gb\Models\Estate\Liability;
+use Fynla\Packs\Gb\Models\Estate\Trust;
+use Fynla\Packs\Gb\Models\Investment\InvestmentAccount;
 use App\Services\Cache\CacheInvalidationService;
 use App\Services\Estate\CashFlowProjector;
 use App\Services\Estate\NetWorthAnalyzer;
@@ -54,7 +54,7 @@ class EstateController extends Controller
         $liabilities = Liability::where('user_id', $user->id)->limit(100)->get();
 
         // Include mortgages as liabilities for net worth display
-        $mortgages = \App\Models\Mortgage::whereHas('property', function ($q) use ($user) {
+        $mortgages = \Fynla\Packs\Gb\Models\Mortgage::whereHas('property', function ($q) use ($user) {
             $q->where('user_id', $user->id)->orWhere('joint_owner_id', $user->id);
         })->with('property')->limit(100)->get();
 
@@ -78,7 +78,7 @@ class EstateController extends Controller
         $gifts = Gift::where('user_id', $user->id)->limit(100)->get();
         $trusts = Trust::where('user_id', $user->id)->limit(100)->get();
         $ihtProfile = IHTProfile::where('user_id', $user->id)->first();
-        $will = \App\Models\Estate\Will::where('user_id', $user->id)->first();
+        $will = \Fynla\Packs\Gb\Models\Estate\Will::where('user_id', $user->id)->first();
 
         // Pull investment accounts and categorize for IHT
         $investmentAccounts = InvestmentAccount::where('user_id', $user->id)->limit(100)->get();

@@ -6,7 +6,7 @@ namespace App\Http\Controllers\Api\Investment;
 
 use App\Http\Controllers\Controller;
 use App\Http\Traits\SanitizedErrorResponse;
-use App\Models\Investment\InvestmentGoal;
+use Fynla\Packs\Gb\Models\Investment\InvestmentGoal;
 use App\Services\Investment\Goals\GoalProbabilityCalculator;
 use App\Services\Investment\Goals\GoalProgressAnalyzer;
 use App\Services\Investment\Goals\ShortfallAnalyzer;

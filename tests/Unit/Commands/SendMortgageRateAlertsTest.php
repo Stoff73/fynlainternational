@@ -5,8 +5,8 @@ declare(strict_types=1);
 uses(Tests\TestCase::class, Illuminate\Foundation\Testing\RefreshDatabase::class);
 
 beforeEach(function () {
-    if (! \App\Models\TaxConfiguration::where('is_active', true)->exists()) {
-        \App\Models\TaxConfiguration::factory()->create(['is_active' => true]);
+    if (! \Fynla\Packs\Gb\Models\TaxConfiguration::where('is_active', true)->exists()) {
+        \Fynla\Packs\Gb\Models\TaxConfiguration::factory()->create(['is_active' => true]);
     }
 });
 
@@ -19,8 +19,8 @@ describe('SendMortgageRateAlerts', function () {
     it('detects mortgages with fixed rate ending in 90 days', function () {
         $user = \App\Models\User::factory()->create();
         \Fynla\Core\Models\NotificationPreference::getOrCreateForUser($user->id);
-        $property = \App\Models\Property::factory()->create(['user_id' => $user->id]);
-        \App\Models\Mortgage::factory()->create([
+        $property = \Fynla\Packs\Gb\Models\Property::factory()->create(['user_id' => $user->id]);
+        \Fynla\Packs\Gb\Models\Mortgage::factory()->create([
             'user_id' => $user->id,
             'property_id' => $property->id,
             'rate_type' => 'fixed',
@@ -35,8 +35,8 @@ describe('SendMortgageRateAlerts', function () {
         $user = \App\Models\User::factory()->create();
         $prefs = \Fynla\Core\Models\NotificationPreference::getOrCreateForUser($user->id);
         $prefs->update(['mortgage_rate_alerts' => false]);
-        $property = \App\Models\Property::factory()->create(['user_id' => $user->id]);
-        \App\Models\Mortgage::factory()->create([
+        $property = \Fynla\Packs\Gb\Models\Property::factory()->create(['user_id' => $user->id]);
+        \Fynla\Packs\Gb\Models\Mortgage::factory()->create([
             'user_id' => $user->id,
             'property_id' => $property->id,
             'rate_type' => 'fixed',

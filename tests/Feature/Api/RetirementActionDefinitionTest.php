@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-use App\Models\RetirementActionDefinition;
+use Fynla\Packs\Gb\Models\RetirementActionDefinition;
 use Fynla\Core\Models\Role;
 use App\Models\User;
 use Database\Seeders\RetirementActionDefinitionSeeder;

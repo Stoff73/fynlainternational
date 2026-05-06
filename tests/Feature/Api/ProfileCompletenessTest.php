@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-use App\Models\Estate\Asset;
+use Fynla\Packs\Gb\Models\Estate\Asset;
 use Fynla\Core\Models\FamilyMember;
-use App\Models\ProtectionProfile;
+use Fynla\Packs\Gb\Models\ProtectionProfile;
 use App\Models\User;
 use Database\Seeders\TaxConfigurationSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;

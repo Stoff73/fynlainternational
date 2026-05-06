@@ -5,7 +5,7 @@ namespace Database\Factories;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Chattel>
+ * @extends \Illuminate\Database\Eloquent\Factories\Factory<\Fynla\Packs\Gb\Models\Chattel>
  */
 class ChattelFactory extends Factory
 {

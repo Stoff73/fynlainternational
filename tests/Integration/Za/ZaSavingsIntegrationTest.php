@@ -3,7 +3,7 @@
 declare(strict_types=1);
 
 use Fynla\Core\Models\FamilyMember;
-use App\Models\SavingsAccount;
+use Fynla\Packs\Gb\Models\SavingsAccount;
 use App\Models\User;
 use Fynla\Packs\Za\Database\Seeders\ZaTaxConfigurationSeeder;
 use Fynla\Packs\Za\Savings\ZaSavingsEngine;

@@ -9,7 +9,7 @@ use App\Http\Requests\Chattel\StoreChattelRequest;
 use App\Http\Requests\Chattel\UpdateChattelRequest;
 use App\Http\Resources\ChattelResource;
 use App\Http\Traits\SanitizedErrorResponse;
-use App\Models\Chattel;
+use Fynla\Packs\Gb\Models\Chattel;
 use App\Services\Chattel\ChattelCGTService;
 use App\Services\NetWorth\NetWorthService;
 use Illuminate\Http\JsonResponse;

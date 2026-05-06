@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Database\Factories;
 
 use App\Models\User;
-use App\Models\WhatIfScenario;
+use Fynla\Packs\Gb\Models\WhatIfScenario;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 class WhatIfScenarioFactory extends Factory

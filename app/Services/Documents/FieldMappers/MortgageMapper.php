@@ -39,7 +39,7 @@ class MortgageMapper extends AbstractFieldMapper
 
     public function getModelClass(): string
     {
-        return \App\Models\Mortgage::class;
+        return \Fynla\Packs\Gb\Models\Mortgage::class;
     }
 
     public function getSubtype(): string

@@ -7,7 +7,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreInvestmentActionDefinitionRequest;
 use App\Http\Traits\SanitizedErrorResponse;
-use App\Models\InvestmentActionDefinition;
+use Fynla\Packs\Gb\Models\InvestmentActionDefinition;
 use Illuminate\Http\JsonResponse;
 
 class InvestmentActionDefinitionController extends Controller

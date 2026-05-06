@@ -5,7 +5,7 @@ namespace Database\Factories;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Mortgage>
+ * @extends \Illuminate\Database\Eloquent\Factories\Factory<\Fynla\Packs\Gb\Models\Mortgage>
  */
 class MortgageFactory extends Factory
 {
@@ -27,7 +27,7 @@ class MortgageFactory extends Factory
         $remainingMonths = max(0, ($maturityDate->getTimestamp() - $now->getTimestamp()) / (30 * 24 * 60 * 60));
 
         return [
-            'property_id' => \App\Models\Property::factory(),
+            'property_id' => \Fynla\Packs\Gb\Models\Property::factory(),
             'lender_name' => fake()->company().' Bank',
             'mortgage_account_number' => fake()->optional()->numerify('MG########'),
             'mortgage_type' => $mortgageType,

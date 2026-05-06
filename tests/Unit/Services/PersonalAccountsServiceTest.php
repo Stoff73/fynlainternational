@@ -3,11 +3,11 @@
 declare(strict_types=1);
 
 use App\Models\Household;
-use App\Models\Investment\InvestmentAccount;
-use App\Models\Mortgage;
-use App\Models\Property;
-use App\Models\SavingsAccount;
-use App\Models\TaxConfiguration;
+use Fynla\Packs\Gb\Models\Investment\InvestmentAccount;
+use Fynla\Packs\Gb\Models\Mortgage;
+use Fynla\Packs\Gb\Models\Property;
+use Fynla\Packs\Gb\Models\SavingsAccount;
+use Fynla\Packs\Gb\Models\TaxConfiguration;
 use App\Models\User;
 use App\Services\UserProfile\PersonalAccountsService;
 use Carbon\Carbon;

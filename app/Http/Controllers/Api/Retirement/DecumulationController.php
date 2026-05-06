@@ -6,8 +6,8 @@ namespace App\Http\Controllers\Api\Retirement;
 
 use App\Http\Controllers\Controller;
 use App\Http\Traits\SanitizedErrorResponse;
-use App\Models\DCPension;
-use App\Models\RetirementProfile;
+use Fynla\Packs\Gb\Models\DCPension;
+use Fynla\Packs\Gb\Models\RetirementProfile;
 use App\Services\Retirement\DecumulationPlanner;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;

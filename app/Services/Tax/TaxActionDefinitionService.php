@@ -5,9 +5,9 @@ declare(strict_types=1);
 namespace App\Services\Tax;
 
 use Fynla\Packs\Gb\Constants\TaxDefaults;
-use App\Models\Investment\InvestmentAccount;
-use App\Models\SavingsAccount;
-use App\Models\TaxActionDefinition;
+use Fynla\Packs\Gb\Models\Investment\InvestmentAccount;
+use Fynla\Packs\Gb\Models\SavingsAccount;
+use Fynla\Packs\Gb\Models\TaxActionDefinition;
 use App\Models\User;
 use App\Services\Retirement\AnnualAllowanceChecker;
 use App\Services\TaxConfigService;

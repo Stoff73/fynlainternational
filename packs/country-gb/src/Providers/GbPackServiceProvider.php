@@ -53,6 +53,14 @@ class GbPackServiceProvider extends ServiceProvider
 
     public function boot(PackRegistry $registry): void
     {
+        // R-4: polymorphic *_type columns store the model FQCN. A one-shot
+        // data migration converts legacy App\Models\X values to the
+        // relocated Fynla\Packs\Gb\Models\X namespace
+        // (database/migrations/…_backfill_polymorphic_morph_map_aliases.php).
+        // A morph map is intentionally NOT registered here — it would
+        // require every write to use an alias, breaking existing test data
+        // and any third-party code that constructs morph rows by FQCN.
+
         // Idempotent: skip if another call path already registered GB
         // (e.g. if a test boots the framework twice).
         if ($registry->isEnabled('gb')) {

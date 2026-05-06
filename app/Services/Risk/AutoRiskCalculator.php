@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace App\Services\Risk;
 
-use App\Models\DCPension;
+use Fynla\Packs\Gb\Models\DCPension;
 use Fynla\Core\Models\FamilyMember;
-use App\Models\Investment\InvestmentAccount;
-use App\Models\Investment\RiskProfile;
-use App\Models\SavingsAccount;
+use Fynla\Packs\Gb\Models\Investment\InvestmentAccount;
+use Fynla\Packs\Gb\Models\Investment\RiskProfile;
+use Fynla\Packs\Gb\Models\SavingsAccount;
 use App\Models\User;
 use App\Services\NetWorth\NetWorthService;
 use Carbon\Carbon;

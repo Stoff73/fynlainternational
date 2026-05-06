@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Console\Commands;
 
-use App\Models\Mortgage;
+use Fynla\Packs\Gb\Models\Mortgage;
 use App\Services\Mobile\PushNotificationService;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Log;

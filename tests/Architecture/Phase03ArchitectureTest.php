@@ -170,11 +170,12 @@ describe('Phase 03 Architecture Tests', function () {
             $filePath = $reflection->getFileName();
             $contents = file_get_contents($filePath);
 
-            // Should import model classes directly or use CrossModuleAssetAggregator
-            expect($contents)->toContain('use App\Models\Property');
-            expect($contents)->toContain('use App\Models\Investment\InvestmentAccount');
-            expect($contents)->toContain('use App\Models\BusinessInterest');
-            expect($contents)->toContain('use App\Models\Chattel');
+            // Should import model classes directly or use CrossModuleAssetAggregator.
+            // R-4: UK models live under Fynla\Packs\Gb\Models\.
+            expect($contents)->toContain('use Fynla\Packs\Gb\Models\Property');
+            expect($contents)->toContain('use Fynla\Packs\Gb\Models\Investment\InvestmentAccount');
+            expect($contents)->toContain('use Fynla\Packs\Gb\Models\BusinessInterest');
+            expect($contents)->toContain('use Fynla\Packs\Gb\Models\Chattel');
             // Cash and Mortgage are handled via CrossModuleAssetAggregator
             expect($contents)->toContain('CrossModuleAssetAggregator');
         });

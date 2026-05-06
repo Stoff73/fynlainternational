@@ -9,7 +9,7 @@ use Fynla\Core\Models\Document;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Estate\SaveWillDocumentRequest;
 use App\Http\Traits\SanitizedErrorResponse;
-use App\Models\Estate\WillDocument;
+use Fynla\Packs\Gb\Models\Estate\WillDocument;
 use App\Services\Estate\WillDocumentService;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\JsonResponse;

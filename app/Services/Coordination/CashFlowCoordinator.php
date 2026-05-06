@@ -4,13 +4,13 @@ declare(strict_types=1);
 
 namespace App\Services\Coordination;
 
-use App\Models\CriticalIllnessPolicy;
-use App\Models\DCPension;
-use App\Models\DisabilityPolicy;
-use App\Models\IncomeProtectionPolicy;
-use App\Models\LifeInsurancePolicy;
-use App\Models\SavingsAccount;
-use App\Models\SicknessIllnessPolicy;
+use Fynla\Packs\Gb\Models\CriticalIllnessPolicy;
+use Fynla\Packs\Gb\Models\DCPension;
+use Fynla\Packs\Gb\Models\DisabilityPolicy;
+use Fynla\Packs\Gb\Models\IncomeProtectionPolicy;
+use Fynla\Packs\Gb\Models\LifeInsurancePolicy;
+use Fynla\Packs\Gb\Models\SavingsAccount;
+use Fynla\Packs\Gb\Models\SicknessIllnessPolicy;
 use App\Models\User;
 use App\Services\Plans\DisposableIncomeAccessor;
 use Fynla\Packs\Gb\Traits\ResolvesExpenditure;

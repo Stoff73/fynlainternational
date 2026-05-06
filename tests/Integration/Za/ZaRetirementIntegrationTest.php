@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-use App\Models\DCPension;
+use Fynla\Packs\Gb\Models\DCPension;
 use App\Models\User;
 use Fynla\Packs\Za\Database\Seeders\ZaTaxConfigurationSeeder;
 use Fynla\Packs\Za\Retirement\ZaContributionSplitService;

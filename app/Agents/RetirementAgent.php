@@ -5,9 +5,9 @@ declare(strict_types=1);
 namespace App\Agents;
 
 use Fynla\Packs\Gb\Constants\TaxDefaults;
-use App\Models\DCPension;
+use Fynla\Packs\Gb\Models\DCPension;
 use App\Models\Goal;
-use App\Models\RetirementProfile;
+use Fynla\Packs\Gb\Models\RetirementProfile;
 use App\Models\User;
 use App\Services\Investment\FeeAnalyzer;
 use App\Services\Investment\MonteCarloSimulator;

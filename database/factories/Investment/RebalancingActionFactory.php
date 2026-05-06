@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace Database\Factories\Investment;
 
-use App\Models\Investment\Holding;
-use App\Models\Investment\InvestmentAccount;
-use App\Models\Investment\RebalancingAction;
+use Fynla\Packs\Gb\Models\Investment\Holding;
+use Fynla\Packs\Gb\Models\Investment\InvestmentAccount;
+use Fynla\Packs\Gb\Models\Investment\RebalancingAction;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 

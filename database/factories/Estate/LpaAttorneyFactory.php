@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Database\Factories\Estate;
 
-use App\Models\Estate\LastingPowerOfAttorney;
-use App\Models\Estate\LpaAttorney;
+use Fynla\Packs\Gb\Models\Estate\LastingPowerOfAttorney;
+use Fynla\Packs\Gb\Models\Estate\LpaAttorney;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**

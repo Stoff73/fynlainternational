@@ -199,13 +199,13 @@ class GoalPlanService extends BasePlanService
         // Linked accounts
         $linkedParts = [];
         if ($goal->linked_savings_account_id) {
-            $savingsAccount = \App\Models\SavingsAccount::find($goal->linked_savings_account_id);
+            $savingsAccount = \Fynla\Packs\Gb\Models\SavingsAccount::find($goal->linked_savings_account_id);
             if ($savingsAccount) {
                 $linkedParts[] = sprintf('your savings account at %s', $savingsAccount->institution ?: 'your bank');
             }
         }
         if ($goal->linked_investment_account_id) {
-            $investmentAccount = \App\Models\Investment\InvestmentAccount::find($goal->linked_investment_account_id);
+            $investmentAccount = \Fynla\Packs\Gb\Models\Investment\InvestmentAccount::find($goal->linked_investment_account_id);
             if ($investmentAccount) {
                 $linkedParts[] = sprintf('your %s investment account', $investmentAccount->provider ?: 'linked');
             }

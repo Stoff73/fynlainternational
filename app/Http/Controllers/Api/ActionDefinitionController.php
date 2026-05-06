@@ -7,12 +7,12 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreActionDefinitionRequest;
 use App\Http\Traits\SanitizedErrorResponse;
-use App\Models\EstateActionDefinition;
-use App\Models\InvestmentActionDefinition;
-use App\Models\ProtectionActionDefinition;
-use App\Models\RetirementActionDefinition;
-use App\Models\SavingsActionDefinition;
-use App\Models\TaxActionDefinition;
+use Fynla\Packs\Gb\Models\EstateActionDefinition;
+use Fynla\Packs\Gb\Models\InvestmentActionDefinition;
+use Fynla\Packs\Gb\Models\ProtectionActionDefinition;
+use Fynla\Packs\Gb\Models\RetirementActionDefinition;
+use Fynla\Packs\Gb\Models\SavingsActionDefinition;
+use Fynla\Packs\Gb\Models\TaxActionDefinition;
 use Illuminate\Http\JsonResponse;
 
 class ActionDefinitionController extends Controller

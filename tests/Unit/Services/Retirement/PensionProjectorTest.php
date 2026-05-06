@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-use App\Models\DBPension;
-use App\Models\DCPension;
-use App\Models\StatePension;
+use Fynla\Packs\Gb\Models\DBPension;
+use Fynla\Packs\Gb\Models\DCPension;
+use Fynla\Packs\Gb\Models\StatePension;
 use App\Services\Retirement\PensionProjector;
 use App\Services\Risk\RiskPreferenceService;
 use App\Services\TaxConfigService;

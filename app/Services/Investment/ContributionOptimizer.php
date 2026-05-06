@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace App\Services\Investment;
 
-use App\Models\Investment\InvestmentAccount;
-use App\Models\Investment\InvestmentGoal;
+use Fynla\Packs\Gb\Models\Investment\InvestmentAccount;
+use Fynla\Packs\Gb\Models\Investment\InvestmentGoal;
 use App\Models\User;
 use App\Services\Investment\Goals\GoalProbabilityCalculator;
 use App\Services\Investment\Tax\ISAAllowanceOptimizer;

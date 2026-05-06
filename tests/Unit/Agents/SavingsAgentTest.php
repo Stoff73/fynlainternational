@@ -3,8 +3,8 @@
 declare(strict_types=1);
 
 use App\Agents\SavingsAgent;
-use App\Models\SavingsAccount;
-use App\Models\SavingsGoal;
+use Fynla\Packs\Gb\Models\SavingsAccount;
+use Fynla\Packs\Gb\Models\SavingsGoal;
 use App\Models\User;
 use App\Services\Savings\EmergencyFundCalculator;
 use App\Services\Savings\GoalProgressCalculator;

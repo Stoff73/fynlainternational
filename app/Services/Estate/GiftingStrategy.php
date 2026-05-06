@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace App\Services\Estate;
 
-use App\Models\Estate\Gift;
-use App\Models\Estate\IHTProfile;
+use Fynla\Packs\Gb\Models\Estate\Gift;
+use Fynla\Packs\Gb\Models\Estate\IHTProfile;
 use App\Services\TaxConfigService;
 use Carbon\Carbon;
 use Illuminate\Support\Collection;

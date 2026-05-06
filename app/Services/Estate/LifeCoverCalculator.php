@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Services\Estate;
 
-use App\Models\LifeInsurancePolicy;
+use Fynla\Packs\Gb\Models\LifeInsurancePolicy;
 use App\Models\User;
 use App\Services\Settings\AssumptionsService;
 use Carbon\Carbon;

@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace App\Services\Estate;
 
 use Fynla\Core\Models\Document;
-use App\Models\Estate\LastingPowerOfAttorney;
+use Fynla\Packs\Gb\Models\Estate\LastingPowerOfAttorney;
 use App\Models\User;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;

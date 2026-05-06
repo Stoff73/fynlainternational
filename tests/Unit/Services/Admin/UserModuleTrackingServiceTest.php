@@ -12,9 +12,9 @@ beforeEach(function () {
 
 it('returns complete status for user with all protection data', function () {
     $user = User::factory()->create();
-    \App\Models\LifeInsurancePolicy::factory()->create(['user_id' => $user->id]);
-    \App\Models\CriticalIllnessPolicy::factory()->create(['user_id' => $user->id]);
-    \App\Models\IncomeProtectionPolicy::factory()->create(['user_id' => $user->id]);
+    \Fynla\Packs\Gb\Models\LifeInsurancePolicy::factory()->create(['user_id' => $user->id]);
+    \Fynla\Packs\Gb\Models\CriticalIllnessPolicy::factory()->create(['user_id' => $user->id]);
+    \Fynla\Packs\Gb\Models\IncomeProtectionPolicy::factory()->create(['user_id' => $user->id]);
 
     $result = $this->service->getModuleStatus($user);
 
@@ -24,7 +24,7 @@ it('returns complete status for user with all protection data', function () {
 
 it('returns partial status for user with some data', function () {
     $user = User::factory()->create();
-    \App\Models\LifeInsurancePolicy::factory()->create(['user_id' => $user->id]);
+    \Fynla\Packs\Gb\Models\LifeInsurancePolicy::factory()->create(['user_id' => $user->id]);
 
     $result = $this->service->getModuleStatus($user);
 
@@ -44,7 +44,7 @@ it('returns empty status for user with no data', function () {
 
 it('returns correct sub-area counts and values', function () {
     $user = User::factory()->create();
-    \App\Models\LifeInsurancePolicy::factory()->count(3)->create([
+    \Fynla\Packs\Gb\Models\LifeInsurancePolicy::factory()->count(3)->create([
         'user_id' => $user->id,
         'sum_assured' => 100000,
     ]);

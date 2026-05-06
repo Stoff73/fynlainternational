@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-use App\Models\Estate\Asset;
-use App\Models\Estate\Gift;
-use App\Models\Estate\IHTProfile;
-use App\Models\Estate\Liability;
+use Fynla\Packs\Gb\Models\Estate\Asset;
+use Fynla\Packs\Gb\Models\Estate\Gift;
+use Fynla\Packs\Gb\Models\Estate\IHTProfile;
+use Fynla\Packs\Gb\Models\Estate\Liability;
 use App\Models\User;
 use Carbon\Carbon;
 use Database\Seeders\TaxConfigurationSeeder;

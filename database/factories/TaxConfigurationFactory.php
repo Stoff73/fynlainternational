@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace Database\Factories;
 
-use App\Models\TaxConfiguration;
+use Fynla\Packs\Gb\Models\TaxConfiguration;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\TaxConfiguration>
+ * @extends \Illuminate\Database\Eloquent\Factories\Factory<\Fynla\Packs\Gb\Models\TaxConfiguration>
  */
 class TaxConfigurationFactory extends Factory
 {

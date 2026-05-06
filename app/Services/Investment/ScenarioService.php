@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace App\Services\Investment;
 
 use App\Jobs\RunMonteCarloSimulation;
-use App\Models\Investment\InvestmentScenario;
+use Fynla\Packs\Gb\Models\Investment\InvestmentScenario;
 use Illuminate\Support\Str;
 
 class ScenarioService

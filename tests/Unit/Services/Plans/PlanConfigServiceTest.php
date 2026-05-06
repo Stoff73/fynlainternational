@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-use App\Models\PlanConfiguration;
+use Fynla\Packs\Gb\Models\PlanConfiguration;
 use App\Services\Plans\PlanConfigService;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 

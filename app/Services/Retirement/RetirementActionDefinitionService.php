@@ -5,10 +5,10 @@ declare(strict_types=1);
 namespace App\Services\Retirement;
 
 use Fynla\Packs\Gb\Constants\TaxDefaults;
-use App\Models\DCPension;
-use App\Models\RetirementActionDefinition;
-use App\Models\RetirementProfile;
-use App\Models\StatePension;
+use Fynla\Packs\Gb\Models\DCPension;
+use Fynla\Packs\Gb\Models\RetirementActionDefinition;
+use Fynla\Packs\Gb\Models\RetirementProfile;
+use Fynla\Packs\Gb\Models\StatePension;
 use App\Models\User;
 use App\Services\TaxConfigService;
 use App\Traits\FormatsCurrency;
@@ -1579,7 +1579,7 @@ class RetirementActionDefinitionService
         ];
 
         // Step 2: Pension positions (for annuity context)
-        $dcPensions = \App\Models\DCPension::where('user_id', $userId)->get();
+        $dcPensions = \Fynla\Packs\Gb\Models\DCPension::where('user_id', $userId)->get();
         $totalFundValue = 0;
         $pensionSummaries = [];
         foreach ($dcPensions as $pension) {
@@ -1925,7 +1925,7 @@ class RetirementActionDefinitionService
         ];
 
         // Step 3: Pension details for decumulation context
-        $dcPensions = \App\Models\DCPension::where('user_id', $userId)->get();
+        $dcPensions = \Fynla\Packs\Gb\Models\DCPension::where('user_id', $userId)->get();
         $pensionSummaries = [];
         foreach ($dcPensions as $pension) {
             $name = $pension->provider.' '.($pension->scheme_name ?? $pension->pension_type ?? 'Pension');

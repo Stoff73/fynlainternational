@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Observers;
 
-use App\Models\SavingsAccount;
+use Fynla\Packs\Gb\Models\SavingsAccount;
 use Fynla\Packs\Gb\Traits\TracksGoalContributions;
 use Illuminate\Database\Eloquent\Model;
 

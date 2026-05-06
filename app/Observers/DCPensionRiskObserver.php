@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Observers;
 
-use App\Models\DCPension;
+use Fynla\Packs\Gb\Models\DCPension;
 
 /**
  * Observer that triggers risk recalculation when DCPension changes.

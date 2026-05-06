@@ -7,7 +7,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreRetirementActionDefinitionRequest;
 use App\Http\Traits\SanitizedErrorResponse;
-use App\Models\RetirementActionDefinition;
+use Fynla\Packs\Gb\Models\RetirementActionDefinition;
 use Illuminate\Http\JsonResponse;
 
 class RetirementActionDefinitionController extends Controller

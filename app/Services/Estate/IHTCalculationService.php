@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace App\Services\Estate;
 
-use App\Models\DCPension;
-use App\Models\Estate\Gift;
-use App\Models\Estate\IHTCalculation;
-use App\Models\Estate\IHTProfile;
-use App\Models\Investment\InvestmentAccount;
-use App\Models\Property;
+use Fynla\Packs\Gb\Models\DCPension;
+use Fynla\Packs\Gb\Models\Estate\Gift;
+use Fynla\Packs\Gb\Models\Estate\IHTCalculation;
+use Fynla\Packs\Gb\Models\Estate\IHTProfile;
+use Fynla\Packs\Gb\Models\Investment\InvestmentAccount;
+use Fynla\Packs\Gb\Models\Property;
 use App\Models\User;
 use App\Services\Goals\LifeEventService;
 use App\Services\Investment\InvestmentProjectionService;
@@ -1311,7 +1311,7 @@ class IHTCalculationService
      */
     private function hasMainResidence(User $user, ?User $spouse): bool
     {
-        $userHasMainRes = \App\Models\Property::where('user_id', $user->id)
+        $userHasMainRes = \Fynla\Packs\Gb\Models\Property::where('user_id', $user->id)
             ->where('property_type', 'main_residence')
             ->exists();
 
@@ -1320,7 +1320,7 @@ class IHTCalculationService
         }
 
         if ($spouse) {
-            return \App\Models\Property::where('user_id', $spouse->id)
+            return \Fynla\Packs\Gb\Models\Property::where('user_id', $spouse->id)
                 ->where('property_type', 'main_residence')
                 ->exists();
         }

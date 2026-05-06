@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace App\Services\Estate;
 
 use Fynla\Packs\Gb\Constants\TaxDefaults;
-use App\Models\ActuarialLifeTable;
-use App\Models\Estate\Trust;
+use Fynla\Packs\Gb\Models\ActuarialLifeTable;
+use Fynla\Packs\Gb\Models\Estate\Trust;
 use App\Services\TaxConfigService;
 use Carbon\Carbon;
 use Illuminate\Support\Collection;

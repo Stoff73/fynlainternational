@@ -2,8 +2,8 @@
 
 declare(strict_types=1);
 
-use App\Models\Estate\Will;
-use App\Models\Estate\WillDocument;
+use Fynla\Packs\Gb\Models\Estate\Will;
+use Fynla\Packs\Gb\Models\Estate\WillDocument;
 use Fynla\Core\Models\FamilyMember;
 use App\Models\User;
 use App\Services\Estate\WillDocumentService;

@@ -3,8 +3,8 @@
 declare(strict_types=1);
 
 use App\Models\Goal;
-use App\Models\Investment\InvestmentAccount;
-use App\Models\SavingsAccount;
+use Fynla\Packs\Gb\Models\Investment\InvestmentAccount;
+use Fynla\Packs\Gb\Models\SavingsAccount;
 use App\Models\User;
 use App\Services\Plans\BasePlanService;
 use Illuminate\Foundation\Testing\RefreshDatabase;

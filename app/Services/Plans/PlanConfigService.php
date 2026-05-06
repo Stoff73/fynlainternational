@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace App\Services\Plans;
 
 use Fynla\Packs\Gb\Constants\TaxDefaults;
-use App\Models\PlanConfiguration;
+use Fynla\Packs\Gb\Models\PlanConfiguration;
 use Illuminate\Support\Arr;
 
 /**

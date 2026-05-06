@@ -4,16 +4,16 @@ declare(strict_types=1);
 
 namespace App\Services\Estate;
 
-use App\Models\BusinessInterest;
-use App\Models\Chattel;
-use App\Models\DBPension;
-use App\Models\DCPension;
-use App\Models\Estate\Asset;
-use App\Models\Estate\Liability;
-use App\Models\Investment\InvestmentAccount;
-use App\Models\Mortgage;
-use App\Models\Property;
-use App\Models\SavingsAccount;
+use Fynla\Packs\Gb\Models\BusinessInterest;
+use Fynla\Packs\Gb\Models\Chattel;
+use Fynla\Packs\Gb\Models\DBPension;
+use Fynla\Packs\Gb\Models\DCPension;
+use Fynla\Packs\Gb\Models\Estate\Asset;
+use Fynla\Packs\Gb\Models\Estate\Liability;
+use Fynla\Packs\Gb\Models\Investment\InvestmentAccount;
+use Fynla\Packs\Gb\Models\Mortgage;
+use Fynla\Packs\Gb\Models\Property;
+use Fynla\Packs\Gb\Models\SavingsAccount;
 use App\Models\User;
 use Fynla\Core\Traits\CalculatesOwnershipShare;
 use Illuminate\Support\Collection;
@@ -250,10 +250,10 @@ class EstateAssetAggregatorService
      */
     public function getExistingLifeCover(User $user): float
     {
-        $lifeInsurance = \App\Models\LifeInsurancePolicy::where('user_id', $user->id)
+        $lifeInsurance = \Fynla\Packs\Gb\Models\LifeInsurancePolicy::where('user_id', $user->id)
             ->sum('sum_assured');
 
-        $criticalIllness = \App\Models\CriticalIllnessPolicy::where('user_id', $user->id)
+        $criticalIllness = \Fynla\Packs\Gb\Models\CriticalIllnessPolicy::where('user_id', $user->id)
             ->sum('sum_assured');
 
         return $lifeInsurance + $criticalIllness;
@@ -274,7 +274,7 @@ class EstateAssetAggregatorService
         }
 
         // Fall back to ProtectionProfile if available
-        $protectionProfile = \App\Models\ProtectionProfile::where('user_id', $user->id)->first();
+        $protectionProfile = \Fynla\Packs\Gb\Models\ProtectionProfile::where('user_id', $user->id)->first();
         if ($protectionProfile && $protectionProfile->monthly_expenditure) {
             return [
                 'monthly_expenditure' => $protectionProfile->monthly_expenditure,

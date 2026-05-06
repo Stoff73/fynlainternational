@@ -267,7 +267,7 @@ class UserModuleTrackingService
     private function getEstateSubAreas(User $user): array
     {
         // Check for will via the Estate\Will model
-        $hasWill = \App\Models\Estate\Will::where('user_id', $user->id)
+        $hasWill = \Fynla\Packs\Gb\Models\Estate\Will::where('user_id', $user->id)
             ->where('has_will', true)
             ->exists();
 

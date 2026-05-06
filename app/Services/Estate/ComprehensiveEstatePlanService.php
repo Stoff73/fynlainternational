@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace App\Services\Estate;
 
-use App\Models\ActuarialLifeTable;
-use App\Models\Estate\IHTProfile;
+use Fynla\Packs\Gb\Models\ActuarialLifeTable;
+use Fynla\Packs\Gb\Models\Estate\IHTProfile;
 use Fynla\Core\Models\FamilyMember;
 use App\Models\User;
 use App\Services\Goals\LifeEventIntegrationService;
@@ -522,7 +522,7 @@ class ComprehensiveEstatePlanService
         $liabilities = [];
 
         // Get mortgages where user is owner OR joint_owner, with property addresses
-        $mortgages = \App\Models\Mortgage::forUserOrJoint($userId)
+        $mortgages = \Fynla\Packs\Gb\Models\Mortgage::forUserOrJoint($userId)
             ->with('property:id,address_line_1')
             ->get();
 
@@ -543,7 +543,7 @@ class ComprehensiveEstatePlanService
         }
 
         // Get other liabilities where user is owner OR joint_owner
-        $otherLiabilities = \App\Models\Estate\Liability::forUserOrJoint($userId)
+        $otherLiabilities = \Fynla\Packs\Gb\Models\Estate\Liability::forUserOrJoint($userId)
             ->get();
 
         foreach ($otherLiabilities as $liability) {

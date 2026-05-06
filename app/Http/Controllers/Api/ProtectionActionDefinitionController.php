@@ -7,7 +7,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreProtectionActionDefinitionRequest;
 use App\Http\Traits\SanitizedErrorResponse;
-use App\Models\ProtectionActionDefinition;
+use Fynla\Packs\Gb\Models\ProtectionActionDefinition;
 use Illuminate\Http\JsonResponse;
 
 class ProtectionActionDefinitionController extends Controller

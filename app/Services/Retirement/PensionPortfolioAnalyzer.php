@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace App\Services\Retirement;
 
-use App\Models\DCPension;
-use App\Models\Investment\RiskProfile;
+use Fynla\Packs\Gb\Models\DCPension;
+use Fynla\Packs\Gb\Models\Investment\RiskProfile;
 use App\Services\Investment\DiversificationAnalyzer;
 use App\Services\Investment\PortfolioAnalyzer;
 use App\Services\Investment\SimpleAssetAllocationOptimizer;

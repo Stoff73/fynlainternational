@@ -35,7 +35,7 @@ class SavingsAccountMapper extends AbstractFieldMapper
 
     public function getModelClass(): string
     {
-        return \App\Models\SavingsAccount::class;
+        return \Fynla\Packs\Gb\Models\SavingsAccount::class;
     }
 
     public function getSubtype(): string

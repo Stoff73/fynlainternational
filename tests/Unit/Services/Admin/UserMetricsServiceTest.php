@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-use App\Models\SavingsAccount;
+use Fynla\Packs\Gb\Models\SavingsAccount;
 use Fynla\Core\Models\Subscription;
 use App\Models\User;
 use App\Services\Admin\UserMetricsService;
@@ -400,7 +400,7 @@ describe('getEngagementStats', function () {
             'onboarding_completed' => true,
         ]);
         SavingsAccount::factory()->create(['user_id' => $user1->id]);
-        \App\Models\Property::factory()->create(['user_id' => $user1->id]);
+        \Fynla\Packs\Gb\Models\Property::factory()->create(['user_id' => $user1->id]);
 
         // User who has used 0 modules
         User::factory()->create([

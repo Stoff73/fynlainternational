@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-use App\Models\DCPension;
+use Fynla\Packs\Gb\Models\DCPension;
 use App\Models\Household;
-use App\Models\Investment\InvestmentAccount;
-use App\Models\Investment\RiskProfile;
-use App\Models\SavingsAccount;
+use Fynla\Packs\Gb\Models\Investment\InvestmentAccount;
+use Fynla\Packs\Gb\Models\Investment\RiskProfile;
+use Fynla\Packs\Gb\Models\SavingsAccount;
 use App\Models\User;
 use Database\Seeders\TaxConfigurationSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;

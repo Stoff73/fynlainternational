@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace App\Services\Savings;
 
-use App\Models\SavingsAccount;
-use App\Models\SavingsMarketRate;
+use Fynla\Packs\Gb\Models\SavingsAccount;
+use Fynla\Packs\Gb\Models\SavingsMarketRate;
 
 class RateComparator
 {

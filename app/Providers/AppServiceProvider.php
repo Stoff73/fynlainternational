@@ -97,12 +97,12 @@ class AppServiceProvider extends ServiceProvider
         // observer auto-activates a user's jurisdictions from asset
         // location; users never see the word "jurisdiction" in the UI.
         $assetModels = [
-            \App\Models\Investment\InvestmentAccount::class,
-            \App\Models\DCPension::class,
-            \App\Models\DBPension::class,
-            \App\Models\SavingsAccount::class,
-            \App\Models\Property::class,
-            \App\Models\Estate\Asset::class,
+            \Fynla\Packs\Gb\Models\Investment\InvestmentAccount::class,
+            \Fynla\Packs\Gb\Models\DCPension::class,
+            \Fynla\Packs\Gb\Models\DBPension::class,
+            \Fynla\Packs\Gb\Models\SavingsAccount::class,
+            \Fynla\Packs\Gb\Models\Property::class,
+            \Fynla\Packs\Gb\Models\Estate\Asset::class,
         ];
         foreach ($assetModels as $modelClass) {
             $modelClass::observe(\Fynla\Core\Observers\JurisdictionDetectionObserver::class);

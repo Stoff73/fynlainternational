@@ -10,7 +10,7 @@ uses(RefreshDatabase::class);
 
 function zaBucketCreateFundHolding(int $userId): int
 {
-    $pensionClass = '\\' . 'App' . '\\Models\\DCPension';
+    $pensionClass = '\\' . 'Fynla' . '\\Packs\\Gb\\Models\\DCPension';
     $pension = $pensionClass::factory()->create([
         'user_id' => $userId,
         'country_code' => 'ZA',

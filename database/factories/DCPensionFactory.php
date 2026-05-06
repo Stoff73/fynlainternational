@@ -2,12 +2,12 @@
 
 namespace Database\Factories;
 
-use App\Models\DCPension;
+use Fynla\Packs\Gb\Models\DCPension;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\DCPension>
+ * @extends \Illuminate\Database\Eloquent\Factories\Factory<\Fynla\Packs\Gb\Models\DCPension>
  */
 class DCPensionFactory extends Factory
 {

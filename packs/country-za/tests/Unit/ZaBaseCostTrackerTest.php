@@ -10,10 +10,10 @@ uses(RefreshDatabase::class);
 
 function zaLotsCreateHolding(int $userId): int
 {
-    $accountClass = '\\' . 'App' . '\\Models\\Investment\\InvestmentAccount';
+    $accountClass = '\\' . 'Fynla' . '\\Packs\\Gb\\Models\\Investment\\InvestmentAccount';
     $account = $accountClass::factory()->create(['user_id' => $userId]);
 
-    $holdingClass = '\\' . 'App' . '\\Models\\Investment\\Holding';
+    $holdingClass = '\\' . 'Fynla' . '\\Packs\\Gb\\Models\\Investment\\Holding';
     $holding = $holdingClass::factory()->create([
         'holdable_type' => $accountClass,
         'holdable_id' => $account->id,

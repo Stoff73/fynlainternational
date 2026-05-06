@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-use App\Models\DCPension;
+use Fynla\Packs\Gb\Models\DCPension;
 use App\Models\User;
 use App\Services\Tax\IncomeDefinitionsService;
 use App\Services\TaxConfigService;

@@ -14,12 +14,12 @@ arch('all new Phase 1 models extend Eloquent Model')
     ->expect([
         'App\Models\Household',
         'Fynla\Core\Models\FamilyMember',
-        'App\Models\Property',
-        'App\Models\Mortgage',
-        'App\Models\BusinessInterest',
-        'App\Models\Chattel',
-        'App\Models\CashAccount',
-        'App\Models\PersonalAccount',
+        'Fynla\Packs\Gb\Models\Property',
+        'Fynla\Packs\Gb\Models\Mortgage',
+        'Fynla\Packs\Gb\Models\BusinessInterest',
+        'Fynla\Packs\Gb\Models\Chattel',
+        'Fynla\Packs\Gb\Models\CashAccount',
+        'Fynla\Packs\Gb\Models\PersonalAccount',
     ])
     ->toExtend('Illuminate\Database\Eloquent\Model');
 
@@ -28,12 +28,12 @@ arch('new Phase 1 models use HasFactory trait')
     ->expect([
         'App\Models\Household',
         'Fynla\Core\Models\FamilyMember',
-        'App\Models\Property',
-        'App\Models\Mortgage',
-        'App\Models\BusinessInterest',
-        'App\Models\Chattel',
-        'App\Models\CashAccount',
-        'App\Models\PersonalAccount',
+        'Fynla\Packs\Gb\Models\Property',
+        'Fynla\Packs\Gb\Models\Mortgage',
+        'Fynla\Packs\Gb\Models\BusinessInterest',
+        'Fynla\Packs\Gb\Models\Chattel',
+        'Fynla\Packs\Gb\Models\CashAccount',
+        'Fynla\Packs\Gb\Models\PersonalAccount',
     ])
     ->toUse('Illuminate\Database\Eloquent\Factories\HasFactory');
 
@@ -43,17 +43,17 @@ arch('new Phase 1 models use strict types')
     ->toUseStrictTypes()
     ->and('Fynla\Core\Models\FamilyMember')
     ->toUseStrictTypes()
-    ->and('App\Models\Property')
+    ->and('Fynla\Packs\Gb\Models\Property')
     ->toUseStrictTypes()
-    ->and('App\Models\Mortgage')
+    ->and('Fynla\Packs\Gb\Models\Mortgage')
     ->toUseStrictTypes()
-    ->and('App\Models\BusinessInterest')
+    ->and('Fynla\Packs\Gb\Models\BusinessInterest')
     ->toUseStrictTypes()
-    ->and('App\Models\Chattel')
+    ->and('Fynla\Packs\Gb\Models\Chattel')
     ->toUseStrictTypes()
-    ->and('App\Models\CashAccount')
+    ->and('Fynla\Packs\Gb\Models\CashAccount')
     ->toUseStrictTypes()
-    ->and('App\Models\PersonalAccount')
+    ->and('Fynla\Packs\Gb\Models\PersonalAccount')
     ->toUseStrictTypes();
 
 // Test: Models use Eloquent relationships
@@ -62,12 +62,12 @@ arch('Household model uses relationships')
     ->toUse('Illuminate\Database\Eloquent\Relations\HasMany');
 
 arch('Property model uses relationships')
-    ->expect('App\Models\Property')
+    ->expect('Fynla\Packs\Gb\Models\Property')
     ->toUse('Illuminate\Database\Eloquent\Relations\BelongsTo')
     ->toUse('Illuminate\Database\Eloquent\Relations\HasMany');
 
 arch('Mortgage model uses relationships')
-    ->expect('App\Models\Mortgage')
+    ->expect('Fynla\Packs\Gb\Models\Mortgage')
     ->toUse('Illuminate\Database\Eloquent\Relations\BelongsTo');
 
 // Test: Models are properly namespaced
@@ -75,12 +75,12 @@ arch('all Phase 1 models are in App\Models namespace')
     ->expect([
         'App\Models\Household',
         'Fynla\Core\Models\FamilyMember',
-        'App\Models\Property',
-        'App\Models\Mortgage',
-        'App\Models\BusinessInterest',
-        'App\Models\Chattel',
-        'App\Models\CashAccount',
-        'App\Models\PersonalAccount',
+        'Fynla\Packs\Gb\Models\Property',
+        'Fynla\Packs\Gb\Models\Mortgage',
+        'Fynla\Packs\Gb\Models\BusinessInterest',
+        'Fynla\Packs\Gb\Models\Chattel',
+        'Fynla\Packs\Gb\Models\CashAccount',
+        'Fynla\Packs\Gb\Models\PersonalAccount',
     ])
     ->toBeClasses();
 
@@ -89,12 +89,12 @@ arch('Phase 1 models do not use external services')
     ->expect([
         'App\Models\Household',
         'Fynla\Core\Models\FamilyMember',
-        'App\Models\Property',
-        'App\Models\Mortgage',
-        'App\Models\BusinessInterest',
-        'App\Models\Chattel',
-        'App\Models\CashAccount',
-        'App\Models\PersonalAccount',
+        'Fynla\Packs\Gb\Models\Property',
+        'Fynla\Packs\Gb\Models\Mortgage',
+        'Fynla\Packs\Gb\Models\BusinessInterest',
+        'Fynla\Packs\Gb\Models\Chattel',
+        'Fynla\Packs\Gb\Models\CashAccount',
+        'Fynla\Packs\Gb\Models\PersonalAccount',
     ])
     ->not->toUse([
         'Illuminate\Support\Facades\Cache',

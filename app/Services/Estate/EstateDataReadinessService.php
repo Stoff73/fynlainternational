@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace App\Services\Estate;
 
-use App\Models\Estate\Gift;
-use App\Models\Estate\LastingPowerOfAttorney;
-use App\Models\Estate\Will;
-use App\Models\LetterToSpouse;
+use Fynla\Packs\Gb\Models\Estate\Gift;
+use Fynla\Packs\Gb\Models\Estate\LastingPowerOfAttorney;
+use Fynla\Packs\Gb\Models\Estate\Will;
+use Fynla\Packs\Gb\Models\LetterToSpouse;
 use App\Models\User;
 
 /**

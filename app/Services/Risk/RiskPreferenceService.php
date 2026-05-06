@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Services\Risk;
 
-use App\Models\Investment\RiskProfile;
+use Fynla\Packs\Gb\Models\Investment\RiskProfile;
 use App\Models\User;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Log;

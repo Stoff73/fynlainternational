@@ -17,7 +17,7 @@ use Fynla\Packs\Za\Http\Resources\Retirement\Reg28SnapshotResource;
 use Fynla\Packs\Za\Http\Resources\Retirement\ZaAnnuityQuoteResource;
 use Fynla\Packs\Za\Http\Resources\Retirement\ZaRetirementBucketResource;
 use Fynla\Packs\Za\Http\Resources\Retirement\ZaRetirementFundResource;
-use App\Models\DCPension;
+use Fynla\Packs\Gb\Models\DCPension;
 use Fynla\Core\Money\Currency;
 use Fynla\Core\Money\Money;
 use Fynla\Packs\Za\Models\ZaReg28Snapshot;

@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Console\Commands;
 
-use App\Models\SavingsAccount;
+use Fynla\Packs\Gb\Models\SavingsAccount;
 use App\Models\User;
 use App\Notifications\EmergencyFundAlertNotification;
 use App\Notifications\ISAAllowanceWarningNotification;

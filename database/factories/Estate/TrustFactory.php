@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Database\Factories\Estate;
 
-use App\Models\Estate\Trust;
+use Fynla\Packs\Gb\Models\Estate\Trust;
 use App\Models\Household;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;

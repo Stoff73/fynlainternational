@@ -37,7 +37,7 @@ class ProtectionMapper extends AbstractFieldMapper
 
     public function getModelClass(): string
     {
-        return \App\Models\LifeInsurancePolicy::class;
+        return \Fynla\Packs\Gb\Models\LifeInsurancePolicy::class;
     }
 
     /**
@@ -46,9 +46,9 @@ class ProtectionMapper extends AbstractFieldMapper
     public function getModelClassForType(string $type): string
     {
         return match ($type) {
-            'critical_illness', 'standalone', 'accelerated', 'additional' => \App\Models\CriticalIllnessPolicy::class,
-            'income_protection' => \App\Models\IncomeProtectionPolicy::class,
-            default => \App\Models\LifeInsurancePolicy::class,
+            'critical_illness', 'standalone', 'accelerated', 'additional' => \Fynla\Packs\Gb\Models\CriticalIllnessPolicy::class,
+            'income_protection' => \Fynla\Packs\Gb\Models\IncomeProtectionPolicy::class,
+            default => \Fynla\Packs\Gb\Models\LifeInsurancePolicy::class,
         };
     }
 

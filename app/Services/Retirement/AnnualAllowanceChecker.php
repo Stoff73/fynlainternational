@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace App\Services\Retirement;
 
-use App\Models\DCPension;
-use App\Models\RetirementProfile;
+use Fynla\Packs\Gb\Models\DCPension;
+use Fynla\Packs\Gb\Models\RetirementProfile;
 use App\Services\Tax\IncomeDefinitionsService;
 use App\Services\TaxConfigService;
 use Carbon\Carbon;

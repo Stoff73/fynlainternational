@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Services;
 
-use App\Models\TaxConfiguration;
+use Fynla\Packs\Gb\Models\TaxConfiguration;
 use Fynla\Core\Contracts\TaxEngine;
 use Illuminate\Support\Arr;
 use RuntimeException;

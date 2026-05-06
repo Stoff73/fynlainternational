@@ -48,12 +48,18 @@ describe('Pack Isolation', function () {
         //
         // R-3: Constants/ and Traits/ have App\Models\* and App\Services\*
         // imports that don't move until R-4 (Models) and R-5 (Tax services).
-        // Each import is allow-listed below. R-4/R-5 update the imports to
-        // their relocated namespaces; R-15 closes the exemption.
+        //
+        // R-4: Models/ relationships still reference User / Household / Goal /
+        // LifeEvent et al. that are deferred in App\Models\ (heavy cross-pack
+        // refs would trip CoreIndependenceTest if moved to core today).
+        //
+        // Each import is allow-listed below. Subsequent workstreams shrink
+        // the allow-list; R-15 closes the exemption.
         $exemptDirs = [
             $packDir . DIRECTORY_SEPARATOR . 'Providers' . DIRECTORY_SEPARATOR,
             $packDir . DIRECTORY_SEPARATOR . 'Constants' . DIRECTORY_SEPARATOR,
             $packDir . DIRECTORY_SEPARATOR . 'Traits' . DIRECTORY_SEPARATOR,
+            $packDir . DIRECTORY_SEPARATOR . 'Models' . DIRECTORY_SEPARATOR,
         ];
 
         $violations = [];
@@ -84,24 +90,29 @@ describe('Pack Isolation', function () {
         );
     });
 
-    it('country-gb Constants/Traits only import allow-listed App\\ namespaces (R-4/R-5 ratchet)', function () {
+    it('country-gb Constants/Traits/Models only import allow-listed App\\ namespaces (R-4/R-5 ratchet)', function () {
         $packDir = base_path('packs/country-gb/src');
         $targetDirs = [
             $packDir . DIRECTORY_SEPARATOR . 'Constants',
             $packDir . DIRECTORY_SEPARATOR . 'Traits',
+            $packDir . DIRECTORY_SEPARATOR . 'Models',
         ];
 
-        // The R-3 relocation tolerates a narrow allow-list of App\ imports
-        // inside the GB Constants/Traits. Anything outside this list is a
-        // leak and should fail the build. R-4 (Models) and R-5 (TaxConfigService)
-        // shrink the allow-list; R-15 reduces it to empty.
+        // The R-3/R-4 relocations tolerate a narrow allow-list of App\
+        // imports inside the GB Constants/Traits/Models. Anything outside
+        // this list is a leak and should fail the build. R-5 (TaxConfigService)
+        // and the deferred User/Household/Goal/LifeEvent relocation shrink
+        // the allow-list; R-15 reduces it to empty.
         $allowed = [
-            // App\Models\* — relocated to Fynla\Packs\Gb\Models\* in R-4.
-            'App\\Models\\AiConversation',
-            'App\\Models\\AiMessage',
-            'App\\Models\\ExpenditureProfile',
+            // App\Models\* — these are deferred from R-4 because their
+            // relationships span every pack. They relocate in a follow-up
+            // workstream that introduces a container-resolved query layer
+            // for cross-pack reads.
             'App\\Models\\Goal',
             'App\\Models\\GoalContribution',
+            'App\\Models\\Household',
+            'App\\Models\\LifeEvent',
+            'App\\Models\\LifeEventAllocation',
             'App\\Models\\User',
             // App\Services\* — relocated in R-5/R-6.
             'App\\Services\\AI\\KycGateChecker',
@@ -112,6 +123,10 @@ describe('Pack Isolation', function () {
             'App\\Services\\PrerequisiteGateService',
             'App\\Services\\TaxConfigService',
             'App\\Services\\UKTaxCalculator',
+            // App\Services\* — relocated in R-5/R-6.
+            'App\\Services\\Estate\\TrustValuationService',
+            'App\\Services\\Investment\\EmployeeSchemeCalculationService',
+            'App\\Services\\Property\\PropertyCalculationService',
         ];
 
         $violations = [];
@@ -210,17 +225,22 @@ describe('Pack Isolation', function () {
             $this->markTestSkipped('packs/country-za/src/Http directory not found');
         }
 
-        // The R-0a relocation tolerates a narrow allow-list of App\ imports
-        // inside the SA Http adapters. Anything outside this list is a leak
-        // and should fail the build. R-15 reduces this list to empty.
+        // The R-0a relocation tolerates a narrow allow-list of cross-pack
+        // imports inside the SA Http adapters. Anything outside this list
+        // is a leak and should fail the build. R-15 reduces this list to
+        // empty once a core-mediated asset query layer is in place.
         $allowed = [
+            // App\ — only the base controller stays in the legacy namespace.
             'App\\Http\\Controllers\\Controller',
-            'App\\Models\\DCPension',
-            'App\\Models\\FamilyMember',
-            'App\\Models\\Investment\\Holding',
-            'App\\Models\\Investment\\InvestmentAccount',
-            'App\\Models\\Mortgage',
-            'App\\Models\\SavingsAccount',
+            // Cross-pack — UK models the SA Http layer reads for joint
+            // assets and aggregate calculations.
+            'Fynla\\Packs\\Gb\\Models\\DCPension',
+            'Fynla\\Packs\\Gb\\Models\\Investment\\Holding',
+            'Fynla\\Packs\\Gb\\Models\\Investment\\InvestmentAccount',
+            'Fynla\\Packs\\Gb\\Models\\Mortgage',
+            'Fynla\\Packs\\Gb\\Models\\SavingsAccount',
+            // Core models — relocated in R-4a.
+            'Fynla\\Core\\Models\\FamilyMember',
         ];
 
         $violations = [];
@@ -232,7 +252,11 @@ describe('Pack Isolation', function () {
             if ($file->getExtension() !== 'php') continue;
             $contents = file_get_contents($file->getPathname());
 
-            preg_match_all('/^use\s+(\\\\?App\\\\[A-Za-z0-9_\\\\]+);/m', $contents, $matches);
+            // Allow-list applies to App\ and Fynla\Packs\Gb\ — these are
+            // the legacy and relocated cross-pack imports. Fynla\Core\
+            // imports (contracts, Money VO) are core infrastructure that
+            // every pack legitimately uses, so they're not allow-listed.
+            preg_match_all('/^use\s+(\\\\?(?:App|Fynla\\\\Packs\\\\Gb)\\\\[A-Za-z0-9_\\\\]+);/m', $contents, $matches);
             foreach ($matches[1] as $import) {
                 $normalised = ltrim($import, '\\');
                 if (! in_array($normalised, $allowed, true)) {
@@ -242,16 +266,24 @@ describe('Pack Isolation', function () {
         }
 
         expect($violations)->toBeEmpty(
-            'ZA pack Http adapters may only import allow-listed App\\ classes. Violations: ' . implode(', ', $violations)
+            'ZA pack Http adapters may only import allow-listed cross-namespace classes. Violations: ' . implode(', ', $violations)
         );
     });
 
-    it('country-za does not reference other pack namespaces', function () {
+    it('country-za does not reference other pack namespaces (outside Http adapters)', function () {
         $packDir = base_path('packs/country-za/src');
 
         if (!is_dir($packDir)) {
             $this->markTestSkipped('packs/country-za/src directory not found');
         }
+
+        // R-4: SA Http adapters previously imported App\Models\Property
+        // etc. for cross-pack reads (R-0a allow-list). After R-4 those
+        // models live under Fynla\Packs\Gb\Models\, so the imports are
+        // now cross-pack rather than App\. Same exemption shape as the
+        // App\ ban — ratchets to empty in R-15 once the core-mediated
+        // query layer abstracts asset lookup.
+        $exemptPrefix = $packDir . DIRECTORY_SEPARATOR . 'Http' . DIRECTORY_SEPARATOR;
 
         $violations = [];
         $iterator = new RecursiveIteratorIterator(
@@ -260,6 +292,7 @@ describe('Pack Isolation', function () {
 
         foreach ($iterator as $file) {
             if ($file->getExtension() !== 'php') continue;
+            if (str_starts_with($file->getPathname(), $exemptPrefix)) continue;
             $contents = file_get_contents($file->getPathname());
 
             // Any Fynla\Packs\ reference that isn't the Za namespace is a leak.
@@ -269,7 +302,7 @@ describe('Pack Isolation', function () {
         }
 
         expect($violations)->toBeEmpty(
-            'ZA pack must not reference other pack namespaces. Violations: ' . implode(', ', $violations)
+            'ZA pack must not reference other pack namespaces (outside src/Http/). Violations: ' . implode(', ', $violations)
         );
     });
 

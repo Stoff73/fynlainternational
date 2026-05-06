@@ -9,8 +9,8 @@ use App\Http\Requests\StoreMortgageRequest;
 use App\Http\Requests\UpdateMortgageRequest;
 use App\Http\Resources\MortgageResource;
 use App\Http\Traits\SanitizedErrorResponse;
-use App\Models\Mortgage;
-use App\Models\Property;
+use Fynla\Packs\Gb\Models\Mortgage;
+use Fynla\Packs\Gb\Models\Property;
 use App\Services\Property\MortgageService;
 use Fynla\Core\Traits\CalculatesOwnershipShare;
 use Illuminate\Http\JsonResponse;
@@ -385,7 +385,7 @@ class MortgageController extends Controller
             ],
         ];
 
-        \App\Models\JointAccountLog::logEdit(
+        \Fynla\Packs\Gb\Models\JointAccountLog::logEdit(
             $user->id,
             $mortgage->joint_owner_id,
             $mortgage,

@@ -8,7 +8,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreWhatIfScenarioRequest;
 use App\Http\Resources\WhatIfScenarioResource;
 use App\Http\Traits\SanitizedErrorResponse;
-use App\Models\WhatIfScenario;
+use Fynla\Packs\Gb\Models\WhatIfScenario;
 use App\Services\WhatIf\WhatIfScenarioService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;

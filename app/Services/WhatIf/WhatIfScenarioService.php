@@ -10,7 +10,7 @@ use App\Agents\ProtectionAgent;
 use App\Agents\RetirementAgent;
 use App\Agents\SavingsAgent;
 use App\Models\User;
-use App\Models\WhatIfScenario;
+use Fynla\Packs\Gb\Models\WhatIfScenario;
 
 class WhatIfScenarioService
 {

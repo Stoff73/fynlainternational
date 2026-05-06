@@ -2,8 +2,8 @@
 
 declare(strict_types=1);
 
-use App\Models\Estate\Liability;
-use App\Models\TaxConfiguration;
+use Fynla\Packs\Gb\Models\Estate\Liability;
+use Fynla\Packs\Gb\Models\TaxConfiguration;
 use App\Models\User;
 use App\Services\Estate\CashFlowProjector;
 

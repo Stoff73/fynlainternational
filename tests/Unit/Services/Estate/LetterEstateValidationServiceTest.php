@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-use App\Models\Chattel;
-use App\Models\Estate\Will;
-use App\Models\LetterToSpouse;
-use App\Models\LifeInsurancePolicy;
-use App\Models\Property;
+use Fynla\Packs\Gb\Models\Chattel;
+use Fynla\Packs\Gb\Models\Estate\Will;
+use Fynla\Packs\Gb\Models\LetterToSpouse;
+use Fynla\Packs\Gb\Models\LifeInsurancePolicy;
+use Fynla\Packs\Gb\Models\Property;
 use App\Models\User;
 use App\Services\Estate\LetterEstateValidationService;
 use Illuminate\Foundation\Testing\RefreshDatabase;

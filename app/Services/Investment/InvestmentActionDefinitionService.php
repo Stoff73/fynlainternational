@@ -6,7 +6,7 @@ namespace App\Services\Investment;
 
 use Fynla\Packs\Gb\Constants\TaxDefaults;
 use App\Models\Goal;
-use App\Models\InvestmentActionDefinition;
+use Fynla\Packs\Gb\Models\InvestmentActionDefinition;
 use App\Services\Plans\PlanConfigService;
 use App\Services\TaxConfigService;
 use App\Traits\FormatsCurrency;

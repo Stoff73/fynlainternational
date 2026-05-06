@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-use App\Models\InvestmentActionDefinition;
-use App\Models\SavingsActionDefinition;
-use App\Models\TaxConfiguration;
+use Fynla\Packs\Gb\Models\InvestmentActionDefinition;
+use Fynla\Packs\Gb\Models\SavingsActionDefinition;
+use Fynla\Packs\Gb\Models\TaxConfiguration;
 use App\Services\Coordination\PriorityRanker;
 
 describe('Cross-Module Integration', function () {
@@ -99,7 +99,7 @@ describe('Cross-Module Integration', function () {
             $taxYear = $taxConfig->getTaxYear();
 
             // Create a Cash ISA (Savings) with £8,000 subscribed this year
-            \App\Models\SavingsAccount::factory()->create([
+            \Fynla\Packs\Gb\Models\SavingsAccount::factory()->create([
                 'user_id' => $user->id,
                 'account_type' => 'cash_isa',
                 'current_balance' => 8000,
@@ -108,7 +108,7 @@ describe('Cross-Module Integration', function () {
             ]);
 
             // Create a S&S ISA (Investment) with £7,000 subscribed this year
-            \App\Models\Investment\InvestmentAccount::factory()->create([
+            \Fynla\Packs\Gb\Models\Investment\InvestmentAccount::factory()->create([
                 'user_id' => $user->id,
                 'account_type' => 'isa',
                 'current_value' => 7000,
@@ -143,7 +143,7 @@ describe('Cross-Module Integration', function () {
             $taxYear = $taxConfig->getTaxYear();
 
             // Cash ISA: £12,000
-            \App\Models\SavingsAccount::factory()->create([
+            \Fynla\Packs\Gb\Models\SavingsAccount::factory()->create([
                 'user_id' => $user->id,
                 'account_type' => 'cash_isa',
                 'current_balance' => 12000,
@@ -152,7 +152,7 @@ describe('Cross-Module Integration', function () {
             ]);
 
             // S&S ISA: £8,000
-            \App\Models\Investment\InvestmentAccount::factory()->create([
+            \Fynla\Packs\Gb\Models\Investment\InvestmentAccount::factory()->create([
                 'user_id' => $user->id,
                 'account_type' => 'isa',
                 'current_value' => 8000,

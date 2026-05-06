@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace App\Services\Documents;
 
-use App\Models\DCPension;
-use App\Models\Investment\Holding;
-use App\Models\Investment\InvestmentAccount;
+use Fynla\Packs\Gb\Models\DCPension;
+use Fynla\Packs\Gb\Models\Investment\Holding;
+use Fynla\Packs\Gb\Models\Investment\InvestmentAccount;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;

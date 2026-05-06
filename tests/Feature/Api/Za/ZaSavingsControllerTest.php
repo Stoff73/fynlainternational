@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-use App\Models\SavingsAccount;
+use Fynla\Packs\Gb\Models\SavingsAccount;
 use App\Models\User;
 use Fynla\Packs\Za\Database\Seeders\ZaTaxConfigurationSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;

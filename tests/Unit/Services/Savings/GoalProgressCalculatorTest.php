@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-use App\Models\SavingsGoal;
+use Fynla\Packs\Gb\Models\SavingsGoal;
 use App\Services\Savings\GoalProgressCalculator;
 use Carbon\Carbon;
 

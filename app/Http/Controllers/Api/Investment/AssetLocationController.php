@@ -189,7 +189,7 @@ class AssetLocationController extends Controller
 
         try {
             // SECURITY: Fetch with ownership check to prevent information disclosure
-            $holding = \App\Models\Investment\Holding::whereHas('investmentAccount', function ($query) use ($user) {
+            $holding = \Fynla\Packs\Gb\Models\Investment\Holding::whereHas('investmentAccount', function ($query) use ($user) {
                 $query->where('user_id', $user->id);
             })->where('id', $validated['holding_id'])->firstOrFail();
 

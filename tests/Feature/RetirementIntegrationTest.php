@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-use App\Models\DBPension;
-use App\Models\DCPension;
-use App\Models\RetirementProfile;
-use App\Models\StatePension;
+use Fynla\Packs\Gb\Models\DBPension;
+use Fynla\Packs\Gb\Models\DCPension;
+use Fynla\Packs\Gb\Models\RetirementProfile;
+use Fynla\Packs\Gb\Models\StatePension;
 use App\Models\User;
 use Database\Seeders\TaxConfigurationSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;

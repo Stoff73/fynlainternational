@@ -41,7 +41,7 @@ class LifeInsuranceMapper extends AbstractFieldMapper
 
     public function getModelClass(): string
     {
-        return \App\Models\LifeInsurancePolicy::class;
+        return \Fynla\Packs\Gb\Models\LifeInsurancePolicy::class;
     }
 
     public function getSubtype(): string

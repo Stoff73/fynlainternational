@@ -6,12 +6,12 @@ namespace App\Http\Controllers\Api\Estate;
 
 use App\Http\Controllers\Controller;
 use App\Http\Resources\Estate\TrustResource;
-use App\Models\Estate\Asset;
-use App\Models\Estate\Gift;
-use App\Models\Estate\IHTProfile;
-use App\Models\Estate\Liability;
-use App\Models\Estate\Trust;
-use App\Models\Estate\Will;
+use Fynla\Packs\Gb\Models\Estate\Asset;
+use Fynla\Packs\Gb\Models\Estate\Gift;
+use Fynla\Packs\Gb\Models\Estate\IHTProfile;
+use Fynla\Packs\Gb\Models\Estate\Liability;
+use Fynla\Packs\Gb\Models\Estate\Trust;
+use Fynla\Packs\Gb\Models\Estate\Will;
 use App\Services\Cache\CacheInvalidationService;
 use App\Services\Estate\IHTCalculationService;
 use App\Services\Estate\TrustService;

@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Database\Factories;
 
-use App\Models\ISAAllowanceTracking;
+use Fynla\Packs\Gb\Models\ISAAllowanceTracking;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 

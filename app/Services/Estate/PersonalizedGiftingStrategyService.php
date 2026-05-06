@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Services\Estate;
 
-use App\Models\Estate\IHTProfile;
+use Fynla\Packs\Gb\Models\Estate\IHTProfile;
 use App\Models\User;
 use App\Services\TaxConfigService;
 use Fynla\Packs\Gb\Traits\ResolvesExpenditure;

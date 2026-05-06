@@ -309,7 +309,7 @@ class SystemPromptBuilder
             }
 
             // Property
-            $ownsProperty = \App\Models\Property::forUserOrJoint($user->id)->exists();
+            $ownsProperty = \Fynla\Packs\Gb\Models\Property::forUserOrJoint($user->id)->exists();
             $lines[] = '- Property owner: '.($ownsProperty ? 'Yes' : 'No');
 
             // Estate (IHT-specific)
@@ -533,7 +533,7 @@ class SystemPromptBuilder
 
             // Savings
             if ($include('savings_account')) {
-                $savings = \App\Models\SavingsAccount::where('user_id', $userId)->orWhere('joint_owner_id', $userId)->get();
+                $savings = \Fynla\Packs\Gb\Models\SavingsAccount::where('user_id', $userId)->orWhere('joint_owner_id', $userId)->get();
                 if ($savings->isNotEmpty()) {
                     $items = $savings->map(fn ($a) => "[ID:{$a->id} \"{$a->account_name}\" at {$a->institution}".($a->is_isa ? ' ISA(tax-free)' : '').$ownershipLabel($a).' '.$valueWithShare($a, (float) $a->current_balance).']')->implode(' ');
                     $lines[] = "SAVINGS: {$items}";
@@ -542,7 +542,7 @@ class SystemPromptBuilder
 
             // Investments
             if ($include('investment_account')) {
-                $investments = \App\Models\Investment\InvestmentAccount::where('user_id', $userId)->orWhere('joint_owner_id', $userId)->get();
+                $investments = \Fynla\Packs\Gb\Models\Investment\InvestmentAccount::where('user_id', $userId)->orWhere('joint_owner_id', $userId)->get();
                 if ($investments->isNotEmpty()) {
                     $items = $investments->map(fn ($a) => "[ID:{$a->id} \"{$a->provider}\" ".$this->formatInvestmentAccountType($a->account_type).$ownershipLabel($a).' '.$valueWithShare($a, (float) $a->current_value).']')->implode(' ');
                     $lines[] = "INVESTMENTS: {$items}";
@@ -551,7 +551,7 @@ class SystemPromptBuilder
 
             // DC Pensions
             if ($include('dc_pension')) {
-                $dcPensions = \App\Models\DCPension::where('user_id', $userId)->get();
+                $dcPensions = \Fynla\Packs\Gb\Models\DCPension::where('user_id', $userId)->get();
                 if ($dcPensions->isNotEmpty()) {
                     $items = $dcPensions->map(fn ($p) => "[ID:{$p->id} \"{$p->scheme_name}\" {$p->pension_type} £".number_format((float) $p->current_fund_value, 0).']')->implode(' ');
                     $lines[] = "DC PENSIONS: {$items}";
@@ -560,7 +560,7 @@ class SystemPromptBuilder
 
             // DB Pensions
             if ($include('db_pension')) {
-                $dbPensions = \App\Models\DBPension::where('user_id', $userId)->get();
+                $dbPensions = \Fynla\Packs\Gb\Models\DBPension::where('user_id', $userId)->get();
                 if ($dbPensions->isNotEmpty()) {
                     $items = $dbPensions->map(fn ($p) => "[ID:{$p->id} \"{$p->scheme_name}\" £".number_format((float) ($p->accrued_annual_pension ?? 0), 0).'/yr]')->implode(' ');
                     $lines[] = "DB PENSIONS: {$items}";
@@ -569,7 +569,7 @@ class SystemPromptBuilder
 
             // Properties — show total value, user's share, mortgage, and ownership with co-owner name
             if ($include('property') || $include('mortgage')) {
-                $properties = \App\Models\Property::with('mortgages')->where('user_id', $userId)->orWhere('joint_owner_id', $userId)->get();
+                $properties = \Fynla\Packs\Gb\Models\Property::with('mortgages')->where('user_id', $userId)->orWhere('joint_owner_id', $userId)->get();
                 if ($properties->isNotEmpty()) {
                     $items = $properties->map(function ($p) use ($userId, $ownershipLabel) {
                         $totalValue = (float) $p->current_value;
@@ -604,7 +604,7 @@ class SystemPromptBuilder
 
             // Life Insurance
             if ($include('life_insurance')) {
-                $lifePolicies = \App\Models\LifeInsurancePolicy::where('user_id', $userId)->get();
+                $lifePolicies = \Fynla\Packs\Gb\Models\LifeInsurancePolicy::where('user_id', $userId)->get();
                 if ($lifePolicies->isNotEmpty()) {
                     $items = $lifePolicies->map(fn ($p) => "[ID:{$p->id} \"{$p->provider}\" {$p->policy_type} £".number_format((float) $p->sum_assured, 0).']')->implode(' ');
                     $lines[] = "LIFE INSURANCE: {$items}";
@@ -613,7 +613,7 @@ class SystemPromptBuilder
 
             // Critical Illness
             if ($include('critical_illness')) {
-                $ciPolicies = \App\Models\CriticalIllnessPolicy::where('user_id', $userId)->get();
+                $ciPolicies = \Fynla\Packs\Gb\Models\CriticalIllnessPolicy::where('user_id', $userId)->get();
                 if ($ciPolicies->isNotEmpty()) {
                     $items = $ciPolicies->map(fn ($p) => "[ID:{$p->id} \"{$p->provider}\" £".number_format((float) $p->sum_assured, 0).']')->implode(' ');
                     $lines[] = "CRITICAL ILLNESS: {$items}";
@@ -622,7 +622,7 @@ class SystemPromptBuilder
 
             // Income Protection
             if ($include('income_protection')) {
-                $ipPolicies = \App\Models\IncomeProtectionPolicy::where('user_id', $userId)->get();
+                $ipPolicies = \Fynla\Packs\Gb\Models\IncomeProtectionPolicy::where('user_id', $userId)->get();
                 if ($ipPolicies->isNotEmpty()) {
                     $items = $ipPolicies->map(fn ($p) => "[ID:{$p->id} \"{$p->provider}\" £".number_format((float) $p->benefit_amount, 0).'/mo]')->implode(' ');
                     $lines[] = "INCOME PROTECTION: {$items}";
@@ -631,7 +631,7 @@ class SystemPromptBuilder
 
             // Trusts
             if ($include('trust')) {
-                $trusts = \App\Models\Estate\Trust::where('user_id', $userId)->get();
+                $trusts = \Fynla\Packs\Gb\Models\Estate\Trust::where('user_id', $userId)->get();
                 if ($trusts->isNotEmpty()) {
                     $items = $trusts->map(fn ($t) => "[ID:{$t->id} \"{$t->trust_name}\" {$t->trust_type} £".number_format((float) $t->current_value, 0).']')->implode(' ');
                     $lines[] = "TRUSTS: {$items}";
@@ -640,7 +640,7 @@ class SystemPromptBuilder
 
             // Business Interests
             if ($include('business')) {
-                $businesses = \App\Models\BusinessInterest::where('user_id', $userId)->orWhere('joint_owner_id', $userId)->get();
+                $businesses = \Fynla\Packs\Gb\Models\BusinessInterest::where('user_id', $userId)->orWhere('joint_owner_id', $userId)->get();
                 if ($businesses->isNotEmpty()) {
                     $items = $businesses->map(fn ($b) => "[ID:{$b->id} \"{$b->business_name}\" {$b->business_type} £".number_format((float) $b->current_valuation, 0).']')->implode(' ');
                     $lines[] = "BUSINESS: {$items}";
@@ -649,7 +649,7 @@ class SystemPromptBuilder
 
             // Chattels
             if ($include('chattel')) {
-                $chattels = \App\Models\Chattel::where('user_id', $userId)->orWhere('joint_owner_id', $userId)->get();
+                $chattels = \Fynla\Packs\Gb\Models\Chattel::where('user_id', $userId)->orWhere('joint_owner_id', $userId)->get();
                 if ($chattels->isNotEmpty()) {
                     $items = $chattels->map(fn ($c) => "[ID:{$c->id} \"{$c->description}\" {$c->chattel_type} £".number_format((float) $c->current_value, 0).']')->implode(' ');
                     $lines[] = "CHATTELS: {$items}";
@@ -658,7 +658,7 @@ class SystemPromptBuilder
 
             // Liabilities
             if ($include('liability')) {
-                $liabilities = \App\Models\Estate\Liability::where('user_id', $userId)->orWhere('joint_owner_id', $userId)->get();
+                $liabilities = \Fynla\Packs\Gb\Models\Estate\Liability::where('user_id', $userId)->orWhere('joint_owner_id', $userId)->get();
                 if ($liabilities->isNotEmpty()) {
                     $items = $liabilities->map(function ($l) {
                         $parts = "[ID:{$l->id} \"{$l->liability_name}\" {$l->liability_type} £".number_format((float) $l->current_balance, 0);
@@ -680,7 +680,7 @@ class SystemPromptBuilder
 
             // Gifts
             if ($include('gift')) {
-                $gifts = \App\Models\Estate\Gift::where('user_id', $userId)->get();
+                $gifts = \Fynla\Packs\Gb\Models\Estate\Gift::where('user_id', $userId)->get();
                 if ($gifts->isNotEmpty()) {
                     $items = $gifts->map(fn ($g) => "[ID:{$g->id} \"{$g->recipient}\" {$g->gift_type} £".number_format((float) $g->gift_value, 0).' '.($g->gift_date ? $g->gift_date->format('M Y') : '').']')->implode(' ');
                     $lines[] = "GIFTS: {$items}";

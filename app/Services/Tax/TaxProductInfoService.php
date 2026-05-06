@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace App\Services\Tax;
 
 use Fynla\Packs\Gb\Constants\TaxDefaults;
-use App\Models\TaxProductReference;
+use Fynla\Packs\Gb\Models\TaxProductReference;
 use App\Services\TaxConfigService;
 use Illuminate\Support\Collection;
 

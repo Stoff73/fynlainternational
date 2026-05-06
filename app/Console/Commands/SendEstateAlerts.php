@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace App\Console\Commands;
 
-use App\Models\Estate\Gift;
-use App\Models\Estate\Trust;
+use Fynla\Packs\Gb\Models\Estate\Gift;
+use Fynla\Packs\Gb\Models\Estate\Trust;
 use Fynla\Core\Models\NotificationPreference;
 use App\Models\User;
 use App\Notifications\GiftExemptionNotification;

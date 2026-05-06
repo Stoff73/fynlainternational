@@ -376,7 +376,7 @@ class LifeStageService
                 || $this->hasProperty($user),
             'has_goals' => $user->goals()->exists(),
             'has_liabilities' => $user->liabilities()->exists(),
-            'has_will' => \App\Models\Estate\Will::where('user_id', $user->id)->exists(),
+            'has_will' => \Fynla\Packs\Gb\Models\Estate\Will::where('user_id', $user->id)->exists(),
             'has_protection' => $user->lifeInsurancePolicies()->exists()
                 || $user->criticalIllnessPolicies()->exists()
                 || $user->incomeProtectionPolicies()->exists(),

@@ -37,7 +37,7 @@ class DBPensionMapper extends AbstractFieldMapper
 
     public function getModelClass(): string
     {
-        return \App\Models\DBPension::class;
+        return \Fynla\Packs\Gb\Models\DBPension::class;
     }
 
     public function getSubtype(): string

@@ -9,7 +9,7 @@ use App\Http\Requests\StorePropertyRequest;
 use App\Http\Requests\UpdatePropertyRequest;
 use App\Http\Resources\PropertyResource;
 use App\Http\Traits\SanitizedErrorResponse;
-use App\Models\Property;
+use Fynla\Packs\Gb\Models\Property;
 use App\Services\Property\MortgageService;
 use App\Services\Property\PropertyService;
 use App\Services\Property\PropertyTaxService;
@@ -428,7 +428,7 @@ class PropertyController extends Controller
             ],
         ];
 
-        \App\Models\JointAccountLog::logEdit(
+        \Fynla\Packs\Gb\Models\JointAccountLog::logEdit(
             $user->id,
             $property->joint_owner_id,
             $property,

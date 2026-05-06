@@ -5,11 +5,11 @@ declare(strict_types=1);
 namespace App\Services\Investment\Recommendation;
 
 use Fynla\Packs\Gb\Constants\TaxDefaults;
-use App\Models\Estate\Liability;
-use App\Models\Investment\InvestmentAccount;
-use App\Models\Investment\RiskProfile;
+use Fynla\Packs\Gb\Models\Estate\Liability;
+use Fynla\Packs\Gb\Models\Investment\InvestmentAccount;
+use Fynla\Packs\Gb\Models\Investment\RiskProfile;
 use App\Models\LifeEvent;
-use App\Models\SavingsAccount;
+use Fynla\Packs\Gb\Models\SavingsAccount;
 use App\Models\User;
 use App\Services\Risk\RiskPreferenceService;
 use App\Services\TaxConfigService;

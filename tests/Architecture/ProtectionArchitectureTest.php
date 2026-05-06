@@ -12,17 +12,17 @@ arch('Protection services are in correct namespace')
     ->not->toBeAbstract();
 
 arch('Protection models have user relationship')
-    ->expect('App\Models\ProtectionProfile')
+    ->expect('Fynla\Packs\Gb\Models\ProtectionProfile')
     ->toHaveMethod('user')
-    ->and('App\Models\LifeInsurancePolicy')
+    ->and('Fynla\Packs\Gb\Models\LifeInsurancePolicy')
     ->toHaveMethod('user')
-    ->and('App\Models\CriticalIllnessPolicy')
+    ->and('Fynla\Packs\Gb\Models\CriticalIllnessPolicy')
     ->toHaveMethod('user')
-    ->and('App\Models\IncomeProtectionPolicy')
+    ->and('Fynla\Packs\Gb\Models\IncomeProtectionPolicy')
     ->toHaveMethod('user')
-    ->and('App\Models\DisabilityPolicy')
+    ->and('Fynla\Packs\Gb\Models\DisabilityPolicy')
     ->toHaveMethod('user')
-    ->and('App\Models\SicknessIllnessPolicy')
+    ->and('Fynla\Packs\Gb\Models\SicknessIllnessPolicy')
     ->toHaveMethod('user');
 
 arch('Protection form requests extend FormRequest')

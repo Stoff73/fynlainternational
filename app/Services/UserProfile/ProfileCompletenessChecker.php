@@ -4,14 +4,14 @@ declare(strict_types=1);
 
 namespace App\Services\UserProfile;
 
-use App\Models\BusinessInterest;
-use App\Models\CashAccount;
-use App\Models\Chattel;
-use App\Models\DCPension;
-use App\Models\Estate\Asset;
-use App\Models\Investment\InvestmentAccount;
-use App\Models\Property;
-use App\Models\SavingsAccount;
+use Fynla\Packs\Gb\Models\BusinessInterest;
+use Fynla\Packs\Gb\Models\CashAccount;
+use Fynla\Packs\Gb\Models\Chattel;
+use Fynla\Packs\Gb\Models\DCPension;
+use Fynla\Packs\Gb\Models\Estate\Asset;
+use Fynla\Packs\Gb\Models\Investment\InvestmentAccount;
+use Fynla\Packs\Gb\Models\Property;
+use Fynla\Packs\Gb\Models\SavingsAccount;
 use App\Models\User;
 
 class ProfileCompletenessChecker

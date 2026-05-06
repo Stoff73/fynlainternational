@@ -5,10 +5,10 @@ declare(strict_types=1);
 namespace App\Agents;
 
 use Fynla\Packs\Gb\Constants\TaxDefaults;
-use App\Models\Investment\InvestmentAccount;
-use App\Models\Investment\InvestmentGoal;
-use App\Models\Investment\RiskProfile;
-use App\Models\SavingsAccount;
+use Fynla\Packs\Gb\Models\Investment\InvestmentAccount;
+use Fynla\Packs\Gb\Models\Investment\InvestmentGoal;
+use Fynla\Packs\Gb\Models\Investment\RiskProfile;
+use Fynla\Packs\Gb\Models\SavingsAccount;
 use App\Models\User;
 use App\Services\Investment\DiversificationAnalyzer;
 use App\Services\Investment\FeeAnalyzer;

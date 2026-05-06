@@ -3,7 +3,7 @@
 declare(strict_types=1);
 
 use Fynla\Core\Models\FamilyMember;
-use App\Models\Property;
+use Fynla\Packs\Gb\Models\Property;
 use App\Models\User;
 use App\Services\Coordination\RecommendationPersonaliser;
 use App\Services\TaxConfigService;

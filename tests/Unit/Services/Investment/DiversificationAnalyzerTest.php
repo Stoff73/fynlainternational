@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-use App\Models\Investment\Holding;
+use Fynla\Packs\Gb\Models\Investment\Holding;
 use App\Services\Investment\DiversificationAnalyzer;
 
 beforeEach(function () {

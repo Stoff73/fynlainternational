@@ -4,6 +4,18 @@ declare(strict_types=1);
 
 namespace App\Models;
 
+use Fynla\Packs\Gb\Models\Investment\InvestmentAccount;
+
+use Fynla\Packs\Gb\Models\Estate\Trust;
+
+use Fynla\Packs\Gb\Models\Property;
+
+use Fynla\Packs\Gb\Models\Chattel;
+
+use Fynla\Packs\Gb\Models\CashAccount;
+
+use Fynla\Packs\Gb\Models\BusinessInterest;
+
 use Fynla\Core\Models\FamilyMember;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;

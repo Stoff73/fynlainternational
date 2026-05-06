@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace App\Services\Trust;
 
-use App\Models\BusinessInterest;
-use App\Models\CashAccount;
-use App\Models\Chattel;
-use App\Models\Estate\Trust;
-use App\Models\Investment\InvestmentAccount;
-use App\Models\Property;
+use Fynla\Packs\Gb\Models\BusinessInterest;
+use Fynla\Packs\Gb\Models\CashAccount;
+use Fynla\Packs\Gb\Models\Chattel;
+use Fynla\Packs\Gb\Models\Estate\Trust;
+use Fynla\Packs\Gb\Models\Investment\InvestmentAccount;
+use Fynla\Packs\Gb\Models\Property;
 use Illuminate\Support\Collection;
 
 class TrustAssetAggregatorService

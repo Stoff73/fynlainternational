@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-use App\Models\TaxConfiguration;
+use Fynla\Packs\Gb\Models\TaxConfiguration;
 use App\Services\Estate\FutureValueCalculator;
 
 beforeEach(function () {

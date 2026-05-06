@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace App\Console\Commands;
 
-use App\Models\BusinessInterest;
-use App\Models\Chattel;
-use App\Models\Property;
+use Fynla\Packs\Gb\Models\BusinessInterest;
+use Fynla\Packs\Gb\Models\Chattel;
+use Fynla\Packs\Gb\Models\Property;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\DB;
 

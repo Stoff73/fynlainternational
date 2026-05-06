@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace App\Services\Documents;
 
-use App\Models\DCPension;
+use Fynla\Packs\Gb\Models\DCPension;
 use Fynla\Core\Models\Document;
 use Fynla\Core\Models\DocumentExtractionLog;
-use App\Models\Investment\InvestmentAccount;
+use Fynla\Packs\Gb\Models\Investment\InvestmentAccount;
 use App\Models\User;
 use App\Services\Documents\FieldMappers\DBPensionMapper;
 use App\Services\Documents\FieldMappers\DCPensionMapper;
@@ -395,7 +395,7 @@ class DocumentProcessor
                     $mapper = new FieldMappers\SavingsAccountMapper;
                     $mapped = $mapper->map($sheet['account'] ?? []);
                     $mapped['user_id'] = $user->id;
-                    $model = \App\Models\SavingsAccount::create($mapped);
+                    $model = \Fynla\Packs\Gb\Models\SavingsAccount::create($mapped);
                     $results[] = [
                         'sheet_name' => $sheet['sheet_name'],
                         'category' => $category,
@@ -407,7 +407,7 @@ class DocumentProcessor
                     foreach ($sheet['properties'] ?? [$sheet['account'] ?? []] as $propertyData) {
                         $mapped = $mapper->map($propertyData);
                         $mapped['user_id'] = $user->id;
-                        $model = \App\Models\Property::create($mapped);
+                        $model = \Fynla\Packs\Gb\Models\Property::create($mapped);
                         $results[] = [
                             'sheet_name' => $sheet['sheet_name'],
                             'category' => $category,
@@ -466,13 +466,13 @@ class DocumentProcessor
     private function registerMappers(): void
     {
         $this->mappers = [
-            \App\Models\DCPension::class => new DCPensionMapper,
-            \App\Models\DBPension::class => new DBPensionMapper,
-            \App\Models\LifeInsurancePolicy::class => new LifeInsuranceMapper,
-            \App\Models\Investment\InvestmentAccount::class => new InvestmentAccountMapper,
-            \App\Models\Property::class => new FieldMappers\PropertyMapper,
-            \App\Models\SavingsAccount::class => new FieldMappers\SavingsAccountMapper,
-            \App\Models\Mortgage::class => new FieldMappers\MortgageMapper,
+            \Fynla\Packs\Gb\Models\DCPension::class => new DCPensionMapper,
+            \Fynla\Packs\Gb\Models\DBPension::class => new DBPensionMapper,
+            \Fynla\Packs\Gb\Models\LifeInsurancePolicy::class => new LifeInsuranceMapper,
+            \Fynla\Packs\Gb\Models\Investment\InvestmentAccount::class => new InvestmentAccountMapper,
+            \Fynla\Packs\Gb\Models\Property::class => new FieldMappers\PropertyMapper,
+            \Fynla\Packs\Gb\Models\SavingsAccount::class => new FieldMappers\SavingsAccountMapper,
+            \Fynla\Packs\Gb\Models\Mortgage::class => new FieldMappers\MortgageMapper,
         ];
     }
 }

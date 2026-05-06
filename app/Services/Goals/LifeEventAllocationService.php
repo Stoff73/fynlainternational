@@ -5,13 +5,13 @@ declare(strict_types=1);
 namespace App\Services\Goals;
 
 use Fynla\Packs\Gb\Constants\TaxDefaults;
-use App\Models\DCPension;
+use Fynla\Packs\Gb\Models\DCPension;
 use App\Models\Goal;
-use App\Models\Investment\InvestmentAccount;
+use Fynla\Packs\Gb\Models\Investment\InvestmentAccount;
 use App\Models\LifeEvent;
 use App\Models\LifeEventAllocation;
-use App\Models\RetirementProfile;
-use App\Models\SavingsAccount;
+use Fynla\Packs\Gb\Models\RetirementProfile;
+use Fynla\Packs\Gb\Models\SavingsAccount;
 use App\Models\User;
 use App\Services\Retirement\AnnualAllowanceChecker;
 use App\Services\Savings\EmergencyFundCalculator;

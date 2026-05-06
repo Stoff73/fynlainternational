@@ -43,7 +43,7 @@ class DCPensionMapper extends AbstractFieldMapper
 
     public function getModelClass(): string
     {
-        return \App\Models\DCPension::class;
+        return \Fynla\Packs\Gb\Models\DCPension::class;
     }
 
     public function getSubtype(): string

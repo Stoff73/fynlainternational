@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Database\Seeders;
 
-use App\Models\RetirementActionDefinition;
+use Fynla\Packs\Gb\Models\RetirementActionDefinition;
 use Illuminate\Database\Seeder;
 
 /**
