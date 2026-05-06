@@ -9,7 +9,7 @@ use Fynla\Packs\Gb\Models\Investment\InvestmentAccount;
 use Fynla\Packs\Gb\Models\SavingsAccount;
 use App\Models\User;
 use App\Services\Retirement\AnnualAllowanceChecker;
-use App\Services\TaxConfigService;
+use Fynla\Packs\Gb\Tax\TaxConfigService;
 use Fynla\Packs\Gb\Traits\ResolvesIncome;
 
 /**

@@ -6,7 +6,7 @@ namespace App\Services\Coordination;
 
 use Fynla\Packs\Gb\Constants\TaxDefaults;
 use App\Models\User;
-use App\Services\TaxConfigService;
+use Fynla\Packs\Gb\Tax\TaxConfigService;
 
 /**
  * CrossModuleStrategyService

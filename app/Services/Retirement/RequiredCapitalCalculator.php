@@ -6,7 +6,7 @@ namespace App\Services\Retirement;
 
 use App\Models\User;
 use App\Services\Settings\AssumptionsService;
-use App\Services\TaxConfigService;
+use Fynla\Packs\Gb\Tax\TaxConfigService;
 use App\Services\UserProfile\UserProfileService;
 use Carbon\Carbon;
 

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Services\Estate;
+namespace Fynla\Packs\Gb\Estate;
 
 use Fynla\Packs\Gb\Models\LifeInsurancePolicy;
 use App\Models\User;

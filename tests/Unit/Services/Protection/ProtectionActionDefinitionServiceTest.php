@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 use Fynla\Packs\Gb\Models\ProtectionActionDefinition;
 use App\Services\Protection\ProtectionActionDefinitionService;
-use App\Services\TaxConfigService;
+use Fynla\Packs\Gb\Tax\TaxConfigService;
 use Database\Seeders\ProtectionActionDefinitionSeeder;
 use Database\Seeders\TaxConfigurationSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;

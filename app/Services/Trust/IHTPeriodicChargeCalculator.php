@@ -6,7 +6,7 @@ namespace App\Services\Trust;
 
 use Fynla\Packs\Gb\Constants\TaxDefaults;
 use Fynla\Packs\Gb\Models\Estate\Trust;
-use App\Services\TaxConfigService;
+use Fynla\Packs\Gb\Tax\TaxConfigService;
 use Carbon\Carbon;
 
 class IHTPeriodicChargeCalculator

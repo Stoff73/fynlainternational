@@ -10,7 +10,7 @@ use Fynla\Packs\Gb\Models\SavingsAccount;
 use Fynla\Packs\Gb\Models\TaxActionDefinition;
 use App\Models\User;
 use App\Services\Retirement\AnnualAllowanceChecker;
-use App\Services\TaxConfigService;
+use Fynla\Packs\Gb\Tax\TaxConfigService;
 use App\Traits\FormatsCurrency;
 use Fynla\Core\Traits\StructuredLogging;
 

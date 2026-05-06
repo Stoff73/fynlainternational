@@ -19,7 +19,7 @@ use Fynla\Packs\Gb\Models\Mortgage;
 use Fynla\Packs\Gb\Models\Property;
 use Fynla\Packs\Gb\Models\SavingsAccount;
 use App\Models\User;
-use App\Services\TaxConfigService;
+use Fynla\Packs\Gb\Tax\TaxConfigService;
 use Fynla\Core\Traits\CalculatesOwnershipShare;
 
 /**

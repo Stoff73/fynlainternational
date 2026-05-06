@@ -6,7 +6,7 @@ namespace App\Agents;
 
 use App\Models\User;
 use App\Services\Tax\TaxOptimisationService;
-use App\Services\TaxConfigService;
+use Fynla\Packs\Gb\Tax\TaxConfigService;
 use Fynla\Core\Contracts\TaxOptimisationEngine;
 
 /**

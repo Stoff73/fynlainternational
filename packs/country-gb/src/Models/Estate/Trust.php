@@ -6,7 +6,7 @@ namespace Fynla\Packs\Gb\Models\Estate;
 
 use App\Models\Household;
 use App\Models\User;
-use App\Services\Estate\TrustValuationService;
+use Fynla\Packs\Gb\Estate\TrustValuationService;
 use Fynla\Core\Traits\Auditable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;

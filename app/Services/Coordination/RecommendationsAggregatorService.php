@@ -8,7 +8,7 @@ use App\Agents\ProtectionAgent;
 use App\Agents\RetirementAgent;
 use App\Agents\SavingsAgent;
 use App\Models\User;
-use App\Services\Estate\ComprehensiveEstatePlanService;
+use Fynla\Packs\Gb\Estate\ComprehensiveEstatePlanService;
 use App\Services\Investment\PortfolioAnalyzer;
 use Illuminate\Support\Facades\Log;
 

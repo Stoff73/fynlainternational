@@ -36,7 +36,7 @@ describe('Cross-Module Integration', function () {
         it('SafetyCheckService gates surplus without producing standalone emergency fund recommendations', function () {
             // Ensure TaxConfiguration exists for SafetyCheckService
             TaxConfiguration::factory()->create(['is_active' => true]);
-            app()->forgetInstance(\App\Services\TaxConfigService::class);
+            app()->forgetInstance(\Fynla\Packs\Gb\Tax\TaxConfigService::class);
 
             $service = app(\App\Services\Investment\Recommendation\SafetyCheckService::class);
 
@@ -88,13 +88,13 @@ describe('Cross-Module Integration', function () {
         it('ISA allowance is shared between Cash ISA and Stocks & Shares ISA', function () {
             // Ensure TaxConfiguration exists for TaxConfigService
             TaxConfiguration::factory()->create(['is_active' => true]);
-            app()->forgetInstance(\App\Services\TaxConfigService::class);
+            app()->forgetInstance(\Fynla\Packs\Gb\Tax\TaxConfigService::class);
 
             $user = \App\Models\User::factory()->create([
                 'date_of_birth' => now()->subYears(35),
             ]);
 
-            $taxConfig = app(\App\Services\TaxConfigService::class);
+            $taxConfig = app(\Fynla\Packs\Gb\Tax\TaxConfigService::class);
             $isaAllowance = $taxConfig->getISAAllowances()['annual_allowance'] ?? 20000;
             $taxYear = $taxConfig->getTaxYear();
 
@@ -133,13 +133,13 @@ describe('Cross-Module Integration', function () {
         it('ISA context accounts for both modules when allowance is fully used', function () {
             // Ensure TaxConfiguration exists for TaxConfigService
             TaxConfiguration::factory()->create(['is_active' => true]);
-            app()->forgetInstance(\App\Services\TaxConfigService::class);
+            app()->forgetInstance(\Fynla\Packs\Gb\Tax\TaxConfigService::class);
 
             $user = \App\Models\User::factory()->create([
                 'date_of_birth' => now()->subYears(40),
             ]);
 
-            $taxConfig = app(\App\Services\TaxConfigService::class);
+            $taxConfig = app(\Fynla\Packs\Gb\Tax\TaxConfigService::class);
             $taxYear = $taxConfig->getTaxYear();
 
             // Cash ISA: £12,000
@@ -374,7 +374,7 @@ describe('Cross-Module Integration', function () {
 
         it('all 5 modules have data readiness services', function () {
             expect(class_exists(\App\Services\Savings\SavingsDataReadinessService::class))->toBeTrue();
-            expect(class_exists(\App\Services\Estate\EstateDataReadinessService::class))->toBeTrue();
+            expect(class_exists(\Fynla\Packs\Gb\Estate\EstateDataReadinessService::class))->toBeTrue();
             expect(class_exists(\App\Services\Investment\Recommendation\DataReadinessService::class))->toBeTrue();
             expect(class_exists(\App\Services\Protection\ProtectionDataReadinessService::class))->toBeTrue();
             expect(class_exists(\App\Services\Retirement\RetirementDataReadinessService::class))->toBeTrue();

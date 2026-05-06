@@ -16,7 +16,7 @@ use Fynla\Packs\Gb\Models\StatePension;
 use App\Models\User;
 use App\Services\Retirement\PensionProjector;
 use App\Services\Retirement\RetirementActionDefinitionService;
-use App\Services\TaxConfigService;
+use Fynla\Packs\Gb\Tax\TaxConfigService;
 use Illuminate\Support\Collection;
 
 class RetirementPlanService extends BasePlanService

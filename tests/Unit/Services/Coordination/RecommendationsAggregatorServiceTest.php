@@ -8,7 +8,7 @@ use App\Agents\SavingsAgent;
 use App\Models\User;
 use App\Services\Coordination\RecommendationPersonaliser;
 use App\Services\Coordination\RecommendationsAggregatorService;
-use App\Services\Estate\ComprehensiveEstatePlanService;
+use Fynla\Packs\Gb\Estate\ComprehensiveEstatePlanService;
 use App\Services\Investment\PortfolioAnalyzer;
 
 beforeEach(function () {

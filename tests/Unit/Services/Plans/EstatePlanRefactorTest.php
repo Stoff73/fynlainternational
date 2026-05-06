@@ -5,13 +5,13 @@ declare(strict_types=1);
 use App\Agents\EstateAgent;
 use App\Models\User;
 use App\Services\Coordination\RecommendationPersonaliser;
-use App\Services\Estate\EstateAssetAggregatorService;
-use App\Services\Estate\IHTCalculationService;
+use Fynla\Packs\Gb\Estate\EstateAssetAggregatorService;
+use Fynla\Packs\Gb\Estate\IHTCalculationService;
 use App\Services\Estate\IHTFormattingService;
 use App\Services\Plans\DisposableIncomeAccessor;
 use App\Services\Plans\EstatePlanService;
 use App\Services\Plans\PlanConfigService;
-use App\Services\TaxConfigService;
+use Fynla\Packs\Gb\Tax\TaxConfigService;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
 uses(RefreshDatabase::class);

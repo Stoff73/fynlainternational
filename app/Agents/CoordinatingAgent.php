@@ -31,7 +31,7 @@ use App\Services\Coordination\HolisticPlanner;
 use App\Services\Coordination\PriorityRanker;
 use App\Services\NetWorth\NetWorthService;
 use App\Services\PrerequisiteGateService;
-use App\Services\TaxConfigService;
+use Fynla\Packs\Gb\Tax\TaxConfigService;
 use Fynla\Packs\Gb\Traits\HasAiChat;
 use Fynla\Packs\Gb\Traits\HasAiGuardrails;
 use Illuminate\Support\Facades\Cache;

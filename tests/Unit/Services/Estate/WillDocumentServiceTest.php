@@ -6,7 +6,7 @@ use Fynla\Packs\Gb\Models\Estate\Will;
 use Fynla\Packs\Gb\Models\Estate\WillDocument;
 use Fynla\Core\Models\FamilyMember;
 use App\Models\User;
-use App\Services\Estate\WillDocumentService;
+use Fynla\Packs\Gb\Estate\WillDocumentService;
 
 beforeEach(function () {
     $this->service = new WillDocumentService;

@@ -7,7 +7,7 @@ namespace App\Services\Savings;
 use Fynla\Packs\Gb\Models\Investment\InvestmentAccount;
 use Fynla\Packs\Gb\Models\ISAAllowanceTracking;
 use Fynla\Packs\Gb\Models\SavingsAccount;
-use App\Services\TaxConfigService;
+use Fynla\Packs\Gb\Tax\TaxConfigService;
 use Carbon\Carbon;
 
 class ISATracker

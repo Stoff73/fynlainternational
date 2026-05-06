@@ -6,7 +6,7 @@ namespace App\Services\Tax;
 
 use Fynla\Packs\Gb\Models\Property;
 use App\Models\User;
-use App\Services\TaxConfigService;
+use Fynla\Packs\Gb\Tax\TaxConfigService;
 
 class IncomeDefinitionsService
 {

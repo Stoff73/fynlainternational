@@ -3,7 +3,7 @@
 declare(strict_types=1);
 
 use Fynla\Packs\Gb\Models\Estate\Asset;
-use App\Services\Estate\AssetLiquidityAnalyzer;
+use Fynla\Packs\Gb\Estate\AssetLiquidityAnalyzer;
 
 beforeEach(function () {
     $this->analyzer = new AssetLiquidityAnalyzer;

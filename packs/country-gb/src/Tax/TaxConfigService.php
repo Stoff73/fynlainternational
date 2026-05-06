@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Services;
+namespace Fynla\Packs\Gb\Tax;
 
 use Fynla\Packs\Gb\Models\TaxConfiguration;
 use Fynla\Core\Contracts\TaxEngine;

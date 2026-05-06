@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace App\Services\Savings;
 
 use App\Models\User;
-use App\Services\TaxConfigService;
+use Fynla\Packs\Gb\Tax\TaxConfigService;
 use Fynla\Packs\Gb\Traits\ResolvesIncome;
 use Illuminate\Support\Collection;
 

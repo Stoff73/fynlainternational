@@ -10,7 +10,7 @@ use Fynla\Packs\Gb\Models\RetirementActionDefinition;
 use Fynla\Packs\Gb\Models\RetirementProfile;
 use Fynla\Packs\Gb\Models\StatePension;
 use App\Models\User;
-use App\Services\TaxConfigService;
+use Fynla\Packs\Gb\Tax\TaxConfigService;
 use App\Traits\FormatsCurrency;
 
 /**

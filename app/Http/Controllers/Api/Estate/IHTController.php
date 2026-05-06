@@ -9,10 +9,10 @@ use App\Http\Traits\SanitizedErrorResponse;
 use Fynla\Packs\Gb\Models\Estate\Will;
 use Fynla\Packs\Gb\Models\LifeInsurancePolicy;
 use App\Models\User;
-use App\Services\Estate\EstateAssetAggregatorService;
-use App\Services\Estate\IHTCalculationService;
+use Fynla\Packs\Gb\Estate\EstateAssetAggregatorService;
+use Fynla\Packs\Gb\Estate\IHTCalculationService;
 use App\Services\Estate\IHTFormattingService;
-use App\Services\TaxConfigService;
+use Fynla\Packs\Gb\Tax\TaxConfigService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 

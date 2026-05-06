@@ -3,7 +3,7 @@
 declare(strict_types=1);
 
 use App\Services\Retirement\DecumulationPlanner;
-use App\Services\TaxConfigService;
+use Fynla\Packs\Gb\Tax\TaxConfigService;
 
 beforeEach(function () {
     $this->mockTaxConfig = Mockery::mock(TaxConfigService::class);

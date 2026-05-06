@@ -6,7 +6,7 @@ use Fynla\Packs\Gb\Models\Estate\LastingPowerOfAttorney;
 use Fynla\Packs\Gb\Models\Estate\LpaAttorney;
 use Fynla\Packs\Gb\Models\TaxConfiguration;
 use App\Models\User;
-use App\Services\Estate\LpaService;
+use Fynla\Packs\Gb\Estate\LpaService;
 
 beforeEach(function () {
     if (! TaxConfiguration::where('is_active', true)->exists()) {

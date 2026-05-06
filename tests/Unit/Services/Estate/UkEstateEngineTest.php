@@ -2,8 +2,8 @@
 
 declare(strict_types=1);
 
-use App\Services\Estate\UkEstateEngine;
-use App\Services\TaxConfigService;
+use Fynla\Packs\Gb\Estate\UkEstateEngine;
+use Fynla\Packs\Gb\Tax\TaxConfigService;
 use Database\Seeders\TaxConfigurationSeeder;
 use Fynla\Core\Contracts\EstateEngine;
 use Illuminate\Foundation\Testing\RefreshDatabase;

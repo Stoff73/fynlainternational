@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace App\Services\Investment\Rebalancing;
 
 use Fynla\Packs\Gb\Models\Investment\Holding;
-use App\Services\TaxConfigService;
+use Fynla\Packs\Gb\Tax\TaxConfigService;
 use Illuminate\Support\Collection;
 
 /**

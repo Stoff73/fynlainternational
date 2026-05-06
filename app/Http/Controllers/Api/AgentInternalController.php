@@ -15,7 +15,7 @@ use App\Agents\TaxOptimisationAgent;
 use App\Http\Controllers\Controller;
 use App\Models\User;
 use App\Services\PrerequisiteGateService;
-use App\Services\TaxConfigService;
+use Fynla\Packs\Gb\Tax\TaxConfigService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;

@@ -5,7 +5,7 @@ declare(strict_types=1);
 use Fynla\Packs\Gb\Models\Estate\Asset;
 use Fynla\Packs\Gb\Models\Estate\Liability;
 use App\Models\User;
-use App\Services\Estate\NetWorthAnalyzer;
+use Fynla\Packs\Gb\Estate\NetWorthAnalyzer;
 use App\Services\Shared\CrossModuleAssetAggregator;
 use Carbon\Carbon;
 use Illuminate\Foundation\Testing\RefreshDatabase;

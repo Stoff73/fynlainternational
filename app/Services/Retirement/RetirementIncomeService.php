@@ -12,7 +12,7 @@ use Fynla\Packs\Gb\Models\StatePension;
 use App\Models\User;
 use App\Services\Investment\InvestmentProjectionService;
 use App\Services\TaxBandTracker;
-use App\Services\TaxConfigService;
+use Fynla\Packs\Gb\Tax\TaxConfigService;
 
 /**
  * Retirement Income Service

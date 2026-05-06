@@ -6,7 +6,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Http\Traits\SanitizedErrorResponse;
-use App\Services\Tax\TaxProductInfoService;
+use Fynla\Packs\Gb\Tax\TaxProductInfoService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 

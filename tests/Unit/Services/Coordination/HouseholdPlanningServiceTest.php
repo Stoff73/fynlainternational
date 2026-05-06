@@ -6,7 +6,7 @@ use Fynla\Packs\Gb\Models\Property;
 use Fynla\Packs\Gb\Models\SavingsAccount;
 use App\Models\User;
 use App\Services\Coordination\HouseholdPlanningService;
-use App\Services\TaxConfigService;
+use Fynla\Packs\Gb\Tax\TaxConfigService;
 
 function createHouseholdService(): HouseholdPlanningService
 {

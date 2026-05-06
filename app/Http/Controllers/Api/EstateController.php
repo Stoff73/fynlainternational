@@ -23,10 +23,10 @@ use Fynla\Packs\Gb\Models\Estate\Liability;
 use Fynla\Packs\Gb\Models\Estate\Trust;
 use Fynla\Packs\Gb\Models\Investment\InvestmentAccount;
 use App\Services\Cache\CacheInvalidationService;
-use App\Services\Estate\CashFlowProjector;
-use App\Services\Estate\NetWorthAnalyzer;
+use Fynla\Packs\Gb\Estate\CashFlowProjector;
+use Fynla\Packs\Gb\Estate\NetWorthAnalyzer;
 use App\Services\Goals\LifeEventIntegrationService;
-use App\Services\TaxConfigService;
+use Fynla\Packs\Gb\Tax\TaxConfigService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
@@ -37,7 +37,7 @@ class EstateController extends Controller
     public function __construct(
         private readonly NetWorthAnalyzer $netWorthAnalyzer,
         private readonly CashFlowProjector $cashFlowProjector,
-        private readonly \App\Services\Estate\ComprehensiveEstatePlanService $comprehensiveEstatePlan,
+        private readonly \Fynla\Packs\Gb\Estate\ComprehensiveEstatePlanService $comprehensiveEstatePlan,
         private readonly TaxConfigService $taxConfig,
         private readonly LifeEventIntegrationService $lifeEventIntegration,
         private readonly CacheInvalidationService $cacheInvalidation

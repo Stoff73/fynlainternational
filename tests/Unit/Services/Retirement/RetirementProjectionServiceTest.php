@@ -11,7 +11,7 @@ use App\Services\Investment\MonteCarloSimulator;
 use App\Services\Retirement\RequiredCapitalCalculator;
 use App\Services\Retirement\RetirementProjectionService;
 use App\Services\Risk\RiskPreferenceService;
-use App\Services\TaxConfigService;
+use Fynla\Packs\Gb\Tax\TaxConfigService;
 use Carbon\Carbon;
 
 beforeEach(function () {

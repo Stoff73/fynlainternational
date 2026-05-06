@@ -8,7 +8,7 @@ use Fynla\Packs\Gb\Constants\TaxDefaults;
 use Fynla\Packs\Gb\Models\Investment\InvestmentAccount;
 use App\Models\User;
 use App\Services\Risk\RiskPreferenceService;
-use App\Services\TaxConfigService;
+use Fynla\Packs\Gb\Tax\TaxConfigService;
 use Fynla\Packs\Gb\Traits\ResolvesIncome;
 
 /**

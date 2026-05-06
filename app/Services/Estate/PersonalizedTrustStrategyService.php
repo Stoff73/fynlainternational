@@ -5,11 +5,12 @@ declare(strict_types=1);
 namespace App\Services\Estate;
 
 use Fynla\Packs\Gb\Constants\TaxDefaults;
+use Fynla\Packs\Gb\Estate\AssetLiquidityAnalyzer;
 use Fynla\Packs\Gb\Models\Estate\IHTProfile;
 use App\Models\User;
 use App\Services\Risk\RiskPreferenceService;
 use App\Services\Settings\AssumptionsService;
-use App\Services\TaxConfigService;
+use Fynla\Packs\Gb\Tax\TaxConfigService;
 use Illuminate\Support\Collection;
 
 /**

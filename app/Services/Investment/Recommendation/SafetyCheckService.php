@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Services\Investment\Recommendation;
 
-use App\Services\TaxConfigService;
+use Fynla\Packs\Gb\Tax\TaxConfigService;
 
 /**
  * Safety checks that can reduce the surplus available to the waterfall.

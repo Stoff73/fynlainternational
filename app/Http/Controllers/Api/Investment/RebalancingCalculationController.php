@@ -12,7 +12,7 @@ use Fynla\Packs\Gb\Models\Investment\RiskProfile;
 use App\Services\Investment\Rebalancing\DriftAnalyzer;
 use App\Services\Investment\Rebalancing\RebalancingCalculator;
 use App\Services\Investment\Rebalancing\TaxAwareRebalancer;
-use App\Services\TaxConfigService;
+use Fynla\Packs\Gb\Tax\TaxConfigService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 

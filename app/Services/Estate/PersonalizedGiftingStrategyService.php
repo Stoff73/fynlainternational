@@ -4,9 +4,10 @@ declare(strict_types=1);
 
 namespace App\Services\Estate;
 
+use Fynla\Packs\Gb\Estate\AssetLiquidityAnalyzer;
 use Fynla\Packs\Gb\Models\Estate\IHTProfile;
 use App\Models\User;
-use App\Services\TaxConfigService;
+use Fynla\Packs\Gb\Tax\TaxConfigService;
 use Fynla\Packs\Gb\Traits\ResolvesExpenditure;
 use Fynla\Packs\Gb\Traits\ResolvesIncome;
 use Illuminate\Support\Collection;

@@ -8,13 +8,13 @@ use App\Http\Controllers\Controller;
 use App\Http\Traits\SanitizedErrorResponse;
 use Fynla\Packs\Gb\Models\Estate\Asset;
 use Fynla\Packs\Gb\Models\Estate\IHTProfile;
-use App\Services\Estate\CashFlowProjector;
-use App\Services\Estate\EstateAssetAggregatorService;
-use App\Services\Estate\GiftingStrategyOptimizer;
+use Fynla\Packs\Gb\Estate\CashFlowProjector;
+use Fynla\Packs\Gb\Estate\EstateAssetAggregatorService;
+use Fynla\Packs\Gb\Estate\GiftingStrategyOptimizer;
 use App\Services\Estate\PersonalizedGiftingStrategyService;
 use App\Services\Estate\PersonalizedTrustStrategyService;
 use App\Services\Estate\TrustService;
-use App\Services\TaxConfigService;
+use Fynla\Packs\Gb\Tax\TaxConfigService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 

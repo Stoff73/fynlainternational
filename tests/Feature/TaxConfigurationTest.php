@@ -8,7 +8,7 @@ use Fynla\Packs\Gb\Models\TaxConfiguration;
 use App\Models\User;
 use App\Services\Retirement\AnnualAllowanceChecker;
 use App\Services\Savings\ISATracker;
-use App\Services\TaxConfigService;
+use Fynla\Packs\Gb\Tax\TaxConfigService;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 

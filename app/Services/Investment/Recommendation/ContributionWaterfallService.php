@@ -6,7 +6,7 @@ namespace App\Services\Investment\Recommendation;
 
 use Fynla\Packs\Gb\Constants\TaxDefaults;
 use App\Services\Risk\RiskPreferenceService;
-use App\Services\TaxConfigService;
+use Fynla\Packs\Gb\Tax\TaxConfigService;
 use Illuminate\Support\Str;
 
 /**

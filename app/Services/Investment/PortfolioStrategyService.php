@@ -11,7 +11,7 @@ use App\Models\User;
 use App\Services\Investment\Rebalancing\DriftAnalyzer;
 use App\Services\Investment\Tax\TaxOptimizationAnalyzer;
 use App\Services\Risk\RiskPreferenceService;
-use App\Services\TaxConfigService;
+use Fynla\Packs\Gb\Tax\TaxConfigService;
 use App\Traits\FormatsCurrency;
 
 /**

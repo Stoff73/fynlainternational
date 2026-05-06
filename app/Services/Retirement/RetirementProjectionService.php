@@ -8,7 +8,7 @@ use App\Models\User;
 use App\Services\Goals\LifeEventCashFlowService;
 use App\Services\Investment\MonteCarloSimulator;
 use App\Services\Risk\RiskPreferenceService;
-use App\Services\TaxConfigService;
+use Fynla\Packs\Gb\Tax\TaxConfigService;
 
 /**
  * Retirement Projection Service

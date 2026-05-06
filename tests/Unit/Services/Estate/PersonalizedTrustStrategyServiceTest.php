@@ -6,7 +6,7 @@ use Fynla\Packs\Gb\Models\Estate\Asset;
 use Fynla\Packs\Gb\Models\Estate\IHTProfile;
 use Fynla\Packs\Gb\Models\TaxConfiguration;
 use App\Models\User;
-use App\Services\Estate\AssetLiquidityAnalyzer;
+use Fynla\Packs\Gb\Estate\AssetLiquidityAnalyzer;
 use App\Services\Estate\PersonalizedTrustStrategyService;
 use App\Services\Risk\RiskPreferenceService;
 use App\Services\Settings\AssumptionsService;
@@ -18,7 +18,7 @@ beforeEach(function () {
     }
 
     $this->liquidityAnalyzer = new AssetLiquidityAnalyzer;
-    $taxConfig = app(\App\Services\TaxConfigService::class);
+    $taxConfig = app(\Fynla\Packs\Gb\Tax\TaxConfigService::class);
     $assumptionsService = app(AssumptionsService::class);
     $riskPreferenceService = app(RiskPreferenceService::class);
     $this->service = new PersonalizedTrustStrategyService($this->liquidityAnalyzer, $taxConfig, $assumptionsService, $riskPreferenceService);

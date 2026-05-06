@@ -25,7 +25,7 @@ use App\Services\Investment\Recommendation\SafetyCheckService;
 use App\Services\Investment\Recommendation\SpouseOptimisationService;
 use App\Services\Investment\Recommendation\TransferRecommendationService;
 use App\Services\Investment\Recommendation\UserContextBuilder;
-use App\Services\TaxConfigService;
+use Fynla\Packs\Gb\Tax\TaxConfigService;
 
 class InvestmentPlanService extends BasePlanService
 {

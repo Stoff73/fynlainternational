@@ -6,7 +6,7 @@ use Fynla\Packs\Gb\Models\ISAAllowanceTracking;
 use Fynla\Packs\Gb\Models\SavingsAccount;
 use App\Models\User;
 use App\Services\Savings\ISATracker;
-use App\Services\TaxConfigService;
+use Fynla\Packs\Gb\Tax\TaxConfigService;
 
 // Mock TaxConfigService before running tests
 beforeEach(function () {

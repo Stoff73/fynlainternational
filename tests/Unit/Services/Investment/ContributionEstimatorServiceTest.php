@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 use Fynla\Packs\Gb\Models\Investment\InvestmentAccount;
 use App\Services\Investment\ContributionEstimatorService;
-use App\Services\TaxConfigService;
+use Fynla\Packs\Gb\Tax\TaxConfigService;
 
 beforeEach(function () {
     $this->taxConfig = Mockery::mock(TaxConfigService::class);

@@ -3,7 +3,7 @@
 declare(strict_types=1);
 
 use App\Services\Investment\UkInvestmentEngine;
-use App\Services\TaxConfigService;
+use Fynla\Packs\Gb\Tax\TaxConfigService;
 use Database\Seeders\TaxConfigurationSeeder;
 use Fynla\Core\Contracts\InvestmentEngine;
 use Illuminate\Foundation\Testing\RefreshDatabase;

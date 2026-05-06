@@ -6,7 +6,7 @@ use Fynla\Packs\Gb\Models\Investment\Holding;
 use Fynla\Packs\Gb\Models\Investment\InvestmentAccount;
 use App\Services\Investment\FeeAnalyzer;
 use App\Services\Risk\RiskPreferenceService;
-use App\Services\TaxConfigService;
+use Fynla\Packs\Gb\Tax\TaxConfigService;
 
 beforeEach(function () {
     $this->riskPreferenceService = Mockery::mock(RiskPreferenceService::class);

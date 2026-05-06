@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Services\Retirement;
 
-use App\Services\TaxConfigService;
+use Fynla\Packs\Gb\Tax\TaxConfigService;
 use Fynla\Core\Contracts\RetirementEngine;
 
 /**

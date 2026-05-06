@@ -6,7 +6,7 @@ use Fynla\Core\Models\FamilyMember;
 use Fynla\Packs\Gb\Models\Property;
 use App\Models\User;
 use App\Services\Coordination\RecommendationPersonaliser;
-use App\Services\TaxConfigService;
+use Fynla\Packs\Gb\Tax\TaxConfigService;
 
 function createPersonaliser(): RecommendationPersonaliser
 {

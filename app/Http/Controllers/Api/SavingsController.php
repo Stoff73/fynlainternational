@@ -648,7 +648,7 @@ class SavingsController extends Controller
 
         $jisaAllowance = 9000.0;
         try {
-            $isaAllowances = app(\App\Services\TaxConfigService::class)->getISAAllowances();
+            $isaAllowances = app(\Fynla\Packs\Gb\Tax\TaxConfigService::class)->getISAAllowances();
             $jisaAllowance = (float) ($isaAllowances['junior_isa']['annual_allowance'] ?? 9000);
         } catch (\Throwable $e) {
             // Use default

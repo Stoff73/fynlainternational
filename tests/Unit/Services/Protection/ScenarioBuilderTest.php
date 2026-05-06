@@ -5,7 +5,7 @@ declare(strict_types=1);
 use Fynla\Packs\Gb\Models\ProtectionProfile;
 use App\Models\User;
 use App\Services\Protection\ScenarioBuilder;
-use App\Services\TaxConfigService;
+use Fynla\Packs\Gb\Tax\TaxConfigService;
 
 beforeEach(function () {
     $mockTaxConfig = Mockery::mock(TaxConfigService::class);

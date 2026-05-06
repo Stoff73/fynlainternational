@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-use App\Services\TaxConfigService;
+use Fynla\Packs\Gb\Tax\TaxConfigService;
 use Fynla\Core\Contracts\TaxEngine;
 
 describe('TaxEngine contract implementation', function () {

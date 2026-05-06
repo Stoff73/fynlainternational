@@ -9,7 +9,7 @@ use Fynla\Packs\Gb\Models\DCPension;
 use Fynla\Packs\Gb\Models\StatePension;
 use App\Models\User;
 use App\Services\Risk\RiskPreferenceService;
-use App\Services\TaxConfigService;
+use Fynla\Packs\Gb\Tax\TaxConfigService;
 
 /**
  * Pension Projector Service

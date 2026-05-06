@@ -60,6 +60,11 @@ describe('Pack Isolation', function () {
             $packDir . DIRECTORY_SEPARATOR . 'Constants' . DIRECTORY_SEPARATOR,
             $packDir . DIRECTORY_SEPARATOR . 'Traits' . DIRECTORY_SEPARATOR,
             $packDir . DIRECTORY_SEPARATOR . 'Models' . DIRECTORY_SEPARATOR,
+            // R-5: Estate/Tax services still import App\Services\* peers
+            // (Investment, Retirement, Goals, Risk, Settings, Cache, Shared,
+            // UserProfile) that relocate in R-6/R-7. Pinned by allow-list.
+            $packDir . DIRECTORY_SEPARATOR . 'Estate' . DIRECTORY_SEPARATOR,
+            $packDir . DIRECTORY_SEPARATOR . 'Tax' . DIRECTORY_SEPARATOR,
         ];
 
         $violations = [];
@@ -90,12 +95,14 @@ describe('Pack Isolation', function () {
         );
     });
 
-    it('country-gb Constants/Traits/Models only import allow-listed App\\ namespaces (R-4/R-5 ratchet)', function () {
+    it('country-gb Constants/Traits/Models/Estate/Tax only import allow-listed App\\ namespaces (R-6/R-7 ratchet)', function () {
         $packDir = base_path('packs/country-gb/src');
         $targetDirs = [
             $packDir . DIRECTORY_SEPARATOR . 'Constants',
             $packDir . DIRECTORY_SEPARATOR . 'Traits',
             $packDir . DIRECTORY_SEPARATOR . 'Models',
+            $packDir . DIRECTORY_SEPARATOR . 'Estate',
+            $packDir . DIRECTORY_SEPARATOR . 'Tax',
         ];
 
         // The R-3/R-4 relocations tolerate a narrow allow-list of App\
@@ -121,12 +128,41 @@ describe('Pack Isolation', function () {
             'App\\Services\\AI\\XaiClient',
             'App\\Services\\AI\\XaiToolDefinitions',
             'App\\Services\\PrerequisiteGateService',
-            'App\\Services\\TaxConfigService',
+            // App\Services\UKTaxCalculator stays put — float-money signatures
+            // (ADR-005) prevent moving into pack scope until int-minor refactor.
             'App\\Services\\UKTaxCalculator',
-            // App\Services\* — relocated in R-5/R-6.
-            'App\\Services\\Estate\\TrustValuationService',
+            // App\Services\* — relocated in R-6/R-7.
+            'App\\Services\\Cache\\CacheInvalidationService',
+            'App\\Services\\Goals\\LifeEventIntegrationService',
+            'App\\Services\\Goals\\LifeEventService',
             'App\\Services\\Investment\\EmployeeSchemeCalculationService',
+            'App\\Services\\Investment\\InvestmentProjectionService',
             'App\\Services\\Property\\PropertyCalculationService',
+            'App\\Services\\Retirement\\AnnualAllowanceChecker',
+            'App\\Services\\Risk\\RiskPreferenceService',
+            'App\\Services\\Settings\\AssumptionsService',
+            'App\\Services\\Shared\\CrossModuleAssetAggregator',
+            'App\\Services\\UserProfile\\ProfileCompletenessChecker',
+            // App\Traits\* — FormatsCurrency/CalculatesOCF stay in app/Traits
+            // pending the int-minor money refactor (ADR-005).
+            'App\\Traits\\FormatsCurrency',
+            'App\\Traits\\CalculatesOCF',
+            // App\Services\Estate\* — these stay in app/Services/Estate
+            // pending the int-minor money refactor (ADR-005). Pack code that
+            // collaborates with them imports across the boundary until
+            // they relocate.
+            'App\\Services\\Estate\\FutureValueCalculator',
+            'App\\Services\\Estate\\PersonalizedTrustStrategyService',
+            'App\\Services\\Estate\\PersonalizedGiftingStrategyService',
+            'App\\Services\\Estate\\IHTFormattingService',
+            'App\\Services\\Estate\\TrustService',
+            'App\\Services\\Estate\\GiftingStrategy',
+            'App\\Services\\Estate\\IntestacyCalculator',
+            // Same deferral for Tax-side float-money services.
+            'App\\Services\\Tax\\IncomeDefinitionsService',
+            'App\\Services\\Tax\\TaxOptimisationService',
+            'App\\Services\\Tax\\TaxActionDefinitionService',
+            'App\\Services\\TaxBandTracker',
         ];
 
         $violations = [];
@@ -435,7 +471,7 @@ describe('Pack Isolation', function () {
     });
 
     it('UkEstateEngine implements the core EstateEngine contract', function () {
-        expect(class_implements(\App\Services\Estate\UkEstateEngine::class))
+        expect(class_implements(\Fynla\Packs\Gb\Estate\UkEstateEngine::class))
             ->toContain(\Fynla\Core\Contracts\EstateEngine::class);
     });
 

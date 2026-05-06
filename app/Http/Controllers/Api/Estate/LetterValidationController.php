@@ -6,7 +6,7 @@ namespace App\Http\Controllers\Api\Estate;
 
 use App\Http\Controllers\Controller;
 use App\Http\Traits\SanitizedErrorResponse;
-use App\Services\Estate\LetterEstateValidationService;
+use Fynla\Packs\Gb\Estate\LetterEstateValidationService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 

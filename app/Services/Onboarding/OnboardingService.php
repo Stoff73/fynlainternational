@@ -15,7 +15,7 @@ class OnboardingService
 {
     public function __construct(
         private EstateOnboardingFlow $estateFlow,
-        private \App\Services\TaxConfigService $taxConfig,
+        private \Fynla\Packs\Gb\Tax\TaxConfigService $taxConfig,
         private readonly \App\Services\Cache\CacheInvalidationService $cacheInvalidation
     ) {}
 

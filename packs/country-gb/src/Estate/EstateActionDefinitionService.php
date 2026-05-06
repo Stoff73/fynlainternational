@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Services\Estate;
+namespace Fynla\Packs\Gb\Estate;
 
 use Fynla\Packs\Gb\Constants\TaxDefaults;
 use Fynla\Packs\Gb\Models\Estate\Gift;
@@ -12,7 +12,7 @@ use Fynla\Packs\Gb\Models\Estate\Will;
 use Fynla\Packs\Gb\Models\EstateActionDefinition;
 use Fynla\Packs\Gb\Models\LifeInsurancePolicy;
 use App\Models\User;
-use App\Services\TaxConfigService;
+use Fynla\Packs\Gb\Tax\TaxConfigService;
 use App\Traits\FormatsCurrency;
 use Fynla\Core\Traits\StructuredLogging;
 use Carbon\Carbon;

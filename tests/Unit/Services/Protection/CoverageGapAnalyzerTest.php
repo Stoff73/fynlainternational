@@ -5,7 +5,7 @@ declare(strict_types=1);
 use Fynla\Packs\Gb\Models\ProtectionProfile;
 use App\Models\User;
 use App\Services\Protection\CoverageGapAnalyzer;
-use App\Services\TaxConfigService;
+use Fynla\Packs\Gb\Tax\TaxConfigService;
 use App\Services\UKTaxCalculator;
 
 beforeEach(function () {

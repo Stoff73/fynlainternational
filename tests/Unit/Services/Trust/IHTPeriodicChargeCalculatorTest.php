@@ -15,7 +15,7 @@ beforeEach(function () {
         TaxConfiguration::factory()->create(['is_active' => true]);
     }
 
-    $taxConfig = app(\App\Services\TaxConfigService::class);
+    $taxConfig = app(\Fynla\Packs\Gb\Tax\TaxConfigService::class);
     $this->calculator = new IHTPeriodicChargeCalculator($taxConfig);
     $this->user = User::factory()->create();
     $this->household = Household::factory()->create();

@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace App\Services\Protection;
 
 use Fynla\Packs\Gb\Models\ProtectionProfile;
-use App\Services\TaxConfigService;
+use Fynla\Packs\Gb\Tax\TaxConfigService;
 
 class ScenarioBuilder
 {

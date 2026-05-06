@@ -8,9 +8,9 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Estate\StoreLpaRequest;
 use App\Http\Requests\Estate\UpdateLpaRequest;
 use App\Http\Requests\Estate\UploadLpaRequest;
-use App\Services\Estate\LpaComplianceService;
-use App\Services\Estate\LpaDocumentService;
-use App\Services\Estate\LpaService;
+use Fynla\Packs\Gb\Estate\LpaComplianceService;
+use Fynla\Packs\Gb\Estate\LpaDocumentService;
+use Fynla\Packs\Gb\Estate\LpaService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 

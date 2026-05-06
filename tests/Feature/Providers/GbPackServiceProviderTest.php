@@ -7,7 +7,7 @@ use Fynla\Core\Registry\PackRegistry;
 it('binds pack.gb.tax to the UK TaxConfigService', function () {
     $instance = app('pack.gb.tax');
 
-    expect($instance)->toBeInstanceOf(\App\Services\TaxConfigService::class);
+    expect($instance)->toBeInstanceOf(\Fynla\Packs\Gb\Tax\TaxConfigService::class);
 });
 
 it('registers GB with the PackRegistry', function () {

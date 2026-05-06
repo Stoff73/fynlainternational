@@ -7,7 +7,7 @@ namespace App\Services\Retirement;
 use Fynla\Packs\Gb\Models\DCPension;
 use Fynla\Packs\Gb\Models\RetirementProfile;
 use App\Services\Tax\IncomeDefinitionsService;
-use App\Services\TaxConfigService;
+use Fynla\Packs\Gb\Tax\TaxConfigService;
 use Carbon\Carbon;
 
 /**

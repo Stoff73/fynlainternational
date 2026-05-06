@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace App\Services;
 
+use Fynla\Packs\Gb\Tax\TaxConfigService;
+
 /**
  * UK Tax and National Insurance Calculator
  * Uses active tax year rates from TaxConfigService

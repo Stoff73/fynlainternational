@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Fynla\Packs\Gb\Constants;
 
-use App\Services\TaxConfigService;
+use Fynla\Packs\Gb\Tax\TaxConfigService;
 
 /**
  * Validation limits for financial data.

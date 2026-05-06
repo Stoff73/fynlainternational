@@ -2,14 +2,18 @@
 
 declare(strict_types=1);
 
-namespace App\Services\Estate;
+namespace Fynla\Packs\Gb\Estate;
+
+use App\Services\Estate\PersonalizedTrustStrategyService;
+
+use App\Services\Estate\PersonalizedGiftingStrategyService;
 
 use Fynla\Packs\Gb\Models\ActuarialLifeTable;
 use Fynla\Packs\Gb\Models\Estate\IHTProfile;
 use Fynla\Core\Models\FamilyMember;
 use App\Models\User;
 use App\Services\Goals\LifeEventIntegrationService;
-use App\Services\TaxConfigService;
+use Fynla\Packs\Gb\Tax\TaxConfigService;
 use App\Services\UserProfile\ProfileCompletenessChecker;
 use Fynla\Core\Traits\CalculatesOwnershipShare;
 use Illuminate\Support\Collection;

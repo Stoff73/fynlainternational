@@ -6,7 +6,7 @@ namespace App\Services\Business;
 
 use Fynla\Packs\Gb\Models\BusinessInterest;
 use App\Models\User;
-use App\Services\TaxConfigService;
+use Fynla\Packs\Gb\Tax\TaxConfigService;
 use Carbon\Carbon;
 
 class BusinessInterestService

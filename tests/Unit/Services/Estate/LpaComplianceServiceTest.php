@@ -7,7 +7,7 @@ use Fynla\Packs\Gb\Models\Estate\LpaAttorney;
 use Fynla\Packs\Gb\Models\Estate\LpaNotificationPerson;
 use Fynla\Packs\Gb\Models\TaxConfiguration;
 use App\Models\User;
-use App\Services\Estate\LpaComplianceService;
+use Fynla\Packs\Gb\Estate\LpaComplianceService;
 
 beforeEach(function () {
     if (! TaxConfiguration::where('is_active', true)->exists()) {

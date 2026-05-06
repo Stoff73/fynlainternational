@@ -6,7 +6,7 @@ namespace App\Services\Investment;
 
 use Fynla\Packs\Gb\Constants\TaxDefaults;
 use Fynla\Packs\Gb\Models\Investment\InvestmentAccount;
-use App\Services\TaxConfigService;
+use Fynla\Packs\Gb\Tax\TaxConfigService;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Log;
 

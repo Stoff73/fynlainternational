@@ -19,7 +19,7 @@ use App\Services\Investment\PortfolioAnalyzer;
 use App\Services\Investment\Recommendation\DataReadinessService;
 use App\Services\Investment\SimpleAssetAllocationOptimizer;
 use App\Services\Investment\TaxEfficiencyCalculator;
-use App\Services\TaxConfigService;
+use Fynla\Packs\Gb\Tax\TaxConfigService;
 use Illuminate\Support\Facades\Cache;
 
 class InvestmentAgent extends BaseAgent

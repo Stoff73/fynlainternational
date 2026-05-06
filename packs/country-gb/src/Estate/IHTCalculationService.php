@@ -2,7 +2,9 @@
 
 declare(strict_types=1);
 
-namespace App\Services\Estate;
+namespace Fynla\Packs\Gb\Estate;
+
+use App\Services\Estate\FutureValueCalculator;
 
 use Fynla\Packs\Gb\Models\DCPension;
 use Fynla\Packs\Gb\Models\Estate\Gift;
@@ -14,7 +16,7 @@ use App\Models\User;
 use App\Services\Goals\LifeEventService;
 use App\Services\Investment\InvestmentProjectionService;
 use App\Services\Settings\AssumptionsService;
-use App\Services\TaxConfigService;
+use Fynla\Packs\Gb\Tax\TaxConfigService;
 use Carbon\Carbon;
 use Illuminate\Support\Collection;
 

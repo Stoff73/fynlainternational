@@ -3,7 +3,7 @@
 declare(strict_types=1);
 
 use App\Services\Investment\DividendTaxCalculator;
-use App\Services\TaxConfigService;
+use Fynla\Packs\Gb\Tax\TaxConfigService;
 
 beforeEach(function () {
     $this->taxConfig = Mockery::mock(TaxConfigService::class);

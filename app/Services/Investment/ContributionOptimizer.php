@@ -30,7 +30,7 @@ class ContributionOptimizer
     public function __construct(
         private ISAAllowanceOptimizer $isaOptimizer,
         private GoalProbabilityCalculator $probabilityCalculator,
-        private \App\Services\TaxConfigService $taxConfig,
+        private \Fynla\Packs\Gb\Tax\TaxConfigService $taxConfig,
         private readonly RiskPreferenceService $riskPreferenceService
     ) {}
 

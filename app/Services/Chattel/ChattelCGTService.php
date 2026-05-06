@@ -6,7 +6,7 @@ namespace App\Services\Chattel;
 
 use Fynla\Packs\Gb\Models\Chattel;
 use App\Models\User;
-use App\Services\TaxConfigService;
+use Fynla\Packs\Gb\Tax\TaxConfigService;
 
 /**
  * Capital Gains Tax calculation service for chattels (personal property)

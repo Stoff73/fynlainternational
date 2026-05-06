@@ -8,7 +8,7 @@ use Fynla\Packs\Gb\Models\Investment\Holding;
 use App\Models\User;
 use Fynla\Core\Models\UserAssumption;
 use App\Services\Risk\RiskPreferenceService;
-use App\Services\TaxConfigService;
+use Fynla\Packs\Gb\Tax\TaxConfigService;
 use Illuminate\Support\Facades\Log;
 
 /**

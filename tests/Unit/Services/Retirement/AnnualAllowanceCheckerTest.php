@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 use App\Services\Retirement\AnnualAllowanceChecker;
 use App\Services\Tax\IncomeDefinitionsService;
-use App\Services\TaxConfigService;
+use Fynla\Packs\Gb\Tax\TaxConfigService;
 
 beforeEach(function () {
     // Mock TaxConfigService

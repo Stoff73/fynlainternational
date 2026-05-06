@@ -7,7 +7,7 @@ use Fynla\Packs\Gb\Models\Investment\InvestmentAccount;
 use App\Services\Investment\DividendTaxCalculator;
 use App\Services\Investment\Tax\CGTHarvestingCalculator;
 use App\Services\Investment\TaxEfficiencyCalculator;
-use App\Services\TaxConfigService;
+use Fynla\Packs\Gb\Tax\TaxConfigService;
 
 beforeEach(function () {
     $this->taxConfig = Mockery::mock(TaxConfigService::class);

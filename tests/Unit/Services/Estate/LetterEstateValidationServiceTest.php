@@ -8,7 +8,7 @@ use Fynla\Packs\Gb\Models\LetterToSpouse;
 use Fynla\Packs\Gb\Models\LifeInsurancePolicy;
 use Fynla\Packs\Gb\Models\Property;
 use App\Models\User;
-use App\Services\Estate\LetterEstateValidationService;
+use Fynla\Packs\Gb\Estate\LetterEstateValidationService;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
 uses(RefreshDatabase::class);

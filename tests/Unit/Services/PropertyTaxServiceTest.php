@@ -7,7 +7,7 @@ namespace Tests\Unit\Services;
 use Fynla\Packs\Gb\Models\Property;
 use App\Models\User;
 use App\Services\Property\PropertyTaxService;
-use App\Services\TaxConfigService;
+use Fynla\Packs\Gb\Tax\TaxConfigService;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Mockery;
 use Tests\TestCase;

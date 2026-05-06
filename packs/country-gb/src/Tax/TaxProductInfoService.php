@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace App\Services\Tax;
+namespace Fynla\Packs\Gb\Tax;
 
 use Fynla\Packs\Gb\Constants\TaxDefaults;
 use Fynla\Packs\Gb\Models\TaxProductReference;
-use App\Services\TaxConfigService;
+use Fynla\Packs\Gb\Tax\TaxConfigService;
 use Illuminate\Support\Collection;
 
 /**

@@ -16,7 +16,7 @@ use App\Models\User;
 use App\Services\Retirement\AnnualAllowanceChecker;
 use App\Services\Savings\EmergencyFundCalculator;
 use App\Services\Savings\ISATracker;
-use App\Services\TaxConfigService;
+use Fynla\Packs\Gb\Tax\TaxConfigService;
 use Fynla\Packs\Gb\Traits\ResolvesExpenditure;
 use Fynla\Core\Traits\StructuredLogging;
 use Carbon\Carbon;

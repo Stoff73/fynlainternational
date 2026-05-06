@@ -7,7 +7,7 @@ namespace App\Services\Investment\Recommendation;
 use Fynla\Packs\Gb\Constants\TaxDefaults;
 use App\Services\Investment\Tax\BedAndISACalculator;
 use App\Services\Investment\Tax\CGTHarvestingCalculator;
-use App\Services\TaxConfigService;
+use Fynla\Packs\Gb\Tax\TaxConfigService;
 use Illuminate\Support\Str;
 
 /**

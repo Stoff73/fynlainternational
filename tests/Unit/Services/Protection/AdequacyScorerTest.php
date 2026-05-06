@@ -3,7 +3,7 @@
 declare(strict_types=1);
 
 use App\Services\Protection\AdequacyScorer;
-use App\Services\TaxConfigService;
+use Fynla\Packs\Gb\Tax\TaxConfigService;
 
 beforeEach(function () {
     $mockTaxConfig = Mockery::mock(TaxConfigService::class);

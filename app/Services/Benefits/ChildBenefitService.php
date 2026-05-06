@@ -6,7 +6,7 @@ namespace App\Services\Benefits;
 
 use Fynla\Core\Models\FamilyMember;
 use App\Models\User;
-use App\Services\TaxConfigService;
+use Fynla\Packs\Gb\Tax\TaxConfigService;
 use Illuminate\Support\Collection;
 
 /**

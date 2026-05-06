@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace App\Services\Estate;
+namespace Fynla\Packs\Gb\Estate;
 
 use Fynla\Packs\Gb\Models\Estate\Bequest;
 use Fynla\Packs\Gb\Models\Estate\Will;
 use App\Models\User;
-use App\Services\TaxConfigService;
+use Fynla\Packs\Gb\Tax\TaxConfigService;
 
 /**
  * Will Analysis Service

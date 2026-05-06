@@ -7,7 +7,7 @@ use App\Services\Coordination\ConflictResolver;
 use App\Services\Coordination\HolisticPlanner;
 use App\Services\Coordination\PriorityRanker;
 use App\Services\Plans\PlanConfigService;
-use App\Services\TaxConfigService;
+use Fynla\Packs\Gb\Tax\TaxConfigService;
 
 // Helper: create ConflictResolver with mocked TaxConfigService
 function createMockedConflictResolver(): ConflictResolver

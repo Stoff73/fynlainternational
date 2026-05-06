@@ -6,7 +6,7 @@ namespace App\Services\Savings;
 
 use Fynla\Packs\Gb\Models\Investment\RiskProfile;
 use App\Models\User;
-use App\Services\TaxConfigService;
+use Fynla\Packs\Gb\Tax\TaxConfigService;
 use Fynla\Packs\Gb\Traits\ResolvesExpenditure;
 use Fynla\Packs\Gb\Traits\ResolvesIncome;
 

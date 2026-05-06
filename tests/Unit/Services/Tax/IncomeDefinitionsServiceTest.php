@@ -5,7 +5,7 @@ declare(strict_types=1);
 use Fynla\Packs\Gb\Models\DCPension;
 use App\Models\User;
 use App\Services\Tax\IncomeDefinitionsService;
-use App\Services\TaxConfigService;
+use Fynla\Packs\Gb\Tax\TaxConfigService;
 
 beforeEach(function () {
     $this->seed(\Database\Seeders\TaxConfigurationSeeder::class);

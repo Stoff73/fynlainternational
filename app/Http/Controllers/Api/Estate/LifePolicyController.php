@@ -6,7 +6,7 @@ namespace App\Http\Controllers\Api\Estate;
 
 use App\Http\Controllers\Controller;
 use App\Http\Traits\SanitizedErrorResponse;
-use App\Services\Estate\LifePolicyStrategyService;
+use Fynla\Packs\Gb\Estate\LifePolicyStrategyService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 

@@ -7,7 +7,7 @@ use Fynla\Packs\Gb\Models\Investment\InvestmentAccount;
 use App\Models\User;
 use App\Services\Retirement\AnnualAllowanceChecker;
 use App\Services\Tax\TaxOptimisationService;
-use App\Services\TaxConfigService;
+use Fynla\Packs\Gb\Tax\TaxConfigService;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
 uses(RefreshDatabase::class);

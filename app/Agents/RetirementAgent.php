@@ -23,7 +23,7 @@ use App\Services\Retirement\PensionProjector;
 use App\Services\Retirement\RetirementActionDefinitionService;
 use App\Services\Retirement\RetirementDataReadinessService;
 use App\Services\Risk\RiskPreferenceService;
-use App\Services\TaxConfigService;
+use Fynla\Packs\Gb\Tax\TaxConfigService;
 use Illuminate\Support\Collection;
 
 /**

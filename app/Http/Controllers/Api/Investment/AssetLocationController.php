@@ -10,7 +10,7 @@ use App\Http\Traits\SanitizedErrorResponse;
 use App\Services\Investment\AssetLocation\AccountTypeRecommender;
 use App\Services\Investment\AssetLocation\AssetLocationOptimizer;
 use App\Services\Investment\AssetLocation\TaxDragCalculator;
-use App\Services\TaxConfigService;
+use Fynla\Packs\Gb\Tax\TaxConfigService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;

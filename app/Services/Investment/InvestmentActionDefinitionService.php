@@ -8,7 +8,7 @@ use Fynla\Packs\Gb\Constants\TaxDefaults;
 use App\Models\Goal;
 use Fynla\Packs\Gb\Models\InvestmentActionDefinition;
 use App\Services\Plans\PlanConfigService;
-use App\Services\TaxConfigService;
+use Fynla\Packs\Gb\Tax\TaxConfigService;
 use App\Traits\FormatsCurrency;
 
 /**

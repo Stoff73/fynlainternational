@@ -5,7 +5,7 @@ declare(strict_types=1);
 use Fynla\Packs\Gb\Models\Estate\Liability;
 use Fynla\Packs\Gb\Models\TaxConfiguration;
 use App\Models\User;
-use App\Services\Estate\CashFlowProjector;
+use Fynla\Packs\Gb\Estate\CashFlowProjector;
 
 beforeEach(function () {
     // Ensure active tax configuration exists
@@ -13,7 +13,7 @@ beforeEach(function () {
         TaxConfiguration::factory()->create(['is_active' => true]);
     }
 
-    $taxConfig = app(\App\Services\TaxConfigService::class);
+    $taxConfig = app(\Fynla\Packs\Gb\Tax\TaxConfigService::class);
     $this->projector = new CashFlowProjector($taxConfig);
     $this->user = User::factory()->create();
 });

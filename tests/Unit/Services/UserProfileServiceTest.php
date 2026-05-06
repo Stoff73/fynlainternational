@@ -9,7 +9,7 @@ use Fynla\Packs\Gb\Models\Property;
 use App\Models\User;
 use App\Services\Benefits\ChildBenefitService;
 use App\Services\Shared\CrossModuleAssetAggregator;
-use App\Services\TaxConfigService;
+use Fynla\Packs\Gb\Tax\TaxConfigService;
 use App\Services\UKTaxCalculator;
 use App\Services\UserProfile\UserProfileService;
 use Illuminate\Foundation\Testing\RefreshDatabase;

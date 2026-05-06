@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace App\Services\Estate;
+namespace Fynla\Packs\Gb\Estate;
 
 use App\Models\User;
 use App\Services\Settings\AssumptionsService;
-use App\Services\TaxConfigService;
+use Fynla\Packs\Gb\Tax\TaxConfigService;
 
 /**
  * Calculate Whole of Life Insurance Strategy vs. Self-Insurance

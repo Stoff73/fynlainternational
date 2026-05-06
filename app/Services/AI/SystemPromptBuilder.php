@@ -12,7 +12,7 @@ use App\Services\AI\Prompts\CoreIdentity;
 use App\Services\AI\Prompts\FcaProcessInstructions;
 use App\Services\AI\Prompts\QueryKnowledge;
 use App\Services\PrerequisiteGateService;
-use App\Services\TaxConfigService;
+use Fynla\Packs\Gb\Tax\TaxConfigService;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Log;
 
