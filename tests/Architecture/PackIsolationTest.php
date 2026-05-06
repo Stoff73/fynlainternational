@@ -34,6 +34,49 @@ describe('Pack Isolation', function () {
         );
     });
 
+    it('country-gb does not import the App namespace (outside provider wiring)', function () {
+        $packDir = base_path('packs/country-gb/src');
+
+        if (!is_dir($packDir)) {
+            $this->markTestSkipped('packs/country-gb/src directory not found');
+        }
+
+        // R-2: provider wiring (Providers/) and module-orchestrator agents
+        // that have not yet relocated (Agents/CoordinatingAgent.php, R-8) may
+        // still reference \App\Services\… and \App\Agents\… while UK code
+        // moves in across R-3 → R-9. R-15 ratchets the exemption away.
+        $exemptDirs = [
+            $packDir . DIRECTORY_SEPARATOR . 'Providers' . DIRECTORY_SEPARATOR,
+        ];
+
+        $violations = [];
+        $iterator = new RecursiveIteratorIterator(
+            new RecursiveDirectoryIterator($packDir)
+        );
+
+        foreach ($iterator as $file) {
+            if ($file->getExtension() !== 'php') continue;
+            $path = $file->getPathname();
+            $isExempt = false;
+            foreach ($exemptDirs as $prefix) {
+                if (str_starts_with($path, $prefix)) {
+                    $isExempt = true;
+                    break;
+                }
+            }
+            if ($isExempt) continue;
+            $contents = file_get_contents($path);
+
+            if (preg_match('/(?:^|[\s(;])(use\s+)?\\\\?App\\\\/m', $contents)) {
+                $violations[] = str_replace(base_path() . '/', '', $path);
+            }
+        }
+
+        expect($violations)->toBeEmpty(
+            'GB pack must not import any App\\ namespace (outside src/Providers/). Violations: ' . implode(', ', $violations)
+        );
+    });
+
     it('country-xx-smoke does not reference other pack namespaces', function () {
         $packDir = base_path('packs/country-xx-smoke/src');
 
