@@ -60,7 +60,8 @@ arch('controllers do not use DB facade directly')
         'App\Http\Controllers\Api\PaymentController', // Uses DB for payment processing
         'App\Http\Controllers\Api\RetirementController', // Uses DB for batch pension queries
         'App\Http\Controllers\Api\InvestmentController', // Uses DB for portfolio aggregation
-        'App\Http\Controllers\Api\Za\ZaProtectionController', // Uses DB::transaction for atomic policy + beneficiary writes
+        // ZaProtectionController relocated to packs/country-za/src/Http/Controllers/ (R-0a),
+        // outside the App\Http\Controllers namespace this rule scopes to.
     ]);
 
 // Note: Controllers can use Eloquent models for simple CRUD operations

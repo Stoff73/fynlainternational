@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Fynla\Packs\Za\Database\Seeders;
 
-use Database\Seeders\ZaJurisdictionSeeder;
+use Fynla\Packs\Za\Database\Seeders\ZaJurisdictionSeeder;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 

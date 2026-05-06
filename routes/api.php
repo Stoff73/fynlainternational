@@ -1244,97 +1244,97 @@ Route::middleware(['auth:sanctum', 'active.jurisdiction', 'pack.enabled:za'])
     ->as('za.')
     ->group(function () {
         Route::prefix('savings')->as('savings.')->group(function () {
-            Route::get('dashboard', [\App\Http\Controllers\Api\Za\ZaSavingsController::class, 'dashboard'])
+            Route::get('dashboard', [\Fynla\Packs\Za\Http\Controllers\ZaSavingsController::class, 'dashboard'])
                 ->name('dashboard');
-            Route::get('contributions', [\App\Http\Controllers\Api\Za\ZaSavingsController::class, 'listContributions'])
+            Route::get('contributions', [\Fynla\Packs\Za\Http\Controllers\ZaSavingsController::class, 'listContributions'])
                 ->name('contributions.index');
-            Route::post('contributions', [\App\Http\Controllers\Api\Za\ZaSavingsController::class, 'storeContribution'])
+            Route::post('contributions', [\Fynla\Packs\Za\Http\Controllers\ZaSavingsController::class, 'storeContribution'])
                 ->name('contributions.store');
-            Route::post('emergency-fund/assess', [\App\Http\Controllers\Api\Za\ZaSavingsController::class, 'assessEmergencyFund'])
+            Route::post('emergency-fund/assess', [\Fynla\Packs\Za\Http\Controllers\ZaSavingsController::class, 'assessEmergencyFund'])
                 ->name('emergency-fund.assess');
-            Route::get('accounts', [\App\Http\Controllers\Api\Za\ZaSavingsController::class, 'listAccounts'])
+            Route::get('accounts', [\Fynla\Packs\Za\Http\Controllers\ZaSavingsController::class, 'listAccounts'])
                 ->name('accounts.index');
-            Route::post('accounts', [\App\Http\Controllers\Api\Za\ZaSavingsController::class, 'storeAccount'])
+            Route::post('accounts', [\Fynla\Packs\Za\Http\Controllers\ZaSavingsController::class, 'storeAccount'])
                 ->name('accounts.store');
         });
 
         // WS 1.3c — Investment
         Route::prefix('investments')->as('investments.')->group(function () {
-            Route::get('dashboard', [\App\Http\Controllers\Api\Za\ZaInvestmentController::class, 'dashboard'])
+            Route::get('dashboard', [\Fynla\Packs\Za\Http\Controllers\ZaInvestmentController::class, 'dashboard'])
                 ->name('dashboard');
-            Route::get('accounts', [\App\Http\Controllers\Api\Za\ZaInvestmentController::class, 'listAccounts'])
+            Route::get('accounts', [\Fynla\Packs\Za\Http\Controllers\ZaInvestmentController::class, 'listAccounts'])
                 ->name('accounts.index');
-            Route::post('accounts', [\App\Http\Controllers\Api\Za\ZaInvestmentController::class, 'storeAccount'])
+            Route::post('accounts', [\Fynla\Packs\Za\Http\Controllers\ZaInvestmentController::class, 'storeAccount'])
                 ->name('accounts.store');
-            Route::get('holdings', [\App\Http\Controllers\Api\Za\ZaInvestmentController::class, 'listHoldings'])
+            Route::get('holdings', [\Fynla\Packs\Za\Http\Controllers\ZaInvestmentController::class, 'listHoldings'])
                 ->name('holdings.index');
-            Route::get('holdings/{holdingId}/lots', [\App\Http\Controllers\Api\Za\ZaInvestmentController::class, 'listLots'])
+            Route::get('holdings/{holdingId}/lots', [\Fynla\Packs\Za\Http\Controllers\ZaInvestmentController::class, 'listLots'])
                 ->whereNumber('holdingId')
                 ->name('holdings.lots');
-            Route::post('holdings/purchase', [\App\Http\Controllers\Api\Za\ZaInvestmentController::class, 'storePurchase'])
+            Route::post('holdings/purchase', [\Fynla\Packs\Za\Http\Controllers\ZaInvestmentController::class, 'storePurchase'])
                 ->name('holdings.purchase');
-            Route::post('holdings/disposal', [\App\Http\Controllers\Api\Za\ZaInvestmentController::class, 'recordDisposal'])
+            Route::post('holdings/disposal', [\Fynla\Packs\Za\Http\Controllers\ZaInvestmentController::class, 'recordDisposal'])
                 ->name('holdings.disposal');
-            Route::post('cgt/calculate', [\App\Http\Controllers\Api\Za\ZaInvestmentController::class, 'calculateCgt'])
+            Route::post('cgt/calculate', [\Fynla\Packs\Za\Http\Controllers\ZaInvestmentController::class, 'calculateCgt'])
                 ->name('cgt.calculate');
         });
 
         // WS 1.3c — Exchange Control
         Route::prefix('exchange-control')->as('exchange-control.')->group(function () {
-            Route::get('dashboard', [\App\Http\Controllers\Api\Za\ZaExchangeControlController::class, 'dashboard'])
+            Route::get('dashboard', [\Fynla\Packs\Za\Http\Controllers\ZaExchangeControlController::class, 'dashboard'])
                 ->name('dashboard');
-            Route::get('transfers', [\App\Http\Controllers\Api\Za\ZaExchangeControlController::class, 'listTransfers'])
+            Route::get('transfers', [\Fynla\Packs\Za\Http\Controllers\ZaExchangeControlController::class, 'listTransfers'])
                 ->name('transfers.index');
-            Route::post('transfers', [\App\Http\Controllers\Api\Za\ZaExchangeControlController::class, 'storeTransfer'])
+            Route::post('transfers', [\Fynla\Packs\Za\Http\Controllers\ZaExchangeControlController::class, 'storeTransfer'])
                 ->name('transfers.store');
-            Route::post('check-approval', [\App\Http\Controllers\Api\Za\ZaExchangeControlController::class, 'checkApproval'])
+            Route::post('check-approval', [\Fynla\Packs\Za\Http\Controllers\ZaExchangeControlController::class, 'checkApproval'])
                 ->name('check-approval');
         });
 
         // WS 1.4d — Retirement
         Route::prefix('retirement')->as('retirement.')->group(function () {
-            Route::get('dashboard', [\App\Http\Controllers\Api\Za\ZaRetirementController::class, 'dashboard'])->name('dashboard');
+            Route::get('dashboard', [\Fynla\Packs\Za\Http\Controllers\ZaRetirementController::class, 'dashboard'])->name('dashboard');
 
-            Route::get('funds', [\App\Http\Controllers\Api\Za\ZaRetirementController::class, 'listFunds'])->name('funds.index');
-            Route::post('funds', [\App\Http\Controllers\Api\Za\ZaRetirementController::class, 'storeFund'])->name('funds.store');
-            Route::get('funds/{fundId}/buckets', [\App\Http\Controllers\Api\Za\ZaRetirementController::class, 'showBuckets'])->name('funds.buckets');
+            Route::get('funds', [\Fynla\Packs\Za\Http\Controllers\ZaRetirementController::class, 'listFunds'])->name('funds.index');
+            Route::post('funds', [\Fynla\Packs\Za\Http\Controllers\ZaRetirementController::class, 'storeFund'])->name('funds.store');
+            Route::get('funds/{fundId}/buckets', [\Fynla\Packs\Za\Http\Controllers\ZaRetirementController::class, 'showBuckets'])->name('funds.buckets');
 
-            Route::post('contributions', [\App\Http\Controllers\Api\Za\ZaRetirementController::class, 'storeContribution'])->name('contributions.store');
+            Route::post('contributions', [\Fynla\Packs\Za\Http\Controllers\ZaRetirementController::class, 'storeContribution'])->name('contributions.store');
 
-            Route::post('savings-pot/simulate', [\App\Http\Controllers\Api\Za\ZaRetirementController::class, 'simulateSavingsPotWithdrawal'])->name('savings-pot.simulate');
-            Route::post('savings-pot/withdraw', [\App\Http\Controllers\Api\Za\ZaRetirementController::class, 'withdrawSavingsPot'])->name('savings-pot.withdraw');
+            Route::post('savings-pot/simulate', [\Fynla\Packs\Za\Http\Controllers\ZaRetirementController::class, 'simulateSavingsPotWithdrawal'])->name('savings-pot.simulate');
+            Route::post('savings-pot/withdraw', [\Fynla\Packs\Za\Http\Controllers\ZaRetirementController::class, 'withdrawSavingsPot'])->name('savings-pot.withdraw');
 
-            Route::post('tax-relief/calculate', [\App\Http\Controllers\Api\Za\ZaRetirementController::class, 'calculateTaxRelief'])->name('tax-relief.calculate');
+            Route::post('tax-relief/calculate', [\Fynla\Packs\Za\Http\Controllers\ZaRetirementController::class, 'calculateTaxRelief'])->name('tax-relief.calculate');
 
             Route::prefix('annuities')->as('annuities.')->group(function () {
-                Route::post('living/quote', [\App\Http\Controllers\Api\Za\ZaRetirementController::class, 'quoteLivingAnnuity'])->name('living.quote');
-                Route::post('life/quote', [\App\Http\Controllers\Api\Za\ZaRetirementController::class, 'quoteLifeAnnuity'])->name('life.quote');
-                Route::post('compulsory-apportion', [\App\Http\Controllers\Api\Za\ZaRetirementController::class, 'apportionCompulsory'])->name('compulsory-apportion');
+                Route::post('living/quote', [\Fynla\Packs\Za\Http\Controllers\ZaRetirementController::class, 'quoteLivingAnnuity'])->name('living.quote');
+                Route::post('life/quote', [\Fynla\Packs\Za\Http\Controllers\ZaRetirementController::class, 'quoteLifeAnnuity'])->name('life.quote');
+                Route::post('compulsory-apportion', [\Fynla\Packs\Za\Http\Controllers\ZaRetirementController::class, 'apportionCompulsory'])->name('compulsory-apportion');
             });
 
             Route::prefix('reg28')->as('reg28.')->group(function () {
-                Route::match(['get', 'post'], 'check', [\App\Http\Controllers\Api\Za\ZaRetirementController::class, 'checkReg28'])->name('check');
-                Route::get('snapshots', [\App\Http\Controllers\Api\Za\ZaRetirementController::class, 'listReg28Snapshots'])->name('snapshots.index');
-                Route::post('snapshots', [\App\Http\Controllers\Api\Za\ZaRetirementController::class, 'storeReg28Snapshot'])->name('snapshots.store');
+                Route::match(['get', 'post'], 'check', [\Fynla\Packs\Za\Http\Controllers\ZaRetirementController::class, 'checkReg28'])->name('check');
+                Route::get('snapshots', [\Fynla\Packs\Za\Http\Controllers\ZaRetirementController::class, 'listReg28Snapshots'])->name('snapshots.index');
+                Route::post('snapshots', [\Fynla\Packs\Za\Http\Controllers\ZaRetirementController::class, 'storeReg28Snapshot'])->name('snapshots.store');
             });
         });
 
         // WS 1.5b — Protection
         Route::prefix('protection')->as('protection.')->group(function () {
-            Route::get('dashboard', [\App\Http\Controllers\Api\Za\ZaProtectionController::class, 'dashboard'])->name('dashboard');
+            Route::get('dashboard', [\Fynla\Packs\Za\Http\Controllers\ZaProtectionController::class, 'dashboard'])->name('dashboard');
 
-            Route::get('policies', [\App\Http\Controllers\Api\Za\ZaProtectionController::class, 'listPolicies'])->name('policies.index');
-            Route::post('policies', [\App\Http\Controllers\Api\Za\ZaProtectionController::class, 'storePolicy'])->name('policies.store');
-            Route::get('policies/{id}', [\App\Http\Controllers\Api\Za\ZaProtectionController::class, 'showPolicy'])->whereNumber('id')->name('policies.show');
-            Route::put('policies/{id}', [\App\Http\Controllers\Api\Za\ZaProtectionController::class, 'updatePolicy'])->whereNumber('id')->name('policies.update');
-            Route::delete('policies/{id}', [\App\Http\Controllers\Api\Za\ZaProtectionController::class, 'deletePolicy'])->whereNumber('id')->name('policies.destroy');
+            Route::get('policies', [\Fynla\Packs\Za\Http\Controllers\ZaProtectionController::class, 'listPolicies'])->name('policies.index');
+            Route::post('policies', [\Fynla\Packs\Za\Http\Controllers\ZaProtectionController::class, 'storePolicy'])->name('policies.store');
+            Route::get('policies/{id}', [\Fynla\Packs\Za\Http\Controllers\ZaProtectionController::class, 'showPolicy'])->whereNumber('id')->name('policies.show');
+            Route::put('policies/{id}', [\Fynla\Packs\Za\Http\Controllers\ZaProtectionController::class, 'updatePolicy'])->whereNumber('id')->name('policies.update');
+            Route::delete('policies/{id}', [\Fynla\Packs\Za\Http\Controllers\ZaProtectionController::class, 'deletePolicy'])->whereNumber('id')->name('policies.destroy');
 
-            Route::get('policy-types', [\App\Http\Controllers\Api\Za\ZaProtectionController::class, 'policyTypes'])->name('policy-types');
-            Route::get('tax-treatment/{type}', [\App\Http\Controllers\Api\Za\ZaProtectionController::class, 'taxTreatment'])->name('tax-treatment');
+            Route::get('policy-types', [\Fynla\Packs\Za\Http\Controllers\ZaProtectionController::class, 'policyTypes'])->name('policy-types');
+            Route::get('tax-treatment/{type}', [\Fynla\Packs\Za\Http\Controllers\ZaProtectionController::class, 'taxTreatment'])->name('tax-treatment');
 
-            Route::get('coverage-gap', [\App\Http\Controllers\Api\Za\ZaProtectionController::class, 'coverageGap'])->name('coverage-gap');
+            Route::get('coverage-gap', [\Fynla\Packs\Za\Http\Controllers\ZaProtectionController::class, 'coverageGap'])->name('coverage-gap');
 
-            Route::get('beneficiaries/{policyId}', [\App\Http\Controllers\Api\Za\ZaProtectionController::class, 'listBeneficiaries'])->whereNumber('policyId')->name('beneficiaries.index');
-            Route::post('beneficiaries/{policyId}', [\App\Http\Controllers\Api\Za\ZaProtectionController::class, 'storeBeneficiaries'])->whereNumber('policyId')->name('beneficiaries.store');
+            Route::get('beneficiaries/{policyId}', [\Fynla\Packs\Za\Http\Controllers\ZaProtectionController::class, 'listBeneficiaries'])->whereNumber('policyId')->name('beneficiaries.index');
+            Route::post('beneficiaries/{policyId}', [\Fynla\Packs\Za\Http\Controllers\ZaProtectionController::class, 'storeBeneficiaries'])->whereNumber('policyId')->name('beneficiaries.store');
         });
     });

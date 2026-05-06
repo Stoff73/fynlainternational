@@ -62,12 +62,19 @@ describe('Pack Isolation', function () {
         );
     });
 
-    it('country-za does not import the App namespace', function () {
+    it('country-za does not import the App namespace (outside Http adapters)', function () {
         $packDir = base_path('packs/country-za/src');
 
         if (!is_dir($packDir)) {
             $this->markTestSkipped('packs/country-za/src directory not found');
         }
+
+        // R-0a: SA HTTP adapters (controllers under src/Http/) are exempt from
+        // the strict App\ ban while the cross-pack read layer is still
+        // mediated by direct App\Models\* imports. R-15 ratchets this — the
+        // core query layer (or relocated cross-pack models) closes the gap
+        // and this exemption is removed.
+        $exemptPrefix = $packDir . DIRECTORY_SEPARATOR . 'Http' . DIRECTORY_SEPARATOR;
 
         $violations = [];
         $iterator = new RecursiveIteratorIterator(
@@ -76,6 +83,7 @@ describe('Pack Isolation', function () {
 
         foreach ($iterator as $file) {
             if ($file->getExtension() !== 'php') continue;
+            if (str_starts_with($file->getPathname(), $exemptPrefix)) continue;
             $contents = file_get_contents($file->getPathname());
 
             // Look for `use App\`, `App\\...::class`, or a leading backslash App\ reference.
@@ -85,7 +93,50 @@ describe('Pack Isolation', function () {
         }
 
         expect($violations)->toBeEmpty(
-            'ZA pack must not import any App\\ namespace. Violations: ' . implode(', ', $violations)
+            'ZA pack must not import any App\\ namespace (outside src/Http/). Violations: ' . implode(', ', $violations)
+        );
+    });
+
+    it('country-za HTTP adapters only import allow-listed App\\ namespaces (R-15 ratchet)', function () {
+        $httpDir = base_path('packs/country-za/src/Http');
+
+        if (!is_dir($httpDir)) {
+            $this->markTestSkipped('packs/country-za/src/Http directory not found');
+        }
+
+        // The R-0a relocation tolerates a narrow allow-list of App\ imports
+        // inside the SA Http adapters. Anything outside this list is a leak
+        // and should fail the build. R-15 reduces this list to empty.
+        $allowed = [
+            'App\\Http\\Controllers\\Controller',
+            'App\\Models\\DCPension',
+            'App\\Models\\FamilyMember',
+            'App\\Models\\Investment\\Holding',
+            'App\\Models\\Investment\\InvestmentAccount',
+            'App\\Models\\Mortgage',
+            'App\\Models\\SavingsAccount',
+        ];
+
+        $violations = [];
+        $iterator = new RecursiveIteratorIterator(
+            new RecursiveDirectoryIterator($httpDir)
+        );
+
+        foreach ($iterator as $file) {
+            if ($file->getExtension() !== 'php') continue;
+            $contents = file_get_contents($file->getPathname());
+
+            preg_match_all('/^use\s+(\\\\?App\\\\[A-Za-z0-9_\\\\]+);/m', $contents, $matches);
+            foreach ($matches[1] as $import) {
+                $normalised = ltrim($import, '\\');
+                if (! in_array($normalised, $allowed, true)) {
+                    $violations[] = str_replace(base_path() . '/', '', $file->getPathname()) . ' uses ' . $normalised;
+                }
+            }
+        }
+
+        expect($violations)->toBeEmpty(
+            'ZA pack Http adapters may only import allow-listed App\\ classes. Violations: ' . implode(', ', $violations)
         );
     });
 
