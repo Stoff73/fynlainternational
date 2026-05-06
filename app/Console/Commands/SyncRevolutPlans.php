@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Console\Commands;
 
-use App\Models\SubscriptionPlan;
+use Fynla\Core\Models\SubscriptionPlan;
 use App\Services\Payment\RevolutSubscriptionService;
 use Illuminate\Console\Command;
 

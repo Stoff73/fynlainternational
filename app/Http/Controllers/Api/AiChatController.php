@@ -7,7 +7,7 @@ namespace App\Http\Controllers\Api;
 use App\Agents\CoordinatingAgent;
 use App\Http\Controllers\Controller;
 use App\Http\Traits\SanitizedErrorResponse;
-use App\Models\AiConversation;
+use Fynla\Core\Models\AiConversation;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;

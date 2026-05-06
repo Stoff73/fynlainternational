@@ -6,7 +6,7 @@ namespace App\Console\Commands;
 
 use App\Models\Estate\Gift;
 use App\Models\Estate\Trust;
-use App\Models\NotificationPreference;
+use Fynla\Core\Models\NotificationPreference;
 use App\Models\User;
 use App\Notifications\GiftExemptionNotification;
 use App\Notifications\TrustAnniversaryNotification;

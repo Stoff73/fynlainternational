@@ -2,8 +2,8 @@
 
 declare(strict_types=1);
 
-use App\Models\Role;
-use App\Models\Subscription;
+use Fynla\Core\Models\Role;
+use Fynla\Core\Models\Subscription;
 use App\Models\User;
 use Database\Seeders\RolesPermissionsSeeder;
 use Database\Seeders\TaxConfigurationSeeder;

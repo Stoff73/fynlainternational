@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-use App\Models\Payment;
-use App\Models\Subscription;
-use App\Models\SubscriptionPlan;
+use Fynla\Core\Models\Payment;
+use Fynla\Core\Models\Subscription;
+use Fynla\Core\Models\SubscriptionPlan;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Http;

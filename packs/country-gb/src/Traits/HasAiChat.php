@@ -14,9 +14,9 @@ use Anthropic\Messages\RawMessageStartEvent;
 use Anthropic\Messages\TextBlock;
 use Anthropic\Messages\TextDelta;
 use Anthropic\Messages\ToolUseBlock;
-use App\Models\AiConversation;
+use Fynla\Core\Models\AiConversation;
 // Anthropic SDK imports — only used when AI_PROVIDER=anthropic
-use App\Models\AiMessage;
+use Fynla\Core\Models\AiMessage;
 use App\Models\User;
 use App\Services\AI\KycGateChecker;
 use App\Services\AI\QueryClassifier;
@@ -488,7 +488,7 @@ trait HasAiChat
         if ($classification !== null
             && \Fynla\Packs\Gb\Constants\QuerySchemas::isAdviceType($classification['primary'])) {
             try {
-                \App\Models\AiAdviceLog::create([
+                \Fynla\Core\Models\AiAdviceLog::create([
                     'user_id' => $user->id,
                     'conversation_id' => $conversation->id,
                     'message_id' => $assistantMessage->id,

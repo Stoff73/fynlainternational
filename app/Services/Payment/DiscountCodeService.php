@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace App\Services\Payment;
 
-use App\Models\DiscountCode;
-use App\Models\DiscountCodeUsage;
+use Fynla\Core\Models\DiscountCode;
+use Fynla\Core\Models\DiscountCodeUsage;
 use Illuminate\Support\Facades\Log;
 
 class DiscountCodeService

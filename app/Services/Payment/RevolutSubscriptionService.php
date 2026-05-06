@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Services\Payment;
 
-use App\Models\SubscriptionPlan;
+use Fynla\Core\Models\SubscriptionPlan;
 use App\Models\User;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;

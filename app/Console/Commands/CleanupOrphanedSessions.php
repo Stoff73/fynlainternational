@@ -19,7 +19,7 @@ class CleanupOrphanedSessions extends Command
         $isDryRun = $this->option('dry-run');
 
         if ($isDryRun) {
-            $count = \App\Models\UserSession::whereDoesntHave('token')->count();
+            $count = \Fynla\Core\Models\UserSession::whereDoesntHave('token')->count();
             $this->info("Would delete {$count} orphaned session(s).");
         } else {
             $count = $sessionService->cleanupOrphanedSessions();

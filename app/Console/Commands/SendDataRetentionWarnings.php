@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace App\Console\Commands;
 
 use App\Mail\DataRetentionWarning;
-use App\Models\Subscription;
+use Fynla\Core\Models\Subscription;
 use Carbon\Carbon;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\DB;

@@ -5,9 +5,9 @@ declare(strict_types=1);
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use App\Models\AiAdviceLog;
-use App\Models\AiConversation;
-use App\Models\AiMessage;
+use Fynla\Core\Models\AiAdviceLog;
+use Fynla\Core\Models\AiConversation;
+use Fynla\Core\Models\AiMessage;
 use App\Models\User;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;

@@ -219,7 +219,7 @@ class ComprehensiveProtectionPlanService
             'education_level' => $educationLevel,
             'smoker_status' => $smokerStatus,
             'health_status' => $healthStatus,
-            'number_of_dependents' => \App\Models\FamilyMember::where('user_id', $user->id)->where('is_dependent', true)->count(),
+            'number_of_dependents' => \Fynla\Core\Models\FamilyMember::where('user_id', $user->id)->where('is_dependent', true)->count(),
             'dependents_ages' => $profile->dependents_ages ?? [],
             'retirement_age' => $profile->retirement_age ?? 65,
             'death_in_service_multiple' => $profile->death_in_service_multiple,

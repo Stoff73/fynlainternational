@@ -2,8 +2,8 @@
 
 declare(strict_types=1);
 
-use App\Models\DiscountCode;
-use App\Models\DiscountCodeUsage;
+use Fynla\Core\Models\DiscountCode;
+use Fynla\Core\Models\DiscountCodeUsage;
 use App\Models\User;
 use App\Services\Payment\DiscountCodeService;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -131,8 +131,8 @@ describe('apply', function () {
         $code = DiscountCode::factory()->percentage(20)->create(['code' => 'APPLY20']);
 
         // Create a real payment to satisfy FK constraint
-        $subscription = \App\Models\Subscription::factory()->create(['user_id' => $this->user->id]);
-        $payment = \App\Models\Payment::create([
+        $subscription = \Fynla\Core\Models\Subscription::factory()->create(['user_id' => $this->user->id]);
+        $payment = \Fynla\Core\Models\Payment::create([
             'subscription_id' => $subscription->id,
             'user_id' => $this->user->id,
             'revolut_order_id' => 'test-order-123',

@@ -13,7 +13,7 @@ use App\Models\Estate\Asset;
 use App\Models\Estate\Gift;
 use App\Models\Estate\Liability;
 use App\Models\Estate\Trust;
-use App\Models\FamilyMember;
+use Fynla\Core\Models\FamilyMember;
 use App\Models\Goal;
 use App\Models\IncomeProtectionPolicy;
 use App\Models\Investment\InvestmentAccount;
@@ -863,7 +863,7 @@ class CoordinatingAgent extends BaseAgent
                 $records = $items->map(fn ($g) => ['id' => $g->id, 'recipient' => $g->recipient, 'gift_type' => $g->gift_type, 'value' => (float) $g->gift_value, 'date' => $g->gift_date?->format('Y-m-d'), 'status' => $g->status, 'taper_relief_applicable' => (bool) $g->taper_relief_applicable, 'notes' => $g->notes])->toArray();
                 break;
             case 'family_member':
-                $items = \App\Models\FamilyMember::where('user_id', $userId)->get();
+                $items = \Fynla\Core\Models\FamilyMember::where('user_id', $userId)->get();
                 $records = $items->map(fn ($m) => ['id' => $m->id, 'name' => trim($m->first_name.' '.$m->last_name), 'relationship' => $m->relationship, 'age' => $m->date_of_birth ? now()->diffInYears($m->date_of_birth) : null, 'date_of_birth' => $m->date_of_birth?->format('Y-m-d'), 'gender' => $m->gender, 'annual_income' => $m->annual_income ? (float) $m->annual_income : null, 'is_dependent' => (bool) $m->is_dependent, 'education_status' => $m->education_status, 'receives_child_benefit' => (bool) $m->receives_child_benefit])->toArray();
                 break;
             default:
@@ -1891,7 +1891,7 @@ class CoordinatingAgent extends BaseAgent
         $spouse = $user->spouse;
         $spouseFullName = $spouse ? trim($spouse->first_name.' '.$spouse->surname) : null;
 
-        $children = \App\Models\FamilyMember::where('user_id', $user->id)
+        $children = \Fynla\Core\Models\FamilyMember::where('user_id', $user->id)
             ->where('relationship', 'child')
             ->get();
         $childNames = $children->count() > 0

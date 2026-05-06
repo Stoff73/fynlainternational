@@ -3,7 +3,7 @@
 declare(strict_types=1);
 
 use App\Models\User;
-use App\Models\UserSession;
+use Fynla\Core\Models\UserSession;
 
 beforeEach(function () {
     $this->user = User::factory()->create([

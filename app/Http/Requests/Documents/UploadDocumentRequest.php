@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Http\Requests\Documents;
 
-use App\Models\Document;
+use Fynla\Core\Models\Document;
 use Illuminate\Foundation\Http\FormRequest;
 
 class UploadDocumentRequest extends FormRequest

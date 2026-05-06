@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace App\Console\Commands;
 
 use App\Mail\DataDeletionConfirmation;
-use App\Models\Subscription;
+use Fynla\Core\Models\Subscription;
 use App\Services\Payment\DataPurgeService;
 use Carbon\Carbon;
 use Illuminate\Console\Command;

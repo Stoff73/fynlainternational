@@ -10,9 +10,9 @@ use App\Jobs\FireAwinConversionJob;
 use App\Mail\DataDeletionConfirmation;
 use App\Mail\PaymentConfirmation;
 use App\Mail\SubscriptionCancellation;
-use App\Models\Invoice;
-use App\Models\Payment;
-use App\Models\SubscriptionPlan;
+use Fynla\Core\Models\Invoice;
+use Fynla\Core\Models\Payment;
+use Fynla\Core\Models\SubscriptionPlan;
 use App\Models\User;
 use App\Services\Marketing\AwinTrackingService;
 use App\Services\Payment\DataPurgeService;
@@ -671,7 +671,7 @@ class PaymentController extends Controller
             }
 
             $accessUntil = DB::transaction(function () use ($subscription, $request) {
-                $locked = \App\Models\Subscription::where('id', $subscription->id)->lockForUpdate()->first();
+                $locked = \Fynla\Core\Models\Subscription::where('id', $subscription->id)->lockForUpdate()->first();
 
                 if (! in_array($locked->status, ['active', 'past_due'])) {
                     return null;
@@ -941,7 +941,7 @@ class PaymentController extends Controller
     /**
      * Send a cancellation confirmation email to the user.
      */
-    private function sendCancellationEmail(User $user, \App\Models\Subscription $subscription): void
+    private function sendCancellationEmail(User $user, \Fynla\Core\Models\Subscription $subscription): void
     {
         try {
             Mail::to($user->email)->send(new SubscriptionCancellation($user, $subscription));

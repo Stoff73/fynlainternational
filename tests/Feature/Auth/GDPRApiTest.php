@@ -3,7 +3,7 @@
 declare(strict_types=1);
 
 use App\Models\User;
-use App\Models\UserConsent;
+use Fynla\Core\Models\UserConsent;
 use Illuminate\Support\Facades\Mail;
 
 beforeEach(function () {

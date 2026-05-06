@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers\Api\Estate;
 
+use Fynla\Core\Models\Document;
+
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Estate\SaveWillDocumentRequest;
 use App\Http\Traits\SanitizedErrorResponse;

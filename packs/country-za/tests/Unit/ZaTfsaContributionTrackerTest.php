@@ -51,7 +51,7 @@ it('isolates sums by tax year', function () {
 });
 
 it('isolates a minor TFSA allowance from the parent owner', function () {
-    $familyMemberClass = '\\' . 'App' . '\\Models\\FamilyMember';
+    $familyMemberClass = '\\' . 'Fynla' . '\\Core\\Models\\FamilyMember';
     $child = $familyMemberClass::factory()->for($this->user)->create();
 
     $this->tracker->record($this->user->id, null, null, TFSA_TAX_YEAR, 3_000_000, '2026-04-10');

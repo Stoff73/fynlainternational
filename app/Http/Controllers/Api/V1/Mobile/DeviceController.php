@@ -7,7 +7,7 @@ namespace App\Http\Controllers\Api\V1\Mobile;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\V1\RegisterDeviceRequest;
 use App\Http\Traits\SanitizedErrorResponse;
-use App\Models\DeviceToken;
+use Fynla\Core\Models\DeviceToken;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 

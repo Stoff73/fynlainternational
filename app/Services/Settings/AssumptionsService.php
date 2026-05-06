@@ -6,7 +6,7 @@ namespace App\Services\Settings;
 
 use App\Models\Investment\Holding;
 use App\Models\User;
-use App\Models\UserAssumption;
+use Fynla\Core\Models\UserAssumption;
 use App\Services\Risk\RiskPreferenceService;
 use App\Services\TaxConfigService;
 use Illuminate\Support\Facades\Log;

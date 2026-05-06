@@ -151,7 +151,7 @@ class UserProfileController extends Controller
         if ($validated['monthly_expenditure'] ?? null) {
             $monthly = $validated['monthly_expenditure'];
 
-            \App\Models\ExpenditureProfile::updateOrCreate(
+            \Fynla\Core\Models\ExpenditureProfile::updateOrCreate(
                 ['user_id' => $user->id],
                 [
                     'monthly_housing' => 0,
@@ -382,7 +382,7 @@ class UserProfileController extends Controller
         if ($validated['monthly_expenditure'] ?? null) {
             $monthly = $validated['monthly_expenditure'];
 
-            \App\Models\ExpenditureProfile::updateOrCreate(
+            \Fynla\Core\Models\ExpenditureProfile::updateOrCreate(
                 ['user_id' => $spouse->id],
                 [
                     'monthly_housing' => 0,

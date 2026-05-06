@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace App\Models\Estate;
 
+use Fynla\Core\Models\Document;
+
 use App\Models\User;
 use Fynla\Core\Traits\Auditable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;

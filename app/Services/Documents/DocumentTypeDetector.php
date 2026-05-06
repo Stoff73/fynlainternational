@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Services\Documents;
 
-use App\Models\Document;
+use Fynla\Core\Models\Document;
 
 class DocumentTypeDetector
 {

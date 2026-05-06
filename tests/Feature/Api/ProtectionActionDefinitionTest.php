@@ -3,7 +3,7 @@
 declare(strict_types=1);
 
 use App\Models\ProtectionActionDefinition;
-use App\Models\Role;
+use Fynla\Core\Models\Role;
 use App\Models\User;
 use Database\Seeders\ProtectionActionDefinitionSeeder;
 use Database\Seeders\RolesPermissionsSeeder;

@@ -4,14 +4,16 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers\Api;
 
+use Fynla\Core\Models\Permission;
+
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreFamilyMemberRequest;
 use App\Http\Requests\UpdateFamilyMemberRequest;
 use App\Http\Traits\SanitizedErrorResponse;
 use App\Mail\SpouseAccountCreated;
 use App\Mail\SpouseAccountLinked;
-use App\Models\FamilyMember;
-use App\Models\SpousePermission;
+use Fynla\Core\Models\FamilyMember;
+use Fynla\Core\Models\SpousePermission;
 use App\Services\Cache\CacheInvalidationService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;

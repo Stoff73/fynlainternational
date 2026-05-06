@@ -619,7 +619,7 @@ class UserProfileService
 
         // If user has a linked spouse, get spouse's children (NOT the spouse record itself)
         if ($user->spouse_id) {
-            $spouseFamilyMembers = \App\Models\FamilyMember::where('user_id', $user->spouse_id)
+            $spouseFamilyMembers = \Fynla\Core\Models\FamilyMember::where('user_id', $user->spouse_id)
                 ->where('relationship', 'child')  // Only children, not spouse record
                 ->orderBy('date_of_birth')
                 ->get();

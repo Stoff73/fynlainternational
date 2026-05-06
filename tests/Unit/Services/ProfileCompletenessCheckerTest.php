@@ -3,7 +3,7 @@
 declare(strict_types=1);
 
 use App\Models\Estate\Asset;
-use App\Models\FamilyMember;
+use Fynla\Core\Models\FamilyMember;
 use App\Models\ProtectionProfile;
 use App\Models\User;
 use App\Services\UserProfile\ProfileCompletenessChecker;

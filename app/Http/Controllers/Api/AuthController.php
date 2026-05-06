@@ -10,13 +10,13 @@ use App\Http\Requests\RegisterRequest;
 use App\Http\Resources\UserResource;
 use App\Http\Traits\SanitizedErrorResponse;
 use App\Mail\VerificationCode;
-use App\Models\AuditLog;
-use App\Models\EmailVerificationCode;
-use App\Models\LoginAttempt;
-use App\Models\PendingRegistration;
-use App\Models\Role;
+use Fynla\Core\Models\AuditLog;
+use Fynla\Core\Models\EmailVerificationCode;
+use Fynla\Core\Models\LoginAttempt;
+use Fynla\Core\Models\PendingRegistration;
+use Fynla\Core\Models\Role;
 use App\Models\User;
-use App\Models\UserSession;
+use Fynla\Core\Models\UserSession;
 use App\Services\Audit\AuditService;
 use App\Services\Auth\LoginLockoutService;
 use App\Services\Auth\MFAService;
@@ -143,7 +143,7 @@ class AuthController extends Controller
 
         // Auto-promote admin users on login if listed in ADMIN_EMAILS
         if ($user && ! $user->is_admin && in_array($email, config('auth.admin_emails', []), true)) {
-            $adminRole = \App\Models\Role::findByName(\App\Models\Role::ROLE_ADMIN);
+            $adminRole = \Fynla\Core\Models\Role::findByName(\Fynla\Core\Models\Role::ROLE_ADMIN);
             if ($adminRole) {
                 $user->role_id = $adminRole->id;
                 $user->is_admin = true;

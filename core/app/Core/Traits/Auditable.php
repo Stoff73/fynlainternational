@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Fynla\Core\Traits;
 
-use App\Models\AuditLog;
+use Fynla\Core\Models\AuditLog;
 
 /**
  * Trait to automatically audit model changes (create, update, delete).

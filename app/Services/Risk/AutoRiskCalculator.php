@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace App\Services\Risk;
 
 use App\Models\DCPension;
-use App\Models\FamilyMember;
+use Fynla\Core\Models\FamilyMember;
 use App\Models\Investment\InvestmentAccount;
 use App\Models\Investment\RiskProfile;
 use App\Models\SavingsAccount;

@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Database\Seeders;
 
-use App\Models\OccupationCode;
+use Fynla\Core\Models\OccupationCode;
 use Illuminate\Database\Seeder;
 
 /**

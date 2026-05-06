@@ -8,7 +8,7 @@ use App\Agents\CoordinatingAgent;
 use Fynla\Packs\Gb\Constants\TaxDefaults;
 use App\Http\Controllers\Controller;
 use App\Http\Traits\SanitizedErrorResponse;
-use App\Models\RecommendationTracking;
+use Fynla\Core\Models\RecommendationTracking;
 use App\Services\Cache\CacheInvalidationService;
 use App\Services\Coordination\CashFlowCoordinator;
 use Illuminate\Http\JsonResponse;

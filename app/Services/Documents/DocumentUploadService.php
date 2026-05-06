@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace App\Services\Documents;
 
-use App\Models\Document;
-use App\Models\DocumentExtractionLog;
+use Fynla\Core\Models\Document;
+use Fynla\Core\Models\DocumentExtractionLog;
 use App\Models\User;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;

@@ -12,8 +12,8 @@ beforeEach(function () {
     // Seed roles and permissions
     $this->seed(\Database\Seeders\RolesPermissionsSeeder::class);
 
-    $adminRole = \App\Models\Role::findByName(\App\Models\Role::ROLE_ADMIN);
-    $userRole = \App\Models\Role::findByName(\App\Models\Role::ROLE_USER);
+    $adminRole = \Fynla\Core\Models\Role::findByName(\Fynla\Core\Models\Role::ROLE_ADMIN);
+    $userRole = \Fynla\Core\Models\Role::findByName(\Fynla\Core\Models\Role::ROLE_USER);
 
     $this->adminUser = User::factory()->create([
         'first_name' => 'Admin',

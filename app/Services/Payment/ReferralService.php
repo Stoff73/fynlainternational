@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace App\Services\Payment;
 
 use App\Mail\ReferralInvitationEmail;
-use App\Models\Referral;
+use Fynla\Core\Models\Referral;
 use App\Models\User;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;

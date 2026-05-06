@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-use App\Models\RecommendationTracking;
+use Fynla\Core\Models\RecommendationTracking;
 use App\Models\User;
 use App\Services\Estate\EstateAnalyzer;
 use App\Services\Investment\PortfolioAnalyzer;

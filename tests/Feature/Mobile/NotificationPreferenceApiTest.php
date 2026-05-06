@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-use App\Models\NotificationPreference;
+use Fynla\Core\Models\NotificationPreference;
 use App\Models\User;
 
 describe('Notification Preferences API', function () {

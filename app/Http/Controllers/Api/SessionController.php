@@ -6,7 +6,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Http\Traits\SanitizedErrorResponse;
-use App\Models\AuditLog;
+use Fynla\Core\Models\AuditLog;
 use App\Services\Audit\AuditService;
 use App\Services\Auth\SessionService;
 use Illuminate\Http\JsonResponse;

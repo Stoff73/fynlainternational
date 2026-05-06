@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace App\Models;
 
+use Fynla\Core\Models\FamilyMember;
+
 use Fynla\Core\Traits\Auditable;
 use Fynla\Core\Traits\HasJointOwnership;
 use Illuminate\Database\Eloquent\Casts\Attribute;

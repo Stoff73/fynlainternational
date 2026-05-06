@@ -58,7 +58,7 @@ class SavingsAccountFactory extends Factory
      * The beneficiary columns are already on savings_accounts; this state
      * populates them so minor-TFSA tracking keys correctly.
      */
-    public function minor(\App\Models\FamilyMember $beneficiary): static
+    public function minor(\Fynla\Core\Models\FamilyMember $beneficiary): static
     {
         return $this->state(fn () => [
             'beneficiary_id' => $beneficiary->id,

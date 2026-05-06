@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-use App\Models\ExpenditureProfile;
+use Fynla\Core\Models\ExpenditureProfile;
 use App\Models\SavingsAccount;
 use App\Models\SavingsGoal;
 use App\Models\User;

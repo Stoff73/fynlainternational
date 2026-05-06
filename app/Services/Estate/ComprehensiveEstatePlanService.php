@@ -6,7 +6,7 @@ namespace App\Services\Estate;
 
 use App\Models\ActuarialLifeTable;
 use App\Models\Estate\IHTProfile;
-use App\Models\FamilyMember;
+use Fynla\Core\Models\FamilyMember;
 use App\Models\User;
 use App\Services\Goals\LifeEventIntegrationService;
 use App\Services\TaxConfigService;

@@ -2,8 +2,8 @@
 
 declare(strict_types=1);
 
-use App\Models\AuditLog;
-use App\Models\ErasureRequest;
+use Fynla\Core\Models\AuditLog;
+use Fynla\Core\Models\ErasureRequest;
 use App\Models\User;
 use App\Services\Audit\AuditService;
 use App\Services\GDPR\DataErasureService;

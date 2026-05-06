@@ -3,8 +3,8 @@
 declare(strict_types=1);
 
 use App\Jobs\FireAwinConversionJob;
-use App\Models\Payment;
-use App\Models\Subscription;
+use Fynla\Core\Models\Payment;
+use Fynla\Core\Models\Subscription;
 use App\Models\User;
 use App\Services\Payment\RevolutService;
 use Illuminate\Foundation\Testing\RefreshDatabase;

@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace App\Services\Payment;
 
-use App\Models\Subscription;
-use App\Models\SubscriptionPlan;
+use Fynla\Core\Models\Subscription;
+use Fynla\Core\Models\SubscriptionPlan;
 use App\Models\User;
 use Carbon\Carbon;
 

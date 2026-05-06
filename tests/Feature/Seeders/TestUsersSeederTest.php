@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-use App\Models\FamilyMember;
+use Fynla\Core\Models\FamilyMember;
 use App\Models\Mortgage;
 use App\Models\Property;
 use App\Models\User;

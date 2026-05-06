@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace App\Services\Auth;
 
 use App\Models\User;
-use App\Models\UserSession;
+use Fynla\Core\Models\UserSession;
 use Illuminate\Support\Collection;
 use Laravel\Sanctum\PersonalAccessToken;
 

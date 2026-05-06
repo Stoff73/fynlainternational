@@ -689,7 +689,7 @@ class SystemPromptBuilder
 
             // Family Members
             if ($include('family_member')) {
-                $family = \App\Models\FamilyMember::where('user_id', $userId)->get();
+                $family = \Fynla\Core\Models\FamilyMember::where('user_id', $userId)->get();
                 $spouse = $user->spouse;
                 $familyParts = [];
                 if ($spouse) {

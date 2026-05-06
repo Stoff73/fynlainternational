@@ -15,7 +15,7 @@ class StoreTaxConfigurationRequest extends FormRequest
     {
         $permissionService = app(\App\Services\Auth\PermissionService::class);
 
-        return $this->user() && $permissionService->hasPermission($this->user(), \App\Models\Permission::ADMIN_TAX_CONFIG);
+        return $this->user() && $permissionService->hasPermission($this->user(), \Fynla\Core\Models\Permission::ADMIN_TAX_CONFIG);
     }
 
     /**

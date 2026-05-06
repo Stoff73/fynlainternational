@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Services\Estate;
 
-use App\Models\FamilyMember;
+use Fynla\Core\Models\FamilyMember;
 use App\Models\User;
 
 class IntestacyCalculator

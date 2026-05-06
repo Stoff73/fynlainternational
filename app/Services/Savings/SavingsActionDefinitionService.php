@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace App\Services\Savings;
 
 use Fynla\Packs\Gb\Constants\TaxDefaults;
-use App\Models\FamilyMember;
+use Fynla\Core\Models\FamilyMember;
 use App\Models\Goal;
 use App\Models\Mortgage;
 use App\Models\SavingsActionDefinition;

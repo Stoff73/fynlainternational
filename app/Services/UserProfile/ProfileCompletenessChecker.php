@@ -162,7 +162,7 @@ class ProfileCompletenessChecker
         // Also check if spouse has dependent children (shared between linked accounts)
         $spouseHasChildren = false;
         if ($user->spouse_id) {
-            $spouseHasChildren = \App\Models\FamilyMember::where('user_id', $user->spouse_id)
+            $spouseHasChildren = \Fynla\Core\Models\FamilyMember::where('user_id', $user->spouse_id)
                 ->where('is_dependent', true)
                 ->whereIn('relationship', ['child', 'step_child'])
                 ->exists();

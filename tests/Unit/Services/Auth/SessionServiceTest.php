@@ -3,7 +3,7 @@
 declare(strict_types=1);
 
 use App\Models\User;
-use App\Models\UserSession;
+use Fynla\Core\Models\UserSession;
 use App\Services\Auth\SessionService;
 
 beforeEach(function () {

@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace App\Services\GDPR;
 
-use App\Models\AuditLog;
-use App\Models\ErasureRequest;
+use Fynla\Core\Models\AuditLog;
+use Fynla\Core\Models\ErasureRequest;
 use App\Models\User;
 use App\Services\Audit\AuditService;
 use Illuminate\Support\Facades\DB;
@@ -263,7 +263,7 @@ class DataErasureService
             if ($spouse) {
                 // Delete the spouse's family_member record that represents this user
                 // (the record with relationship='spouse' owned by the spouse)
-                \App\Models\FamilyMember::where('user_id', $spouse->id)
+                \Fynla\Core\Models\FamilyMember::where('user_id', $spouse->id)
                     ->where('relationship', 'spouse')
                     ->delete();
 
@@ -276,7 +276,7 @@ class DataErasureService
         $usersWithThisSpouse = User::where('spouse_id', $user->id)->get();
         foreach ($usersWithThisSpouse as $otherUser) {
             // Delete their family_member record that represents this user
-            \App\Models\FamilyMember::where('user_id', $otherUser->id)
+            \Fynla\Core\Models\FamilyMember::where('user_id', $otherUser->id)
                 ->where('relationship', 'spouse')
                 ->delete();
 

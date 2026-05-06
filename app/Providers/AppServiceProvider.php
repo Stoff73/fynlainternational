@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Providers;
 
 use App\Services\Plans\PlanConfigService;
+use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\ServiceProvider;
 
@@ -42,6 +43,54 @@ class AppServiceProvider extends ServiceProvider
     {
         // Prevent lazy loading in non-production environments to catch N+1 query issues
         Model::preventLazyLoading(! app()->isProduction());
+
+        // R-4: factories live under `Database\Factories\<ModelName>Factory`
+        // regardless of where the model itself lives. Laravel's default
+        // resolver mangles the model FQCN into the factory FQCN, which
+        // doesn't work when the model namespace is `Fynla\Core\Models\…`
+        // or `Fynla\Packs\Gb\Models\…`. Strip those prefixes so the
+        // factory still resolves to `Database\Factories\<ModelName>Factory`.
+        Factory::guessFactoryNamesUsing(function (string $modelName): string {
+            $shortName = class_basename($modelName);
+
+            // Preserve sub-namespaces under Models/ (e.g. Estate, Investment)
+            // so e.g. `Fynla\Packs\Gb\Models\Estate\Trust` still resolves
+            // to `Database\Factories\Estate\TrustFactory`.
+            foreach (['Fynla\\Core\\Models\\', 'Fynla\\Packs\\Gb\\Models\\', 'App\\Models\\'] as $prefix) {
+                if (str_starts_with($modelName, $prefix)) {
+                    $relative = substr($modelName, strlen($prefix));
+                    return 'Database\\Factories\\' . $relative . 'Factory';
+                }
+            }
+
+            return 'Database\\Factories\\' . $shortName . 'Factory';
+        });
+
+        // Inverse: factory → model. Laravel's default looks under App\Models\
+        // which doesn't find models that have relocated to core or GB pack.
+        // Walk a known set of namespaces and return the first match.
+        Factory::guessModelNamesUsing(function (Factory $factory): string {
+            $factoryClass = get_class($factory);
+            $relative = preg_replace(
+                '/^Database\\\\Factories\\\\/',
+                '',
+                preg_replace('/Factory$/', '', $factoryClass)
+            );
+
+            foreach ([
+                'Fynla\\Core\\Models\\',
+                'Fynla\\Packs\\Gb\\Models\\',
+                'App\\Models\\',
+            ] as $prefix) {
+                $candidate = $prefix . $relative;
+                if (class_exists($candidate)) {
+                    return $candidate;
+                }
+            }
+
+            // Fallback to Laravel default behaviour.
+            return 'App\\' . class_basename($factoryClass);
+        });
 
         // Workstream 0.6 — wire the jurisdiction-detection observer on every
         // asset-bearing model that carries a country_code column. The

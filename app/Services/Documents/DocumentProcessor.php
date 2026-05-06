@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace App\Services\Documents;
 
 use App\Models\DCPension;
-use App\Models\Document;
-use App\Models\DocumentExtractionLog;
+use Fynla\Core\Models\Document;
+use Fynla\Core\Models\DocumentExtractionLog;
 use App\Models\Investment\InvestmentAccount;
 use App\Models\User;
 use App\Services\Documents\FieldMappers\DBPensionMapper;
@@ -275,7 +275,7 @@ class DocumentProcessor
                         $sheet['content'],
                     );
 
-                    $extraction = \App\Models\DocumentExtraction::create([
+                    $extraction = \Fynla\Core\Models\DocumentExtraction::create([
                         'document_id' => $document->id,
                         'extraction_version' => 1,
                         'model_used' => config('services.xai.vision_model', 'grok-4-1-fast-non-reasoning'),

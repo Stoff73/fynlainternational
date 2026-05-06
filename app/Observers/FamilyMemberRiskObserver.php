@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Observers;
 
-use App\Models\FamilyMember;
+use Fynla\Core\Models\FamilyMember;
 
 /**
  * Observer that triggers risk recalculation when FamilyMember changes.

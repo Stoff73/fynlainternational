@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Database\Factories;
 
-use App\Models\Payment;
-use App\Models\Subscription;
+use Fynla\Core\Models\Payment;
+use Fynla\Core\Models\Subscription;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 

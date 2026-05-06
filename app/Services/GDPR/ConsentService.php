@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace App\Services\GDPR;
 
 use App\Models\User;
-use App\Models\UserConsent;
+use Fynla\Core\Models\UserConsent;
 
 class ConsentService
 {

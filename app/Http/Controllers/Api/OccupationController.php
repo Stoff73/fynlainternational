@@ -6,7 +6,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Http\Traits\SanitizedErrorResponse;
-use App\Models\OccupationCode;
+use Fynla\Core\Models\OccupationCode;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 

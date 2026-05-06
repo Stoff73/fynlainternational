@@ -2,8 +2,8 @@
 
 declare(strict_types=1);
 
-use App\Models\AdvisorClient;
-use App\Models\AuditLog;
+use Fynla\Core\Models\AdvisorClient;
+use Fynla\Core\Models\AuditLog;
 use App\Models\User;
 use App\Services\Advisor\AdvisorImpersonationService;
 use Illuminate\Support\Facades\Cache;

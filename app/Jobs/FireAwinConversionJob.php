@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Jobs;
 
-use App\Models\Payment;
+use Fynla\Core\Models\Payment;
 use App\Services\Marketing\AwinTrackingService;
 use Fynla\Core\Traits\StructuredLogging;
 use Illuminate\Bus\Queueable;

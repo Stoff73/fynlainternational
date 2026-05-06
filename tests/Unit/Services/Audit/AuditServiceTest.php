@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-use App\Models\AuditLog;
+use Fynla\Core\Models\AuditLog;
 use App\Models\User;
 use App\Services\Audit\AuditService;
 use Illuminate\Foundation\Testing\RefreshDatabase;

@@ -3,7 +3,7 @@
 declare(strict_types=1);
 
 use App\Models\SavingsAccount;
-use App\Models\Subscription;
+use Fynla\Core\Models\Subscription;
 use App\Models\User;
 use App\Services\Admin\UserMetricsService;
 

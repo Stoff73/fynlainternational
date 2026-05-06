@@ -72,7 +72,7 @@ it('creates verification code during registration', function () {
     ]);
 
     // Verify the pending registration has a verification code
-    $pending = \App\Models\PendingRegistration::find($pendingId);
+    $pending = \Fynla\Core\Models\PendingRegistration::find($pendingId);
     expect($pending->verification_code)->not()->toBeNull();
     expect(strlen($pending->verification_code))->toBe(6);
 });

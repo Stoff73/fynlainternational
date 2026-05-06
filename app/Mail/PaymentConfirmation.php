@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Mail;
 
-use App\Models\Payment;
+use Fynla\Core\Models\Payment;
 use App\Models\User;
 use Illuminate\Bus\Queueable;
 use Illuminate\Mail\Mailable;
@@ -99,7 +99,7 @@ class PaymentConfirmation extends Mailable
         return [];
     }
 
-    private function describeDiscount(\App\Models\DiscountCode $discount): string
+    private function describeDiscount(\Fynla\Core\Models\DiscountCode $discount): string
     {
         return match ($discount->type) {
             'percentage' => "{$discount->value}% off",

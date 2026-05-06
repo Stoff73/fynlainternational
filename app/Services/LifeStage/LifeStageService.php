@@ -536,6 +536,6 @@ class LifeStageService
      */
     private function hasExpenditureProfile(User $user): bool
     {
-        return \App\Models\ExpenditureProfile::where('user_id', $user->id)->exists();
+        return \Fynla\Core\Models\ExpenditureProfile::where('user_id', $user->id)->exists();
     }
 }

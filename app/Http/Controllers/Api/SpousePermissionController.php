@@ -4,9 +4,11 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers\Api;
 
+use Fynla\Core\Models\Permission;
+
 use App\Http\Controllers\Controller;
 use App\Http\Traits\SanitizedErrorResponse;
-use App\Models\SpousePermission;
+use Fynla\Core\Models\SpousePermission;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
@@ -27,7 +29,7 @@ class SpousePermissionController extends Controller
         $hasLinkedSpouse = (bool) $user->spouse_id;
 
         // Also check if user has a spouse in family_members table (may not have linked account)
-        $spouseFamilyMember = \App\Models\FamilyMember::where('user_id', $user->id)
+        $spouseFamilyMember = \Fynla\Core\Models\FamilyMember::where('user_id', $user->id)
             ->where('relationship', 'spouse')
             ->first();
 

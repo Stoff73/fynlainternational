@@ -4,9 +4,11 @@ declare(strict_types=1);
 
 namespace App\Services\Estate;
 
+use Fynla\Core\Models\Document;
+
 use App\Models\Estate\Will;
 use App\Models\Estate\WillDocument;
-use App\Models\FamilyMember;
+use Fynla\Core\Models\FamilyMember;
 use App\Models\User;
 
 class WillDocumentService

@@ -7,8 +7,8 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\UserResource;
 use App\Http\Traits\SanitizedErrorResponse;
-use App\Models\AuditLog;
-use App\Models\LoginAttempt;
+use Fynla\Core\Models\AuditLog;
+use Fynla\Core\Models\LoginAttempt;
 use App\Services\Audit\AuditService;
 use App\Services\Auth\LoginLockoutService;
 use App\Services\Auth\MFAService;
@@ -209,7 +209,7 @@ class MFAController extends Controller
         // Create session for this token
         $accessToken = $user->tokens()->latest()->first();
         if ($accessToken) {
-            \App\Models\UserSession::createForToken($user, $accessToken);
+            \Fynla\Core\Models\UserSession::createForToken($user, $accessToken);
         }
 
         return response()->json([
@@ -264,7 +264,7 @@ class MFAController extends Controller
         // Create session for this token
         $accessToken = $user->tokens()->latest()->first();
         if ($accessToken) {
-            \App\Models\UserSession::createForToken($user, $accessToken);
+            \Fynla\Core\Models\UserSession::createForToken($user, $accessToken);
         }
 
         $remainingCodes = $this->mfaService->getRemainingRecoveryCodeCount($user);

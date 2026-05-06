@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Database\Factories;
 
-use App\Models\DiscountCode;
+use Fynla\Core\Models\DiscountCode;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 class DiscountCodeFactory extends Factory

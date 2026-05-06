@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Database\Seeders;
 
 use App\Models\Household;
-use App\Models\Subscription;
+use Fynla\Core\Models\Subscription;
 use App\Models\User;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
@@ -39,7 +39,7 @@ class TestUsersSeeder extends Seeder
                 'password' => Hash::make('password'),
                 'household_id' => $smithHousehold->id,
                 'is_primary_account' => true,
-                'role_id' => \App\Models\Role::findByName(\App\Models\Role::ROLE_USER)?->id,
+                'role_id' => \Fynla\Core\Models\Role::findByName(\Fynla\Core\Models\Role::ROLE_USER)?->id,
                 'date_of_birth' => '1980-05-15',
                 'gender' => 'male',
                 'marital_status' => 'married',
@@ -67,7 +67,7 @@ class TestUsersSeeder extends Seeder
                 'password' => Hash::make('password'),
                 'household_id' => $smithHousehold->id,
                 'is_primary_account' => false,
-                'role_id' => \App\Models\Role::findByName(\App\Models\Role::ROLE_USER)?->id,
+                'role_id' => \Fynla\Core\Models\Role::findByName(\Fynla\Core\Models\Role::ROLE_USER)?->id,
                 'date_of_birth' => '1982-08-22',
                 'gender' => 'female',
                 'marital_status' => 'married',
@@ -99,7 +99,7 @@ class TestUsersSeeder extends Seeder
                 'password' => Hash::make('password'),
                 'household_id' => $jonesHousehold->id,
                 'is_primary_account' => true,
-                'role_id' => \App\Models\Role::findByName(\App\Models\Role::ROLE_USER)?->id,
+                'role_id' => \Fynla\Core\Models\Role::findByName(\Fynla\Core\Models\Role::ROLE_USER)?->id,
                 'date_of_birth' => '1985-03-10',
                 'gender' => 'female',
                 'marital_status' => 'single',
@@ -147,7 +147,7 @@ class TestUsersSeeder extends Seeder
                 'password' => Hash::make('password'),
                 'household_id' => $smithHousehold->id,
                 'is_primary_account' => true,
-                'role_id' => \App\Models\Role::findByName(\App\Models\Role::ROLE_USER)?->id,
+                'role_id' => \Fynla\Core\Models\Role::findByName(\Fynla\Core\Models\Role::ROLE_USER)?->id,
                 'date_of_birth' => '1975-01-01',
                 'gender' => 'male',
                 'marital_status' => 'married',
@@ -167,8 +167,8 @@ class TestUsersSeeder extends Seeder
 
         $zaProtectionUser->update(['trial_ends_at' => $trialEnd]);
 
-        if (\App\Models\FamilyMember::where('user_id', $zaProtectionUser->id)->where('is_dependent', true)->doesntExist()) {
-            \App\Models\FamilyMember::factory()->for($zaProtectionUser)->count(2)->create(['is_dependent' => true]);
+        if (\Fynla\Core\Models\FamilyMember::where('user_id', $zaProtectionUser->id)->where('is_dependent', true)->doesntExist()) {
+            \Fynla\Core\Models\FamilyMember::factory()->for($zaProtectionUser)->count(2)->create(['is_dependent' => true]);
         }
 
         $property = \App\Models\Property::where('user_id', $zaProtectionUser->id)->first();

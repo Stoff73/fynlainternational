@@ -5,9 +5,9 @@ declare(strict_types=1);
 namespace App\Services\Payment;
 
 use App\Mail\PaymentFailedNotification;
-use App\Models\Payment;
-use App\Models\Subscription;
-use App\Models\SubscriptionPlan;
+use Fynla\Core\Models\Payment;
+use Fynla\Core\Models\Subscription;
+use Fynla\Core\Models\SubscriptionPlan;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;

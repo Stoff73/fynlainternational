@@ -265,7 +265,7 @@ class EstateAssetAggregatorService
     public function getUserExpenditure(User $user): array
     {
         // Try ExpenditureProfile first
-        $expenditureProfile = \App\Models\ExpenditureProfile::where('user_id', $user->id)->first();
+        $expenditureProfile = \Fynla\Core\Models\ExpenditureProfile::where('user_id', $user->id)->first();
         if ($expenditureProfile) {
             return [
                 'monthly_expenditure' => $expenditureProfile->total_monthly_expenditure,

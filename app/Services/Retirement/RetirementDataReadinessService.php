@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Services\Retirement;
 
-use App\Models\ExpenditureProfile;
+use Fynla\Core\Models\ExpenditureProfile;
 use App\Models\Investment\RiskProfile;
 use App\Models\User;
 

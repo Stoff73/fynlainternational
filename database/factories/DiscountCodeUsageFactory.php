@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace Database\Factories;
 
-use App\Models\DiscountCode;
-use App\Models\DiscountCodeUsage;
-use App\Models\Payment;
+use Fynla\Core\Models\DiscountCode;
+use Fynla\Core\Models\DiscountCodeUsage;
+use Fynla\Core\Models\Payment;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 

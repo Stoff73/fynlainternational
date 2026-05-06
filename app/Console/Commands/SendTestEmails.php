@@ -84,7 +84,7 @@ class SendTestEmails extends Command
 
     private function sendPayment(string $to, User $user): void
     {
-        $payment = \App\Models\Payment::latest()->first();
+        $payment = \Fynla\Core\Models\Payment::latest()->first();
 
         if (!$payment) {
             $this->warn('No payment records found — skipping payment confirmation email.');
@@ -104,7 +104,7 @@ class SendTestEmails extends Command
     {
         $subscription = $user->subscription;
         if (!$subscription) {
-            $subscription = \App\Models\Subscription::latest()->first();
+            $subscription = \Fynla\Core\Models\Subscription::latest()->first();
         }
         if (!$subscription) {
             $this->warn('No subscription found — skipping renewal reminder email.');
@@ -118,7 +118,7 @@ class SendTestEmails extends Command
     {
         $subscription = $user->subscription;
         if (!$subscription) {
-            $subscription = \App\Models\Subscription::latest()->first();
+            $subscription = \Fynla\Core\Models\Subscription::latest()->first();
         }
         if (!$subscription) {
             $this->warn('No subscription found — skipping cancellation email.');

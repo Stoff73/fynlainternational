@@ -4,6 +4,12 @@ declare(strict_types=1);
 
 namespace App\Http;
 
+use Fynla\Core\Models\Subscription;
+
+use Fynla\Core\Models\Role;
+
+use Fynla\Core\Models\Permission;
+
 use Illuminate\Foundation\Http\Kernel as HttpKernel;
 
 class Kernel extends HttpKernel

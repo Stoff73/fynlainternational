@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Services\AI;
 
-use App\Models\AiAdviceLog;
+use Fynla\Core\Models\AiAdviceLog;
 use App\Models\User;
 
 /**

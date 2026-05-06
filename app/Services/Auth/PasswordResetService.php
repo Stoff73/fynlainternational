@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace App\Services\Auth;
 
 use App\Mail\PasswordResetCode;
-use App\Models\AuditLog;
-use App\Models\PasswordResetSession;
+use Fynla\Core\Models\AuditLog;
+use Fynla\Core\Models\PasswordResetSession;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;

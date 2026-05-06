@@ -3,8 +3,8 @@
 declare(strict_types=1);
 
 use App\Http\Controllers\Api\PaymentController;
-use App\Models\Payment;
-use App\Models\Subscription;
+use Fynla\Core\Models\Payment;
+use Fynla\Core\Models\Subscription;
 use App\Models\User;
 use App\Services\Payment\RevolutService;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -77,7 +77,7 @@ it('generates invoice when webhook beats confirmPayment (race condition)', funct
     expect($payment->invoice_id)->not->toBeNull();
 
     // Assert: invoice record exists with correct amounts
-    $invoice = \App\Models\Invoice::find($payment->invoice_id);
+    $invoice = \Fynla\Core\Models\Invoice::find($payment->invoice_id);
     expect($invoice)->not->toBeNull();
     expect($invoice->user_id)->toBe($user->id);
     expect($invoice->payment_id)->toBe($payment->id);

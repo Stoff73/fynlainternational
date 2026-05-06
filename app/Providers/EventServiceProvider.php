@@ -11,7 +11,7 @@ use App\Models\DCPension;
 use App\Models\DisabilityPolicy;
 use App\Models\Estate\Asset as EstateAsset;
 use App\Models\Estate\Liability as EstateLiability;
-use App\Models\FamilyMember;
+use Fynla\Core\Models\FamilyMember;
 use App\Models\IncomeProtectionPolicy;
 use App\Models\Investment\InvestmentAccount;
 use App\Models\LifeEvent;

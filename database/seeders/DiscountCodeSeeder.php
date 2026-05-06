@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Database\Seeders;
 
-use App\Models\DiscountCode;
+use Fynla\Core\Models\DiscountCode;
 use Illuminate\Database\Seeder;
 
 class DiscountCodeSeeder extends Seeder

@@ -4,6 +4,38 @@ declare(strict_types=1);
 
 namespace App\Models;
 
+use Fynla\Core\Models\FamilyMember;
+
+use Fynla\Core\Models\UserSession;
+
+use Fynla\Core\Models\UserConsent;
+
+use Fynla\Core\Models\UserAssumption;
+
+use Fynla\Core\Models\Subscription;
+
+use Fynla\Core\Models\SpousePermission;
+
+use Fynla\Core\Models\Role;
+
+use Fynla\Core\Models\Referral;
+
+use Fynla\Core\Models\Permission;
+
+use Fynla\Core\Models\Payment;
+
+use Fynla\Core\Models\OnboardingProgress;
+
+use Fynla\Core\Models\ExpenditureProfile;
+
+use Fynla\Core\Models\ErasureRequest;
+
+use Fynla\Core\Models\DataExport;
+
+use Fynla\Core\Models\AiConversation;
+
+use Fynla\Core\Models\AdvisorClient;
+
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Fynla\Core\Models\Jurisdiction;
 use Illuminate\Database\Eloquent\Factories\HasFactory;

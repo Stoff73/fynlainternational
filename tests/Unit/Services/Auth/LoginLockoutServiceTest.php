@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-use App\Models\LoginAttempt;
+use Fynla\Core\Models\LoginAttempt;
 use App\Models\User;
 use App\Services\Auth\LoginLockoutService;
 use Illuminate\Foundation\Testing\RefreshDatabase;

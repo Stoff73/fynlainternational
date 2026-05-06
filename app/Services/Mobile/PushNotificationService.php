@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace App\Services\Mobile;
 
-use App\Models\DeviceToken;
-use App\Models\NotificationPreference;
+use Fynla\Core\Models\DeviceToken;
+use Fynla\Core\Models\NotificationPreference;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
 

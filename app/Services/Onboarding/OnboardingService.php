@@ -4,7 +4,9 @@ declare(strict_types=1);
 
 namespace App\Services\Onboarding;
 
-use App\Models\OnboardingProgress;
+use Fynla\Core\Models\Permission;
+
+use Fynla\Core\Models\OnboardingProgress;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
@@ -248,7 +250,7 @@ class OnboardingService
         }
 
         // Get existing family members added during onboarding
-        $existingMembers = \App\Models\FamilyMember::where('user_id', $userId)
+        $existingMembers = \Fynla\Core\Models\FamilyMember::where('user_id', $userId)
             ->whereNotNull('date_of_birth')
             ->get()
             ->keyBy('name');
@@ -273,7 +275,7 @@ class OnboardingService
                 ]);
             } else {
                 // Create new family member
-                \App\Models\FamilyMember::create([
+                \Fynla\Core\Models\FamilyMember::create([
                     'user_id' => $userId,
                     'name' => $memberData['name'],
                     'relationship' => $memberData['relationship'],
@@ -332,7 +334,7 @@ class OnboardingService
                 $this->cacheInvalidation->invalidateForUserAndSpouse($user->id, $spouseAccount->id);
 
                 // Create bidirectional spouse data sharing permissions
-                \App\Models\SpousePermission::updateOrCreate(
+                \Fynla\Core\Models\SpousePermission::updateOrCreate(
                     [
                         'user_id' => $user->id,
                         'spouse_id' => $spouseAccount->id,
@@ -343,7 +345,7 @@ class OnboardingService
                     ]
                 );
 
-                \App\Models\SpousePermission::updateOrCreate(
+                \Fynla\Core\Models\SpousePermission::updateOrCreate(
                     [
                         'user_id' => $spouseAccount->id,
                         'spouse_id' => $user->id,
@@ -355,7 +357,7 @@ class OnboardingService
                 );
 
                 // Create family member record for the current user
-                \App\Models\FamilyMember::updateOrCreate(
+                \Fynla\Core\Models\FamilyMember::updateOrCreate(
                     [
                         'user_id' => $user->id,
                         'relationship' => 'spouse',
@@ -369,7 +371,7 @@ class OnboardingService
                 );
 
                 // Create reciprocal family member record for spouse
-                \App\Models\FamilyMember::updateOrCreate(
+                \Fynla\Core\Models\FamilyMember::updateOrCreate(
                     [
                         'user_id' => $spouseAccount->id,
                         'relationship' => 'spouse',
@@ -384,7 +386,7 @@ class OnboardingService
             });
         } else {
             // Account doesn't exist yet - just create family member record
-            \App\Models\FamilyMember::updateOrCreate(
+            \Fynla\Core\Models\FamilyMember::updateOrCreate(
                 [
                     'user_id' => $user->id,
                     'relationship' => 'spouse',

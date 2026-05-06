@@ -2,8 +2,8 @@
 
 declare(strict_types=1);
 
-use App\Models\Permission;
-use App\Models\Role;
+use Fynla\Core\Models\Permission;
+use Fynla\Core\Models\Role;
 use App\Models\User;
 use App\Services\Auth\PermissionService;
 

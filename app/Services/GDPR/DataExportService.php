@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace App\Services\GDPR;
 
-use App\Models\AuditLog;
-use App\Models\DataExport;
+use Fynla\Core\Models\AuditLog;
+use Fynla\Core\Models\DataExport;
 use App\Models\User;
 use App\Services\Audit\AuditService;
 use Illuminate\Support\Facades\Storage;

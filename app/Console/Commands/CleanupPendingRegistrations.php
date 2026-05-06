@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Console\Commands;
 
-use App\Models\PendingRegistration;
+use Fynla\Core\Models\PendingRegistration;
 use Illuminate\Console\Command;
 
 class CleanupPendingRegistrations extends Command

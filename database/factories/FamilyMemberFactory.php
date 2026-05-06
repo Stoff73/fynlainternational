@@ -2,11 +2,11 @@
 
 namespace Database\Factories;
 
-use App\Models\FamilyMember;
+use Fynla\Core\Models\FamilyMember;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\FamilyMember>
+ * @extends \Illuminate\Database\Eloquent\Factories\Factory<\Fynla\Core\Models\FamilyMember>
  */
 class FamilyMemberFactory extends Factory
 {

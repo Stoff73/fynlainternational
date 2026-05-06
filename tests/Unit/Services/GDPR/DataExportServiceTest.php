@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-use App\Models\DataExport;
+use Fynla\Core\Models\DataExport;
 use App\Models\User;
 use App\Services\GDPR\DataExportService;
 use Illuminate\Foundation\Testing\RefreshDatabase;

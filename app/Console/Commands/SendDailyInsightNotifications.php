@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace App\Console\Commands;
 
-use App\Models\DeviceToken;
-use App\Models\NotificationPreference;
+use Fynla\Core\Models\DeviceToken;
+use Fynla\Core\Models\NotificationPreference;
 use App\Services\Mobile\PushNotificationService;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Log;

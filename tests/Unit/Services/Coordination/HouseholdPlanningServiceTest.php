@@ -59,7 +59,7 @@ function createMarriedCouple(): array
         'ownership_type' => 'individual',
         'ownership_percentage' => 100,
     ]);
-    \App\Models\FamilyMember::factory()->create([
+    \Fynla\Core\Models\FamilyMember::factory()->create([
         'user_id' => $user->id,
         'relationship' => 'child',
         'first_name' => 'Oliver',
@@ -71,7 +71,7 @@ function createMarriedCouple(): array
         'ownership_type' => 'individual',
         'ownership_percentage' => 100,
     ]);
-    \App\Models\FamilyMember::factory()->create([
+    \Fynla\Core\Models\FamilyMember::factory()->create([
         'user_id' => $spouse->id,
         'relationship' => 'child',
         'first_name' => 'Oliver',

@@ -5,9 +5,9 @@ declare(strict_types=1);
 namespace App\Services\Payment;
 
 use App\Mail\InvoiceEmail;
-use App\Models\DiscountCode;
-use App\Models\Invoice;
-use App\Models\Payment;
+use Fynla\Core\Models\DiscountCode;
+use Fynla\Core\Models\Invoice;
+use Fynla\Core\Models\Payment;
 use App\Models\User;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Support\Facades\Log;

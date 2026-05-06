@@ -54,7 +54,7 @@ class EncryptExistingData extends Command
             'fields' => ['current_value', 'account_number'],
         ],
         'FamilyMember' => [
-            'class' => \App\Models\FamilyMember::class,
+            'class' => \Fynla\Core\Models\FamilyMember::class,
             'fields' => ['national_insurance_number'],
         ],
         'DCPension' => [

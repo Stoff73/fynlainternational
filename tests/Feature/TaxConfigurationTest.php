@@ -49,8 +49,8 @@ class TaxConfigurationTest extends TestCase
         // Seed roles and permissions (required for RBAC middleware)
         $this->seed(\Database\Seeders\RolesPermissionsSeeder::class);
 
-        $adminRole = \App\Models\Role::findByName(\App\Models\Role::ROLE_ADMIN);
-        $userRole = \App\Models\Role::findByName(\App\Models\Role::ROLE_USER);
+        $adminRole = \Fynla\Core\Models\Role::findByName(\Fynla\Core\Models\Role::ROLE_ADMIN);
+        $userRole = \Fynla\Core\Models\Role::findByName(\Fynla\Core\Models\Role::ROLE_USER);
 
         // Create admin user with admin role
         $this->admin = User::factory()->create([

@@ -3,7 +3,7 @@
 declare(strict_types=1);
 
 use App\Jobs\FireAwinConversionJob;
-use App\Models\Payment;
+use Fynla\Core\Models\Payment;
 use App\Models\User;
 use App\Services\Marketing\AwinTrackingService;
 use Illuminate\Foundation\Testing\RefreshDatabase;

@@ -13,7 +13,7 @@ declare(strict_types=1);
 arch('all new Phase 1 models extend Eloquent Model')
     ->expect([
         'App\Models\Household',
-        'App\Models\FamilyMember',
+        'Fynla\Core\Models\FamilyMember',
         'App\Models\Property',
         'App\Models\Mortgage',
         'App\Models\BusinessInterest',
@@ -27,7 +27,7 @@ arch('all new Phase 1 models extend Eloquent Model')
 arch('new Phase 1 models use HasFactory trait')
     ->expect([
         'App\Models\Household',
-        'App\Models\FamilyMember',
+        'Fynla\Core\Models\FamilyMember',
         'App\Models\Property',
         'App\Models\Mortgage',
         'App\Models\BusinessInterest',
@@ -41,7 +41,7 @@ arch('new Phase 1 models use HasFactory trait')
 arch('new Phase 1 models use strict types')
     ->expect('App\Models\Household')
     ->toUseStrictTypes()
-    ->and('App\Models\FamilyMember')
+    ->and('Fynla\Core\Models\FamilyMember')
     ->toUseStrictTypes()
     ->and('App\Models\Property')
     ->toUseStrictTypes()
@@ -74,7 +74,7 @@ arch('Mortgage model uses relationships')
 arch('all Phase 1 models are in App\Models namespace')
     ->expect([
         'App\Models\Household',
-        'App\Models\FamilyMember',
+        'Fynla\Core\Models\FamilyMember',
         'App\Models\Property',
         'App\Models\Mortgage',
         'App\Models\BusinessInterest',
@@ -88,7 +88,7 @@ arch('all Phase 1 models are in App\Models namespace')
 arch('Phase 1 models do not use external services')
     ->expect([
         'App\Models\Household',
-        'App\Models\FamilyMember',
+        'Fynla\Core\Models\FamilyMember',
         'App\Models\Property',
         'App\Models\Mortgage',
         'App\Models\BusinessInterest',

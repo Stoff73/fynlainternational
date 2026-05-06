@@ -13,7 +13,7 @@ class StoreRetirementActionDefinitionRequest extends FormRequest
     {
         $permissionService = app(\App\Services\Auth\PermissionService::class);
 
-        return $this->user() && $permissionService->hasPermission($this->user(), \App\Models\Permission::ADMIN_ACCESS);
+        return $this->user() && $permissionService->hasPermission($this->user(), \Fynla\Core\Models\Permission::ADMIN_ACCESS);
     }
 
     public function rules(): array

@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Database\Factories;
 
-use App\Models\AdvisorClient;
-use App\Models\ClientActivity;
+use Fynla\Core\Models\AdvisorClient;
+use Fynla\Core\Models\ClientActivity;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 

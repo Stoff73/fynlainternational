@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Fynla\Packs\Gb\Traits;
 
-use App\Models\ExpenditureProfile;
+use Fynla\Core\Models\ExpenditureProfile;
 use App\Models\User;
 
 trait ResolvesExpenditure
