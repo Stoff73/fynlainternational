@@ -77,31 +77,37 @@ Defer to a follow-up after Phase 1. Tests stay in `tests/` for now; namespace re
 
 ### G. Updated total estimate
 
-Plan original total: **~39 hr**. After audit corrections: **~50 hr** broken down as:
+Plan original total: **~39 hr**. After audit corrections: **~50 hr**. After session 4 (2026-05-06) deferral decision adding R-14a + R-14b explicit workstreams: **~61 hr** broken down as:
 
-| WS | Was | Now |
-|---|---|---|
-| R-0 | 1 | 1.5 (Null impls) |
-| R-0a (new) | — | 2 |
-| R-1 | 1 | 1 (much already in place but contracts +1 + binding refresh as files move costs more later) |
-| R-2 | 1 | 1 |
-| R-3 | 2 | 3 |
-| R-4 | 4 | 5 |
-| R-5 | 3 | 3.5 |
-| R-6 | 3 | 4.5 |
-| R-7 | 2 | 3 |
-| R-8 | 1 | 1.5 (CoordinatingAgent move) |
-| R-9 | 4 | 6 |
-| R-10 | 1 | 1.5 |
-| R-11 | 2 | 2 |
-| R-12 | 2 | 2 |
-| R-13a (UK FE) | 6 | 7 |
-| R-13b (SA FE, new) | — | 3 |
-| R-14 | 3 | 3 |
-| R-15 | 3 | 3 |
-| **Total** | **39** | **~50** |
+| WS | Was | Audit | Post-session-4 |
+|---|---|---|---|
+| R-0 | 1 | 1.5 (Null impls) | 1.5 ✅ shipped |
+| R-0a (new) | — | 2 | 2 ✅ shipped |
+| R-1 | 1 | 1 (much already in place but contracts +1 + binding refresh as files move costs more later) | 1 ✅ shipped |
+| R-2 | 1 | 1 | 1 ✅ shipped |
+| R-3 | 2 | 3 | 3 ✅ shipped |
+| R-4 | 4 | 5 | 5 ✅ shipped |
+| R-5 | 3 | 3.5 | 3.5 ✅ shipped |
+| R-6 | 3 | 4.5 | 4.5 |
+| R-7 | 2 | 3 | 3 |
+| R-8 | 1 | 1.5 (CoordinatingAgent move) | 1.5 |
+| R-9 | 4 | 6 | 6 |
+| R-10 | 1 | 1.5 | 1.5 |
+| R-11 | 2 | 2 | 2 |
+| R-12 | 2 | 2 | 2 |
+| R-13a (UK FE) | 6 | 7 | 7 |
+| R-13b (SA FE, new) | — | 3 | 3 |
+| R-14 | 3 | 3 | 3 |
+| **R-14a (new — ADR-005 int-minor)** | — | — | **6** |
+| **R-14b (new — query layer + 6 core models)** | — | — | **5** |
+| R-15 | 3 | 3 | 3 (no longer absorbs the deferral burden — stays at 3) |
+| **Total** | **39** | **~50** | **~61** |
 
-The 11-hour delta reflects quantification, not scope creep. Actual file counts are larger than the original plan assumed; SA pack cleanup and SA frontend relocation are net-new prerequisites the plan failed to surface. Hours-not-days mandate still holds at workstream level — flag drift if any single workstream blows past its updated estimate.
+The 11-hour delta from audit → post-session-4 reflects the explicit workstreams CSJ scheduled to clean up the deferrals R-3/R-4/R-5 accumulated (and R-6/R-7/R-8/R-9 will continue to accumulate). Without R-14a/R-14b, R-15 would balloon from 3 hr to ~10–15 hr and become the actual hard workstream. Hours-not-days mandate still holds at workstream level — flag drift if any single workstream blows past its updated estimate.
+
+R-14a and R-14b sizing is provisional. Both should be re-scoped at workstream kickoff:
+- R-14a once R-6/R-7/R-8/R-9 have settled the float-money deferral list (currently 12 services + 2 traits; expect 25–30 by R-9 close).
+- R-14b once R-9 has shown how the relocated controllers/observers query the 6 deferred core models — that's the surface the query layer abstracts.
 
 ### H. Three plan defaults — confirmation deferred
 
@@ -118,7 +124,7 @@ The three decision points in § 18 (URL strategy, table renames, branch strategy
 
 ---
 
-## 1. The 15-Workstream Sequence
+## 1. The 17-Workstream Sequence
 
 Order is mandatory — earlier workstreams establish the namespace and binding plumbing that later ones rely on.
 
@@ -139,9 +145,11 @@ Order is mandatory — earlier workstreams establish the namespace and binding p
 | R-12 | Replace `MODULES_BY_JURISDICTION` constant with per-pack `navigation()` providers (frontend) | 2 hr | Each pack's `navigation()` registers via PackRegistry on import; sidebar reads from registry |
 | R-13 | Relocate UK frontend — Vue components (~440 UK), views (~70), Vuex modules (~24 UK) | 6 hr | `packs/country-gb/resources/js/{components,views,store,services}/` — dynamic-imported on auth |
 | R-14 | Routing realignment — country-prefixed backend URLs (`/api/gb/*`), pack-isolated frontend routes, redirect layer for legacy URLs | 3 hr | UK clients see no break; SA `/za/*` URLs drop to unprefixed inside the SA pack scope |
+| **R-14a** | **ADR-005 int-minor money refactor — convert all `float $amount`-style signatures on the deferred-from-R-3/R-5/R-6/R-7 services + traits to int-minor; relocate them into the GB pack; close their PackIsolationTest allow-list entries** | **6 hr** | **All 12+ deferred float-money services + 2 traits relocated into `packs/country-gb/src/`. NoFloatMoneyTest passes inside `packs/`. Allow-list shrinks by ~14 entries.** |
+| **R-14b** | **Container-resolved query layer + relocate 6 deferred core models (`User`, `Household`, `Goal`, `GoalContribution`, `LifeEvent`, `LifeEventAllocation`) to core. Designs an `AssetQueryService`-style abstraction for cross-pack relationships so `hasMany(\Fynla\Packs\Gb\Models\X::class)` literals come out of the moved models** | **5 hr** | **6 models in `core/app/Core/Models/` (or equivalent) under `Fynla\Core\Models\`. CoreIndependenceTest passes. Allow-list shrinks by ~6 entries.** |
 | R-15 | Full Pest + Playwright regression — UK-only journey, SA-only journey, dual-user smoke | 3 hr | Phase 1 acceptance per Spec § 10 |
 
-**Total: ~39 hours of focused mechanical execution.**
+**Total: ~50 hours after audit + 11 hours for R-14a/R-14b = ~61 hours of focused mechanical execution.** R-14a and R-14b are sized provisionally; both should be re-scoped at workstream kickoff once R-6/R-7/R-8/R-9 have settled how many extra services land on the deferral list.
 
 The previous "days/weeks" framing assumed scope drift, off-piste exploration, and re-planning loops. Held to the plan as written — with disciplined namespace-renames, scripted `use`-statement updates, and Pest-green-after-every-commit cadence — this is hours of work, not weeks. Any blow-out beyond the per-workstream estimates is a signal to stop and re-check whether the work has drifted from the plan, not to extend the estimate.
 
@@ -684,6 +692,145 @@ Backend routes use the country prefix (Spec § 6.1 Option X). Frontend routes dr
 
 ---
 
+## 16a. R-14a — ADR-005 Int-Minor Money Refactor + Relocation of Deferred Float-Money Services (6 hr — provisional)
+
+### Goal
+Convert all `float $amount`-style signatures on the services and traits that R-3, R-5, and (future) R-6/R-7/R-8/R-9 deferred to int-minor (per ADR-005), then relocate them into `packs/country-gb/src/`. Close the corresponding PackIsolationTest allow-list entries. NoFloatMoneyTest must pass inside `packs/` after this workstream.
+
+### Why a separate workstream (not folded into each R-N)
+The deferred services are not domain-orthogonal — they share traits and call each other. Converting them piecemeal inside R-3/R-5/R-6/R-7 would mean a mid-batch ADR-005 surface every time, lengthening the inner loop of each mechanical relocation. Lifting them out into one focused sweep:
+
+- Lets R-3 → R-9 stay strictly mechanical (move + namespace + caller updates only).
+- Concentrates the int-minor refactor — the only workstream where domain logic actually changes — into a single review surface.
+- Keeps the architecture-test allow-list as a *temporary* parking spot, not a permanent compromise.
+
+### Targets
+
+As of 2026-05-06 session 4, the deferral list is:
+
+**Traits (2)**
+- `app/Traits/FormatsCurrency.php` — every method outputs `£` (UK currency symbol) hardcoded; should use core `Localisation` contract via the pack registry once relocated.
+- `app/Traits/CalculatesOCF.php`
+
+**Estate services (7)**
+- `app/Services/Estate/IHTFormattingService.php`
+- `app/Services/Estate/PersonalizedGiftingStrategyService.php`
+- `app/Services/Estate/PersonalizedTrustStrategyService.php`
+- `app/Services/Estate/TrustService.php`
+- `app/Services/Estate/GiftingStrategy.php`
+- `app/Services/Estate/IntestacyCalculator.php`
+- `app/Services/Estate/FutureValueCalculator.php`
+
+**Tax services (5)**
+- `app/Services/Tax/IncomeDefinitionsService.php`
+- `app/Services/Tax/TaxOptimisationService.php`
+- `app/Services/Tax/TaxActionDefinitionService.php`
+- `app/Services/TaxBandTracker.php`
+- `app/Services/UKTaxCalculator.php`
+
+**Plus**: any additional services R-6/R-7/R-8/R-9 add to the allow-list with R-15 ratchet markers. Re-scope this section at workstream kickoff.
+
+### Tasks (per file)
+
+1. Convert every `float $amount`-style parameter and return type to `int $amountMinor` (pence/cents).
+2. Convert internal arithmetic that uses native floats to integer arithmetic (or `BCMath` where decimal precision matters — e.g. percentage applies on a pension contribution).
+3. Update every caller (services, agents, controllers, observers, tests) to pass and receive minor units. Use `(int) round($amount * 100)` only at the boundaries (form-request validation, view formatting).
+4. Update factories + seeders that generate fixture amounts.
+5. Move the file into `packs/country-gb/src/{Estate,Tax,Traits}/` with the standard relocation procedure (namespace update, `use` statements in callers, sed of bare class refs).
+6. Remove the file's allow-list entry from `tests/Architecture/PackIsolationTest.php`.
+
+### Update bindings
+
+Already-bound services (`pack.gb.tax`, `pack.gb.estate` etc.) get their `bind()` targets repointed from `\App\…` to `\Fynla\Packs\Gb\…` as each file moves. Some services aren't bound — they're called through other services that ARE bound; for these, the bare-class-reference fix from R-3/R-5 pattern applies.
+
+### Verification
+
+- `./vendor/bin/pest --testsuite=Architecture` — green, including `NoFloatMoneyTest` now active inside `packs/country-gb/`.
+- `./vendor/bin/pest` — full suite green (2,788 + any new tests added during R-6 → R-13 must still pass).
+- `tests/Architecture/PackIsolationTest.php` allow-list shrinks by ~14 entries (12 services + 2 traits) plus whatever R-6 → R-9 added.
+- Spot-check one Estate calculation end-to-end at the API level to confirm minor-unit arithmetic produces the same display value as before.
+
+### Risks
+
+- **Loss of precision around percentage applies.** The most subtle bugs are in places that previously did `$balance * $rate` where `$rate` is a float fraction and `$balance` is in pounds-as-float. Converting `$balance` to pence-as-int while leaving `$rate` as float is fine, but the rounding mode at result-conversion (back to display pounds) must be consistent with the existing UI expectation.
+- **Test fixture drift.** Factories that produced floats now produce ints — any test that asserts an exact pound value needs to be re-checked. The arch test will surface signature mismatches; the Pest suite will surface assertion drift.
+- **Mid-workstream blow-out.** If the deferral list has grown beyond ~30 entries by the time R-14a starts, the 6 hr estimate is wrong. Re-scope at kickoff before starting moves.
+
+---
+
+## 16b. R-14b — Container-Resolved Query Layer + Relocation of 6 Deferred Core Models (5 hr — provisional)
+
+### Goal
+Design and implement a small core-side query abstraction so the 6 deferred core models — `User`, `Household`, `Goal`, `GoalContribution`, `LifeEvent`, `LifeEventAllocation` — can be relocated to `core/app/Core/Models/` (under `Fynla\Core\Models\`) without their relationship arrows pointing into the GB pack and tripping `CoreIndependenceTest`.
+
+### Why these 6 stayed put
+After R-4a (35 jurisdiction-agnostic models → core) and R-4b (53 UK models → GB pack), these 6 models have:
+
+- `hasMany(\Fynla\Packs\Gb\Models\X::class)` relationships — relocating them to core would mean core code holds a literal reference to a pack namespace.
+- The relationships span every pack (GB today, ZA tomorrow, XX in tests). A static `hasMany` literal cannot be parameterised by jurisdiction.
+
+Currently held in `App\Models\` (back-compat namespace) precisely because of this. The architecture-test allow-list has 6 entries tagged with R-14b ratchet markers.
+
+### Approach
+
+A core-mediated query layer expressed as a contract on the registry:
+
+```php
+// core/app/Core/Contracts/AssetQueryService.php
+interface AssetQueryService
+{
+    /** @return Collection<\Fynla\Core\Models\AssetSummary> */
+    public function ownedBy(User $user): Collection;
+
+    /** Aggregate value across all packs for a household. */
+    public function totalValueForHousehold(Household $household): int; // minor units (post-R-14a)
+}
+```
+
+Each pack provides an implementation that knows which of its models count as "assets":
+
+```php
+// packs/country-gb/src/Query/GbAssetQueryService.php
+public function ownedBy(User $user): Collection
+{
+    return $user->morphsLikely()->concat(
+        $user->isaContributions, ...
+    )->map(fn($m) => AssetSummary::from($m));
+}
+```
+
+The 6 core models then call out via `app(AssetQueryService::class)->ownedBy($this)` instead of declaring `hasMany` literals into pack namespaces. The arrow direction reverses: instead of core referring to pack, pack provides a service core depends on.
+
+### Tasks
+
+1. Design `AssetQueryService` (or equivalent — final shape decided at kickoff once R-9 has shown how controllers actually query these 6 models).
+2. Add the contract to `core/app/Core/Contracts/`.
+3. Add a 15th binding key (`pack.gb.asset_query`) and bind it in `GbPackServiceProvider`.
+4. Add equivalent stubs in `ZaPackServiceProvider` (Null impl returning empty collection until SA needs the surface).
+5. Refactor User/Household/Goal/GoalContribution/LifeEvent/LifeEventAllocation to call through the service in place of `hasMany`/`belongsToMany` literals into packs. Keep `hasMany` to *core* models (User → Household, Household → User, Goal → User, etc.).
+6. Move all 6 to `core/app/Core/Models/` under namespace `Fynla\Core\Models\`. Standard relocation procedure (namespace, `use` statements, factories, sed of bare refs).
+7. Update Eloquent morph-map registrations so polymorphic relations from pack models still resolve User correctly across the namespace change.
+8. Remove the 6 allow-list entries from `tests/Architecture/PackIsolationTest.php`.
+
+### Why after R-14, not before
+- R-9 (controllers + observers) is what actually exercises the query surface. Designing the abstraction before R-9 has settled means designing against speculative call patterns. After R-14, the controllers are in the GB pack, the URL prefixing is settled, and the real call sites are visible.
+- R-14a (int-minor) lands first because the query layer's aggregates (`totalValueForHousehold`) need to return minor units to be consistent with the rest of the relocated services.
+
+### Verification
+
+- `./vendor/bin/pest --testsuite=Architecture` — green, including `CoreIndependenceTest` now active for `core/app/Core/Models/`. No `Fynla\\Packs\\` literals anywhere in core.
+- `./vendor/bin/pest` — full suite green.
+- Spot-check: a UK dashboard view that aggregates assets across modules still renders the same totals.
+- Spot-check: a SA user logging in still resolves `User::find($id)` from the new core namespace, sidebar still renders, and `pack.za.asset_query` resolves to a working (possibly empty) collection.
+
+### Risks
+
+- **Morph-map churn.** Six core models with polymorphic relations from pack models means the morph map needs to be re-registered for the new core namespace. If R-4b's polymorphic data migration left any rows pointing at `App\Models\User`, those need a follow-up backfill (write a one-shot migration as part of this workstream).
+- **Eloquent global scopes.** Any global scope on User/Household that filters by jurisdiction needs to live in core but be aware of pack data. Contract on the registry handles this; verify no global scope leaks into a pack namespace.
+- **Dual-jurisdiction users.** A user whose household has both UK and SA assets means `AssetQueryService::ownedBy($user)` must merge results across packs. The default implementation should iterate registered packs and call each one's local query service. This is the moment to settle that pattern before Phase 2 builds on it.
+
+---
+
 ## 17. R-15 — Full Regression (3 hr)
 
 ### Pest
@@ -700,7 +847,9 @@ Login as `za-protection-test@example.com`. Navigate every SA module via unprefix
 Seed a dual-jurisdiction test user. Login. Verify sidebar renders without crashing. Verify the **country of residence**'s pack owns the URL routing for shared-name URLs. (Phase 2 will deliver foreign-asset surfacing inside residence-pack views; Phase 1 expects residence-pack routes to load and the sidebar to render.)
 
 ### Architecture test ratchet
-At this point, every pack-boundary assertion is active and passing. Cross-pack import attempts fail the build.
+At this point, every pack-boundary assertion is active and passing. Cross-pack import attempts fail the build. The PackIsolationTest allow-list is empty (R-14a closed the float-money entries; R-14b closed the 6 core-model entries; no remaining R-15 ratchet markers).
+
+If any allow-list entries remain at R-15 kickoff, they are net-new accumulations from R-6 → R-9 that R-14a/R-14b didn't anticipate. Re-scope R-14a's late-bound list, run the relevant relocation, and only then start R-15.
 
 ---
 
