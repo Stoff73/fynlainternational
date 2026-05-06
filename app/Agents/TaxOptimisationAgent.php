@@ -7,6 +7,7 @@ namespace App\Agents;
 use App\Models\User;
 use App\Services\Tax\TaxOptimisationService;
 use App\Services\TaxConfigService;
+use Fynla\Core\Contracts\TaxOptimisationEngine;
 
 /**
  * Tax Optimisation Agent
@@ -14,8 +15,11 @@ use App\Services\TaxConfigService;
  * Orchestrates cross-module tax analysis covering ISA allowance usage,
  * pension Annual Allowance and carry forward, Capital Gains Tax planning,
  * and spousal optimisation. Generates actionable, prioritised strategies.
+ *
+ * Bound to the pack.gb.tax_optimisation container key as the UK
+ * implementation of the cross-module TaxOptimisationEngine contract.
  */
-class TaxOptimisationAgent extends BaseAgent
+class TaxOptimisationAgent extends BaseAgent implements TaxOptimisationEngine
 {
     public function __construct(
         private readonly TaxOptimisationService $optimisationService,

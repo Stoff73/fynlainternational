@@ -247,6 +247,17 @@ describe('Pack Isolation', function () {
             ->toContain(\Fynla\Core\Contracts\ExchangeControl::class);
     });
 
+    it('TaxOptimisationAgent implements the core TaxOptimisationEngine contract', function () {
+        expect(class_implements(\App\Agents\TaxOptimisationAgent::class))
+            ->toContain(\Fynla\Core\Contracts\TaxOptimisationEngine::class);
+    });
+
+    it('pack.gb.tax_optimisation resolves to the UK tax-optimisation agent', function () {
+        $resolved = app('pack.gb.tax_optimisation');
+        expect($resolved)->toBeInstanceOf(\App\Agents\TaxOptimisationAgent::class);
+        expect($resolved)->toBeInstanceOf(\Fynla\Core\Contracts\TaxOptimisationEngine::class);
+    });
+
     it('ZaExchangeControl implements the core ExchangeControl contract', function () {
         if (! class_exists(\Fynla\Packs\Za\ExchangeControl\ZaExchangeControl::class)) {
             $this->markTestSkipped('ZaExchangeControl not yet loaded (WS 1.3b in progress)');

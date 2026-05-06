@@ -13,7 +13,7 @@ use Fynla\Core\Validation\NullIdentityValidator;
 use Illuminate\Support\ServiceProvider;
 
 /**
- * Registers the UK pack with the core PackRegistry and binds the 13
+ * Registers the UK pack with the core PackRegistry and binds the 14
  * country-pack contract keys to the existing UK service classes.
  *
  * Phase 1 state: bindings still resolve to \App\Services\… because
@@ -39,6 +39,7 @@ class GbPackServiceProvider extends ServiceProvider
         $this->app->bind('pack.gb.estate', \App\Services\Estate\UkEstateEngine::class);
         $this->app->bind('pack.gb.savings', \App\Services\Savings\UkSavingsEngine::class);
         $this->app->bind('pack.gb.exchange_control', \App\Services\ExchangeControl\UkExchangeControl::class);
+        $this->app->bind('pack.gb.tax_optimisation', \App\Agents\TaxOptimisationAgent::class);
 
         // 4 contracts where the GB pack does not yet have a real
         // implementation. Null implementations live in core and are
