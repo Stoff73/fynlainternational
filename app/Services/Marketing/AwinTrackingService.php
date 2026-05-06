@@ -6,7 +6,7 @@ namespace App\Services\Marketing;
 
 use App\Models\Payment;
 use App\Models\User;
-use App\Traits\StructuredLogging;
+use Fynla\Core\Traits\StructuredLogging;
 use Illuminate\Support\Facades\Http;
 
 /**

@@ -11,7 +11,7 @@ use App\Models\User;
 use App\Services\Goals\LifeEventIntegrationService;
 use App\Services\TaxConfigService;
 use App\Services\UserProfile\ProfileCompletenessChecker;
-use App\Traits\CalculatesOwnershipShare;
+use Fynla\Core\Traits\CalculatesOwnershipShare;
 use Illuminate\Support\Collection;
 
 /**

@@ -6,7 +6,7 @@ namespace App\Models\Estate;
 
 use App\Models\Document;
 use App\Models\User;
-use App\Traits\Auditable;
+use Fynla\Core\Traits\Auditable;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;

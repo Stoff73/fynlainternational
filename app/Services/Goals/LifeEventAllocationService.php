@@ -18,7 +18,7 @@ use App\Services\Savings\EmergencyFundCalculator;
 use App\Services\Savings\ISATracker;
 use App\Services\TaxConfigService;
 use App\Traits\ResolvesExpenditure;
-use App\Traits\StructuredLogging;
+use Fynla\Core\Traits\StructuredLogging;
 use Carbon\Carbon;
 use Illuminate\Support\Collection;
 

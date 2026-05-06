@@ -12,7 +12,7 @@ use App\Models\User;
 use App\Services\Retirement\AnnualAllowanceChecker;
 use App\Services\TaxConfigService;
 use App\Traits\FormatsCurrency;
-use App\Traits\StructuredLogging;
+use Fynla\Core\Traits\StructuredLogging;
 
 /**
  * Evaluates tax action definitions against user data

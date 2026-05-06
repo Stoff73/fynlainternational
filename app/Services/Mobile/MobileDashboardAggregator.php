@@ -18,8 +18,8 @@ use App\Models\Property;
 use App\Models\SavingsAccount;
 use App\Models\User;
 use App\Services\Dashboard\DashboardAggregator;
-use App\Traits\CalculatesOwnershipShare;
-use App\Traits\StructuredLogging;
+use Fynla\Core\Traits\CalculatesOwnershipShare;
+use Fynla\Core\Traits\StructuredLogging;
 use Illuminate\Support\Facades\Cache;
 
 /**

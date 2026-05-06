@@ -29,7 +29,7 @@ use App\Services\Goals\LifeEventIntegrationService;
 use App\Services\Investment\DiversificationAnalyzer;
 use App\Services\Investment\InvestmentProjectionService;
 use App\Services\Investment\ReturnCalculationService;
-use App\Traits\CalculatesOwnershipShare;
+use Fynla\Core\Traits\CalculatesOwnershipShare;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;

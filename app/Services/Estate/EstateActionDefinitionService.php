@@ -14,7 +14,7 @@ use App\Models\LifeInsurancePolicy;
 use App\Models\User;
 use App\Services\TaxConfigService;
 use App\Traits\FormatsCurrency;
-use App\Traits\StructuredLogging;
+use Fynla\Core\Traits\StructuredLogging;
 use Carbon\Carbon;
 
 /**

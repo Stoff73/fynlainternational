@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace App\Models\Estate;
 
 use App\Models\User;
-use App\Traits\Auditable;
+use Fynla\Core\Traits\Auditable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;

@@ -9,7 +9,7 @@ use App\Models\Estate\Will;
 use App\Models\LifeInsurancePolicy;
 use App\Models\Property;
 use App\Models\User;
-use App\Traits\StructuredLogging;
+use Fynla\Core\Traits\StructuredLogging;
 
 class LetterEstateValidationService
 {

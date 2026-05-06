@@ -12,7 +12,7 @@ use App\Http\Traits\SanitizedErrorResponse;
 use App\Models\Mortgage;
 use App\Models\Property;
 use App\Services\Property\MortgageService;
-use App\Traits\CalculatesOwnershipShare;
+use Fynla\Core\Traits\CalculatesOwnershipShare;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 

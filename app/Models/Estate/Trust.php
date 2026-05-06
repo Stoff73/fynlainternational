@@ -7,7 +7,7 @@ namespace App\Models\Estate;
 use App\Models\Household;
 use App\Models\User;
 use App\Services\Estate\TrustValuationService;
-use App\Traits\Auditable;
+use Fynla\Core\Traits\Auditable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;

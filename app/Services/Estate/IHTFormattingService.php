@@ -7,7 +7,7 @@ namespace App\Services\Estate;
 use App\Models\Estate\Liability;
 use App\Models\Mortgage;
 use App\Models\User;
-use App\Traits\CalculatesOwnershipShare;
+use Fynla\Core\Traits\CalculatesOwnershipShare;
 use Carbon\Carbon;
 use Illuminate\Support\Collection;
 

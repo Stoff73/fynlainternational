@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Traits;
+namespace Fynla\Core\Traits;
 
 use Illuminate\Database\Eloquent\Builder;
 

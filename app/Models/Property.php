@@ -6,8 +6,8 @@ namespace App\Models;
 
 use App\Models\Estate\Trust;
 use App\Services\Property\PropertyCalculationService;
-use App\Traits\Auditable;
-use App\Traits\HasJointOwnership;
+use Fynla\Core\Traits\Auditable;
+use Fynla\Core\Traits\HasJointOwnership;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;

@@ -11,7 +11,7 @@ use App\Http\Resources\BusinessInterestResource;
 use App\Models\BusinessInterest;
 use App\Services\Business\BusinessInterestService;
 use App\Services\NetWorth\NetWorthService;
-use App\Traits\CalculatesOwnershipShare;
+use Fynla\Core\Traits\CalculatesOwnershipShare;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 

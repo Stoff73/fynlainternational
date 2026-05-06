@@ -6,7 +6,7 @@ namespace App\Jobs;
 
 use App\Models\Payment;
 use App\Services\Marketing\AwinTrackingService;
-use App\Traits\StructuredLogging;
+use Fynla\Core\Traits\StructuredLogging;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;

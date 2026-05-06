@@ -13,7 +13,7 @@ use App\Models\Property;
 use App\Services\Property\MortgageService;
 use App\Services\Property\PropertyService;
 use App\Services\Property\PropertyTaxService;
-use App\Traits\CalculatesOwnershipShare;
+use Fynla\Core\Traits\CalculatesOwnershipShare;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 

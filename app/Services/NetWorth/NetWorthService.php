@@ -15,7 +15,7 @@ use App\Models\SavingsAccount;
 use App\Models\StatePension;
 use App\Models\User;
 use App\Services\Shared\CrossModuleAssetAggregator;
-use App\Traits\CalculatesOwnershipShare;
+use Fynla\Core\Traits\CalculatesOwnershipShare;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Cache;
 

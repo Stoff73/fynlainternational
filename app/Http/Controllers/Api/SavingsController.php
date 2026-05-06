@@ -24,7 +24,7 @@ use App\Services\Plans\SavingsPlanService;
 use App\Services\Savings\FSCSAssessor;
 use App\Services\Savings\ISATracker;
 use App\Services\Savings\PSACalculator;
-use App\Traits\CalculatesOwnershipShare;
+use Fynla\Core\Traits\CalculatesOwnershipShare;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 

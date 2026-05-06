@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace App\Services\Onboarding;
 
 use App\Models\User;
-use App\Traits\StructuredLogging;
+use Fynla\Core\Traits\StructuredLogging;
 
 class JourneyStateService
 {

@@ -20,7 +20,7 @@ use App\Models\Property;
 use App\Models\SavingsAccount;
 use App\Models\User;
 use App\Services\TaxConfigService;
-use App\Traits\CalculatesOwnershipShare;
+use Fynla\Core\Traits\CalculatesOwnershipShare;
 
 /**
  * Service for household-level financial planning.

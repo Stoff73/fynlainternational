@@ -8,7 +8,7 @@ use App\Models\Investment\InvestmentAccount;
 use App\Models\Mortgage;
 use App\Models\Property;
 use App\Models\SavingsAccount;
-use App\Traits\CalculatesOwnershipShare;
+use Fynla\Core\Traits\CalculatesOwnershipShare;
 use Illuminate\Support\Collection;
 
 /**

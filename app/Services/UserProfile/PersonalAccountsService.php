@@ -7,7 +7,7 @@ namespace App\Services\UserProfile;
 use App\Models\SavingsAccount;
 use App\Models\User;
 use App\Services\UKTaxCalculator;
-use App\Traits\CalculatesOwnershipShare;
+use Fynla\Core\Traits\CalculatesOwnershipShare;
 use Carbon\Carbon;
 
 class PersonalAccountsService

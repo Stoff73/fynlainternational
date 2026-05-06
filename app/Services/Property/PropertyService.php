@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace App\Services\Property;
 
 use App\Models\Property;
-use App\Traits\CalculatesOwnershipShare;
+use Fynla\Core\Traits\CalculatesOwnershipShare;
 
 /**
  * Property Service

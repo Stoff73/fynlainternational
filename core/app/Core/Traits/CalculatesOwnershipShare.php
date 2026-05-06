@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Traits;
+namespace Fynla\Core\Traits;
 
 /**
  * Trait for calculating user's share of jointly-owned assets.
