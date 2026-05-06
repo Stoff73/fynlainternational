@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Services\AI\Prompts;
 
-use App\Constants\FinancialPlanningKnowledge;
+use Fynla\Packs\Gb\Constants\FinancialPlanningKnowledge;
 use Fynla\Packs\Gb\Constants\QuerySchemas;
 
 /**

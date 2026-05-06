@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Services\Goals;
 
-use App\Constants\TaxDefaults;
+use Fynla\Packs\Gb\Constants\TaxDefaults;
 use App\Models\DCPension;
 use App\Models\Goal;
 use App\Models\Investment\InvestmentAccount;
@@ -17,7 +17,7 @@ use App\Services\Retirement\AnnualAllowanceChecker;
 use App\Services\Savings\EmergencyFundCalculator;
 use App\Services\Savings\ISATracker;
 use App\Services\TaxConfigService;
-use App\Traits\ResolvesExpenditure;
+use Fynla\Packs\Gb\Traits\ResolvesExpenditure;
 use Fynla\Core\Traits\StructuredLogging;
 use Carbon\Carbon;
 use Illuminate\Support\Collection;

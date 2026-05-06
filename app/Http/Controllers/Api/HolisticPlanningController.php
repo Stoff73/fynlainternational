@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace App\Http\Controllers\Api;
 
 use App\Agents\CoordinatingAgent;
-use App\Constants\TaxDefaults;
+use Fynla\Packs\Gb\Constants\TaxDefaults;
 use App\Http\Controllers\Controller;
 use App\Http\Traits\SanitizedErrorResponse;
 use App\Models\RecommendationTracking;

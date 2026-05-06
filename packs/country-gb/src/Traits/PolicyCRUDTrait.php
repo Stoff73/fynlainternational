@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Traits;
+namespace Fynla\Packs\Gb\Traits;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\JsonResponse;

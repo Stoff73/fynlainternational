@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Constants;
+namespace Fynla\Packs\Gb\Constants;
 
 /**
  * FinancialPlanningKnowledge - UK financial planning concepts for the AI assistant.

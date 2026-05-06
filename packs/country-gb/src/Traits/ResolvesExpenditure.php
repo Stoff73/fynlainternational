@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Traits;
+namespace Fynla\Packs\Gb\Traits;
 
 use App\Models\ExpenditureProfile;
 use App\Models\User;

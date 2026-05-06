@@ -32,7 +32,7 @@ use App\Models\LifeInsurancePolicy;
 use App\Models\ProtectionProfile;
 use App\Models\SicknessIllnessPolicy;
 use App\Services\Goals\LifeEventIntegrationService;
-use App\Traits\PolicyCRUDTrait;
+use Fynla\Packs\Gb\Traits\PolicyCRUDTrait;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 

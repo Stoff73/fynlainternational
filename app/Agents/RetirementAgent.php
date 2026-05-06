@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Agents;
 
-use App\Constants\TaxDefaults;
+use Fynla\Packs\Gb\Constants\TaxDefaults;
 use App\Models\DCPension;
 use App\Models\Goal;
 use App\Models\RetirementProfile;

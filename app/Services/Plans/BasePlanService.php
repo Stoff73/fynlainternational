@@ -9,7 +9,7 @@ use App\Models\Investment\InvestmentAccount;
 use App\Models\SavingsAccount;
 use App\Models\User;
 use App\Traits\FormatsCurrency;
-use App\Traits\ResolvesExpenditure;
+use Fynla\Packs\Gb\Traits\ResolvesExpenditure;
 
 abstract class BasePlanService
 {

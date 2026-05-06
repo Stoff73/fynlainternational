@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace App\Services\Investment\AssetLocation;
 
-use App\Constants\TaxDefaults;
+use Fynla\Packs\Gb\Constants\TaxDefaults;
 use App\Models\Investment\InvestmentAccount;
 use App\Models\User;
 use App\Services\Risk\RiskPreferenceService;
 use App\Services\TaxConfigService;
-use App\Traits\ResolvesIncome;
+use Fynla\Packs\Gb\Traits\ResolvesIncome;
 
 /**
  * Asset Location Optimizer

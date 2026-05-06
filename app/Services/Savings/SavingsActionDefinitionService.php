@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Services\Savings;
 
-use App\Constants\TaxDefaults;
+use Fynla\Packs\Gb\Constants\TaxDefaults;
 use App\Models\FamilyMember;
 use App\Models\Goal;
 use App\Models\Mortgage;
@@ -12,8 +12,8 @@ use App\Models\SavingsActionDefinition;
 use App\Models\User;
 use App\Services\TaxConfigService;
 use App\Traits\FormatsCurrency;
-use App\Traits\ResolvesExpenditure;
-use App\Traits\ResolvesIncome;
+use Fynla\Packs\Gb\Traits\ResolvesExpenditure;
+use Fynla\Packs\Gb\Traits\ResolvesIncome;
 use Carbon\Carbon;
 use Illuminate\Support\Collection;
 

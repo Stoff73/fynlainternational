@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Services\Estate;
 
-use App\Constants\TaxDefaults;
+use Fynla\Packs\Gb\Constants\TaxDefaults;
 use App\Models\Estate\Gift;
 use App\Models\Estate\LastingPowerOfAttorney;
 use App\Models\Estate\Trust;

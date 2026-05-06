@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Services\Trust;
 
-use App\Constants\TaxDefaults;
+use Fynla\Packs\Gb\Constants\TaxDefaults;
 use App\Models\Estate\Trust;
 use App\Services\TaxConfigService;
 use Carbon\Carbon;

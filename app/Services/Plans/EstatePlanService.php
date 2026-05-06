@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace App\Services\Plans;
 
 use App\Agents\EstateAgent;
-use App\Constants\TaxDefaults;
+use Fynla\Packs\Gb\Constants\TaxDefaults;
 use App\Models\Estate\Will;
 use App\Models\LifeInsurancePolicy;
 use App\Models\User;

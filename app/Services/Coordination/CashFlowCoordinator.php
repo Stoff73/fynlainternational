@@ -13,7 +13,7 @@ use App\Models\SavingsAccount;
 use App\Models\SicknessIllnessPolicy;
 use App\Models\User;
 use App\Services\Plans\DisposableIncomeAccessor;
-use App\Traits\ResolvesExpenditure;
+use Fynla\Packs\Gb\Traits\ResolvesExpenditure;
 
 /**
  * CashFlowCoordinator

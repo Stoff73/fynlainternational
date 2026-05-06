@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Services\Investment\Tax;
 
-use App\Constants\TaxDefaults;
+use Fynla\Packs\Gb\Constants\TaxDefaults;
 use App\Models\Investment\Holding;
 use App\Models\Investment\InvestmentAccount;
 use App\Services\TaxConfigService;

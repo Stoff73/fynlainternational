@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Constants;
+namespace Fynla\Packs\Gb\Constants;
 
 /**
  * TaxDefaults - Centralised fallback values for UK tax calculations.

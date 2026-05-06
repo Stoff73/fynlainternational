@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Services\Investment\Recommendation;
 
-use App\Constants\TaxDefaults;
+use Fynla\Packs\Gb\Constants\TaxDefaults;
 use App\Models\Estate\Liability;
 use App\Models\Investment\InvestmentAccount;
 use App\Models\Investment\RiskProfile;
@@ -13,8 +13,8 @@ use App\Models\SavingsAccount;
 use App\Models\User;
 use App\Services\Risk\RiskPreferenceService;
 use App\Services\TaxConfigService;
-use App\Traits\ResolvesExpenditure;
-use App\Traits\ResolvesIncome;
+use Fynla\Packs\Gb\Traits\ResolvesExpenditure;
+use Fynla\Packs\Gb\Traits\ResolvesIncome;
 use Carbon\Carbon;
 use Illuminate\Support\Collection;
 

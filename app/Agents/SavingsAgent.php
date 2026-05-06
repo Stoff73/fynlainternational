@@ -21,7 +21,7 @@ use App\Services\Savings\PSACalculator;
 use App\Services\Savings\RateComparator;
 use App\Services\Savings\SavingsActionDefinitionService;
 use App\Services\Savings\SavingsDataReadinessService;
-use App\Traits\ResolvesExpenditure;
+use Fynla\Packs\Gb\Traits\ResolvesExpenditure;
 
 class SavingsAgent extends BaseAgent
 {

@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace App\Services\Coordination;
 
-use App\Constants\EstateDefaults;
-use App\Constants\TaxDefaults;
+use Fynla\Packs\Gb\Constants\EstateDefaults;
+use Fynla\Packs\Gb\Constants\TaxDefaults;
 use App\Models\BusinessInterest;
 use App\Models\CashAccount;
 use App\Models\Chattel;

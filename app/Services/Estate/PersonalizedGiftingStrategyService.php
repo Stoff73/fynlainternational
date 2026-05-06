@@ -7,8 +7,8 @@ namespace App\Services\Estate;
 use App\Models\Estate\IHTProfile;
 use App\Models\User;
 use App\Services\TaxConfigService;
-use App\Traits\ResolvesExpenditure;
-use App\Traits\ResolvesIncome;
+use Fynla\Packs\Gb\Traits\ResolvesExpenditure;
+use Fynla\Packs\Gb\Traits\ResolvesIncome;
 use Illuminate\Support\Collection;
 
 /**

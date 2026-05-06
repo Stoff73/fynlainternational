@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Services\Investment\Recommendation;
 
-use App\Constants\TaxDefaults;
+use Fynla\Packs\Gb\Constants\TaxDefaults;
 use App\Services\Investment\Tax\BedAndISACalculator;
 use App\Services\Investment\Tax\CGTHarvestingCalculator;
 use App\Services\TaxConfigService;

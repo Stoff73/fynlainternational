@@ -45,8 +45,15 @@ describe('Pack Isolation', function () {
         // that have not yet relocated (Agents/CoordinatingAgent.php, R-8) may
         // still reference \App\Services\… and \App\Agents\… while UK code
         // moves in across R-3 → R-9. R-15 ratchets the exemption away.
+        //
+        // R-3: Constants/ and Traits/ have App\Models\* and App\Services\*
+        // imports that don't move until R-4 (Models) and R-5 (Tax services).
+        // Each import is allow-listed below. R-4/R-5 update the imports to
+        // their relocated namespaces; R-15 closes the exemption.
         $exemptDirs = [
             $packDir . DIRECTORY_SEPARATOR . 'Providers' . DIRECTORY_SEPARATOR,
+            $packDir . DIRECTORY_SEPARATOR . 'Constants' . DIRECTORY_SEPARATOR,
+            $packDir . DIRECTORY_SEPARATOR . 'Traits' . DIRECTORY_SEPARATOR,
         ];
 
         $violations = [];
@@ -74,6 +81,62 @@ describe('Pack Isolation', function () {
 
         expect($violations)->toBeEmpty(
             'GB pack must not import any App\\ namespace (outside src/Providers/). Violations: ' . implode(', ', $violations)
+        );
+    });
+
+    it('country-gb Constants/Traits only import allow-listed App\\ namespaces (R-4/R-5 ratchet)', function () {
+        $packDir = base_path('packs/country-gb/src');
+        $targetDirs = [
+            $packDir . DIRECTORY_SEPARATOR . 'Constants',
+            $packDir . DIRECTORY_SEPARATOR . 'Traits',
+        ];
+
+        // The R-3 relocation tolerates a narrow allow-list of App\ imports
+        // inside the GB Constants/Traits. Anything outside this list is a
+        // leak and should fail the build. R-4 (Models) and R-5 (TaxConfigService)
+        // shrink the allow-list; R-15 reduces it to empty.
+        $allowed = [
+            // App\Models\* — relocated to Fynla\Packs\Gb\Models\* in R-4.
+            'App\\Models\\AiConversation',
+            'App\\Models\\AiMessage',
+            'App\\Models\\ExpenditureProfile',
+            'App\\Models\\Goal',
+            'App\\Models\\GoalContribution',
+            'App\\Models\\User',
+            // App\Services\* — relocated in R-5/R-6.
+            'App\\Services\\AI\\KycGateChecker',
+            'App\\Services\\AI\\QueryClassifier',
+            'App\\Services\\AI\\SystemPromptBuilder',
+            'App\\Services\\AI\\XaiClient',
+            'App\\Services\\AI\\XaiToolDefinitions',
+            'App\\Services\\PrerequisiteGateService',
+            'App\\Services\\TaxConfigService',
+            'App\\Services\\UKTaxCalculator',
+        ];
+
+        $violations = [];
+        foreach ($targetDirs as $dir) {
+            if (! is_dir($dir)) continue;
+            $iterator = new RecursiveIteratorIterator(
+                new RecursiveDirectoryIterator($dir)
+            );
+
+            foreach ($iterator as $file) {
+                if ($file->getExtension() !== 'php') continue;
+                $contents = file_get_contents($file->getPathname());
+
+                preg_match_all('/^use\s+(\\\\?App\\\\[A-Za-z0-9_\\\\]+);/m', $contents, $matches);
+                foreach ($matches[1] as $import) {
+                    $normalised = ltrim($import, '\\');
+                    if (! in_array($normalised, $allowed, true)) {
+                        $violations[] = str_replace(base_path() . '/', '', $file->getPathname()) . ' uses ' . $normalised;
+                    }
+                }
+            }
+        }
+
+        expect($violations)->toBeEmpty(
+            'GB pack Constants/Traits may only import allow-listed App\\ classes. Violations: ' . implode(', ', $violations)
         );
     });
 

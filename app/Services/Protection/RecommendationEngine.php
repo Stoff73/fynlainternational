@@ -6,8 +6,8 @@ namespace App\Services\Protection;
 
 use App\Models\ProtectionProfile;
 use App\Services\TaxConfigService;
-use App\Traits\ResolvesExpenditure;
-use App\Traits\ResolvesIncome;
+use Fynla\Packs\Gb\Traits\ResolvesExpenditure;
+use Fynla\Packs\Gb\Traits\ResolvesIncome;
 
 class RecommendationEngine
 {

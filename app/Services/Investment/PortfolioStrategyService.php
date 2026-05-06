@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace App\Services\Investment;
 
 use Fynla\Core\Constants\InvestmentDefaults;
-use App\Constants\TaxDefaults;
+use Fynla\Packs\Gb\Constants\TaxDefaults;
 use App\Models\Investment\InvestmentAccount;
 use App\Models\User;
 use App\Services\Investment\Rebalancing\DriftAnalyzer;

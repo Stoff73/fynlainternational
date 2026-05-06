@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Services\Onboarding;
 
-use App\Constants\EstateDefaults;
+use Fynla\Packs\Gb\Constants\EstateDefaults;
 use App\Services\TaxConfigService;
 
 class EstateOnboardingFlow

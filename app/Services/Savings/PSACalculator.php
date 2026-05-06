@@ -6,7 +6,7 @@ namespace App\Services\Savings;
 
 use App\Models\User;
 use App\Services\TaxConfigService;
-use App\Traits\ResolvesIncome;
+use Fynla\Packs\Gb\Traits\ResolvesIncome;
 use Illuminate\Support\Collection;
 
 class PSACalculator
