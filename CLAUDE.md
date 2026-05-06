@@ -14,7 +14,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 | Models | 94 |
 | Vuex Stores | 39 |
 | Agents | 9 |
-| Country Packs | 2 |
+| Country Packs | 3 |
 
 **Production**: https://fynla.org | **Version**: v1.0
 
