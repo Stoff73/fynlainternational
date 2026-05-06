@@ -77,8 +77,8 @@ trait HasAiChat
         $classification = $classifier->classify($message, $currentRoute);
 
         $kycResult = null;
-        if (! \App\Constants\QuerySchemas::isBypassType($classification['primary'])
-            && $classification['primary'] !== \App\Constants\QuerySchemas::GENERAL) {
+        if (! \Fynla\Packs\Gb\Constants\QuerySchemas::isBypassType($classification['primary'])
+            && $classification['primary'] !== \Fynla\Packs\Gb\Constants\QuerySchemas::GENERAL) {
             $kycChecker = app(KycGateChecker::class);
             $kycResult = $kycChecker->check($user, $classification);
         }
@@ -486,7 +486,7 @@ trait HasAiChat
 
         // Log advice for review system (only for advice query types)
         if ($classification !== null
-            && \App\Constants\QuerySchemas::isAdviceType($classification['primary'])) {
+            && \Fynla\Packs\Gb\Constants\QuerySchemas::isAdviceType($classification['primary'])) {
             try {
                 \App\Models\AiAdviceLog::create([
                     'user_id' => $user->id,

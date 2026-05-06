@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Exceptions;
+namespace Fynla\Core\Exceptions;
 
 use RuntimeException;
 use Throwable;

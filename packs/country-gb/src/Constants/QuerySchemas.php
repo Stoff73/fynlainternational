@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Constants;
+namespace Fynla\Packs\Gb\Constants;
 
 /**
  * Defines all AI query types, their classifications, KYC requirements,

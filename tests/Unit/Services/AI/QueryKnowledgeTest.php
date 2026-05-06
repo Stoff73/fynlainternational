@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-use App\Constants\QuerySchemas;
+use Fynla\Packs\Gb\Constants\QuerySchemas;
 use App\Services\AI\Prompts\QueryKnowledge;
 
 describe('QueryKnowledge', function () {

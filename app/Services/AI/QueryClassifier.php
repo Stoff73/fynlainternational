@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Services\AI;
 
-use App\Constants\QuerySchemas;
+use Fynla\Packs\Gb\Constants\QuerySchemas;
 
 /**
  * Classifies user messages into query types for the FCA 6-step process.

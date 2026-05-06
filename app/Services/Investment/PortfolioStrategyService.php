@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Services\Investment;
 
-use App\Constants\InvestmentDefaults;
+use Fynla\Core\Constants\InvestmentDefaults;
 use App\Constants\TaxDefaults;
 use App\Models\Investment\InvestmentAccount;
 use App\Models\User;

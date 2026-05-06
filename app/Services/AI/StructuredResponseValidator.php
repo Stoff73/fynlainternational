@@ -135,7 +135,7 @@ class StructuredResponseValidator
 
         // For advice responses, check for £ amounts (should have specific figures)
         if ($classification !== null
-            && \App\Constants\QuerySchemas::isAdviceType($classification['primary'] ?? '')
+            && \Fynla\Packs\Gb\Constants\QuerySchemas::isAdviceType($classification['primary'] ?? '')
             && ! preg_match('/£[\d,]+/', $response)) {
             $violations[] = [
                 'rule' => 'missing_amounts',

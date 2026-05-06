@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Services\Investment\Fees;
 
-use App\Constants\InvestmentDefaults;
+use Fynla\Core\Constants\InvestmentDefaults;
 use App\Models\Investment\Holding;
 use App\Services\Risk\RiskPreferenceService;
 use App\Traits\CalculatesOCF;

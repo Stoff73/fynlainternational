@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace App\Services\AI\Prompts;
 
 use App\Constants\FinancialPlanningKnowledge;
-use App\Constants\QuerySchemas;
+use Fynla\Packs\Gb\Constants\QuerySchemas;
 
 /**
  * Layer 8: Query Knowledge — per-domain knowledge retrieval based on classification.

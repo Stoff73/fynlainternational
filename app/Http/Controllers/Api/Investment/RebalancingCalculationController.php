@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers\Api\Investment;
 
-use App\Constants\InvestmentDefaults;
+use Fynla\Core\Constants\InvestmentDefaults;
 use App\Http\Controllers\Controller;
 use App\Http\Traits\SanitizedErrorResponse;
 use App\Models\Investment\InvestmentAccount;

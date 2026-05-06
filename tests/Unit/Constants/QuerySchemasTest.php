@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-use App\Constants\QuerySchemas;
+use Fynla\Packs\Gb\Constants\QuerySchemas;
 
 describe('QuerySchemas', function () {
     describe('trigger mappings', function () {

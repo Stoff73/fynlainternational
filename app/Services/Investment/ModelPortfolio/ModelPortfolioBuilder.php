@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Services\Investment\ModelPortfolio;
 
-use App\Constants\InvestmentDefaults;
+use Fynla\Core\Constants\InvestmentDefaults;
 
 /**
  * Model Portfolio Builder

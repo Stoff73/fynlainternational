@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Services\Investment;
 
-use App\Constants\InvestmentDefaults;
+use Fynla\Core\Constants\InvestmentDefaults;
 use Illuminate\Support\Collection;
 
 class DiversificationAnalyzer
