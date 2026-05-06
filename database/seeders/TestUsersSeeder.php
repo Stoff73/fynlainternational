@@ -191,5 +191,46 @@ class TestUsersSeeder extends Seeder
                 'current_period_end' => $trialEnd,
             ]
         );
+
+        // Pin a primary jurisdiction on every seeded test user so the sidebar
+        // (which renders from active_jurisdictions) actually populates. Until
+        // jurisdiction-from-asset-location lands (Phase 2), seeded users need
+        // an explicit row in user_jurisdictions or the API returns an empty
+        // list and the sidebar comes up blank.
+        $this->assignPrimaryJurisdiction($johnSmith, 'gb');
+        $this->assignPrimaryJurisdiction($janeSmith, 'gb');
+        $this->assignPrimaryJurisdiction($sarahJones, 'gb');
+        $this->assignPrimaryJurisdiction($zaProtectionUser, 'za');
+    }
+
+    /**
+     * Idempotently set a user's primary jurisdiction by ISO code (case-insensitive).
+     * No-op if either the user or the jurisdiction row is missing — we'd rather
+     * skip than throw inside a seeder.
+     */
+    private function assignPrimaryJurisdiction(?User $user, string $code): void
+    {
+        if (! $user) {
+            return;
+        }
+
+        $jurisdictionId = \DB::table('jurisdictions')
+            ->whereRaw('LOWER(code) = ?', [strtolower($code)])
+            ->value('id');
+
+        if (! $jurisdictionId) {
+            return;
+        }
+
+        \DB::table('user_jurisdictions')->updateOrInsert(
+            ['user_id' => $user->id, 'jurisdiction_id' => $jurisdictionId],
+            ['is_primary' => 1, 'created_at' => now(), 'updated_at' => now()],
+        );
+
+        // Demote any other rows for this user so there's exactly one primary.
+        \DB::table('user_jurisdictions')
+            ->where('user_id', $user->id)
+            ->where('jurisdiction_id', '!=', $jurisdictionId)
+            ->update(['is_primary' => 0, 'updated_at' => now()]);
     }
 }
