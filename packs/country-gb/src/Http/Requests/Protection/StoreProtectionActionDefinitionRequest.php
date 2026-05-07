@@ -2,8 +2,10 @@
 
 declare(strict_types=1);
 
-namespace App\Http\Requests;
+namespace Fynla\Packs\Gb\Http\Requests\Protection;
 
+use App\Services\Auth\PermissionService;
+use Fynla\Core\Models\Permission;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
@@ -11,9 +13,9 @@ class StoreProtectionActionDefinitionRequest extends FormRequest
 {
     public function authorize(): bool
     {
-        $permissionService = app(\App\Services\Auth\PermissionService::class);
+        $permissionService = app(PermissionService::class);
 
-        return $this->user() && $permissionService->hasPermission($this->user(), \Fynla\Core\Models\Permission::ADMIN_ACCESS);
+        return $this->user() && $permissionService->hasPermission($this->user(), Permission::ADMIN_ACCESS);
     }
 
     public function rules(): array

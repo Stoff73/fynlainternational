@@ -133,6 +133,14 @@ describe('Pack Isolation', function () {
             // App\Http\Traits\SanitizedErrorResponse (cross-cutting trait,
             // stays in core); pinned by allow-list below.
             $packDir . DIRECTORY_SEPARATOR . 'Http' . DIRECTORY_SEPARATOR . 'Controllers' . DIRECTORY_SEPARATOR,
+            // R-9e: 50 module-folder Requests relocated in R-9c had no App\
+            // imports, so the requests directory wasn't exempted at the time.
+            // The flat StoreProtectionActionDefinitionRequest moved in R-9e
+            // imports App\Services\Auth\PermissionService for admin-permission
+            // gating. Exempt the directory (and pin the import via allow-list
+            // below) rather than refactor PermissionService into core for the
+            // sake of one request.
+            $packDir . DIRECTORY_SEPARATOR . 'Http' . DIRECTORY_SEPARATOR . 'Requests' . DIRECTORY_SEPARATOR,
         ];
 
         $violations = [];
@@ -181,6 +189,7 @@ describe('Pack Isolation', function () {
             $packDir . DIRECTORY_SEPARATOR . 'Agents',
             $packDir . DIRECTORY_SEPARATOR . 'Http' . DIRECTORY_SEPARATOR . 'Resources',
             $packDir . DIRECTORY_SEPARATOR . 'Http' . DIRECTORY_SEPARATOR . 'Controllers',
+            $packDir . DIRECTORY_SEPARATOR . 'Http' . DIRECTORY_SEPARATOR . 'Requests',
             $packDir . DIRECTORY_SEPARATOR . 'Observers',
         ];
 
@@ -221,6 +230,11 @@ describe('Pack Isolation', function () {
             // in core as framework / shared infrastructure.
             'App\\Http\\Controllers\\Controller',
             'App\\Http\\Traits\\SanitizedErrorResponse',
+            // R-9e: StoreProtectionActionDefinitionRequest gates admin
+            // creation of protection action definitions via the cross-cutting
+            // PermissionService (used by every admin-permission check across
+            // packs). Stays in core as shared auth infrastructure.
+            'App\\Services\\Auth\\PermissionService',
             // App\Observers\RiskRecalculationObserver — generic base class
             // (debounced job dispatch). Stays in app/Observers/ as a non-UK
             // helper; the 4 UK risk observers (DCPension, InvestmentAccount,

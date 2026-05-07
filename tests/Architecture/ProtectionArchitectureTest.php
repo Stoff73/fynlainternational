@@ -26,11 +26,11 @@ arch('Protection models have user relationship')
     ->toHaveMethod('user');
 
 arch('Protection form requests extend FormRequest')
-    ->expect('App\Http\Requests\Protection')
+    ->expect('Fynla\Packs\Gb\Http\Requests\Protection')
     ->toExtend('Illuminate\Foundation\Http\FormRequest');
 
 arch('Protection controllers are in correct namespace')
-    ->expect('App\Http\Controllers\Api\ProtectionController')
+    ->expect('Fynla\Packs\Gb\Http\Controllers\ProtectionController')
     ->toBeClass();
 
 arch('strict types declared in Protection files')
