@@ -8,8 +8,8 @@ use App\Http\Controllers\Controller;
 use App\Http\Traits\SanitizedErrorResponse;
 use Fynla\Packs\Gb\Models\Investment\InvestmentAccount;
 use App\Services\Investment\ModelPortfolio\AssetAllocationOptimizer;
-use App\Services\Investment\ModelPortfolio\FundSelector;
-use App\Services\Investment\ModelPortfolio\ModelPortfolioBuilder;
+use Fynla\Packs\Gb\Investment\ModelPortfolio\FundSelector;
+use Fynla\Packs\Gb\Investment\ModelPortfolio\ModelPortfolioBuilder;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 

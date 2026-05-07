@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Services\Investment\Rebalancing;
+namespace Fynla\Packs\Gb\Investment\Rebalancing;
 
 use Fynla\Packs\Gb\Models\Investment\Holding;
 use Fynla\Packs\Gb\Tax\TaxConfigService;

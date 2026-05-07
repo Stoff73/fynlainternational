@@ -6,8 +6,8 @@ namespace App\Http\Controllers\Api\Investment;
 
 use App\Http\Controllers\Controller;
 use App\Http\Traits\SanitizedErrorResponse;
-use App\Services\Investment\Performance\AlphaBetaCalculator;
-use App\Services\Investment\Performance\BenchmarkComparator;
+use Fynla\Packs\Gb\Investment\Performance\AlphaBetaCalculator;
+use Fynla\Packs\Gb\Investment\Performance\BenchmarkComparator;
 use App\Services\Investment\Performance\PerformanceAttributionAnalyzer;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;

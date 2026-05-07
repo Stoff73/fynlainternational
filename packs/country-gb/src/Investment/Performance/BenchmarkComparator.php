@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Services\Investment\Performance;
+namespace Fynla\Packs\Gb\Investment\Performance;
 
 /**
  * Benchmark Comparator

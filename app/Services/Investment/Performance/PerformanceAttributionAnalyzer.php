@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace App\Services\Investment\Performance;
 
 use Fynla\Packs\Gb\Models\Investment\InvestmentAccount;
+use Fynla\Packs\Gb\Investment\Performance\AlphaBetaCalculator;
+use Fynla\Packs\Gb\Investment\Performance\BenchmarkComparator;
 use Illuminate\Support\Collection;
 
 /**

@@ -178,7 +178,6 @@ describe('Pack Isolation', function () {
             // R-6b cross-subworkstream temporary entries — these relocate
             // later in this same R-6b workstream. Removed when the
             // corresponding sub-commit lands.
-            'App\\Services\\Investment\\Rebalancing\\DriftAnalyzer', // R-6b-iii
             'App\\Services\\Investment\\Utilities\\MatrixOperations', // R-6b-iv
             'App\\Services\\Investment\\Utilities\\StatisticalFunctions', // R-6b-iv
             // App\Jobs\* — Job dispatched by ScenarioService when running

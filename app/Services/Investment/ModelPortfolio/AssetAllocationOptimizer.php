@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace App\Services\Investment\ModelPortfolio;
 
+use Fynla\Packs\Gb\Investment\ModelPortfolio\ModelPortfolioBuilder;
+
 /**
  * Asset Allocation Optimizer
  * Optimizes asset allocation based on goals, constraints, and preferences

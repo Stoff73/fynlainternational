@@ -9,7 +9,7 @@ use Fynla\Packs\Gb\Constants\TaxDefaults;
 use Fynla\Packs\Gb\Models\Investment\InvestmentAccount;
 use App\Models\User;
 use App\Services\Investment\FeeAnalyzer;
-use App\Services\Investment\Rebalancing\DriftAnalyzer;
+use Fynla\Packs\Gb\Investment\Rebalancing\DriftAnalyzer;
 use App\Services\Investment\Tax\TaxOptimizationAnalyzer;
 use App\Services\Risk\RiskPreferenceService;
 use Fynla\Packs\Gb\Tax\TaxConfigService;
