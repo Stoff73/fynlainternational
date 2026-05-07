@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers\Api;
 
-use App\Agents\CoordinatingAgent;
+use Fynla\Packs\Gb\Agents\CoordinatingAgent;
 use App\Http\Controllers\Controller;
 use App\Http\Traits\SanitizedErrorResponse;
 use Fynla\Core\Models\AiConversation;

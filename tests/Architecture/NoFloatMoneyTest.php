@@ -12,6 +12,16 @@ describe('No Float Money', function () {
             base_path('packs'),
         ];
 
+        // R-14a allow-list — float-money signatures pinned by ADR-005
+        // int-minor money refactor. Each entry is "<relative_path>:<signature_substring>".
+        // R-14a closes these; new entries must carry an R-14a comment.
+        $allowed = [
+            // R-8: RetirementAgent relocated with private buildLowerTargetScenario
+            // helper that takes float $newTargetIncome (display + arithmetic with
+            // other float-money values). Int-minor refactor in R-14a.
+            'packs/country-gb/src/Agents/RetirementAgent.php:buildLowerTargetScenario',
+        ];
+
         $violations = [];
         $moneyPattern = '/(amount|balance|value|price|cost|salary|income|premium|fee|payment|contribution|benefit|liability|asset|total|net|gross|tax_amount)/i';
 
@@ -36,8 +46,13 @@ describe('No Float Money', function () {
                     }
 
                     // Check for float type hints on money-like parameters
-                    if (preg_match('/function\s+\w+\s*\([^)]*float\s+\$\w*(' . 'amount|balance|value|price|cost|salary|income|premium|fee|payment' . ')/i', $line)) {
+                    if (preg_match('/function\s+(\w+)\s*\([^)]*float\s+\$\w*(' . 'amount|balance|value|price|cost|salary|income|premium|fee|payment' . ')/i', $line, $m)) {
                         $relPath = str_replace(base_path() . '/', '', $path);
+                        $methodName = $m[1] ?? '';
+                        $key = "{$relPath}:{$methodName}";
+                        if (in_array($key, $allowed, true)) {
+                            continue;
+                        }
                         $violations[] = "{$relPath}:" . ($lineNum + 1) . ": {$trimmed}";
                     }
                 }

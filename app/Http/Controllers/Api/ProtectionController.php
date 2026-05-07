@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers\Api;
 
-use App\Agents\ProtectionAgent;
+use Fynla\Packs\Gb\Agents\ProtectionAgent;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Protection\ScenarioRequest;
 use App\Http\Requests\Protection\StoreCriticalIllnessPolicyRequest;

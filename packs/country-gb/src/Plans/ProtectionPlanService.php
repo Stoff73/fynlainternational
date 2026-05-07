@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Fynla\Packs\Gb\Plans;
 
-use App\Agents\ProtectionAgent;
+use Fynla\Packs\Gb\Agents\ProtectionAgent;
 use App\Models\User;
 use App\Services\Plans\BasePlanService;
 use App\Services\Protection\ComprehensiveProtectionPlanService;

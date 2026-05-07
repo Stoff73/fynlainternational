@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-use App\Agents\ProtectionAgent;
+use Fynla\Packs\Gb\Agents\ProtectionAgent;
 use Fynla\Packs\Gb\Models\ProtectionProfile;
 use App\Models\User;
 use Fynla\Packs\Gb\Coordination\RecommendationPersonaliser;

@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace Fynla\Packs\Gb\Coordination;
 
-use App\Agents\ProtectionAgent;
-use App\Agents\RetirementAgent;
-use App\Agents\SavingsAgent;
+use Fynla\Packs\Gb\Agents\ProtectionAgent;
+use Fynla\Packs\Gb\Agents\RetirementAgent;
+use Fynla\Packs\Gb\Agents\SavingsAgent;
 use App\Models\User;
 use Fynla\Packs\Gb\Estate\ComprehensiveEstatePlanService;
 use App\Services\Investment\PortfolioAnalyzer;

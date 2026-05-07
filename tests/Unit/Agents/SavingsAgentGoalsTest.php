@@ -40,7 +40,7 @@ describe('SavingsAgent goal recommendations', function () {
             'monthly_contribution' => 200,
         ]);
 
-        $agent = app(\App\Agents\SavingsAgent::class);
+        $agent = app(\Fynla\Packs\Gb\Agents\SavingsAgent::class);
         $analysis = $agent->analyze($this->user->id);
 
         // generateRecommendations returns a flat array
@@ -60,7 +60,7 @@ describe('SavingsAgent goal recommendations', function () {
             'current_balance' => 1000,
         ]);
 
-        $agent = app(\App\Agents\SavingsAgent::class);
+        $agent = app(\Fynla\Packs\Gb\Agents\SavingsAgent::class);
         $analysis = $agent->analyze($this->user->id);
         $recommendations = $agent->generateRecommendations(
             array_merge($analysis, ['user_id' => $this->user->id])
@@ -89,7 +89,7 @@ describe('SavingsAgent goal recommendations', function () {
             'status' => 'confirmed',
         ]);
 
-        $agent = app(\App\Agents\SavingsAgent::class);
+        $agent = app(\Fynla\Packs\Gb\Agents\SavingsAgent::class);
         $analysis = $agent->analyze($this->user->id);
         $recommendations = $agent->generateRecommendations(
             array_merge($analysis, ['user_id' => $this->user->id])

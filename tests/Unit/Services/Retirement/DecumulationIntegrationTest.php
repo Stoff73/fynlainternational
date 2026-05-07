@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-use App\Agents\RetirementAgent;
+use Fynla\Packs\Gb\Agents\RetirementAgent;
 use Fynla\Packs\Gb\Models\DCPension;
 use Fynla\Packs\Gb\Models\RetirementProfile;
 use Fynla\Packs\Gb\Models\StatePension;

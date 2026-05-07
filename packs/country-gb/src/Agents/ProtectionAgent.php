@@ -2,7 +2,9 @@
 
 declare(strict_types=1);
 
-namespace App\Agents;
+namespace Fynla\Packs\Gb\Agents;
+
+use App\Agents\BaseAgent;
 
 use App\Models\Goal;
 use App\Models\User;

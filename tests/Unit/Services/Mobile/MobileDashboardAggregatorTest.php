@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-use App\Agents\EstateAgent;
-use App\Agents\GoalsAgent;
-use App\Agents\InvestmentAgent;
-use App\Agents\ProtectionAgent;
-use App\Agents\RetirementAgent;
-use App\Agents\SavingsAgent;
+use Fynla\Packs\Gb\Agents\EstateAgent;
+use Fynla\Packs\Gb\Agents\GoalsAgent;
+use Fynla\Packs\Gb\Agents\InvestmentAgent;
+use Fynla\Packs\Gb\Agents\ProtectionAgent;
+use Fynla\Packs\Gb\Agents\RetirementAgent;
+use Fynla\Packs\Gb\Agents\SavingsAgent;
 use Fynla\Packs\Gb\Models\Mortgage;
 use Fynla\Packs\Gb\Models\Property;
 use Fynla\Packs\Gb\Models\SavingsAccount;

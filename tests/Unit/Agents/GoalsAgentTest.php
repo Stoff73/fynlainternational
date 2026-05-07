@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-use App\Agents\GoalsAgent;
+use Fynla\Packs\Gb\Agents\GoalsAgent;
 use App\Models\Goal;
 use App\Models\User;
 use Fynla\Packs\Gb\Goals\GoalAffordabilityService;

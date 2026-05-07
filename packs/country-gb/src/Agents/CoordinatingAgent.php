@@ -2,7 +2,10 @@
 
 declare(strict_types=1);
 
-namespace App\Agents;
+namespace Fynla\Packs\Gb\Agents;
+
+use App\Agents\BaseAgent;
+use App\Agents\TaxOptimisationAgent;
 
 use Fynla\Packs\Gb\Models\BusinessInterest;
 use Fynla\Packs\Gb\Models\Chattel;

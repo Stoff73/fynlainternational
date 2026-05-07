@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Fynla\Packs\Gb\Plans;
 
-use App\Agents\InvestmentAgent;
-use App\Agents\SavingsAgent;
+use Fynla\Packs\Gb\Agents\InvestmentAgent;
+use Fynla\Packs\Gb\Agents\SavingsAgent;
 use Fynla\Packs\Gb\Models\Investment\InvestmentAccount;
 use Fynla\Packs\Gb\Models\SavingsAccount;
 use App\Models\User;

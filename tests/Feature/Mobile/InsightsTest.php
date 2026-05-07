@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-use App\Agents\CoordinatingAgent;
+use Fynla\Packs\Gb\Agents\CoordinatingAgent;
 use App\Models\User;
 
 beforeEach(function () {

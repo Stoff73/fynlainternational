@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-use App\Agents\ProtectionAgent;
-use App\Agents\RetirementAgent;
-use App\Agents\SavingsAgent;
+use Fynla\Packs\Gb\Agents\ProtectionAgent;
+use Fynla\Packs\Gb\Agents\RetirementAgent;
+use Fynla\Packs\Gb\Agents\SavingsAgent;
 use App\Models\User;
 use Fynla\Packs\Gb\Coordination\RecommendationPersonaliser;
 use Fynla\Packs\Gb\Coordination\RecommendationsAggregatorService;

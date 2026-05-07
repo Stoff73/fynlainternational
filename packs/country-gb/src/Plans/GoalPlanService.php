@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Fynla\Packs\Gb\Plans;
 
-use App\Agents\GoalsAgent;
+use Fynla\Packs\Gb\Agents\GoalsAgent;
 use App\Models\Goal;
 use App\Models\User;
 use App\Services\Plans\BasePlanService;

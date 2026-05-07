@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Services\Protection;
 
-use App\Agents\ProtectionAgent;
+use Fynla\Packs\Gb\Agents\ProtectionAgent;
 use Fynla\Packs\Gb\Models\ProtectionProfile;
 use Fynla\Packs\Gb\Protection\AdequacyScorer;
 use Fynla\Packs\Gb\Protection\RecommendationEngine;

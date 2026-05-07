@@ -22,6 +22,12 @@ arch('all agents extend BaseAgent')
     ->toExtend('App\Agents\BaseAgent')
     ->ignoring('App\Agents\BaseAgent');
 
+// R-8: 7 module agents relocated to GB pack — parallel rule for pack agents.
+arch('all GB pack agents extend BaseAgent')
+    ->expect('Fynla\Packs\Gb\Agents')
+    ->classes()
+    ->toExtend('App\Agents\BaseAgent');
+
 // Test: All models use proper traits
 arch('all models extend Eloquent Model')
     ->expect('App\Models')
@@ -71,6 +77,10 @@ arch('controllers do not use DB facade directly')
 // Test: Services and Agents use strict types
 arch('all agents use strict types')
     ->expect('App\Agents')
+    ->toUseStrictTypes();
+
+arch('all GB pack agents use strict types')
+    ->expect('Fynla\Packs\Gb\Agents')
     ->toUseStrictTypes();
 
 arch('all services use strict types')
@@ -156,6 +166,11 @@ arch('all agents have analyze method')
     ->classes()
     ->toHaveMethod('analyze')
     ->ignoring('App\Agents\BaseAgent');
+
+arch('all GB pack agents have analyze method')
+    ->expect('Fynla\Packs\Gb\Agents')
+    ->classes()
+    ->toHaveMethod('analyze');
 
 // Test: Test classes follow naming conventions
 arch('test classes end with Test suffix')

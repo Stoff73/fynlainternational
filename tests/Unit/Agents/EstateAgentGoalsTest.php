@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-use App\Agents\EstateAgent;
+use Fynla\Packs\Gb\Agents\EstateAgent;
 use App\Models\Goal;
 use App\Models\User;
 use Fynla\Packs\Gb\Coordination\RecommendationPersonaliser;

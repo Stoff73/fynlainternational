@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Services\Plans;
 
-use App\Agents\RetirementAgent;
+use Fynla\Packs\Gb\Agents\RetirementAgent;
 use Fynla\Packs\Gb\Models\DBPension;
 use Fynla\Packs\Gb\Models\DCPension;
 use Fynla\Packs\Gb\Models\Investment\InvestmentAccount;

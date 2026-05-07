@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace App\Observers;
 
-use App\Agents\CoordinatingAgent;
-use App\Agents\EstateAgent;
-use App\Agents\InvestmentAgent;
-use App\Agents\ProtectionAgent;
-use App\Agents\RetirementAgent;
-use App\Agents\SavingsAgent;
+use Fynla\Packs\Gb\Agents\CoordinatingAgent;
+use Fynla\Packs\Gb\Agents\EstateAgent;
+use Fynla\Packs\Gb\Agents\InvestmentAgent;
+use Fynla\Packs\Gb\Agents\ProtectionAgent;
+use Fynla\Packs\Gb\Agents\RetirementAgent;
+use Fynla\Packs\Gb\Agents\SavingsAgent;
 use App\Agents\TaxOptimisationAgent;
 use Illuminate\Database\Eloquent\Model;
 

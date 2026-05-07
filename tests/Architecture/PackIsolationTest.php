@@ -41,10 +41,9 @@ describe('Pack Isolation', function () {
             $this->markTestSkipped('packs/country-gb/src directory not found');
         }
 
-        // R-2: provider wiring (Providers/) and module-orchestrator agents
-        // that have not yet relocated (Agents/CoordinatingAgent.php, R-8) may
-        // still reference \App\Services\… and \App\Agents\… while UK code
-        // moves in across R-3 → R-9. R-15 ratchets the exemption away.
+        // R-2: provider wiring (Providers/) may still reference \App\Services\…
+        // while UK code moves in across R-3 → R-9. R-15 ratchets the exemption
+        // away.
         //
         // R-3: Constants/ and Traits/ have App\Models\* and App\Services\*
         // imports that don't move until R-4 (Models) and R-5 (Tax services).
@@ -108,10 +107,16 @@ describe('Pack Isolation', function () {
             // R-7c: Coordination clean services moved into the GB pack. The
             // 3 R-14a deferrals (CashFlowCoordinator, CrossModuleStrategyService,
             // HouseholdPlanningService) stay in app/Services/Coordination/.
-            // Pack RecommendationsAggregatorService imports App\Agents\*
-            // (R-8 deferral) and App\Services\Investment\PortfolioAnalyzer
-            // (R-14a) across the boundary; pinned by allow-list below.
+            // Pack RecommendationsAggregatorService imports
+            // App\Services\Investment\PortfolioAnalyzer (R-14a) across the
+            // boundary; pinned by allow-list below.
             $packDir . DIRECTORY_SEPARATOR . 'Coordination' . DIRECTORY_SEPARATOR,
+            // R-8: 7 module agents (Coordinating + 6 module agents) moved
+            // into the GB pack. They extend App\Agents\BaseAgent (still in
+            // app/Agents pending follow-up) and import deferred R-14a peers
+            // (Coordination/Protection/AI services) across the boundary;
+            // pinned by allow-list below.
+            $packDir . DIRECTORY_SEPARATOR . 'Agents' . DIRECTORY_SEPARATOR,
         ];
 
         $violations = [];
@@ -142,7 +147,7 @@ describe('Pack Isolation', function () {
         );
     });
 
-    it('country-gb Constants/Traits/Models/Estate/Tax/Retirement/Investment/Protection/Savings/Goals/Plans/Coordination only import allow-listed App\\ namespaces (R-6/R-7 ratchet)', function () {
+    it('country-gb Constants/Traits/Models/Estate/Tax/Retirement/Investment/Protection/Savings/Goals/Plans/Coordination/Agents only import allow-listed App\\ namespaces (R-6/R-7/R-8 ratchet)', function () {
         $packDir = base_path('packs/country-gb/src');
         $targetDirs = [
             $packDir . DIRECTORY_SEPARATOR . 'Constants',
@@ -157,6 +162,7 @@ describe('Pack Isolation', function () {
             $packDir . DIRECTORY_SEPARATOR . 'Goals',
             $packDir . DIRECTORY_SEPARATOR . 'Plans',
             $packDir . DIRECTORY_SEPARATOR . 'Coordination',
+            $packDir . DIRECTORY_SEPARATOR . 'Agents',
         ];
 
         // The R-3/R-4 relocations tolerate a narrow allow-list of App\
@@ -175,16 +181,19 @@ describe('Pack Isolation', function () {
             'App\\Models\\LifeEvent',
             'App\\Models\\LifeEventAllocation',
             'App\\Models\\User',
-            // App\Agents\* — module agents relocate in R-8. Pack Plans
-            // services orchestrate via these agents and import them across
-            // the boundary until R-8 lands.
-            'App\\Agents\\EstateAgent',
-            'App\\Agents\\GoalsAgent',
-            'App\\Agents\\InvestmentAgent',
-            'App\\Agents\\ProtectionAgent',
-            'App\\Agents\\RetirementAgent',
-            'App\\Agents\\SavingsAgent',
+            // App\Agents\BaseAgent — abstract parent of all module agents.
+            // Stays in app/Agents/ as a generic orchestrator base (no UK-only
+            // logic except a TaxDefaults cache-TTL constant). The 7 relocated
+            // GB agents extend it across the boundary.
+            'App\\Agents\\BaseAgent',
+            // App\Agents\TaxOptimisationAgent — implements the
+            // TaxOptimisationEngine contract; bound by GbPackServiceProvider
+            // as `pack.gb.tax_optimisation`. Stays in app/Agents/ pending its
+            // App\Services\Tax\TaxOptimisationService dependency relocating
+            // in R-14a. Pack CoordinatingAgent injects it across the boundary.
+            'App\\Agents\\TaxOptimisationAgent',
             // App\Services\* — relocated in R-5/R-6.
+            'App\\Services\\AI\\AiToolDefinitions', // R-8: CoordinatingAgent imports
             'App\\Services\\AI\\KycGateChecker',
             'App\\Services\\AI\\QueryClassifier',
             'App\\Services\\AI\\SystemPromptBuilder',
@@ -196,6 +205,12 @@ describe('Pack Isolation', function () {
             'App\\Services\\UKTaxCalculator',
             // App\Services\* — relocated in R-6/R-7.
             'App\\Services\\Cache\\CacheInvalidationService',
+            // R-14a deferred Coordination services — float-money signatures
+            // keep these in app/Services/Coordination/ until the int-minor
+            // money refactor. Pack CoordinatingAgent imports both across
+            // the boundary.
+            'App\\Services\\Coordination\\CashFlowCoordinator', // R-14a
+            'App\\Services\\Coordination\\CrossModuleStrategyService', // R-14a
             // R-14a deferred Goals services — float-money signatures (ADR-005)
             // keep these in app/Services/Goals/ until the int-minor money
             // refactor lands. Pack GoalStrategyService imports
@@ -251,8 +266,10 @@ describe('Pack Isolation', function () {
             'App\\Services\\Plans\\RetirementPlanService', // R-14a
             // R-14a deferred Protection services — pack ProtectionPlanService
             // imports ComprehensiveProtectionPlanService and
-            // ProtectionActionDefinitionService across the boundary.
+            // ProtectionActionDefinitionService across the boundary; pack
+            // ProtectionAgent (R-8) imports CoverageGapAnalyzer.
             'App\\Services\\Protection\\ComprehensiveProtectionPlanService', // R-14a
+            'App\\Services\\Protection\\CoverageGapAnalyzer', // R-14a
             'App\\Services\\Protection\\ProtectionActionDefinitionService', // R-14a
             'App\\Services\\Property\\PropertyCalculationService',
             // R-14a deferred Retirement services — float-money signatures

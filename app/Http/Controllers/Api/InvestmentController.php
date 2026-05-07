@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers\Api;
 
-use App\Agents\InvestmentAgent;
+use Fynla\Packs\Gb\Agents\InvestmentAgent;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Investment\AccountProjectionsRequest;
 use App\Http\Requests\Investment\ScenarioRequest;

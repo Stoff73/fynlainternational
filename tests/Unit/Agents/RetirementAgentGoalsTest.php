@@ -39,7 +39,7 @@ describe('RetirementAgent goal integration', function () {
             'monthly_contribution' => 500,
         ]);
 
-        $agent = app(\App\Agents\RetirementAgent::class);
+        $agent = app(\Fynla\Packs\Gb\Agents\RetirementAgent::class);
         $result = $agent->analyze($this->user->id);
 
         expect($result['data'])->toHaveKey('post_retirement_goals');

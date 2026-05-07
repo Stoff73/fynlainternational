@@ -3,7 +3,7 @@
 declare(strict_types=1);
 
 arch('ProtectionAgent extends BaseAgent')
-    ->expect('App\Agents\ProtectionAgent')
+    ->expect('Fynla\Packs\Gb\Agents\ProtectionAgent')
     ->toExtend('App\Agents\BaseAgent');
 
 arch('Protection services are in correct namespace')
@@ -36,5 +36,5 @@ arch('Protection controllers are in correct namespace')
 arch('strict types declared in Protection files')
     ->expect('App\Services\Protection')
     ->toUseStrictTypes()
-    ->and('App\Agents\ProtectionAgent')
+    ->and('Fynla\Packs\Gb\Agents\ProtectionAgent')
     ->toUseStrictTypes();

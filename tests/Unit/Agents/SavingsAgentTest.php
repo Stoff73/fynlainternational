@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-use App\Agents\SavingsAgent;
+use Fynla\Packs\Gb\Agents\SavingsAgent;
 use Fynla\Packs\Gb\Models\SavingsAccount;
 use Fynla\Packs\Gb\Models\SavingsGoal;
 use App\Models\User;

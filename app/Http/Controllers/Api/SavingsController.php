@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers\Api;
 
-use App\Agents\SavingsAgent;
+use Fynla\Packs\Gb\Agents\SavingsAgent;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Savings\SavingsAnalysisRequest;
 use App\Http\Requests\Savings\ScenarioRequest;

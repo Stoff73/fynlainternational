@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers\Api;
 
-use App\Agents\GoalsAgent;
+use Fynla\Packs\Gb\Agents\GoalsAgent;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Goals\StoreGoalRequest;
 use App\Http\Requests\Goals\UpdateGoalRequest;
