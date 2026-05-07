@@ -14,7 +14,7 @@ use Fynla\Packs\Gb\Investment\MonteCarloSimulator;
 use App\Services\Investment\PortfolioAnalyzer;
 use Fynla\Packs\Gb\Investment\SimpleAssetAllocationOptimizer;
 use App\Services\Investment\TaxEfficiencyCalculator;
-use App\Services\Plans\PlanConfigService;
+use Fynla\Packs\Gb\Plans\PlanConfigService;
 use App\Services\Retirement\AnnualAllowanceChecker;
 use App\Services\Retirement\DecumulationPlanner;
 use App\Services\Retirement\PensionContributionOptimizer;

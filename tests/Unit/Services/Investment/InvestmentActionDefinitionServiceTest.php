@@ -6,7 +6,7 @@ use Fynla\Packs\Gb\Models\InvestmentActionDefinition;
 use App\Models\User;
 use App\Services\Investment\FeeAnalyzer;
 use Fynla\Packs\Gb\Investment\InvestmentActionDefinitionService;
-use App\Services\Plans\PlanConfigService;
+use Fynla\Packs\Gb\Plans\PlanConfigService;
 use Fynla\Packs\Gb\Tax\TaxConfigService;
 use Database\Seeders\InvestmentActionDefinitionSeeder;
 use Database\Seeders\PlanConfigurationSeeder;

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Services\Plans;
+namespace Fynla\Packs\Gb\Plans;
 
 use App\Agents\EstateAgent;
 use Fynla\Packs\Gb\Constants\TaxDefaults;
@@ -10,6 +10,7 @@ use Fynla\Packs\Gb\Models\Estate\Will;
 use Fynla\Packs\Gb\Models\LifeInsurancePolicy;
 use App\Models\User;
 use App\Services\Coordination\RecommendationPersonaliser;
+use App\Services\Plans\BasePlanService;
 use Fynla\Packs\Gb\Estate\EstateAssetAggregatorService;
 use Fynla\Packs\Gb\Estate\IHTCalculationService;
 use App\Services\Estate\IHTFormattingService;

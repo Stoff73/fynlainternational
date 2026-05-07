@@ -6,7 +6,7 @@ use App\Services\Coordination\CashFlowCoordinator;
 use App\Services\Coordination\ConflictResolver;
 use App\Services\Coordination\HolisticPlanner;
 use App\Services\Coordination\PriorityRanker;
-use App\Services\Plans\PlanConfigService;
+use Fynla\Packs\Gb\Plans\PlanConfigService;
 use Fynla\Packs\Gb\Tax\TaxConfigService;
 
 // Helper: create ConflictResolver with mocked TaxConfigService

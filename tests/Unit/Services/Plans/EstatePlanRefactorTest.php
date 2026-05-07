@@ -8,9 +8,9 @@ use App\Services\Coordination\RecommendationPersonaliser;
 use Fynla\Packs\Gb\Estate\EstateAssetAggregatorService;
 use Fynla\Packs\Gb\Estate\IHTCalculationService;
 use App\Services\Estate\IHTFormattingService;
-use App\Services\Plans\DisposableIncomeAccessor;
-use App\Services\Plans\EstatePlanService;
-use App\Services\Plans\PlanConfigService;
+use Fynla\Packs\Gb\Plans\DisposableIncomeAccessor;
+use Fynla\Packs\Gb\Plans\EstatePlanService;
+use Fynla\Packs\Gb\Plans\PlanConfigService;
 use Fynla\Packs\Gb\Tax\TaxConfigService;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 

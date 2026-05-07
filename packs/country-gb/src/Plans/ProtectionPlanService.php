@@ -2,10 +2,11 @@
 
 declare(strict_types=1);
 
-namespace App\Services\Plans;
+namespace Fynla\Packs\Gb\Plans;
 
 use App\Agents\ProtectionAgent;
 use App\Models\User;
+use App\Services\Plans\BasePlanService;
 use App\Services\Protection\ComprehensiveProtectionPlanService;
 use App\Services\Protection\ProtectionActionDefinitionService;
 

@@ -13,7 +13,7 @@ namespace App\Services\Coordination;
 class HolisticPlanner
 {
     public function __construct(
-        private readonly \App\Services\Plans\PlanConfigService $planConfig
+        private readonly \Fynla\Packs\Gb\Plans\PlanConfigService $planConfig
     ) {}
 
     /**

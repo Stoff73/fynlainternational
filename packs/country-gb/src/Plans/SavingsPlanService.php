@@ -2,13 +2,14 @@
 
 declare(strict_types=1);
 
-namespace App\Services\Plans;
+namespace Fynla\Packs\Gb\Plans;
 
 use App\Agents\InvestmentAgent;
 use App\Agents\SavingsAgent;
 use Fynla\Packs\Gb\Models\Investment\InvestmentAccount;
 use Fynla\Packs\Gb\Models\SavingsAccount;
 use App\Models\User;
+use App\Services\Plans\BasePlanService;
 use Fynla\Packs\Gb\Savings\SavingsActionDefinitionService;
 use Fynla\Packs\Gb\Tax\TaxConfigService;
 

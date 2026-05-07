@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Services\Plans;
+namespace Fynla\Packs\Gb\Plans;
 
 use Fynla\Packs\Gb\Constants\TaxDefaults;
 use Fynla\Packs\Gb\Models\PlanConfiguration;

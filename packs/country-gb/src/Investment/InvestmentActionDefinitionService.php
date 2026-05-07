@@ -7,7 +7,7 @@ namespace Fynla\Packs\Gb\Investment;
 use Fynla\Packs\Gb\Constants\TaxDefaults;
 use App\Models\Goal;
 use Fynla\Packs\Gb\Models\InvestmentActionDefinition;
-use App\Services\Plans\PlanConfigService;
+use Fynla\Packs\Gb\Plans\PlanConfigService;
 use App\Services\Investment\FeeAnalyzer;
 use Fynla\Packs\Gb\Tax\TaxConfigService;
 use App\Traits\FormatsCurrency;

@@ -2,7 +2,10 @@
 
 declare(strict_types=1);
 
-namespace App\Services\Plans;
+namespace Fynla\Packs\Gb\Plans;
+
+use App\Services\Plans\InvestmentPlanService;
+use App\Services\Plans\RetirementPlanService;
 
 /**
  * Handles precise backend recalculation of what-if scenarios

@@ -3,7 +3,7 @@
 declare(strict_types=1);
 
 use Fynla\Packs\Gb\Models\PlanConfiguration;
-use App\Services\Plans\PlanConfigService;
+use Fynla\Packs\Gb\Plans\PlanConfigService;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
 uses(RefreshDatabase::class);

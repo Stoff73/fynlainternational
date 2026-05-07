@@ -13,6 +13,8 @@ use Fynla\Packs\Gb\Models\PlanActionFundingSelection;
 use Fynla\Packs\Gb\Models\SavingsAccount;
 use App\Models\User;
 use App\Services\Coordination\RecommendationPersonaliser;
+use Fynla\Packs\Gb\Plans\DisposableIncomeAccessor;
+use Fynla\Packs\Gb\Plans\PlanConfigService;
 use App\Services\Investment\FeeAnalyzer;
 use Fynla\Packs\Gb\Investment\InvestmentActionDefinitionService;
 use Fynla\Packs\Gb\Investment\Recommendation\ConflictResolutionService;

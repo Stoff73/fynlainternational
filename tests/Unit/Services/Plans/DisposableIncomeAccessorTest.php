@@ -3,7 +3,7 @@
 declare(strict_types=1);
 
 use App\Models\User;
-use App\Services\Plans\DisposableIncomeAccessor;
+use Fynla\Packs\Gb\Plans\DisposableIncomeAccessor;
 use App\Services\UserProfile\UserProfileService;
 
 describe('DisposableIncomeAccessor', function () {

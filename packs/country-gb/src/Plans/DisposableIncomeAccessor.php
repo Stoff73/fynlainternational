@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Services\Plans;
+namespace Fynla\Packs\Gb\Plans;
 
 use App\Models\User;
 use App\Services\UserProfile\UserProfileService;

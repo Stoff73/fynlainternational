@@ -2,11 +2,13 @@
 
 declare(strict_types=1);
 
-namespace App\Services\Plans;
+namespace Fynla\Packs\Gb\Plans;
 
 use App\Agents\GoalsAgent;
 use App\Models\Goal;
 use App\Models\User;
+use App\Services\Plans\BasePlanService;
+use App\Services\Plans\DistributionAccount;
 use Fynla\Packs\Gb\Goals\GoalAffordabilityService;
 use App\Services\Goals\GoalProgressService;
 use Fynla\Packs\Gb\Goals\GoalStrategyService;

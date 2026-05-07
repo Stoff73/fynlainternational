@@ -20,7 +20,7 @@ use App\Services\Cache\CacheInvalidationService;
 use Fynla\Packs\Gb\Goals\GoalStrategyService;
 use Fynla\Packs\Gb\Goals\LifeEventIntegrationService;
 use App\Services\NetWorth\NetWorthService;
-use App\Services\Plans\SavingsPlanService;
+use Fynla\Packs\Gb\Plans\SavingsPlanService;
 use Fynla\Packs\Gb\Savings\FSCSAssessor;
 use App\Services\Savings\ISATracker;
 use Fynla\Packs\Gb\Savings\PSACalculator;

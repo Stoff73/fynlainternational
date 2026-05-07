@@ -77,7 +77,7 @@ describe('Pack Isolation', function () {
             // R-14a peers, plus App\Services\Investment\Rebalancing\*
             // (R-6b-iii target), App\Services\Investment\Utilities\* (R-6b-iv
             // target), App\Jobs\RunMonteCarloSimulation,
-            // App\Services\Plans\PlanConfigService, and
+            // Fynla\Packs\Gb\Plans\PlanConfigService, and
             // App\Services\Shared\MonteCarloEngine. Pinned by allow-list.
             $packDir . DIRECTORY_SEPARATOR . 'Investment' . DIRECTORY_SEPARATOR,
             // R-6c: Protection clean services moved into the GB pack. The
@@ -98,6 +98,13 @@ describe('Pack Isolation', function () {
             // Pack GoalStrategyService imports two of them across the
             // boundary; pinned by allow-list below.
             $packDir . DIRECTORY_SEPARATOR . 'Goals' . DIRECTORY_SEPARATOR,
+            // R-7b: Plans clean services moved into the GB pack. The 4
+            // R-14a deferrals (BasePlanService, DistributionAccount,
+            // InvestmentPlanService, RetirementPlanService) stay in
+            // app/Services/Plans/. Pack Plans services extend BasePlanService
+            // and reference App\Agents\* (R-8 deferral) across the boundary;
+            // pinned by allow-list below.
+            $packDir . DIRECTORY_SEPARATOR . 'Plans' . DIRECTORY_SEPARATOR,
         ];
 
         $violations = [];
@@ -128,7 +135,7 @@ describe('Pack Isolation', function () {
         );
     });
 
-    it('country-gb Constants/Traits/Models/Estate/Tax/Retirement/Investment/Protection/Savings/Goals only import allow-listed App\\ namespaces (R-6/R-7 ratchet)', function () {
+    it('country-gb Constants/Traits/Models/Estate/Tax/Retirement/Investment/Protection/Savings/Goals/Plans only import allow-listed App\\ namespaces (R-6/R-7 ratchet)', function () {
         $packDir = base_path('packs/country-gb/src');
         $targetDirs = [
             $packDir . DIRECTORY_SEPARATOR . 'Constants',
@@ -141,6 +148,7 @@ describe('Pack Isolation', function () {
             $packDir . DIRECTORY_SEPARATOR . 'Protection',
             $packDir . DIRECTORY_SEPARATOR . 'Savings',
             $packDir . DIRECTORY_SEPARATOR . 'Goals',
+            $packDir . DIRECTORY_SEPARATOR . 'Plans',
         ];
 
         // The R-3/R-4 relocations tolerate a narrow allow-list of App\
@@ -159,6 +167,14 @@ describe('Pack Isolation', function () {
             'App\\Models\\LifeEvent',
             'App\\Models\\LifeEventAllocation',
             'App\\Models\\User',
+            // App\Agents\* — module agents relocate in R-8. Pack Plans
+            // services orchestrate via these agents and import them across
+            // the boundary until R-8 lands.
+            'App\\Agents\\EstateAgent',
+            'App\\Agents\\GoalsAgent',
+            'App\\Agents\\InvestmentAgent',
+            'App\\Agents\\ProtectionAgent',
+            'App\\Agents\\SavingsAgent',
             // App\Services\* — relocated in R-5/R-6.
             'App\\Services\\AI\\KycGateChecker',
             'App\\Services\\AI\\QueryClassifier',
@@ -171,6 +187,10 @@ describe('Pack Isolation', function () {
             'App\\Services\\UKTaxCalculator',
             // App\Services\* — relocated in R-6/R-7.
             'App\\Services\\Cache\\CacheInvalidationService',
+            // R-7c target — Coordination clean services move next; pack
+            // EstatePlanService imports RecommendationPersonaliser via the
+            // boundary until that relocation lands.
+            'App\\Services\\Coordination\\RecommendationPersonaliser',
             // R-14a deferred Goals services — float-money signatures (ADR-005)
             // keep these in app/Services/Goals/ until the int-minor money
             // refactor lands. Pack GoalStrategyService imports
@@ -214,9 +234,21 @@ describe('Pack Isolation', function () {
             // App\Jobs\* — Job dispatched by ScenarioService when running
             // Monte Carlo simulations. Stays in app/Jobs after R-6b.
             'App\\Jobs\\RunMonteCarloSimulation',
-            // App\Services\Plans\* — InvestmentActionDefinitionService
-            // imports PlanConfigService. Plans relocates in R-7.
-            'App\\Services\\Plans\\PlanConfigService',
+            // R-14a deferred Plans services — BasePlanService and concrete
+            // plan-money services keep float-money signatures (ADR-005). Pack
+            // EstatePlanService / GoalPlanService / ProtectionPlanService /
+            // SavingsPlanService extend BasePlanService; WhatIfCalculator
+            // imports InvestmentPlanService + RetirementPlanService;
+            // GoalPlanService instantiates DistributionAccount.
+            'App\\Services\\Plans\\BasePlanService', // R-14a
+            'App\\Services\\Plans\\DistributionAccount', // R-14a
+            'App\\Services\\Plans\\InvestmentPlanService', // R-14a
+            'App\\Services\\Plans\\RetirementPlanService', // R-14a
+            // R-14a deferred Protection services — pack ProtectionPlanService
+            // imports ComprehensiveProtectionPlanService and
+            // ProtectionActionDefinitionService across the boundary.
+            'App\\Services\\Protection\\ComprehensiveProtectionPlanService', // R-14a
+            'App\\Services\\Protection\\ProtectionActionDefinitionService', // R-14a
             'App\\Services\\Property\\PropertyCalculationService',
             // R-14a deferred Retirement services — float-money signatures
             // (ADR-005) keep these in app/Services/Retirement/ until the

@@ -11,7 +11,7 @@ use Fynla\Packs\Gb\Models\SavingsAccount;
 use Fynla\Packs\Gb\Models\SavingsGoal;
 use App\Models\User;
 use App\Services\Goals\GoalProgressService;
-use App\Services\Plans\PlanConfigService;
+use Fynla\Packs\Gb\Plans\PlanConfigService;
 use Fynla\Packs\Gb\Savings\EmergencyFundCalculator;
 use Fynla\Packs\Gb\Savings\FSCSAssessor;
 use Fynla\Packs\Gb\Savings\GoalProgressCalculator;
