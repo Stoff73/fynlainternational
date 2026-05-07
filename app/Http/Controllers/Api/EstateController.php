@@ -25,7 +25,7 @@ use Fynla\Packs\Gb\Models\Investment\InvestmentAccount;
 use App\Services\Cache\CacheInvalidationService;
 use Fynla\Packs\Gb\Estate\CashFlowProjector;
 use Fynla\Packs\Gb\Estate\NetWorthAnalyzer;
-use App\Services\Goals\LifeEventIntegrationService;
+use Fynla\Packs\Gb\Goals\LifeEventIntegrationService;
 use Fynla\Packs\Gb\Tax\TaxConfigService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;

@@ -2,10 +2,12 @@
 
 declare(strict_types=1);
 
-namespace App\Services\Goals;
+namespace Fynla\Packs\Gb\Goals;
 
 use App\Models\Goal;
 use App\Models\User;
+use App\Services\Goals\GoalAssignmentService;
+use App\Services\Goals\GoalProgressService;
 
 /**
  * Goal Strategy Service

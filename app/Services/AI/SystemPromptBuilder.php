@@ -451,7 +451,7 @@ class SystemPromptBuilder
 
             // Life event impact summaries
             try {
-                $integrationService = app(\App\Services\Goals\LifeEventIntegrationService::class);
+                $integrationService = app(\Fynla\Packs\Gb\Goals\LifeEventIntegrationService::class);
                 $impactModules = ['savings', 'investment', 'retirement', 'protection', 'estate'];
                 $lifeEventImpacts = [];
 

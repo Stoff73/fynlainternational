@@ -31,7 +31,7 @@ use Fynla\Packs\Gb\Models\IncomeProtectionPolicy;
 use Fynla\Packs\Gb\Models\LifeInsurancePolicy;
 use Fynla\Packs\Gb\Models\ProtectionProfile;
 use Fynla\Packs\Gb\Models\SicknessIllnessPolicy;
-use App\Services\Goals\LifeEventIntegrationService;
+use Fynla\Packs\Gb\Goals\LifeEventIntegrationService;
 use Fynla\Packs\Gb\Traits\PolicyCRUDTrait;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;

@@ -6,7 +6,7 @@ use Fynla\Packs\Gb\Models\DBPension;
 use Fynla\Packs\Gb\Models\DCPension;
 use Fynla\Packs\Gb\Models\StatePension;
 use App\Models\User;
-use App\Services\Goals\LifeEventCashFlowService;
+use Fynla\Packs\Gb\Goals\LifeEventCashFlowService;
 use Fynla\Packs\Gb\Investment\MonteCarloSimulator;
 use Fynla\Packs\Gb\Retirement\RequiredCapitalCalculator;
 use App\Services\Retirement\RetirementProjectionService;

@@ -6,7 +6,7 @@ namespace App\Models;
 
 use Fynla\Packs\Gb\Models\SavingsAccount;
 
-use App\Services\Goals\GoalCalculationService;
+use Fynla\Packs\Gb\Goals\GoalCalculationService;
 use Fynla\Core\Traits\Auditable;
 use Fynla\Core\Traits\HasJointOwnership;
 use Illuminate\Database\Eloquent\Builder;

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Services\Goals;
+namespace Fynla\Packs\Gb\Goals;
 
 use App\Models\User;
 use Illuminate\Support\Collection;

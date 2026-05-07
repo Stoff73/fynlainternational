@@ -92,6 +92,12 @@ describe('Pack Isolation', function () {
             // RateComparator imports App\Services\Savings\ISATracker across
             // the boundary; pinned by allow-list below.
             $packDir . DIRECTORY_SEPARATOR . 'Savings' . DIRECTORY_SEPARATOR,
+            // R-7a: Goals clean services moved into the GB pack. The 3
+            // R-14a deferrals (GoalAssignmentService, GoalProgressService,
+            // LifeEventAllocationService) stay in app/Services/Goals/.
+            // Pack GoalStrategyService imports two of them across the
+            // boundary; pinned by allow-list below.
+            $packDir . DIRECTORY_SEPARATOR . 'Goals' . DIRECTORY_SEPARATOR,
         ];
 
         $violations = [];
@@ -122,7 +128,7 @@ describe('Pack Isolation', function () {
         );
     });
 
-    it('country-gb Constants/Traits/Models/Estate/Tax/Retirement/Investment/Protection/Savings only import allow-listed App\\ namespaces (R-6/R-7 ratchet)', function () {
+    it('country-gb Constants/Traits/Models/Estate/Tax/Retirement/Investment/Protection/Savings/Goals only import allow-listed App\\ namespaces (R-6/R-7 ratchet)', function () {
         $packDir = base_path('packs/country-gb/src');
         $targetDirs = [
             $packDir . DIRECTORY_SEPARATOR . 'Constants',
@@ -134,6 +140,7 @@ describe('Pack Isolation', function () {
             $packDir . DIRECTORY_SEPARATOR . 'Investment',
             $packDir . DIRECTORY_SEPARATOR . 'Protection',
             $packDir . DIRECTORY_SEPARATOR . 'Savings',
+            $packDir . DIRECTORY_SEPARATOR . 'Goals',
         ];
 
         // The R-3/R-4 relocations tolerate a narrow allow-list of App\
@@ -164,8 +171,17 @@ describe('Pack Isolation', function () {
             'App\\Services\\UKTaxCalculator',
             // App\Services\* — relocated in R-6/R-7.
             'App\\Services\\Cache\\CacheInvalidationService',
-            'App\\Services\\Goals\\LifeEventIntegrationService',
-            'App\\Services\\Goals\\LifeEventService',
+            // R-14a deferred Goals services — float-money signatures (ADR-005)
+            // keep these in app/Services/Goals/ until the int-minor money
+            // refactor lands. Pack GoalStrategyService imports
+            // GoalAssignmentService + GoalProgressService across the boundary.
+            'App\\Services\\Goals\\GoalAssignmentService', // R-14a
+            'App\\Services\\Goals\\GoalProgressService', // R-14a
+            'App\\Services\\Goals\\LifeEventAllocationService', // R-14a
+            // App\Services\NetWorth\NetWorthService — used by pack
+            // GoalsProjectionService. Stays in app/Services/NetWorth/ until
+            // a follow-up workstream relocates the NetWorth module.
+            'App\\Services\\NetWorth\\NetWorthService',
             // R-14a deferred Investment services — float-money signatures
             // (ADR-005) keep these in app/Services/Investment/ until the
             // int-minor money refactor. Pack code that collaborates with

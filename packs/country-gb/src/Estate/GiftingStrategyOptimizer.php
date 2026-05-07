@@ -7,7 +7,7 @@ namespace Fynla\Packs\Gb\Estate;
 use App\Services\Estate\FutureValueCalculator;
 
 use App\Models\User;
-use App\Services\Goals\LifeEventService;
+use Fynla\Packs\Gb\Goals\LifeEventService;
 use Fynla\Packs\Gb\Tax\TaxConfigService;
 use Fynla\Packs\Gb\Traits\ResolvesExpenditure;
 use Fynla\Packs\Gb\Traits\ResolvesIncome;

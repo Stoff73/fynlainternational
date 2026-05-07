@@ -9,7 +9,7 @@ use App\Http\Requests\StoreLifeEventRequest;
 use App\Http\Requests\UpdateLifeEventRequest;
 use App\Http\Traits\SanitizedErrorResponse;
 use App\Models\LifeEvent;
-use App\Services\Goals\LifeEventService;
+use Fynla\Packs\Gb\Goals\LifeEventService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 

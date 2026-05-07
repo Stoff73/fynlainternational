@@ -5,10 +5,10 @@ declare(strict_types=1);
 use App\Agents\GoalsAgent;
 use App\Models\Goal;
 use App\Models\User;
-use App\Services\Goals\GoalAffordabilityService;
+use Fynla\Packs\Gb\Goals\GoalAffordabilityService;
 use App\Services\Goals\GoalAssignmentService;
 use App\Services\Goals\GoalProgressService;
-use App\Services\Goals\GoalRiskService;
+use Fynla\Packs\Gb\Goals\GoalRiskService;
 use Illuminate\Support\Facades\Cache;
 
 beforeEach(function () {

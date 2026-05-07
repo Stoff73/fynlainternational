@@ -6,10 +6,10 @@ namespace App\Agents;
 
 use App\Models\Goal;
 use App\Models\User;
-use App\Services\Goals\GoalAffordabilityService;
+use Fynla\Packs\Gb\Goals\GoalAffordabilityService;
 use App\Services\Goals\GoalAssignmentService;
 use App\Services\Goals\GoalProgressService;
-use App\Services\Goals\GoalRiskService;
+use Fynla\Packs\Gb\Goals\GoalRiskService;
 
 /**
  * Goals Agent - orchestrates goals analysis and recommendations.

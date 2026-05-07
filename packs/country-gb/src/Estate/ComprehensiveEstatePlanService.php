@@ -12,7 +12,7 @@ use Fynla\Packs\Gb\Models\ActuarialLifeTable;
 use Fynla\Packs\Gb\Models\Estate\IHTProfile;
 use Fynla\Core\Models\FamilyMember;
 use App\Models\User;
-use App\Services\Goals\LifeEventIntegrationService;
+use Fynla\Packs\Gb\Goals\LifeEventIntegrationService;
 use Fynla\Packs\Gb\Tax\TaxConfigService;
 use App\Services\UserProfile\ProfileCompletenessChecker;
 use Fynla\Core\Traits\CalculatesOwnershipShare;

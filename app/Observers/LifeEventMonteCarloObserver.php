@@ -6,7 +6,7 @@ namespace App\Observers;
 
 use App\Models\LifeEvent;
 use App\Services\Cache\CacheInvalidationService;
-use App\Services\Goals\GoalsProjectionService;
+use Fynla\Packs\Gb\Goals\GoalsProjectionService;
 use Fynla\Packs\Gb\Investment\MonteCarloSimulator;
 
 /**

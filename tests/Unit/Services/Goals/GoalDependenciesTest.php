@@ -120,7 +120,7 @@ it('returns risk parameters for a goal', function () {
         'use_global_risk_profile' => false,
     ]);
 
-    $service = app(\App\Services\Goals\GoalRiskService::class);
+    $service = app(\Fynla\Packs\Gb\Goals\GoalRiskService::class);
     $params = $service->getRiskParameters($goal);
 
     expect($params)->toHaveKeys(['risk_level', 'risk_label', 'expected_return', 'volatility', 'use_global_profile']);
@@ -135,7 +135,7 @@ it('defaults to balanced risk when no preference set', function () {
         'use_global_risk_profile' => false,
     ]);
 
-    $service = app(\App\Services\Goals\GoalRiskService::class);
+    $service = app(\Fynla\Packs\Gb\Goals\GoalRiskService::class);
     $params = $service->getRiskParameters($goal);
 
     expect($params['risk_level'])->toBe(3);
@@ -148,7 +148,7 @@ it('clamps risk level to valid range', function () {
         'use_global_risk_profile' => false,
     ]);
 
-    $service = app(\App\Services\Goals\GoalRiskService::class);
+    $service = app(\Fynla\Packs\Gb\Goals\GoalRiskService::class);
     $params = $service->getRiskParameters($goal);
 
     expect($params['risk_level'])->toBe(5);
@@ -166,7 +166,7 @@ it('returns projections for an investment goal', function () {
         'use_global_risk_profile' => false,
     ]);
 
-    $service = app(\App\Services\Goals\GoalRiskService::class);
+    $service = app(\Fynla\Packs\Gb\Goals\GoalRiskService::class);
     $projections = $service->getProjections($goal);
 
     expect($projections)->toHaveKeys(['risk_parameters', 'projections', 'yearly_projections', 'recommendation']);
@@ -178,7 +178,7 @@ it('returns projections for an investment goal', function () {
 });
 
 it('returns available risk levels', function () {
-    $service = app(\App\Services\Goals\GoalRiskService::class);
+    $service = app(\Fynla\Packs\Gb\Goals\GoalRiskService::class);
     $levels = $service->getAvailableRiskLevels();
 
     expect($levels)->toHaveCount(5);

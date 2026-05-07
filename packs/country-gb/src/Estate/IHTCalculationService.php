@@ -13,7 +13,7 @@ use Fynla\Packs\Gb\Models\Estate\IHTProfile;
 use Fynla\Packs\Gb\Models\Investment\InvestmentAccount;
 use Fynla\Packs\Gb\Models\Property;
 use App\Models\User;
-use App\Services\Goals\LifeEventService;
+use Fynla\Packs\Gb\Goals\LifeEventService;
 use App\Services\Investment\InvestmentProjectionService;
 use App\Services\Settings\AssumptionsService;
 use Fynla\Packs\Gb\Tax\TaxConfigService;

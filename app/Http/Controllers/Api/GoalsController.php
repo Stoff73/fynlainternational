@@ -12,13 +12,13 @@ use App\Http\Resources\GoalContributionResource;
 use App\Http\Resources\GoalResource;
 use App\Http\Traits\SanitizedErrorResponse;
 use App\Models\Goal;
-use App\Services\Goals\FinancialForecastService;
-use App\Services\Goals\GoalAffordabilityService;
+use Fynla\Packs\Gb\Goals\FinancialForecastService;
+use Fynla\Packs\Gb\Goals\GoalAffordabilityService;
 use App\Services\Goals\GoalAssignmentService;
 use App\Services\Goals\GoalProgressService;
-use App\Services\Goals\GoalRiskService;
-use App\Services\Goals\GoalsProjectionService;
-use App\Services\Goals\LifeEventService;
+use Fynla\Packs\Gb\Goals\GoalRiskService;
+use Fynla\Packs\Gb\Goals\GoalsProjectionService;
+use Fynla\Packs\Gb\Goals\LifeEventService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
