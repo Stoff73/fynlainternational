@@ -60,7 +60,6 @@ use App\Http\Controllers\Api\Retirement\DCPensionHoldingsController;
 use App\Http\Controllers\Api\Retirement\DecumulationController;
 use App\Http\Controllers\Api\RetirementController;
 use App\Http\Controllers\Api\RiskPreferenceController;
-use App\Http\Controllers\Api\SavingsController;
 use App\Http\Controllers\Api\SessionController;
 use App\Http\Controllers\Api\Settings\AssumptionsController;
 use App\Http\Controllers\Api\SpousePermissionController;
@@ -393,30 +392,7 @@ Route::middleware('auth:sanctum')->prefix('protection')->group(function () {
     });
 });
 
-// Savings module routes
-Route::middleware('auth:sanctum')->prefix('savings')->group(function () {
-    // Main savings data and analysis
-    Route::get('/', [SavingsController::class, 'index']);
-    Route::post('/analyze', [SavingsController::class, 'analyze']);
-    Route::get('/recommendations', [SavingsController::class, 'recommendations']);
-    Route::post('/scenarios', [SavingsController::class, 'scenarios']);
-
-    // ISA allowance tracking
-    Route::get('/isa-allowance/{taxYear}', [SavingsController::class, 'isaAllowance'])->where('taxYear', '.*');
-
-    // Savings accounts
-    Route::prefix('accounts')->group(function () {
-        Route::post('/', [SavingsController::class, 'storeAccount']);
-        Route::get('/{id}', [SavingsController::class, 'showAccount']);
-        Route::put('/{id}', [SavingsController::class, 'updateAccount']);
-        Route::delete('/{id}', [SavingsController::class, 'destroyAccount']);
-        Route::patch('/{id}/toggle-retirement', [SavingsController::class, 'toggleRetirementInclusion']);
-    });
-
-    // Legacy savings goals - DEPRECATED since v0.7.0
-    // Goals are now managed via unified Goals module: /api/goals?module=savings
-    // See GoalsController for the unified API. Legacy routes removed in v0.8.1.
-});
+// Savings module routes — relocated to packs/country-gb/routes/api.php in R-9d.
 
 // Goals module routes (unified goals-based planning)
 Route::middleware('auth:sanctum')->prefix('goals')->group(function () {

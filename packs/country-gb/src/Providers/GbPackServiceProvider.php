@@ -10,6 +10,7 @@ use Fynla\Core\Registry\PackManifest as CorePackManifest;
 use Fynla\Core\Registry\PackRegistry;
 use Fynla\Core\Validation\NullBankingValidator;
 use Fynla\Core\Validation\NullIdentityValidator;
+use Illuminate\Support\Facades\Route;
 use Illuminate\Support\ServiceProvider;
 
 /**
@@ -79,5 +80,14 @@ class GbPackServiceProvider extends ServiceProvider
             // UK routes mount under /api/gb/* in WS R-9 + R-14.
             'routes' => [],
         ]));
+
+        // R-9d: mount pack routes under the same /api prefix and api
+        // middleware group as routes/api.php. Per the R-9 URL-strategy
+        // decision, GB routes mount WITHOUT a /api/gb/ prefix so URL
+        // paths stay identical and feature tests keep passing. The
+        // Option X prefix + redirect layer ships in R-14.
+        Route::middleware('api')
+            ->prefix('api')
+            ->group(__DIR__.'/../../routes/api.php');
     }
 }

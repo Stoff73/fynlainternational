@@ -127,6 +127,12 @@ describe('Pack Isolation', function () {
             // observers extend App\Observers\RiskRecalculationObserver
             // (generic base, stays in app/Observers/); pinned by allow-list.
             $packDir . DIRECTORY_SEPARATOR . 'Observers' . DIRECTORY_SEPARATOR,
+            // R-9d: UK module controllers begin moving into the GB pack
+            // (Savings first). Controllers extend App\Http\Controllers\Controller
+            // (Laravel base controller, stays in core) and use
+            // App\Http\Traits\SanitizedErrorResponse (cross-cutting trait,
+            // stays in core); pinned by allow-list below.
+            $packDir . DIRECTORY_SEPARATOR . 'Http' . DIRECTORY_SEPARATOR . 'Controllers' . DIRECTORY_SEPARATOR,
         ];
 
         $violations = [];
@@ -174,6 +180,7 @@ describe('Pack Isolation', function () {
             $packDir . DIRECTORY_SEPARATOR . 'Coordination',
             $packDir . DIRECTORY_SEPARATOR . 'Agents',
             $packDir . DIRECTORY_SEPARATOR . 'Http' . DIRECTORY_SEPARATOR . 'Resources',
+            $packDir . DIRECTORY_SEPARATOR . 'Http' . DIRECTORY_SEPARATOR . 'Controllers',
             $packDir . DIRECTORY_SEPARATOR . 'Observers',
         ];
 
@@ -209,6 +216,11 @@ describe('Pack Isolation', function () {
             // Pack resources for joint-ownable models reference UserResource
             // for user / joint_owner relationships across the boundary.
             'App\\Http\\Resources\\UserResource',
+            // R-9d: pack controllers extend the Laravel base controller and
+            // use the cross-cutting SanitizedErrorResponse trait. Both stay
+            // in core as framework / shared infrastructure.
+            'App\\Http\\Controllers\\Controller',
+            'App\\Http\\Traits\\SanitizedErrorResponse',
             // App\Observers\RiskRecalculationObserver — generic base class
             // (debounced job dispatch). Stays in app/Observers/ as a non-UK
             // helper; the 4 UK risk observers (DCPension, InvestmentAccount,
