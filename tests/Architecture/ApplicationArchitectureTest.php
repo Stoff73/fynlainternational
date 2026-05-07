@@ -65,7 +65,8 @@ arch('controllers do not use DB facade directly')
         'App\Http\Controllers\Api\FamilyMembersController', // Uses DB for relationship queries
         'App\Http\Controllers\Api\PaymentController', // Uses DB for payment processing
         'App\Http\Controllers\Api\RetirementController', // Uses DB for batch pension queries
-        'App\Http\Controllers\Api\InvestmentController', // Uses DB for portfolio aggregation
+        // InvestmentController relocated to packs/country-gb/src/Http/Controllers/ (R-9f),
+        // outside the App\Http\Controllers namespace this rule scopes to.
         // ZaProtectionController relocated to packs/country-za/src/Http/Controllers/ (R-0a),
         // outside the App\Http\Controllers namespace this rule scopes to.
     ]);

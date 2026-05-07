@@ -20,6 +20,11 @@ describe('No Float Money', function () {
             // helper that takes float $newTargetIncome (display + arithmetic with
             // other float-money values). Int-minor refactor in R-14a.
             'packs/country-gb/src/Agents/RetirementAgent.php:buildLowerTargetScenario',
+            // R-9f: AssetLocationController relocated with private
+            // calculateIncomeTaxRate(float $income) helper used to derive
+            // a marginal rate for asset-location placement scoring. Int-minor
+            // refactor in R-14a.
+            'packs/country-gb/src/Http/Controllers/Investment/AssetLocationController.php:calculateIncomeTaxRate',
         ];
 
         $violations = [];

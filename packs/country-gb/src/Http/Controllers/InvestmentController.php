@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Http\Controllers\Api;
+namespace Fynla\Packs\Gb\Http\Controllers;
 
 use Fynla\Packs\Gb\Agents\InvestmentAgent;
 use App\Http\Controllers\Controller;
@@ -14,8 +14,8 @@ use Fynla\Packs\Gb\Http\Requests\Investment\StoreInvestmentGoalRequest;
 use Fynla\Packs\Gb\Http\Requests\Investment\StoreRiskProfileRequest;
 use Fynla\Packs\Gb\Http\Requests\Investment\UpdateHoldingRequest;
 use Fynla\Packs\Gb\Http\Requests\Investment\UpdateInvestmentGoalRequest;
-use App\Http\Requests\StoreInvestmentAccountRequest;
-use App\Http\Requests\UpdateInvestmentAccountRequest;
+use Fynla\Packs\Gb\Http\Requests\Investment\StoreInvestmentAccountRequest;
+use Fynla\Packs\Gb\Http\Requests\Investment\UpdateInvestmentAccountRequest;
 use Fynla\Packs\Gb\Http\Resources\HoldingResource;
 use Fynla\Packs\Gb\Http\Resources\InvestmentAccountResource;
 use App\Http\Traits\SanitizedErrorResponse;

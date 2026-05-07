@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace App\Http\Controllers\Api;
+namespace Fynla\Packs\Gb\Http\Controllers;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\StoreInvestmentActionDefinitionRequest;
+use Fynla\Packs\Gb\Http\Requests\Investment\StoreInvestmentActionDefinitionRequest;
 use App\Http\Traits\SanitizedErrorResponse;
 use Fynla\Packs\Gb\Models\InvestmentActionDefinition;
 use Illuminate\Http\JsonResponse;
