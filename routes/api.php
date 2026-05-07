@@ -39,9 +39,6 @@ use App\Http\Controllers\Api\PreviewController;
 use App\Http\Controllers\Api\ProfileCompletenessController;
 use App\Http\Controllers\Api\PropertyController;
 use App\Http\Controllers\Api\RecommendationsController;
-use App\Http\Controllers\Api\Retirement\DCPensionHoldingsController;
-use App\Http\Controllers\Api\Retirement\DecumulationController;
-use App\Http\Controllers\Api\RetirementController;
 use App\Http\Controllers\Api\RiskPreferenceController;
 use App\Http\Controllers\Api\SessionController;
 use App\Http\Controllers\Api\Settings\AssumptionsController;
@@ -480,61 +477,7 @@ Route::middleware(['auth:sanctum', 'feature:pro'])->prefix('estate')->group(func
     });
 });
 
-// Retirement module routes
-Route::middleware('auth:sanctum')->prefix('retirement')->group(function () {
-    // Main retirement data and analysis
-    Route::get('/', [RetirementController::class, 'index']);
-    Route::get('/projections', [RetirementController::class, 'getProjections']);
-    Route::get('/required-capital', [RetirementController::class, 'getRequiredCapital']);
-    Route::get('/dc-pensions/{id}/projections', [RetirementController::class, 'getDCPensionProjection']);
-    Route::post('/analyze', [RetirementController::class, 'analyze']);
-    Route::get('/recommendations', [RetirementController::class, 'recommendations']);
-    Route::post('/scenarios', [RetirementController::class, 'scenarios']);
-
-    // DC Pension Portfolio Analysis (advanced analytics)
-    Route::get('/portfolio-analysis', [RetirementController::class, 'analyzeDCPensionPortfolio']);
-    Route::get('/portfolio-analysis/{dcPensionId}', [RetirementController::class, 'analyzeDCPensionPortfolio']);
-
-    // Annual allowance checking
-    Route::get('/annual-allowance/{taxYear}', [RetirementController::class, 'checkAnnualAllowance'])->where('taxYear', '.*');
-
-    // Retirement strategies
-    Route::get('/strategies', [RetirementController::class, 'getStrategies']);
-    Route::get('/strategies/impact', [RetirementController::class, 'calculateStrategyImpact']);
-
-    // Retirement income (tax-optimized drawdown)
-    Route::get('/income', [RetirementController::class, 'getRetirementIncome']);
-    Route::post('/income/calculate', [RetirementController::class, 'calculateRetirementIncome']);
-    Route::get('/income/accounts', [RetirementController::class, 'getIncomeAccounts']);
-
-    // Decumulation analysis (drawdown strategies)
-    Route::get('/decumulation-analysis', [DecumulationController::class, 'analysis']);
-
-    // DC pensions
-    Route::prefix('pensions/dc')->group(function () {
-        Route::post('/', [RetirementController::class, 'storeDCPension']);
-        Route::put('/{id}', [RetirementController::class, 'updateDCPension']);
-        Route::delete('/{id}', [RetirementController::class, 'destroyDCPension']);
-
-        // DC Pension Holdings (for portfolio optimization)
-        Route::get('/{dcPensionId}/holdings', [DCPensionHoldingsController::class, 'index']);
-        Route::post('/{dcPensionId}/holdings', [DCPensionHoldingsController::class, 'store']);
-        Route::put('/{dcPensionId}/holdings/{holdingId}', [DCPensionHoldingsController::class, 'update']);
-        Route::delete('/{dcPensionId}/holdings/{holdingId}', [DCPensionHoldingsController::class, 'destroy']);
-        Route::post('/{dcPensionId}/holdings/bulk-update', [DCPensionHoldingsController::class, 'bulkUpdate']);
-        Route::get('/{id}/diversification', [RetirementController::class, 'getDCPensionDiversification']);
-    });
-
-    // DB pensions
-    Route::prefix('pensions/db')->group(function () {
-        Route::post('/', [RetirementController::class, 'storeDBPension']);
-        Route::put('/{id}', [RetirementController::class, 'updateDBPension']);
-        Route::delete('/{id}', [RetirementController::class, 'destroyDBPension']);
-    });
-
-    // State pension
-    Route::post('/state-pension', [RetirementController::class, 'updateStatePension']);
-});
+// Retirement module routes — relocated to packs/country-gb/routes/api.php in R-9g.
 
 // Plans routes (comprehensive cross-module plans)
 Route::middleware('auth:sanctum')->prefix('plans')->group(function () {
@@ -704,15 +647,7 @@ Route::middleware(['auth:sanctum', 'permission:admin.access'])->prefix('admin')-
     Route::patch('/discount-codes/{id}/toggle', [\App\Http\Controllers\Api\AdminController::class, 'toggleDiscountCode']);
 });
 
-// Retirement Action Definitions (admin-configurable plan actions)
-Route::middleware(['auth:sanctum', 'permission:admin.access', 'throttle:30,1'])->prefix('admin/retirement-actions')->group(function () {
-    Route::get('/', [\App\Http\Controllers\Api\RetirementActionDefinitionController::class, 'index']);
-    Route::get('/{id}', [\App\Http\Controllers\Api\RetirementActionDefinitionController::class, 'show']);
-    Route::post('/', [\App\Http\Controllers\Api\RetirementActionDefinitionController::class, 'store']);
-    Route::put('/{id}', [\App\Http\Controllers\Api\RetirementActionDefinitionController::class, 'update']);
-    Route::delete('/{id}', [\App\Http\Controllers\Api\RetirementActionDefinitionController::class, 'destroy']);
-    Route::patch('/{id}/toggle', [\App\Http\Controllers\Api\RetirementActionDefinitionController::class, 'toggleEnabled']);
-});
+// Retirement Action Definitions (admin-configurable plan actions) — relocated to packs/country-gb/routes/api.php in R-9g.
 
 // Investment Action Definitions (admin-configurable plan actions) — relocated to packs/country-gb/routes/api.php in R-9f.
 

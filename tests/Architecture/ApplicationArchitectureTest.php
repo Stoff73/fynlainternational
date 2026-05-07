@@ -59,14 +59,14 @@ arch('controllers do not use DB facade directly')
     ->ignoring([
         'App\Http\Controllers\Api\Estate\IHTController',
         'App\Http\Controllers\Api\TaxSettingsController',
-        'App\Http\Controllers\Api\Retirement\DCPensionHoldingsController',
         'App\Http\Controllers\Api\PreviewController', // Uses DB for complex persona queries
         'App\Http\Controllers\Api\WebhookController', // Uses DB for payment transaction handling
         'App\Http\Controllers\Api\FamilyMembersController', // Uses DB for relationship queries
         'App\Http\Controllers\Api\PaymentController', // Uses DB for payment processing
-        'App\Http\Controllers\Api\RetirementController', // Uses DB for batch pension queries
         // InvestmentController relocated to packs/country-gb/src/Http/Controllers/ (R-9f),
         // outside the App\Http\Controllers namespace this rule scopes to.
+        // RetirementController + Retirement\DCPensionHoldingsController relocated to
+        // packs/country-gb/src/Http/Controllers/ (R-9g), outside scope.
         // ZaProtectionController relocated to packs/country-za/src/Http/Controllers/ (R-0a),
         // outside the App\Http\Controllers namespace this rule scopes to.
     ]);

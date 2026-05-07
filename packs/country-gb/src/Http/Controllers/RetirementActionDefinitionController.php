@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace App\Http\Controllers\Api;
+namespace Fynla\Packs\Gb\Http\Controllers;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\StoreRetirementActionDefinitionRequest;
+use Fynla\Packs\Gb\Http\Requests\Retirement\StoreRetirementActionDefinitionRequest;
 use App\Http\Traits\SanitizedErrorResponse;
 use Fynla\Packs\Gb\Models\RetirementActionDefinition;
 use Illuminate\Http\JsonResponse;

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Http\Controllers\Api;
+namespace Fynla\Packs\Gb\Http\Controllers;
 
 use Fynla\Packs\Gb\Agents\RetirementAgent;
 use App\Http\Controllers\Controller;
