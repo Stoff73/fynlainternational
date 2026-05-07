@@ -2,16 +2,19 @@
 
 declare(strict_types=1);
 
-namespace App\Services\Retirement;
+namespace Fynla\Packs\Gb\Retirement;
 
+use App\Models\User;
+use App\Services\Retirement\DecumulationPlanner;
+use App\Services\Retirement\PensionContributionOptimizer;
+use App\Services\Retirement\SalarySacrificeAnalyzer;
+use App\Traits\FormatsCurrency;
 use Fynla\Packs\Gb\Constants\TaxDefaults;
 use Fynla\Packs\Gb\Models\DCPension;
 use Fynla\Packs\Gb\Models\RetirementActionDefinition;
 use Fynla\Packs\Gb\Models\RetirementProfile;
 use Fynla\Packs\Gb\Models\StatePension;
-use App\Models\User;
 use Fynla\Packs\Gb\Tax\TaxConfigService;
-use App\Traits\FormatsCurrency;
 
 /**
  * Evaluates retirement action definitions against user data

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Services\Retirement;
+namespace Fynla\Packs\Gb\Retirement;
 
 use App\Models\User;
 use App\Services\Settings\AssumptionsService;

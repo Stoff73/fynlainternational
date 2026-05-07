@@ -8,7 +8,7 @@ use Fynla\Packs\Gb\Models\StatePension;
 use App\Models\User;
 use App\Services\Goals\LifeEventCashFlowService;
 use App\Services\Investment\MonteCarloSimulator;
-use App\Services\Retirement\RequiredCapitalCalculator;
+use Fynla\Packs\Gb\Retirement\RequiredCapitalCalculator;
 use App\Services\Retirement\RetirementProjectionService;
 use App\Services\Risk\RiskPreferenceService;
 use Fynla\Packs\Gb\Tax\TaxConfigService;

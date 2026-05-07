@@ -6,7 +6,7 @@ use Fynla\Packs\Gb\Models\DCPension;
 use Fynla\Packs\Gb\Models\RetirementActionDefinition;
 use Fynla\Packs\Gb\Models\RetirementProfile;
 use App\Models\User;
-use App\Services\Retirement\RetirementActionDefinitionService;
+use Fynla\Packs\Gb\Retirement\RetirementActionDefinitionService;
 use Database\Seeders\RetirementActionDefinitionSeeder;
 use Database\Seeders\TaxConfigurationSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;

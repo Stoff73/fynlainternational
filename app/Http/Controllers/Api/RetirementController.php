@@ -22,7 +22,7 @@ use App\Services\Goals\GoalStrategyService;
 use App\Services\Goals\LifeEventIntegrationService;
 use App\Services\Investment\DiversificationAnalyzer;
 use App\Services\Retirement\AnnualAllowanceChecker;
-use App\Services\Retirement\RequiredCapitalCalculator;
+use Fynla\Packs\Gb\Retirement\RequiredCapitalCalculator;
 use App\Services\Retirement\RetirementIncomeService;
 use App\Services\Retirement\RetirementProjectionService;
 use App\Services\Retirement\RetirementStrategyService;

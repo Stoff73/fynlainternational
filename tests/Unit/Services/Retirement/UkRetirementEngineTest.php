@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-use App\Services\Retirement\UkRetirementEngine;
+use Fynla\Packs\Gb\Retirement\UkRetirementEngine;
 use Fynla\Packs\Gb\Tax\TaxConfigService;
 use Database\Seeders\TaxConfigurationSeeder;
 use Fynla\Core\Contracts\RetirementEngine;

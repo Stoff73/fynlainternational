@@ -65,6 +65,13 @@ describe('Pack Isolation', function () {
             // UserProfile) that relocate in R-6/R-7. Pinned by allow-list.
             $packDir . DIRECTORY_SEPARATOR . 'Estate' . DIRECTORY_SEPARATOR,
             $packDir . DIRECTORY_SEPARATOR . 'Tax' . DIRECTORY_SEPARATOR,
+            // R-6a: Retirement clean services moved into the GB pack still
+            // collaborate with the 8 deferred App\Services\Retirement\* peers
+            // (R-14a) and with App\Services\Investment\* peers (R-6b),
+            // App\Services\Settings\AssumptionsService (R-7), and
+            // App\Services\UserProfile\UserProfileService (R-7). Pinned by
+            // allow-list below.
+            $packDir . DIRECTORY_SEPARATOR . 'Retirement' . DIRECTORY_SEPARATOR,
         ];
 
         $violations = [];
@@ -95,7 +102,7 @@ describe('Pack Isolation', function () {
         );
     });
 
-    it('country-gb Constants/Traits/Models/Estate/Tax only import allow-listed App\\ namespaces (R-6/R-7 ratchet)', function () {
+    it('country-gb Constants/Traits/Models/Estate/Tax/Retirement only import allow-listed App\\ namespaces (R-6/R-7 ratchet)', function () {
         $packDir = base_path('packs/country-gb/src');
         $targetDirs = [
             $packDir . DIRECTORY_SEPARATOR . 'Constants',
@@ -103,6 +110,7 @@ describe('Pack Isolation', function () {
             $packDir . DIRECTORY_SEPARATOR . 'Models',
             $packDir . DIRECTORY_SEPARATOR . 'Estate',
             $packDir . DIRECTORY_SEPARATOR . 'Tax',
+            $packDir . DIRECTORY_SEPARATOR . 'Retirement',
         ];
 
         // The R-3/R-4 relocations tolerate a narrow allow-list of App\
@@ -137,12 +145,35 @@ describe('Pack Isolation', function () {
             'App\\Services\\Goals\\LifeEventService',
             'App\\Services\\Investment\\EmployeeSchemeCalculationService',
             'App\\Services\\Investment\\InvestmentProjectionService',
+            // R-6b targets — Investment top-level services that relocate
+            // in the next sub-workstream. PensionPortfolioAnalyzer imports
+            // these for portfolio analysis of DC pension holdings.
+            'App\\Services\\Investment\\DiversificationAnalyzer',
+            'App\\Services\\Investment\\PortfolioAnalyzer',
+            'App\\Services\\Investment\\SimpleAssetAllocationOptimizer',
             'App\\Services\\Property\\PropertyCalculationService',
-            'App\\Services\\Retirement\\AnnualAllowanceChecker',
+            // R-14a deferred Retirement services — float-money signatures
+            // (ADR-005) keep these in app/Services/Retirement/ until the
+            // int-minor money refactor lands. RetirementActionDefinitionService
+            // imports DecumulationPlanner / PensionContributionOptimizer /
+            // SalarySacrificeAnalyzer; AnnualAllowanceChecker collaborates
+            // across pack boundaries as before.
+            'App\\Services\\Retirement\\AnnualAllowanceChecker', // R-14a
+            'App\\Services\\Retirement\\DecumulationPlanner', // R-14a
+            'App\\Services\\Retirement\\PensionContributionOptimizer', // R-14a
+            'App\\Services\\Retirement\\PensionProjector', // R-14a
+            'App\\Services\\Retirement\\RetirementIncomeService', // R-14a
+            'App\\Services\\Retirement\\RetirementProjectionService', // R-14a
+            'App\\Services\\Retirement\\RetirementStrategyService', // R-14a
+            'App\\Services\\Retirement\\SalarySacrificeAnalyzer', // R-14a
             'App\\Services\\Risk\\RiskPreferenceService',
             'App\\Services\\Settings\\AssumptionsService',
             'App\\Services\\Shared\\CrossModuleAssetAggregator',
             'App\\Services\\UserProfile\\ProfileCompletenessChecker',
+            // R-7 target — UserProfileService relocates with the
+            // UserProfile module. RequiredCapitalCalculator imports it
+            // for income-source resolution.
+            'App\\Services\\UserProfile\\UserProfileService',
             // App\Traits\* — FormatsCurrency/CalculatesOCF stay in app/Traits
             // pending the int-minor money refactor (ADR-005).
             'App\\Traits\\FormatsCurrency',
@@ -443,7 +474,7 @@ describe('Pack Isolation', function () {
     });
 
     it('UkRetirementEngine implements the core RetirementEngine contract', function () {
-        expect(class_implements(\App\Services\Retirement\UkRetirementEngine::class))
+        expect(class_implements(\Fynla\Packs\Gb\Retirement\UkRetirementEngine::class))
             ->toContain(\Fynla\Core\Contracts\RetirementEngine::class);
     });
 

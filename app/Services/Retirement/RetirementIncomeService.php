@@ -12,6 +12,7 @@ use Fynla\Packs\Gb\Models\StatePension;
 use App\Models\User;
 use App\Services\Investment\InvestmentProjectionService;
 use App\Services\TaxBandTracker;
+use Fynla\Packs\Gb\Retirement\RequiredCapitalCalculator;
 use Fynla\Packs\Gb\Tax\TaxConfigService;
 
 /**

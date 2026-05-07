@@ -377,7 +377,7 @@ describe('Cross-Module Integration', function () {
             expect(class_exists(\Fynla\Packs\Gb\Estate\EstateDataReadinessService::class))->toBeTrue();
             expect(class_exists(\App\Services\Investment\Recommendation\DataReadinessService::class))->toBeTrue();
             expect(class_exists(\App\Services\Protection\ProtectionDataReadinessService::class))->toBeTrue();
-            expect(class_exists(\App\Services\Retirement\RetirementDataReadinessService::class))->toBeTrue();
+            expect(class_exists(\Fynla\Packs\Gb\Retirement\RetirementDataReadinessService::class))->toBeTrue();
         });
     });
 });

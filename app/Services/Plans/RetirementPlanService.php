@@ -15,7 +15,7 @@ use Fynla\Packs\Gb\Models\SavingsAccount;
 use Fynla\Packs\Gb\Models\StatePension;
 use App\Models\User;
 use App\Services\Retirement\PensionProjector;
-use App\Services\Retirement\RetirementActionDefinitionService;
+use Fynla\Packs\Gb\Retirement\RetirementActionDefinitionService;
 use Fynla\Packs\Gb\Tax\TaxConfigService;
 use Illuminate\Support\Collection;
 
