@@ -6,6 +6,8 @@ namespace App\Services\Protection;
 
 use App\Agents\ProtectionAgent;
 use Fynla\Packs\Gb\Models\ProtectionProfile;
+use Fynla\Packs\Gb\Protection\AdequacyScorer;
+use Fynla\Packs\Gb\Protection\RecommendationEngine;
 use App\Models\User;
 use App\Traits\FormatsCurrency;
 

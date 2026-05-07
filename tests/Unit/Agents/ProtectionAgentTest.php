@@ -6,11 +6,11 @@ use App\Agents\ProtectionAgent;
 use Fynla\Packs\Gb\Models\ProtectionProfile;
 use App\Models\User;
 use App\Services\Coordination\RecommendationPersonaliser;
-use App\Services\Protection\AdequacyScorer;
+use Fynla\Packs\Gb\Protection\AdequacyScorer;
 use App\Services\Protection\CoverageGapAnalyzer;
-use App\Services\Protection\ProtectionDataReadinessService;
-use App\Services\Protection\RecommendationEngine;
-use App\Services\Protection\ScenarioBuilder;
+use Fynla\Packs\Gb\Protection\ProtectionDataReadinessService;
+use Fynla\Packs\Gb\Protection\RecommendationEngine;
+use Fynla\Packs\Gb\Protection\ScenarioBuilder;
 use App\Services\UserProfile\ProfileCompletenessChecker;
 use Illuminate\Support\Facades\Cache;
 

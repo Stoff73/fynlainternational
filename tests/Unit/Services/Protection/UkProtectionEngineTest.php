@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-use App\Services\Protection\UkProtectionEngine;
+use Fynla\Packs\Gb\Protection\UkProtectionEngine;
 use Fynla\Core\Contracts\ProtectionEngine;
 
 beforeEach(function () {

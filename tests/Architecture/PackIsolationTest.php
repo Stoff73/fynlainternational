@@ -80,6 +80,13 @@ describe('Pack Isolation', function () {
             // App\Services\Plans\PlanConfigService, and
             // App\Services\Shared\MonteCarloEngine. Pinned by allow-list.
             $packDir . DIRECTORY_SEPARATOR . 'Investment' . DIRECTORY_SEPARATOR,
+            // R-6c: Protection clean services moved into the GB pack. The
+            // 3 R-14a deferred peers (ComprehensiveProtectionPlanService,
+            // CoverageGapAnalyzer, ProtectionActionDefinitionService) stay
+            // in app/Services/Protection/ pending int-minor money refactor.
+            // Pack code still imports them via cross-boundary use; pinned
+            // by allow-list below.
+            $packDir . DIRECTORY_SEPARATOR . 'Protection' . DIRECTORY_SEPARATOR,
         ];
 
         $violations = [];
@@ -110,7 +117,7 @@ describe('Pack Isolation', function () {
         );
     });
 
-    it('country-gb Constants/Traits/Models/Estate/Tax/Retirement/Investment only import allow-listed App\\ namespaces (R-6/R-7 ratchet)', function () {
+    it('country-gb Constants/Traits/Models/Estate/Tax/Retirement/Investment/Protection only import allow-listed App\\ namespaces (R-6/R-7 ratchet)', function () {
         $packDir = base_path('packs/country-gb/src');
         $targetDirs = [
             $packDir . DIRECTORY_SEPARATOR . 'Constants',
@@ -120,6 +127,7 @@ describe('Pack Isolation', function () {
             $packDir . DIRECTORY_SEPARATOR . 'Tax',
             $packDir . DIRECTORY_SEPARATOR . 'Retirement',
             $packDir . DIRECTORY_SEPARATOR . 'Investment',
+            $packDir . DIRECTORY_SEPARATOR . 'Protection',
         ];
 
         // The R-3/R-4 relocations tolerate a narrow allow-list of App\
@@ -527,7 +535,7 @@ describe('Pack Isolation', function () {
     });
 
     it('UkProtectionEngine implements the core ProtectionEngine contract', function () {
-        expect(class_implements(\App\Services\Protection\UkProtectionEngine::class))
+        expect(class_implements(\Fynla\Packs\Gb\Protection\UkProtectionEngine::class))
             ->toContain(\Fynla\Core\Contracts\ProtectionEngine::class);
     });
 

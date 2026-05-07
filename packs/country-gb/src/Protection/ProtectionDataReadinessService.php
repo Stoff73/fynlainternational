@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Services\Protection;
+namespace Fynla\Packs\Gb\Protection;
 
 use App\Models\LifeEvent;
 use App\Models\User;

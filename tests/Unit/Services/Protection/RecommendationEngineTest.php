@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 use Fynla\Packs\Gb\Models\ProtectionProfile;
 use App\Models\User;
-use App\Services\Protection\RecommendationEngine;
+use Fynla\Packs\Gb\Protection\RecommendationEngine;
 use Fynla\Packs\Gb\Tax\TaxConfigService;
 
 beforeEach(function () {

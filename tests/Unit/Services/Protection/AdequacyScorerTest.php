@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-use App\Services\Protection\AdequacyScorer;
+use Fynla\Packs\Gb\Protection\AdequacyScorer;
 use Fynla\Packs\Gb\Tax\TaxConfigService;
 
 beforeEach(function () {
