@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace App\Http\Controllers\Api\Estate;
 
 use App\Http\Controllers\Controller;
-use App\Http\Resources\Estate\TrustResource;
+use Fynla\Packs\Gb\Http\Resources\Estate\TrustResource;
 use Fynla\Packs\Gb\Models\Estate\Asset;
 use Fynla\Packs\Gb\Models\Estate\Gift;
 use Fynla\Packs\Gb\Models\Estate\IHTProfile;

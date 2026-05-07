@@ -2,14 +2,16 @@
 
 declare(strict_types=1);
 
-namespace App\Http\Resources;
+namespace Fynla\Packs\Gb\Http\Resources;
+
+use App\Http\Resources\UserResource;
 
 use Fynla\Core\Traits\CalculatesOwnershipShare;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 /**
- * @mixin \App\Models\Chattel
+ * @mixin \Fynla\Packs\Gb\Models\Chattel
  */
 class ChattelResource extends JsonResource
 {

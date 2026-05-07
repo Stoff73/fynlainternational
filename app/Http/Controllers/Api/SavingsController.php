@@ -12,7 +12,7 @@ use App\Http\Requests\Savings\StoreSavingsAccountRequest;
 use App\Http\Requests\Savings\StoreSavingsGoalRequest;
 use App\Http\Requests\Savings\UpdateSavingsAccountRequest;
 use App\Http\Requests\Savings\UpdateSavingsGoalRequest;
-use App\Http\Resources\SavingsAccountResource;
+use Fynla\Packs\Gb\Http\Resources\SavingsAccountResource;
 use App\Http\Traits\SanitizedErrorResponse;
 use Fynla\Packs\Gb\Models\SavingsAccount;
 use Fynla\Packs\Gb\Models\SavingsGoal;

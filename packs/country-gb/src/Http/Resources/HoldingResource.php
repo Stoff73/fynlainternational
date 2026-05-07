@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-namespace App\Http\Resources;
+namespace Fynla\Packs\Gb\Http\Resources;
 
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 /**
- * @mixin \App\Models\Investment\Holding
+ * @mixin \Fynla\Packs\Gb\Models\Investment\Holding
  */
 class HoldingResource extends JsonResource
 {

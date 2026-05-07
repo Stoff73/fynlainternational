@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace App\Http\Resources\Protection;
+namespace Fynla\Packs\Gb\Http\Resources\Protection;
 
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class IncomeProtectionPolicyResource extends JsonResource
+class SicknessIllnessPolicyResource extends JsonResource
 {
     public function toArray(Request $request): array
     {
@@ -22,9 +22,9 @@ class IncomeProtectionPolicyResource extends JsonResource
             'benefit_period_months' => $this->benefit_period_months,
             'premium_amount' => (float) $this->premium_amount,
             'premium_frequency' => $this->premium_frequency,
-            'occupation_class' => $this->occupation_class,
+            'conditions_covered' => $this->conditions_covered,
+            'exclusions' => $this->exclusions,
             'policy_start_date' => $this->policy_start_date?->format('Y-m-d'),
-            'policy_end_date' => $this->policy_end_date?->format('Y-m-d'),
             'policy_term_years' => $this->policy_term_years,
             'created_at' => $this->created_at?->toISOString(),
             'updated_at' => $this->updated_at?->toISOString(),

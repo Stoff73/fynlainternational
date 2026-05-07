@@ -7,7 +7,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Chattel\StoreChattelRequest;
 use App\Http\Requests\Chattel\UpdateChattelRequest;
-use App\Http\Resources\ChattelResource;
+use Fynla\Packs\Gb\Http\Resources\ChattelResource;
 use App\Http\Traits\SanitizedErrorResponse;
 use Fynla\Packs\Gb\Models\Chattel;
 use App\Services\Chattel\ChattelCGTService;

@@ -7,7 +7,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\BusinessInterest\StoreBusinessInterestRequest;
 use App\Http\Requests\BusinessInterest\UpdateBusinessInterestRequest;
-use App\Http\Resources\BusinessInterestResource;
+use Fynla\Packs\Gb\Http\Resources\BusinessInterestResource;
 use Fynla\Packs\Gb\Models\BusinessInterest;
 use App\Services\Business\BusinessInterestService;
 use App\Services\NetWorth\NetWorthService;

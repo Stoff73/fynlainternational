@@ -2,13 +2,15 @@
 
 declare(strict_types=1);
 
-namespace App\Http\Resources;
+namespace Fynla\Packs\Gb\Http\Resources;
+
+use App\Http\Resources\UserResource;
 
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 /**
- * @mixin \App\Models\BusinessInterest
+ * @mixin \Fynla\Packs\Gb\Models\BusinessInterest
  */
 class BusinessInterestResource extends JsonResource
 {

@@ -7,7 +7,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StorePropertyRequest;
 use App\Http\Requests\UpdatePropertyRequest;
-use App\Http\Resources\PropertyResource;
+use Fynla\Packs\Gb\Http\Resources\PropertyResource;
 use App\Http\Traits\SanitizedErrorResponse;
 use Fynla\Packs\Gb\Models\Property;
 use App\Services\Property\MortgageService;

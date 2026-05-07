@@ -6,7 +6,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreWhatIfScenarioRequest;
-use App\Http\Resources\WhatIfScenarioResource;
+use Fynla\Packs\Gb\Http\Resources\WhatIfScenarioResource;
 use App\Http\Traits\SanitizedErrorResponse;
 use Fynla\Packs\Gb\Models\WhatIfScenario;
 use App\Services\WhatIf\WhatIfScenarioService;

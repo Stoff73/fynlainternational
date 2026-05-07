@@ -117,6 +117,12 @@ describe('Pack Isolation', function () {
             // (Coordination/Protection/AI services) across the boundary;
             // pinned by allow-list below.
             $packDir . DIRECTORY_SEPARATOR . 'Agents' . DIRECTORY_SEPARATOR,
+            // R-9a: 18 UK Resources moved into the GB pack. Pack resources
+            // for UK joint-ownable models (Property, Mortgage, Investment,
+            // Savings, Chattel, BusinessInterest) reference
+            // App\Http\Resources\UserResource for the user / joint_owner
+            // relationships; pinned by allow-list below.
+            $packDir . DIRECTORY_SEPARATOR . 'Http' . DIRECTORY_SEPARATOR . 'Resources' . DIRECTORY_SEPARATOR,
         ];
 
         $violations = [];
@@ -147,7 +153,7 @@ describe('Pack Isolation', function () {
         );
     });
 
-    it('country-gb Constants/Traits/Models/Estate/Tax/Retirement/Investment/Protection/Savings/Goals/Plans/Coordination/Agents only import allow-listed App\\ namespaces (R-6/R-7/R-8 ratchet)', function () {
+    it('country-gb Constants/Traits/Models/Estate/Tax/Retirement/Investment/Protection/Savings/Goals/Plans/Coordination/Agents/Http only import allow-listed App\\ namespaces (R-6/R-7/R-8/R-9 ratchet)', function () {
         $packDir = base_path('packs/country-gb/src');
         $targetDirs = [
             $packDir . DIRECTORY_SEPARATOR . 'Constants',
@@ -163,6 +169,7 @@ describe('Pack Isolation', function () {
             $packDir . DIRECTORY_SEPARATOR . 'Plans',
             $packDir . DIRECTORY_SEPARATOR . 'Coordination',
             $packDir . DIRECTORY_SEPARATOR . 'Agents',
+            $packDir . DIRECTORY_SEPARATOR . 'Http' . DIRECTORY_SEPARATOR . 'Resources',
         ];
 
         // The R-3/R-4 relocations tolerate a narrow allow-list of App\
@@ -192,6 +199,11 @@ describe('Pack Isolation', function () {
             // App\Services\Tax\TaxOptimisationService dependency relocating
             // in R-14a. Pack CoordinatingAgent injects it across the boundary.
             'App\\Agents\\TaxOptimisationAgent',
+            // App\Http\Resources\UserResource — wraps the deferred App\Models\User.
+            // Stays in app/Http/Resources/ until User relocation in R-14b.
+            // Pack resources for joint-ownable models reference UserResource
+            // for user / joint_owner relationships across the boundary.
+            'App\\Http\\Resources\\UserResource',
             // App\Services\* — relocated in R-5/R-6.
             'App\\Services\\AI\\AiToolDefinitions', // R-8: CoordinatingAgent imports
             'App\\Services\\AI\\KycGateChecker',

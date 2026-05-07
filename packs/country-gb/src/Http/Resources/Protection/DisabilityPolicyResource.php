@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Http\Resources\Protection;
+namespace Fynla\Packs\Gb\Http\Resources\Protection;
 
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
