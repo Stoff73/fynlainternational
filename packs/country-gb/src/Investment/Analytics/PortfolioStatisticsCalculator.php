@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Services\Investment\Analytics;
+namespace Fynla\Packs\Gb\Investment\Analytics;
 
 /**
  * Portfolio Statistics Calculator

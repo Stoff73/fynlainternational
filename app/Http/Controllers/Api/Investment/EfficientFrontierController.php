@@ -7,8 +7,8 @@ namespace App\Http\Controllers\Api\Investment;
 use App\Http\Controllers\Controller;
 use App\Http\Traits\SanitizedErrorResponse;
 use Fynla\Packs\Gb\Models\Investment\InvestmentAccount;
-use App\Services\Investment\Analytics\EfficientFrontierCalculator;
-use App\Services\Investment\Analytics\PortfolioStatisticsCalculator;
+use Fynla\Packs\Gb\Investment\Analytics\EfficientFrontierCalculator;
+use Fynla\Packs\Gb\Investment\Analytics\PortfolioStatisticsCalculator;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 

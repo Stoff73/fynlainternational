@@ -6,11 +6,11 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Http\Traits\SanitizedErrorResponse;
-use App\Services\Investment\Analytics\CorrelationMatrixCalculator;
-use App\Services\Investment\Analytics\CovarianceMatrixCalculator;
-use App\Services\Investment\Analytics\EfficientFrontierCalculator;
-use App\Services\Investment\Analytics\HoldingsDataExtractor;
-use App\Services\Investment\Analytics\MarkowitzOptimizer;
+use Fynla\Packs\Gb\Investment\Analytics\CorrelationMatrixCalculator;
+use Fynla\Packs\Gb\Investment\Analytics\CovarianceMatrixCalculator;
+use Fynla\Packs\Gb\Investment\Analytics\EfficientFrontierCalculator;
+use Fynla\Packs\Gb\Investment\Analytics\HoldingsDataExtractor;
+use Fynla\Packs\Gb\Investment\Analytics\MarkowitzOptimizer;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;

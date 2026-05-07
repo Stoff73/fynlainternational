@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Services\Investment\Analytics;
+namespace Fynla\Packs\Gb\Investment\Analytics;
 
 use Fynla\Packs\Gb\Models\Investment\InvestmentAccount;
 use App\Services\Investment\Utilities\StatisticalFunctions;
