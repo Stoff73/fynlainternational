@@ -38,7 +38,7 @@ describe('Cross-Module Integration', function () {
             TaxConfiguration::factory()->create(['is_active' => true]);
             app()->forgetInstance(\Fynla\Packs\Gb\Tax\TaxConfigService::class);
 
-            $service = app(\App\Services\Investment\Recommendation\SafetyCheckService::class);
+            $service = app(\Fynla\Packs\Gb\Investment\Recommendation\SafetyCheckService::class);
 
             // Context with critically low emergency fund
             $context = [
@@ -375,7 +375,7 @@ describe('Cross-Module Integration', function () {
         it('all 5 modules have data readiness services', function () {
             expect(class_exists(\App\Services\Savings\SavingsDataReadinessService::class))->toBeTrue();
             expect(class_exists(\Fynla\Packs\Gb\Estate\EstateDataReadinessService::class))->toBeTrue();
-            expect(class_exists(\App\Services\Investment\Recommendation\DataReadinessService::class))->toBeTrue();
+            expect(class_exists(\Fynla\Packs\Gb\Investment\Recommendation\DataReadinessService::class))->toBeTrue();
             expect(class_exists(\App\Services\Protection\ProtectionDataReadinessService::class))->toBeTrue();
             expect(class_exists(\Fynla\Packs\Gb\Retirement\RetirementDataReadinessService::class))->toBeTrue();
         });

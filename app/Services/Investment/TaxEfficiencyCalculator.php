@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Services\Investment;
 
-use App\Services\Investment\Tax\CGTHarvestingCalculator;
+use Fynla\Packs\Gb\Investment\Tax\CGTHarvestingCalculator;
 use Fynla\Packs\Gb\Tax\TaxConfigService;
 use Illuminate\Support\Collection;
 

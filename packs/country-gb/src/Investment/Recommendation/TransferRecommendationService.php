@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace App\Services\Investment\Recommendation;
+namespace Fynla\Packs\Gb\Investment\Recommendation;
 
 use Fynla\Packs\Gb\Constants\TaxDefaults;
 use App\Services\Investment\Tax\BedAndISACalculator;
-use App\Services\Investment\Tax\CGTHarvestingCalculator;
+use Fynla\Packs\Gb\Investment\Tax\CGTHarvestingCalculator;
 use Fynla\Packs\Gb\Tax\TaxConfigService;
 use Illuminate\Support\Str;
 

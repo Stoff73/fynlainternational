@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Fynla\Packs\Gb\Investment;
 
-use App\Services\Investment\Utilities\MatrixOperations;
+use Fynla\Packs\Gb\Investment\Utilities\MatrixOperations;
 use App\Services\Shared\MonteCarloEngine;
 use Illuminate\Support\Facades\DB;
 

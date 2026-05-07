@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Fynla\Packs\Gb\Investment\Analytics;
 
-use App\Services\Investment\Utilities\MatrixOperations;
-use App\Services\Investment\Utilities\StatisticalFunctions;
+use Fynla\Packs\Gb\Investment\Utilities\MatrixOperations;
+use Fynla\Packs\Gb\Investment\Utilities\StatisticalFunctions;
 
 /**
  * Markowitz Mean-Variance Portfolio Optimization

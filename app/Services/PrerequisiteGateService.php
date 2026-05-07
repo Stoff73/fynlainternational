@@ -6,7 +6,7 @@ namespace App\Services;
 
 use App\Models\User;
 use Fynla\Packs\Gb\Estate\EstateDataReadinessService;
-use App\Services\Investment\Recommendation\DataReadinessService as InvestmentDataReadinessService;
+use Fynla\Packs\Gb\Investment\Recommendation\DataReadinessService as InvestmentDataReadinessService;
 use App\Services\Protection\ProtectionDataReadinessService;
 use Fynla\Packs\Gb\Retirement\RetirementDataReadinessService;
 use App\Services\Savings\SavingsDataReadinessService;

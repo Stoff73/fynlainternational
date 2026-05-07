@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Services\Investment\Utilities;
+namespace Fynla\Packs\Gb\Investment\Utilities;
 
 /**
  * Statistical functions for portfolio analysis

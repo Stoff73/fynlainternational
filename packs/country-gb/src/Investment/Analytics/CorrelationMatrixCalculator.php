@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Fynla\Packs\Gb\Investment\Analytics;
 
-use App\Services\Investment\Utilities\StatisticalFunctions;
+use Fynla\Packs\Gb\Investment\Utilities\StatisticalFunctions;
 use Illuminate\Support\Collection;
 
 /**

@@ -16,7 +16,7 @@ use Fynla\Packs\Gb\Investment\InvestmentActionDefinitionService;
 use App\Services\Investment\InvestmentProjectionService;
 use Fynla\Packs\Gb\Investment\MonteCarloSimulator;
 use App\Services\Investment\PortfolioAnalyzer;
-use App\Services\Investment\Recommendation\DataReadinessService;
+use Fynla\Packs\Gb\Investment\Recommendation\DataReadinessService;
 use Fynla\Packs\Gb\Investment\SimpleAssetAllocationOptimizer;
 use App\Services\Investment\TaxEfficiencyCalculator;
 use Fynla\Packs\Gb\Tax\TaxConfigService;

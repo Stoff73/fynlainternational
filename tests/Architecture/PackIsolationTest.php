@@ -175,11 +175,12 @@ describe('Pack Isolation', function () {
             'App\\Services\\Investment\\Tax\\BedAndISACalculator', // R-14a
             'App\\Services\\Investment\\Tax\\ISAAllowanceOptimizer', // R-14a
             'App\\Services\\Investment\\Tax\\TaxOptimizationAnalyzer', // R-14a
-            // R-6b cross-subworkstream temporary entries — these relocate
-            // later in this same R-6b workstream. Removed when the
-            // corresponding sub-commit lands.
-            'App\\Services\\Investment\\Utilities\\MatrixOperations', // R-6b-iv
-            'App\\Services\\Investment\\Utilities\\StatisticalFunctions', // R-6b-iv
+            // R-6b complete: all 37 clean Investment services have relocated
+            // (R-6b-i top-level, R-6b-ii Analytics + AssetLocation,
+            // R-6b-iii ModelPortfolio + Performance + Rebalancing,
+            // R-6b-iv Recommendation + Tax + Utilities). The 19 remaining
+            // App\Services\Investment\* entries above are R-14a deferrals
+            // pinned by the int-minor money refactor.
             // App\Jobs\* — Job dispatched by ScenarioService when running
             // Monte Carlo simulations. Stays in app/Jobs after R-6b.
             'App\\Jobs\\RunMonteCarloSimulation',

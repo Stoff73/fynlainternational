@@ -7,7 +7,7 @@ namespace App\Http\Controllers\Api\Investment;
 use App\Http\Controllers\Controller;
 use App\Http\Traits\SanitizedErrorResponse;
 use App\Services\Investment\Tax\BedAndISACalculator;
-use App\Services\Investment\Tax\CGTHarvestingCalculator;
+use Fynla\Packs\Gb\Investment\Tax\CGTHarvestingCalculator;
 use App\Services\Investment\Tax\ISAAllowanceOptimizer;
 use App\Services\Investment\Tax\TaxOptimizationAnalyzer;
 use Illuminate\Http\JsonResponse;

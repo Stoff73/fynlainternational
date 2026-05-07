@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Services\Investment\Recommendation;
+namespace Fynla\Packs\Gb\Investment\Recommendation;
 
 /**
  * Formats the final output from the investment recommendation pipeline.

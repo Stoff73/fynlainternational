@@ -5,7 +5,7 @@ declare(strict_types=1);
 use Fynla\Packs\Gb\Models\Investment\Holding;
 use Fynla\Packs\Gb\Models\Investment\InvestmentAccount;
 use App\Services\Investment\DividendTaxCalculator;
-use App\Services\Investment\Tax\CGTHarvestingCalculator;
+use Fynla\Packs\Gb\Investment\Tax\CGTHarvestingCalculator;
 use App\Services\Investment\TaxEfficiencyCalculator;
 use Fynla\Packs\Gb\Tax\TaxConfigService;
 
