@@ -78,7 +78,7 @@ If not running → `./dev.sh` in the background.
 
 ```bash
 cat CSJTODO.md 2>/dev/null | head -100
-ls -t /Users/CSJ/Desktop/fynlaBrain/$(date +%B)/$(date +%B)*Updates/CSJTODO.md 2>/dev/null | head -1
+ls -t /Users/CSJ/Desktop/fynlaInter/FynlaInter/$(date +%B)/$(date +%B)*Updates/CSJTODO.md 2>/dev/null | head -1
 ```
 
 If a vault CSJTODO exists and is newer than the repo one, prefer it.
@@ -86,7 +86,7 @@ If a vault CSJTODO exists and is newer than the repo one, prefer it.
 ### 2b. Most recent vault session folder (LIST, do not read contents)
 
 ```bash
-ls -d /Users/CSJ/Desktop/fynlaBrain/$(date +%B)/$(date +%B)*Updates 2>/dev/null | sort -V | tail -1
+ls -d /Users/CSJ/Desktop/fynlaInter/FynlaInter/$(date +%B)/$(date +%B)*Updates 2>/dev/null | sort -V | tail -1
 ```
 
 Surface the folder name in the report. Read individual files inside it ONLY when the user's request relates to that work.
@@ -98,15 +98,15 @@ This is the most important part. Most "lazy" questions happen because the instan
 | When you need... | Look here (read on-demand, not now) |
 |---|---|
 | A specific feedback rule's full text | `/Users/CSJ/.claude/projects/-Users-CSJ-Desktop-fynlaInternational/memory/<file>.md` (filename in MEMORY.md index) |
-| Design system / colours / typography / components | `/Users/CSJ/Desktop/fynlaBrain/Design/fynlaDesignGuide.md` (v1.3.0) |
-| Module architecture (Investment, Estate, Protection, etc.) | `/Users/CSJ/Desktop/fynlaBrain/v083/09-MODULES.md` + module-specific doc per CLAUDE.md table |
-| Auth / security patterns | `/Users/CSJ/Desktop/fynlaBrain/v083/03-AUTH-SECURITY.md` |
-| Database / schema | `/Users/CSJ/Desktop/fynlaBrain/v083/02-DATABASE.md` |
-| Frontend conventions | `/Users/CSJ/Desktop/fynlaBrain/v083/05-FRONTEND.md` + `resources/js/CLAUDE.md` |
-| Backend conventions | `/Users/CSJ/Desktop/fynlaBrain/v083/04-BACKEND.md` + `app/Services/CLAUDE.md` + `app/Http/CLAUDE.md` |
-| Tax / financial rules | `/Users/CSJ/Desktop/fynlaBrain/v083/08-FINANCIAL-CALCS.md` + `app/Services/Tax/TaxConfigService.php` |
-| Deployment | `/Users/CSJ/Desktop/fynlaBrain/v083/11-CONFIG-DEPLOY.md` + CLAUDE.md "Deployment" section |
-| What was deployed / fixed recently | `/Users/CSJ/Desktop/fynlaBrain/$(date +%B)/$(date +%B)*Updates/` (most recent folder from Phase 2b) |
+| Design system / colours / typography / components | `/Users/CSJ/Desktop/fynlaInter/FynlaInter/Design/fynlaDesignGuide.md` (v1.3.0) |
+| Module architecture (Investment, Estate, Protection, etc.) | `/Users/CSJ/Desktop/fynlaInter/FynlaInter/v083/09-MODULES.md` + module-specific doc per CLAUDE.md table |
+| Auth / security patterns | `/Users/CSJ/Desktop/fynlaInter/FynlaInter/v083/03-AUTH-SECURITY.md` |
+| Database / schema | `/Users/CSJ/Desktop/fynlaInter/FynlaInter/v083/02-DATABASE.md` |
+| Frontend conventions | `/Users/CSJ/Desktop/fynlaInter/FynlaInter/v083/05-FRONTEND.md` + `resources/js/CLAUDE.md` |
+| Backend conventions | `/Users/CSJ/Desktop/fynlaInter/FynlaInter/v083/04-BACKEND.md` + `app/Services/CLAUDE.md` + `app/Http/CLAUDE.md` |
+| Tax / financial rules | `/Users/CSJ/Desktop/fynlaInter/FynlaInter/v083/08-FINANCIAL-CALCS.md` + `app/Services/Tax/TaxConfigService.php` |
+| Deployment | `/Users/CSJ/Desktop/fynlaInter/FynlaInter/v083/11-CONFIG-DEPLOY.md` + CLAUDE.md "Deployment" section |
+| What was deployed / fixed recently | `/Users/CSJ/Desktop/fynlaInter/FynlaInter/$(date +%B)/$(date +%B)*Updates/` (most recent folder from Phase 2b) |
 | Tests for a module | `tests/Unit/Services/<Module>/`, `tests/Feature/<Module>/` + `tests/CLAUDE.md` |
 | Existing code for "is there already a service for X?" | `grep -r "X" app/Services/` BEFORE writing new code |
 | Mobile / iOS / Capacitor patterns | memory file `mobile_capacitor_patterns.md` (already indexed in MEMORY.md) |

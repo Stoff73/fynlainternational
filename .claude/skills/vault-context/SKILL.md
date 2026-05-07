@@ -1,14 +1,14 @@
 ---
 name: vault-context
-description: Load project knowledge from the fynlaBrain Obsidian vault for a specific module or topic. Surfaces architecture docs, current state, recent fixes/bugs, session history, feedback rules, and reports. Use when starting work on any module, before dispatching sub-agents, or when you need context about how something was built or what bugs have been fixed. Triggers on "/vault-context", "load vault", "check vault", "vault context", or before any feature/fix work on a module.
+description: Load project knowledge from the fynlaInter Obsidian vault for a specific module or topic. Surfaces architecture docs, current state, recent fixes/bugs, session history, feedback rules, and reports. Use when starting work on any module, before dispatching sub-agents, or when you need context about how something was built or what bugs have been fixed. Triggers on "/vault-context", "load vault", "check vault", "vault context", or before any feature/fix work on a module.
 disable-model-invocation: false
 ---
 
 # Vault Context — Load Project Knowledge
 
-Read targeted sections from the fynlaBrain Obsidian vault to give Claude full context before working on any module.
+Read targeted sections from the fynlaInter Obsidian vault to give Claude full context before working on any module.
 
-**Vault location:** `/Users/CSJ/Desktop/fynlaBrain/`
+**Vault location:** `/Users/CSJ/Desktop/fynlaInter/FynlaInter/`
 
 ## Usage
 
@@ -59,7 +59,7 @@ Read each file and present a summary of each rule. These apply to ALL work.
 
 ```bash
 # Get the 3 most recent session update folders
-ls -d /Users/CSJ/Desktop/fynlaBrain/March/March*Updates 2>/dev/null | sort -V | tail -3
+ls -d /Users/CSJ/Desktop/fynlaInter/FynlaInter/March/March*Updates 2>/dev/null | sort -V | tail -3
 ```
 
 For each of the 3 most recent folders:
@@ -73,7 +73,7 @@ Present key items: what was worked on, what was deployed, outstanding issues.
 
 ```bash
 # Most recent CSJTODO in vault
-find /Users/CSJ/Desktop/fynlaBrain/March -name "CSJTODO.md" -type f 2>/dev/null | sort -V | tail -1
+find /Users/CSJ/Desktop/fynlaInter/FynlaInter/March -name "CSJTODO.md" -type f 2>/dev/null | sort -V | tail -1
 ```
 
 Compare with repo `TODO.md`. If different, present both.
@@ -81,7 +81,7 @@ Compare with repo `TODO.md`. If different, present both.
 ### Step 4: Check recent reports
 
 ```bash
-find /Users/CSJ/Desktop/fynlaBrain/Reports -name "*.md" -newer /Users/CSJ/Desktop/fynlaBrain/Reports -mtime -7 2>/dev/null
+find /Users/CSJ/Desktop/fynlaInter/FynlaInter/Reports -name "*.md" -newer /Users/CSJ/Desktop/fynlaInter/FynlaInter/Reports -mtime -7 2>/dev/null
 ```
 
 If any recent reports, summarise key findings (tech debt, security, code review).
@@ -114,7 +114,7 @@ Look up the module in the Module Map above. Read the architecture doc, but **tri
 
 ```bash
 # For modules using 09-MODULES.md, grep for the section
-grep -n -i "[module_name]" "/Users/CSJ/Desktop/fynlaBrain/Architecture/v083/09-MODULES.md" | head -5
+grep -n -i "[module_name]" "/Users/CSJ/Desktop/fynlaInter/FynlaInter/Architecture/v083/09-MODULES.md" | head -5
 ```
 
 Then read from the section header to the next `## ` header (typically 50-200 lines).
@@ -124,7 +124,7 @@ For modules with their own architecture doc (auth, database, frontend, backend, 
 ### Step 2: Read current state doc
 
 ```bash
-cat "/Users/CSJ/Desktop/fynlaBrain/Current State/[CurrentStateDoc].md" 2>/dev/null
+cat "/Users/CSJ/Desktop/fynlaInter/FynlaInter/Current State/[CurrentStateDoc].md" 2>/dev/null
 ```
 
 Present: what exists, known limitations, key files.
@@ -135,7 +135,7 @@ Search deploy and fix files from the last 14 days for mentions of this module:
 
 ```bash
 # Find deploy/fix docs mentioning this module
-grep -ril "[module_name]" /Users/CSJ/Desktop/fynlaBrain/March/March*Updates/deploy*.md /Users/CSJ/Desktop/fynlaBrain/March/March*Updates/*fix*.md /Users/CSJ/Desktop/fynlaBrain/March/March*Updates/*Fix*.md 2>/dev/null | tail -5
+grep -ril "[module_name]" /Users/CSJ/Desktop/fynlaInter/FynlaInter/March/March*Updates/deploy*.md /Users/CSJ/Desktop/fynlaInter/FynlaInter/March/March*Updates/*fix*.md /Users/CSJ/Desktop/fynlaInter/FynlaInter/March/March*Updates/*Fix*.md 2>/dev/null | tail -5
 ```
 
 Also search the repo March updates:
@@ -150,7 +150,7 @@ For each matching file, extract the bug/fix entries related to this module. Pres
 
 ```bash
 # Find session notes mentioning this module in last 5 update folders
-for dir in $(ls -d /Users/CSJ/Desktop/fynlaBrain/March/March*Updates 2>/dev/null | sort -V | tail -5); do
+for dir in $(ls -d /Users/CSJ/Desktop/fynlaInter/FynlaInter/March/March*Updates 2>/dev/null | sort -V | tail -5); do
   grep -ril "[module_name]" "$dir"/*.md 2>/dev/null
 done
 ```
@@ -170,7 +170,7 @@ ls /Users/CSJ/.claude/projects/-Users-CSJ-Desktop-fynla/memory/feedback_*.md
 If the module involves Vue components or frontend work:
 
 ```bash
-cat "/Users/CSJ/Desktop/fynlaBrain/Design/fynlaDesignGuide.md" 2>/dev/null | head -100
+cat "/Users/CSJ/Desktop/fynlaInter/FynlaInter/Design/fynlaDesignGuide.md" 2>/dev/null | head -100
 ```
 
 Present: key colours, typography, component patterns.
@@ -178,7 +178,7 @@ Present: key colours, typography, component patterns.
 ### Step 7: Check reports for this module
 
 ```bash
-grep -ril "[module_name]" /Users/CSJ/Desktop/fynlaBrain/Reports/*.md 2>/dev/null
+grep -ril "[module_name]" /Users/CSJ/Desktop/fynlaInter/FynlaInter/Reports/*.md 2>/dev/null
 ```
 
 If found, extract relevant findings (tech debt, code review issues, security).
@@ -212,7 +212,7 @@ If found, extract relevant findings (tech debt, code review issues, security).
 
 ## Important
 
-- The vault is at `/Users/CSJ/Desktop/fynlaBrain/` — it is NOT a git repo, just read files directly.
+- The vault is at `/Users/CSJ/Desktop/fynlaInter/FynlaInter/` — it is NOT a git repo, just read files directly.
 - Feedback rules from `feedback_*.md` are ALWAYS included regardless of mode.
 - Architecture docs can be large — trim to the relevant section, don't dump the whole file.
 - Recent fixes are critical — they prevent re-introducing bugs that were already found and fixed.

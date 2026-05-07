@@ -1,15 +1,15 @@
 ---
 name: vault-sync
-description: Sync project documentation to the fynlaBrain Obsidian vault, update version numbers, git history, ${MONTH_NAME} Index, Home.md, and audit all vault formatting/connections. Use when the user says "sync vault", "update vault", "update fynlaBrain", "sync docs", or at session end after significant work.
+description: Sync project documentation to the fynlaInter Obsidian vault, update version numbers, git history, ${MONTH_NAME} Index, Home.md, and audit all vault formatting/connections. Use when the user says "sync vault", "update vault", "update fynlaInter", "sync docs", or at session end after significant work.
 disable-model-invocation: false
 ---
 
 # Vault Sync — Full Documentation & Integrity Check
 
-Sync all project documentation to the fynlaBrain Obsidian vault, then verify every file is correctly formatted, connected, and up to date.
+Sync all project documentation to the fynlaInter Obsidian vault, then verify every file is correctly formatted, connected, and up to date.
 
-**Vault location:** `/Users/CSJ/Desktop/fynlaBrain/` (NOT a git repo — write files directly)
-**Obsidian config:** `/Users/CSJ/Desktop/fynlaBrain/.obsidian/` (stock config, no custom plugins)
+**Vault location:** `/Users/CSJ/Desktop/fynlaInter/FynlaInter/` (NOT a git repo — write files directly)
+**Obsidian config:** `/Users/CSJ/Desktop/fynlaInter/FynlaInter/.obsidian/` (stock config, no custom plugins)
 **Source docs:** `/Users/CSJ/Desktop/fynlaInternational/${MONTH_NAME}/${MONTH_NAME}[DD]Updates/`
 
 ---
@@ -58,7 +58,7 @@ Compare the local `${MONTH_NAME}/${MONTH_NAME}[DD]Updates/` folders against the 
 # For each date folder in local repo
 for dir in /Users/CSJ/Desktop/fynlaInternational/${MONTH_NAME}/${MONTH_NAME}*Updates; do
   folder=$(basename "$dir")
-  vault_dir="/Users/CSJ/Desktop/fynlaBrain/${MONTH_NAME}/$folder"
+  vault_dir="/Users/CSJ/Desktop/fynlaInter/FynlaInter/${MONTH_NAME}/$folder"
 
   if [ -d "$dir" ]; then
     for file in "$dir"/*.md; do
@@ -90,7 +90,7 @@ Some update folders have subdirectories (e.g. `testFix/`, `plan/`). Sync those t
 for dir in /Users/CSJ/Desktop/fynlaInternational/${MONTH_NAME}/${MONTH_NAME}*Updates; do
   find "$dir" -type d -mindepth 1 | while read subdir; do
     rel_path="${subdir#/Users/CSJ/Desktop/fynlaInternational/}"
-    vault_path="/Users/CSJ/Desktop/fynlaBrain/$rel_path"
+    vault_path="/Users/CSJ/Desktop/fynlaInter/FynlaInter/$rel_path"
     if [ ! -d "$vault_path" ]; then
       echo "NEW DIR: $rel_path"
       mkdir -p "$vault_path"
@@ -122,7 +122,7 @@ COMMITS=$(git log --oneline --since="$(date +%Y-%m-%d) 00:00:00" --until="$(date
 COMMIT_COUNT=$(echo "$COMMITS" | grep -c '^' 2>/dev/null || echo 0)
 ```
 
-Create/update `/Users/CSJ/Desktop/fynlaBrain/Git History/${MONTH_SHORT}${YEAR}/${MONTH_SHORT}${TODAY}.md` following this exact format:
+Create/update `/Users/CSJ/Desktop/fynlaInter/FynlaInter/Git History/${MONTH_SHORT}${YEAR}/${MONTH_SHORT}${TODAY}.md` following this exact format:
 
 ```markdown
 ---
@@ -167,7 +167,7 @@ git log --format="%H %ai %s" --since="$(date +%Y-%m-%d) 00:00:00" --until="$(dat
 
 ### 3b: Update monthly commits index
 
-Read and update `/Users/CSJ/Desktop/fynlaBrain/Git History/${MONTH_SHORT}${YEAR}/${MONTH_SHORT}${YEAR} Commits.md`:
+Read and update `/Users/CSJ/Desktop/fynlaInter/FynlaInter/Git History/${MONTH_SHORT}${YEAR}/${MONTH_SHORT}${YEAR} Commits.md`:
 - Update total commit count
 - Update the commit type breakdown
 - Add/update today's row in the Daily Logs table: `| [[${MONTH_SHORT}${TODAY}]] | [N] | [highlight] |`
@@ -222,7 +222,7 @@ Scan synced files for broken patterns:
 
 ```bash
 # Find all wikilinks in recently synced files
-grep -oP '\[\[([^\]|]+)' /Users/CSJ/Desktop/fynlaBrain/${MONTH_NAME}/${MONTH_NAME}*Updates/*.md 2>/dev/null | sort -u
+grep -oP '\[\[([^\]|]+)' /Users/CSJ/Desktop/fynlaInter/FynlaInter/${MONTH_NAME}/${MONTH_NAME}*Updates/*.md 2>/dev/null | sort -u
 ```
 
 ### 4c: No orphaned files
@@ -231,12 +231,12 @@ Every file in an update folder should be linked from the ${MONTH_NAME} Index. Ch
 
 ```bash
 # Files in vault update folders
-for folder in /Users/CSJ/Desktop/fynlaBrain/${MONTH_NAME}/${MONTH_NAME}*Updates; do
+for folder in /Users/CSJ/Desktop/fynlaInter/FynlaInter/${MONTH_NAME}/${MONTH_NAME}*Updates; do
   foldername=$(basename "$folder")
   for file in "$folder"/*.md; do
     [ -f "$file" ] || continue
     filename=$(basename "$file" .md)
-    if ! grep -q "\[\[$filename\]\]" "/Users/CSJ/Desktop/fynlaBrain/${MONTH_NAME}/${MONTH_NAME} Index.md" 2>/dev/null; then
+    if ! grep -q "\[\[$filename\]\]" "/Users/CSJ/Desktop/fynlaInter/FynlaInter/${MONTH_NAME}/${MONTH_NAME} Index.md" 2>/dev/null; then
       echo "UNLINKED: $foldername/$filename"
     fi
   done
@@ -289,7 +289,7 @@ For the section just added, verify every `[[wikilink]]` target exists as a file:
 
 ## Phase 6: Update Home.md
 
-Read `/Users/CSJ/Desktop/fynlaBrain/Home.md` and check:
+Read `/Users/CSJ/Desktop/fynlaInter/FynlaInter/Home.md` and check:
 
 1. **Version number** — matches the current deployed version in CLAUDE.md
 2. **Git History table** — ${MONTH_NAME} ${YEAR} commit count and day count are current
@@ -320,7 +320,7 @@ If today's work touched a module, check that the relevant update notes cross-ref
 Check if any Current State docs are stale relative to today's changes:
 
 ```bash
-ls -lt /Users/CSJ/Desktop/fynlaBrain/Current\ State/*.md | head -10
+ls -lt /Users/CSJ/Desktop/fynlaInter/FynlaInter/Current\ State/*.md | head -10
 ```
 
 If a Current State doc hasn't been updated in 2+ weeks and today's work touched that module, flag it for the user.
@@ -398,7 +398,7 @@ Based on this session's work, should any new memories be saved? Only suggest if 
 
 ## Important Rules
 
-- The vault is at `/Users/CSJ/Desktop/fynlaBrain/` — NOT a git repo, write files directly
+- The vault is at `/Users/CSJ/Desktop/fynlaInter/FynlaInter/` — NOT a git repo, write files directly
 - Use Obsidian format: YAML frontmatter with `tags`, `[[wikilinks]]`, MOC index files
 - Wikilinks use `[[filename]]` WITHOUT `.md` extension
 - Never invent version numbers — use what's deployed
