@@ -2,12 +2,13 @@
 
 declare(strict_types=1);
 
-namespace App\Services\Investment;
+namespace Fynla\Packs\Gb\Investment;
 
 use Fynla\Core\Constants\InvestmentDefaults;
 use Fynla\Packs\Gb\Constants\TaxDefaults;
 use Fynla\Packs\Gb\Models\Investment\InvestmentAccount;
 use App\Models\User;
+use App\Services\Investment\FeeAnalyzer;
 use App\Services\Investment\Rebalancing\DriftAnalyzer;
 use App\Services\Investment\Tax\TaxOptimizationAnalyzer;
 use App\Services\Risk\RiskPreferenceService;

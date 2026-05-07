@@ -5,7 +5,7 @@ declare(strict_types=1);
 use Fynla\Packs\Gb\Models\InvestmentActionDefinition;
 use App\Models\User;
 use App\Services\Investment\FeeAnalyzer;
-use App\Services\Investment\InvestmentActionDefinitionService;
+use Fynla\Packs\Gb\Investment\InvestmentActionDefinitionService;
 use App\Services\Plans\PlanConfigService;
 use Fynla\Packs\Gb\Tax\TaxConfigService;
 use Database\Seeders\InvestmentActionDefinitionSeeder;

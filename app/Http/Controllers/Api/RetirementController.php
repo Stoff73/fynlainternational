@@ -20,7 +20,7 @@ use Fynla\Packs\Gb\Models\StatePension;
 use App\Services\Cache\CacheInvalidationService;
 use App\Services\Goals\GoalStrategyService;
 use App\Services\Goals\LifeEventIntegrationService;
-use App\Services\Investment\DiversificationAnalyzer;
+use Fynla\Packs\Gb\Investment\DiversificationAnalyzer;
 use App\Services\Retirement\AnnualAllowanceChecker;
 use Fynla\Packs\Gb\Retirement\RequiredCapitalCalculator;
 use App\Services\Retirement\RetirementIncomeService;

@@ -6,9 +6,9 @@ namespace Fynla\Packs\Gb\Retirement;
 
 use Fynla\Packs\Gb\Models\DCPension;
 use Fynla\Packs\Gb\Models\Investment\RiskProfile;
-use App\Services\Investment\DiversificationAnalyzer;
+use Fynla\Packs\Gb\Investment\DiversificationAnalyzer;
 use App\Services\Investment\PortfolioAnalyzer;
-use App\Services\Investment\SimpleAssetAllocationOptimizer;
+use Fynla\Packs\Gb\Investment\SimpleAssetAllocationOptimizer;
 use Illuminate\Support\Collection;
 
 /**

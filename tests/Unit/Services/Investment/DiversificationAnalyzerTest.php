@@ -3,7 +3,7 @@
 declare(strict_types=1);
 
 use Fynla\Packs\Gb\Models\Investment\Holding;
-use App\Services\Investment\DiversificationAnalyzer;
+use Fynla\Packs\Gb\Investment\DiversificationAnalyzer;
 
 beforeEach(function () {
     $this->analyzer = new DiversificationAnalyzer;

@@ -34,7 +34,7 @@ class GbPackServiceProvider extends ServiceProvider
         // FQCNs still point at \App\…; updated in-place as files move.
         $this->app->bind('pack.gb.tax', \Fynla\Packs\Gb\Tax\TaxConfigService::class);
         $this->app->bind('pack.gb.retirement', \Fynla\Packs\Gb\Retirement\UkRetirementEngine::class);
-        $this->app->bind('pack.gb.investment', \App\Services\Investment\UkInvestmentEngine::class);
+        $this->app->bind('pack.gb.investment', \Fynla\Packs\Gb\Investment\UkInvestmentEngine::class);
         $this->app->bind('pack.gb.protection', \App\Services\Protection\UkProtectionEngine::class);
         $this->app->bind('pack.gb.estate', \Fynla\Packs\Gb\Estate\UkEstateEngine::class);
         $this->app->bind('pack.gb.savings', \App\Services\Savings\UkSavingsEngine::class);

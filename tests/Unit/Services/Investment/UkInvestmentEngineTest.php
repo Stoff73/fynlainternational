@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-use App\Services\Investment\UkInvestmentEngine;
+use Fynla\Packs\Gb\Investment\UkInvestmentEngine;
 use Fynla\Packs\Gb\Tax\TaxConfigService;
 use Database\Seeders\TaxConfigurationSeeder;
 use Fynla\Core\Contracts\InvestmentEngine;

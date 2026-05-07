@@ -7,7 +7,7 @@ namespace App\Http\Controllers\Api\Investment;
 use App\Http\Controllers\Controller;
 use App\Http\Traits\SanitizedErrorResponse;
 use Fynla\Packs\Gb\Models\Investment\InvestmentScenario;
-use App\Services\Investment\ScenarioService;
+use Fynla\Packs\Gb\Investment\ScenarioService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 

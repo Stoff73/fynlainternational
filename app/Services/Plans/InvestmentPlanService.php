@@ -14,7 +14,7 @@ use Fynla\Packs\Gb\Models\SavingsAccount;
 use App\Models\User;
 use App\Services\Coordination\RecommendationPersonaliser;
 use App\Services\Investment\FeeAnalyzer;
-use App\Services\Investment\InvestmentActionDefinitionService;
+use Fynla\Packs\Gb\Investment\InvestmentActionDefinitionService;
 use App\Services\Investment\Recommendation\ConflictResolutionService;
 use App\Services\Investment\Recommendation\ContributionWaterfallService;
 use App\Services\Investment\Recommendation\DataReadinessService;

@@ -2,12 +2,13 @@
 
 declare(strict_types=1);
 
-namespace App\Services\Investment;
+namespace Fynla\Packs\Gb\Investment;
 
 use Fynla\Packs\Gb\Constants\TaxDefaults;
 use App\Models\Goal;
 use Fynla\Packs\Gb\Models\InvestmentActionDefinition;
 use App\Services\Plans\PlanConfigService;
+use App\Services\Investment\FeeAnalyzer;
 use Fynla\Packs\Gb\Tax\TaxConfigService;
 use App\Traits\FormatsCurrency;
 

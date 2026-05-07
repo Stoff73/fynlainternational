@@ -3,7 +3,7 @@
 declare(strict_types=1);
 
 use Fynla\Packs\Gb\Models\Investment\RiskProfile;
-use App\Services\Investment\SimpleAssetAllocationOptimizer;
+use Fynla\Packs\Gb\Investment\SimpleAssetAllocationOptimizer;
 
 beforeEach(function () {
     $this->optimizer = new SimpleAssetAllocationOptimizer;

@@ -6,6 +6,8 @@ namespace App\Services\Investment;
 
 use Fynla\Packs\Gb\Models\Investment\InvestmentAccount;
 use App\Models\User;
+use Fynla\Packs\Gb\Investment\ContributionEstimatorService;
+use Fynla\Packs\Gb\Investment\MonteCarloSimulator;
 use App\Services\Goals\LifeEventCashFlowService;
 use App\Services\Risk\RiskPreferenceService;
 use Illuminate\Support\Collection;

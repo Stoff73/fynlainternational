@@ -7,7 +7,7 @@ namespace Fynla\Packs\Gb\Models\Investment;
 use Fynla\Packs\Gb\Models\Estate\Trust;
 use App\Models\Household;
 use App\Models\User;
-use App\Services\Investment\EmployeeSchemeCalculationService;
+use Fynla\Packs\Gb\Investment\EmployeeSchemeCalculationService;
 use Fynla\Core\Traits\Auditable;
 use Fynla\Core\Traits\HasJointOwnership;
 use Illuminate\Database\Eloquent\Builder;

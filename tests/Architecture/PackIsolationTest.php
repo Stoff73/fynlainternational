@@ -72,6 +72,14 @@ describe('Pack Isolation', function () {
             // App\Services\UserProfile\UserProfileService (R-7). Pinned by
             // allow-list below.
             $packDir . DIRECTORY_SEPARATOR . 'Retirement' . DIRECTORY_SEPARATOR,
+            // R-6b: Investment services move in 4 sub-commits. Top-level
+            // (R-6b-i) imports the 19 deferred App\Services\Investment\*
+            // R-14a peers, plus App\Services\Investment\Rebalancing\*
+            // (R-6b-iii target), App\Services\Investment\Utilities\* (R-6b-iv
+            // target), App\Jobs\RunMonteCarloSimulation,
+            // App\Services\Plans\PlanConfigService, and
+            // App\Services\Shared\MonteCarloEngine. Pinned by allow-list.
+            $packDir . DIRECTORY_SEPARATOR . 'Investment' . DIRECTORY_SEPARATOR,
         ];
 
         $violations = [];
@@ -102,7 +110,7 @@ describe('Pack Isolation', function () {
         );
     });
 
-    it('country-gb Constants/Traits/Models/Estate/Tax/Retirement only import allow-listed App\\ namespaces (R-6/R-7 ratchet)', function () {
+    it('country-gb Constants/Traits/Models/Estate/Tax/Retirement/Investment only import allow-listed App\\ namespaces (R-6/R-7 ratchet)', function () {
         $packDir = base_path('packs/country-gb/src');
         $targetDirs = [
             $packDir . DIRECTORY_SEPARATOR . 'Constants',
@@ -111,6 +119,7 @@ describe('Pack Isolation', function () {
             $packDir . DIRECTORY_SEPARATOR . 'Estate',
             $packDir . DIRECTORY_SEPARATOR . 'Tax',
             $packDir . DIRECTORY_SEPARATOR . 'Retirement',
+            $packDir . DIRECTORY_SEPARATOR . 'Investment',
         ];
 
         // The R-3/R-4 relocations tolerate a narrow allow-list of App\
@@ -143,14 +152,40 @@ describe('Pack Isolation', function () {
             'App\\Services\\Cache\\CacheInvalidationService',
             'App\\Services\\Goals\\LifeEventIntegrationService',
             'App\\Services\\Goals\\LifeEventService',
-            'App\\Services\\Investment\\EmployeeSchemeCalculationService',
-            'App\\Services\\Investment\\InvestmentProjectionService',
-            // R-6b targets — Investment top-level services that relocate
-            // in the next sub-workstream. PensionPortfolioAnalyzer imports
-            // these for portfolio analysis of DC pension holdings.
-            'App\\Services\\Investment\\DiversificationAnalyzer',
-            'App\\Services\\Investment\\PortfolioAnalyzer',
-            'App\\Services\\Investment\\SimpleAssetAllocationOptimizer',
+            // R-14a deferred Investment services — float-money signatures
+            // (ADR-005) keep these in app/Services/Investment/ until the
+            // int-minor money refactor. Pack code that collaborates with
+            // them imports across the boundary.
+            'App\\Services\\Investment\\ContributionOptimizer', // R-14a
+            'App\\Services\\Investment\\DividendTaxCalculator', // R-14a
+            'App\\Services\\Investment\\FeeAnalyzer', // R-14a
+            'App\\Services\\Investment\\InvestmentProjectionService', // R-14a
+            'App\\Services\\Investment\\PortfolioAnalyzer', // R-14a
+            'App\\Services\\Investment\\TaxEfficiencyCalculator', // R-14a
+            'App\\Services\\Investment\\AssetLocation\\AssetLocationOptimizer', // R-14a
+            'App\\Services\\Investment\\Fees\\OCFImpactCalculator', // R-14a
+            'App\\Services\\Investment\\Fees\\PlatformComparator', // R-14a
+            'App\\Services\\Investment\\Goals\\GoalProbabilityCalculator', // R-14a
+            'App\\Services\\Investment\\Goals\\GoalProgressAnalyzer', // R-14a
+            'App\\Services\\Investment\\Goals\\ShortfallAnalyzer', // R-14a
+            'App\\Services\\Investment\\ModelPortfolio\\AssetAllocationOptimizer', // R-14a
+            'App\\Services\\Investment\\Performance\\PerformanceAttributionAnalyzer', // R-14a
+            'App\\Services\\Investment\\Recommendation\\LifeEventAssessmentService', // R-14a
+            'App\\Services\\Investment\\Recommendation\\UserContextBuilder', // R-14a
+            'App\\Services\\Investment\\Tax\\BedAndISACalculator', // R-14a
+            'App\\Services\\Investment\\Tax\\ISAAllowanceOptimizer', // R-14a
+            'App\\Services\\Investment\\Tax\\TaxOptimizationAnalyzer', // R-14a
+            // R-6b cross-subworkstream temporary entries — these relocate
+            // later in this same R-6b workstream. Removed when the
+            // corresponding sub-commit lands.
+            'App\\Services\\Investment\\Rebalancing\\DriftAnalyzer', // R-6b-iii
+            'App\\Services\\Investment\\Utilities\\MatrixOperations', // R-6b-iv
+            // App\Jobs\* — Job dispatched by ScenarioService when running
+            // Monte Carlo simulations. Stays in app/Jobs after R-6b.
+            'App\\Jobs\\RunMonteCarloSimulation',
+            // App\Services\Plans\* — InvestmentActionDefinitionService
+            // imports PlanConfigService. Plans relocates in R-7.
+            'App\\Services\\Plans\\PlanConfigService',
             'App\\Services\\Property\\PropertyCalculationService',
             // R-14a deferred Retirement services — float-money signatures
             // (ADR-005) keep these in app/Services/Retirement/ until the
@@ -169,6 +204,9 @@ describe('Pack Isolation', function () {
             'App\\Services\\Risk\\RiskPreferenceService',
             'App\\Services\\Settings\\AssumptionsService',
             'App\\Services\\Shared\\CrossModuleAssetAggregator',
+            // App\Services\Shared\MonteCarloEngine — used by MonteCarloSimulator
+            // (relocated in R-6b-i). Shared module relocates in R-7.
+            'App\\Services\\Shared\\MonteCarloEngine',
             'App\\Services\\UserProfile\\ProfileCompletenessChecker',
             // R-7 target — UserProfileService relocates with the
             // UserProfile module. RequiredCapitalCalculator imports it
@@ -435,7 +473,7 @@ describe('Pack Isolation', function () {
     });
 
     it('UkInvestmentEngine implements the core InvestmentEngine contract', function () {
-        expect(class_implements(\App\Services\Investment\UkInvestmentEngine::class))
+        expect(class_implements(\Fynla\Packs\Gb\Investment\UkInvestmentEngine::class))
             ->toContain(\Fynla\Core\Contracts\InvestmentEngine::class);
     });
 

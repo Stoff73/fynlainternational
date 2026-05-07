@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-use App\Services\Investment\ScenarioService;
+use Fynla\Packs\Gb\Investment\ScenarioService;
 
 beforeEach(function () {
     $this->service = new ScenarioService;

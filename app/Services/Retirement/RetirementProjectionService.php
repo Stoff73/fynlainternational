@@ -6,7 +6,7 @@ namespace App\Services\Retirement;
 
 use App\Models\User;
 use App\Services\Goals\LifeEventCashFlowService;
-use App\Services\Investment\MonteCarloSimulator;
+use Fynla\Packs\Gb\Investment\MonteCarloSimulator;
 use App\Services\Risk\RiskPreferenceService;
 use Fynla\Packs\Gb\Retirement\RequiredCapitalCalculator;
 use Fynla\Packs\Gb\Tax\TaxConfigService;

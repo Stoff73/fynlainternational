@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Services\Investment;
+namespace Fynla\Packs\Gb\Investment;
 
 use App\Services\Investment\Utilities\MatrixOperations;
 use App\Services\Shared\MonteCarloEngine;

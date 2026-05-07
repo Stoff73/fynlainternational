@@ -7,7 +7,7 @@ namespace App\Observers;
 use App\Models\LifeEvent;
 use App\Services\Cache\CacheInvalidationService;
 use App\Services\Goals\GoalsProjectionService;
-use App\Services\Investment\MonteCarloSimulator;
+use Fynla\Packs\Gb\Investment\MonteCarloSimulator;
 
 /**
  * Clears Monte Carlo simulation cache and goals projection cache
