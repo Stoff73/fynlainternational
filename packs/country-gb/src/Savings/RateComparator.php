@@ -2,8 +2,9 @@
 
 declare(strict_types=1);
 
-namespace App\Services\Savings;
+namespace Fynla\Packs\Gb\Savings;
 
+use App\Services\Savings\ISATracker;
 use Fynla\Packs\Gb\Models\SavingsAccount;
 use Fynla\Packs\Gb\Models\SavingsMarketRate;
 

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Services\Savings;
+namespace Fynla\Packs\Gb\Savings;
 
 use App\Models\User;
 use Fynla\Packs\Gb\Tax\TaxConfigService;

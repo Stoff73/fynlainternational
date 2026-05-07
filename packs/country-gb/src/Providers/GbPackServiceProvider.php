@@ -37,7 +37,7 @@ class GbPackServiceProvider extends ServiceProvider
         $this->app->bind('pack.gb.investment', \Fynla\Packs\Gb\Investment\UkInvestmentEngine::class);
         $this->app->bind('pack.gb.protection', \Fynla\Packs\Gb\Protection\UkProtectionEngine::class);
         $this->app->bind('pack.gb.estate', \Fynla\Packs\Gb\Estate\UkEstateEngine::class);
-        $this->app->bind('pack.gb.savings', \App\Services\Savings\UkSavingsEngine::class);
+        $this->app->bind('pack.gb.savings', \Fynla\Packs\Gb\Savings\UkSavingsEngine::class);
         $this->app->bind('pack.gb.exchange_control', \App\Services\ExchangeControl\UkExchangeControl::class);
         $this->app->bind('pack.gb.tax_optimisation', \App\Agents\TaxOptimisationAgent::class);
 

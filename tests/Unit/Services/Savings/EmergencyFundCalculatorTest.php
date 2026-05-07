@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-use App\Services\Savings\EmergencyFundCalculator;
+use Fynla\Packs\Gb\Savings\EmergencyFundCalculator;
 
 describe('EmergencyFundCalculator', function () {
     describe('calculateRunway', function () {

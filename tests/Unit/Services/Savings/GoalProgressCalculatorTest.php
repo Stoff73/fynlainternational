@@ -3,7 +3,7 @@
 declare(strict_types=1);
 
 use Fynla\Packs\Gb\Models\SavingsGoal;
-use App\Services\Savings\GoalProgressCalculator;
+use Fynla\Packs\Gb\Savings\GoalProgressCalculator;
 use Carbon\Carbon;
 
 beforeEach(function () {

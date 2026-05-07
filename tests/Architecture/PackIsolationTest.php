@@ -87,6 +87,11 @@ describe('Pack Isolation', function () {
             // Pack code still imports them via cross-boundary use; pinned
             // by allow-list below.
             $packDir . DIRECTORY_SEPARATOR . 'Protection' . DIRECTORY_SEPARATOR,
+            // R-6d: Savings clean services moved into the GB pack. ISATracker
+            // is the sole R-14a deferral (?float $amount signature). Pack
+            // RateComparator imports App\Services\Savings\ISATracker across
+            // the boundary; pinned by allow-list below.
+            $packDir . DIRECTORY_SEPARATOR . 'Savings' . DIRECTORY_SEPARATOR,
         ];
 
         $violations = [];
@@ -117,7 +122,7 @@ describe('Pack Isolation', function () {
         );
     });
 
-    it('country-gb Constants/Traits/Models/Estate/Tax/Retirement/Investment/Protection only import allow-listed App\\ namespaces (R-6/R-7 ratchet)', function () {
+    it('country-gb Constants/Traits/Models/Estate/Tax/Retirement/Investment/Protection/Savings only import allow-listed App\\ namespaces (R-6/R-7 ratchet)', function () {
         $packDir = base_path('packs/country-gb/src');
         $targetDirs = [
             $packDir . DIRECTORY_SEPARATOR . 'Constants',
@@ -128,6 +133,7 @@ describe('Pack Isolation', function () {
             $packDir . DIRECTORY_SEPARATOR . 'Retirement',
             $packDir . DIRECTORY_SEPARATOR . 'Investment',
             $packDir . DIRECTORY_SEPARATOR . 'Protection',
+            $packDir . DIRECTORY_SEPARATOR . 'Savings',
         ];
 
         // The R-3/R-4 relocations tolerate a narrow allow-list of App\
@@ -210,6 +216,10 @@ describe('Pack Isolation', function () {
             'App\\Services\\Retirement\\RetirementProjectionService', // R-14a
             'App\\Services\\Retirement\\RetirementStrategyService', // R-14a
             'App\\Services\\Retirement\\SalarySacrificeAnalyzer', // R-14a
+            // R-14a deferred Savings service — ISATracker has ?float $amount
+            // signature on updateISAUsage. Pack RateComparator imports it
+            // across the boundary; relocates with the int-minor money refactor.
+            'App\\Services\\Savings\\ISATracker', // R-14a
             'App\\Services\\Risk\\RiskPreferenceService',
             'App\\Services\\Settings\\AssumptionsService',
             'App\\Services\\Shared\\CrossModuleAssetAggregator',
@@ -468,7 +478,7 @@ describe('Pack Isolation', function () {
     });
 
     it('UkSavingsEngine implements the core SavingsEngine contract', function () {
-        expect(class_implements(\App\Services\Savings\UkSavingsEngine::class))
+        expect(class_implements(\Fynla\Packs\Gb\Savings\UkSavingsEngine::class))
             ->toContain(\Fynla\Core\Contracts\SavingsEngine::class);
     });
 

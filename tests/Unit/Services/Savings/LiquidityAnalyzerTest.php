@@ -3,7 +3,7 @@
 declare(strict_types=1);
 
 use Fynla\Packs\Gb\Models\SavingsAccount;
-use App\Services\Savings\LiquidityAnalyzer;
+use Fynla\Packs\Gb\Savings\LiquidityAnalyzer;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Collection;
 

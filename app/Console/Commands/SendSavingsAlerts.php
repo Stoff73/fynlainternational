@@ -10,7 +10,7 @@ use App\Notifications\EmergencyFundAlertNotification;
 use App\Notifications\ISAAllowanceWarningNotification;
 use App\Notifications\SavingsMaturityAlertNotification;
 use App\Notifications\SavingsRateExpiryNotification;
-use App\Services\Savings\EmergencyFundCalculator;
+use Fynla\Packs\Gb\Savings\EmergencyFundCalculator;
 use Fynla\Packs\Gb\Tax\TaxConfigService;
 use Carbon\Carbon;
 use Illuminate\Console\Command;

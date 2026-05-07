@@ -6,12 +6,12 @@ use App\Agents\SavingsAgent;
 use Fynla\Packs\Gb\Models\SavingsAccount;
 use Fynla\Packs\Gb\Models\SavingsGoal;
 use App\Models\User;
-use App\Services\Savings\EmergencyFundCalculator;
-use App\Services\Savings\GoalProgressCalculator;
+use Fynla\Packs\Gb\Savings\EmergencyFundCalculator;
+use Fynla\Packs\Gb\Savings\GoalProgressCalculator;
 use App\Services\Savings\ISATracker;
-use App\Services\Savings\LiquidityAnalyzer;
-use App\Services\Savings\RateComparator;
-use App\Services\Savings\SavingsDataReadinessService;
+use Fynla\Packs\Gb\Savings\LiquidityAnalyzer;
+use Fynla\Packs\Gb\Savings\RateComparator;
+use Fynla\Packs\Gb\Savings\SavingsDataReadinessService;
 
 beforeEach(function () {
     $this->emergencyFundCalculator = Mockery::mock(EmergencyFundCalculator::class);

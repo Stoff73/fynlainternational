@@ -9,7 +9,7 @@ use Fynla\Packs\Gb\Estate\EstateDataReadinessService;
 use Fynla\Packs\Gb\Investment\Recommendation\DataReadinessService as InvestmentDataReadinessService;
 use Fynla\Packs\Gb\Protection\ProtectionDataReadinessService;
 use Fynla\Packs\Gb\Retirement\RetirementDataReadinessService;
-use App\Services\Savings\SavingsDataReadinessService;
+use Fynla\Packs\Gb\Savings\SavingsDataReadinessService;
 
 /**
  * Centralised prerequisite enforcement for all module analysis, tool execution,

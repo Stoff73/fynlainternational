@@ -9,7 +9,7 @@ use App\Agents\SavingsAgent;
 use Fynla\Packs\Gb\Models\Investment\InvestmentAccount;
 use Fynla\Packs\Gb\Models\SavingsAccount;
 use App\Models\User;
-use App\Services\Savings\SavingsActionDefinitionService;
+use Fynla\Packs\Gb\Savings\SavingsActionDefinitionService;
 use Fynla\Packs\Gb\Tax\TaxConfigService;
 
 class SavingsPlanService extends BasePlanService

@@ -12,15 +12,15 @@ use Fynla\Packs\Gb\Models\SavingsGoal;
 use App\Models\User;
 use App\Services\Goals\GoalProgressService;
 use App\Services\Plans\PlanConfigService;
-use App\Services\Savings\EmergencyFundCalculator;
-use App\Services\Savings\FSCSAssessor;
-use App\Services\Savings\GoalProgressCalculator;
+use Fynla\Packs\Gb\Savings\EmergencyFundCalculator;
+use Fynla\Packs\Gb\Savings\FSCSAssessor;
+use Fynla\Packs\Gb\Savings\GoalProgressCalculator;
 use App\Services\Savings\ISATracker;
-use App\Services\Savings\LiquidityAnalyzer;
-use App\Services\Savings\PSACalculator;
-use App\Services\Savings\RateComparator;
-use App\Services\Savings\SavingsActionDefinitionService;
-use App\Services\Savings\SavingsDataReadinessService;
+use Fynla\Packs\Gb\Savings\LiquidityAnalyzer;
+use Fynla\Packs\Gb\Savings\PSACalculator;
+use Fynla\Packs\Gb\Savings\RateComparator;
+use Fynla\Packs\Gb\Savings\SavingsActionDefinitionService;
+use Fynla\Packs\Gb\Savings\SavingsDataReadinessService;
 use Fynla\Packs\Gb\Traits\ResolvesExpenditure;
 
 class SavingsAgent extends BaseAgent

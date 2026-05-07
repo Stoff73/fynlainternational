@@ -373,7 +373,7 @@ describe('Cross-Module Integration', function () {
     describe('Data Readiness Services', function () {
 
         it('all 5 modules have data readiness services', function () {
-            expect(class_exists(\App\Services\Savings\SavingsDataReadinessService::class))->toBeTrue();
+            expect(class_exists(\Fynla\Packs\Gb\Savings\SavingsDataReadinessService::class))->toBeTrue();
             expect(class_exists(\Fynla\Packs\Gb\Estate\EstateDataReadinessService::class))->toBeTrue();
             expect(class_exists(\Fynla\Packs\Gb\Investment\Recommendation\DataReadinessService::class))->toBeTrue();
             expect(class_exists(\Fynla\Packs\Gb\Protection\ProtectionDataReadinessService::class))->toBeTrue();
