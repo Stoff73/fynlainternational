@@ -364,6 +364,14 @@ describe('Pack Isolation', function () {
             'App\\Services\\Estate\\TrustService',
             'App\\Services\\Estate\\GiftingStrategy',
             'App\\Services\\Estate\\IntestacyCalculator',
+            // R-9h surfaced two App\Services\Trust\* peers used by pack
+            // TrustController + WillController. IHTPeriodicChargeCalculator
+            // has float-money signatures (calculateExitCharge / calculateEntryCharge)
+            // — R-14a deferral. TrustAssetAggregatorService is clean but the
+            // Trust sub-module hasn't had a relocation workstream yet; relocates
+            // alongside the Estate float-money services in R-14a.
+            'App\\Services\\Trust\\IHTPeriodicChargeCalculator', // R-14a
+            'App\\Services\\Trust\\TrustAssetAggregatorService', // R-14a (sub-module, relocates with Estate)
             // Same deferral for Tax-side float-money services.
             'App\\Services\\Tax\\IncomeDefinitionsService',
             'App\\Services\\Tax\\TaxOptimisationService',

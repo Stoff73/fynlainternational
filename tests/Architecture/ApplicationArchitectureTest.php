@@ -57,7 +57,6 @@ arch('controllers do not use DB facade directly')
     ->expect('App\Http\Controllers')
     ->not->toUse('Illuminate\Support\Facades\DB')
     ->ignoring([
-        'App\Http\Controllers\Api\Estate\IHTController',
         'App\Http\Controllers\Api\TaxSettingsController',
         'App\Http\Controllers\Api\PreviewController', // Uses DB for complex persona queries
         'App\Http\Controllers\Api\WebhookController', // Uses DB for payment transaction handling
@@ -67,6 +66,8 @@ arch('controllers do not use DB facade directly')
         // outside the App\Http\Controllers namespace this rule scopes to.
         // RetirementController + Retirement\DCPensionHoldingsController relocated to
         // packs/country-gb/src/Http/Controllers/ (R-9g), outside scope.
+        // EstateController + Estate\IHTController relocated to packs/country-gb/src/Http/Controllers/ (R-9h),
+        // outside scope.
         // ZaProtectionController relocated to packs/country-za/src/Http/Controllers/ (R-0a),
         // outside the App\Http\Controllers namespace this rule scopes to.
     ]);

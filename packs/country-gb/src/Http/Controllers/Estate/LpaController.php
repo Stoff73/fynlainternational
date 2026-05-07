@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Http\Controllers\Api\Estate;
+namespace Fynla\Packs\Gb\Http\Controllers\Estate;
 
 use App\Http\Controllers\Controller;
 use Fynla\Packs\Gb\Http\Requests\Estate\StoreLpaRequest;

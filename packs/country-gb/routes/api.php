@@ -18,6 +18,15 @@ use Illuminate\Support\Facades\Route;
 */
 
 use App\Http\Controllers\Api\RiskPreferenceController;
+use Fynla\Packs\Gb\Http\Controllers\Estate\GiftingController;
+use Fynla\Packs\Gb\Http\Controllers\Estate\IHTController;
+use Fynla\Packs\Gb\Http\Controllers\Estate\LetterValidationController;
+use Fynla\Packs\Gb\Http\Controllers\Estate\LifePolicyController;
+use Fynla\Packs\Gb\Http\Controllers\Estate\LpaController;
+use Fynla\Packs\Gb\Http\Controllers\Estate\TrustController;
+use Fynla\Packs\Gb\Http\Controllers\Estate\WillController;
+use Fynla\Packs\Gb\Http\Controllers\Estate\WillDocumentController;
+use Fynla\Packs\Gb\Http\Controllers\EstateController;
 use Fynla\Packs\Gb\Http\Controllers\InvestmentActionDefinitionController;
 use Fynla\Packs\Gb\Http\Controllers\InvestmentController;
 use Fynla\Packs\Gb\Http\Controllers\Investment\AssetLocationController;
@@ -494,4 +503,103 @@ Route::middleware(['auth:sanctum', 'permission:admin.access', 'throttle:30,1'])-
     Route::put('/{id}', [RetirementActionDefinitionController::class, 'update']);
     Route::delete('/{id}', [RetirementActionDefinitionController::class, 'destroy']);
     Route::patch('/{id}/toggle', [RetirementActionDefinitionController::class, 'toggleEnabled']);
+});
+
+
+// Estate Liabilities (standard tier — part of Finances/Net Worth, not estate-only)
+Route::middleware(['auth:sanctum', 'feature:standard'])->prefix('estate/liabilities')->group(function () {
+    Route::post('/', [EstateController::class, 'storeLiability']);
+    Route::put('/{id}', [EstateController::class, 'updateLiability']);
+    Route::delete('/{id}', [EstateController::class, 'destroyLiability']);
+});
+
+// Estate read-only + IHT calculations (all tiers — used by dashboard)
+Route::middleware(['auth:sanctum'])->prefix('estate')->group(function () {
+    Route::get('/', [EstateController::class, 'index']);
+    Route::post('/calculate-iht', [IHTController::class, 'calculateIHT']);
+    Route::get('/net-worth', [EstateController::class, 'getNetWorth']);
+    Route::get('/cash-flow', [EstateController::class, 'getCashFlow']);
+});
+
+// Estate Planning write operations (pro tier)
+Route::middleware(['auth:sanctum', 'feature:pro'])->prefix('estate')->group(function () {
+
+    // IHT Profile
+    Route::post('/profile', [IHTController::class, 'storeOrUpdateIHTProfile']);
+
+    // Assets
+    Route::prefix('assets')->group(function () {
+        Route::post('/', [EstateController::class, 'storeAsset']);
+        Route::put('/{id}', [EstateController::class, 'updateAsset']);
+        Route::delete('/{id}', [EstateController::class, 'destroyAsset']);
+    });
+
+    // Gifts (CRUD in EstateController, Strategy in GiftingController)
+    Route::prefix('gifts')->group(function () {
+        Route::get('/planned-strategy', [GiftingController::class, 'getPlannedGiftingStrategy']);
+        Route::get('/personalized-strategy', [GiftingController::class, 'getPersonalizedGiftingStrategy']);
+        Route::get('/trust-strategy', [GiftingController::class, 'getPersonalizedTrustStrategy']);
+        Route::post('/', [EstateController::class, 'storeGift']);
+        Route::put('/{id}', [EstateController::class, 'updateGift']);
+        Route::delete('/{id}', [EstateController::class, 'destroyGift']);
+    });
+
+    // Life Policy Strategy
+    Route::get('/life-policy-strategy', [LifePolicyController::class, 'getLifePolicyStrategy']);
+
+    // Trusts
+    Route::prefix('trusts')->group(function () {
+        Route::get('/', [TrustController::class, 'getTrusts']);
+        Route::post('/', [TrustController::class, 'createTrust']);
+        Route::put('/{id}', [TrustController::class, 'updateTrust']);
+        Route::delete('/{id}', [TrustController::class, 'deleteTrust']);
+        Route::get('/{id}/analyze', [TrustController::class, 'analyzeTrust']);
+        Route::get('/{id}/assets', [TrustController::class, 'getTrustAssets']);
+        Route::post('/{id}/calculate-iht-impact', [TrustController::class, 'calculateTrustIHTImpact']);
+    });
+
+    // Trust planning and tax returns
+    Route::get('/trust-recommendations', [TrustController::class, 'getTrustRecommendations']);
+    Route::get('/trusts/upcoming-tax-returns', [TrustController::class, 'getUpcomingTaxReturns']);
+
+    // Will Builder
+    Route::prefix('will-builder')->group(function () {
+        Route::get('/pre-populate', [WillDocumentController::class, 'prePopulate']);
+        Route::get('/', [WillDocumentController::class, 'index']);
+        Route::post('/', [WillDocumentController::class, 'store']);
+        Route::get('/{id}', [WillDocumentController::class, 'show']);
+        Route::put('/{id}', [WillDocumentController::class, 'update']);
+        Route::post('/{id}/complete', [WillDocumentController::class, 'complete']);
+        Route::post('/{id}/mirror', [WillDocumentController::class, 'generateMirror']);
+        Route::get('/{id}/validate', [WillDocumentController::class, 'validateDocument']);
+        Route::delete('/{id}', [WillDocumentController::class, 'destroy']);
+    });
+
+    // Will and Bequests
+    Route::get('/will', [WillController::class, 'getWill']);
+    Route::post('/will', [WillController::class, 'storeOrUpdateWill']);
+    Route::post('/calculate-intestacy', [WillController::class, 'calculateIntestacy']);
+    Route::prefix('bequests')->group(function () {
+        Route::get('/', [WillController::class, 'getBequests']);
+        Route::post('/', [WillController::class, 'storeBequest']);
+        Route::put('/{id}', [WillController::class, 'updateBequest']);
+        Route::delete('/{id}', [WillController::class, 'deleteBequest']);
+    });
+    Route::post('/calculate-discount', [GiftingController::class, 'calculateDiscountedGiftDiscount']);
+
+    // Letter to Spouse cross-validation
+    Route::get('/letter-validation', [LetterValidationController::class, 'checkConsistency']);
+
+    // Lasting Powers of Attorney
+    Route::prefix('lpa')->group(function () {
+        Route::get('/', [LpaController::class, 'index']);
+        Route::post('/', [LpaController::class, 'store']);
+        Route::get('/donor-defaults', [LpaController::class, 'donorDefaults']);
+        Route::post('/upload', [LpaController::class, 'upload']);
+        Route::get('/{id}', [LpaController::class, 'show'])->where('id', '[0-9]+');
+        Route::put('/{id}', [LpaController::class, 'update'])->where('id', '[0-9]+');
+        Route::delete('/{id}', [LpaController::class, 'destroy'])->where('id', '[0-9]+');
+        Route::get('/{id}/compliance', [LpaController::class, 'compliance'])->where('id', '[0-9]+');
+        Route::post('/{id}/register', [LpaController::class, 'markRegistered'])->where('id', '[0-9]+');
+    });
 });
