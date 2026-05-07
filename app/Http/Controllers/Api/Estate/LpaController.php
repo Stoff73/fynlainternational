@@ -5,9 +5,9 @@ declare(strict_types=1);
 namespace App\Http\Controllers\Api\Estate;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\Estate\StoreLpaRequest;
-use App\Http\Requests\Estate\UpdateLpaRequest;
-use App\Http\Requests\Estate\UploadLpaRequest;
+use Fynla\Packs\Gb\Http\Requests\Estate\StoreLpaRequest;
+use Fynla\Packs\Gb\Http\Requests\Estate\UpdateLpaRequest;
+use Fynla\Packs\Gb\Http\Requests\Estate\UploadLpaRequest;
 use Fynla\Packs\Gb\Estate\LpaComplianceService;
 use Fynla\Packs\Gb\Estate\LpaDocumentService;
 use Fynla\Packs\Gb\Estate\LpaService;

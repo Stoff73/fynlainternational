@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\Chattel\StoreChattelRequest;
-use App\Http\Requests\Chattel\UpdateChattelRequest;
+use Fynla\Packs\Gb\Http\Requests\Chattel\StoreChattelRequest;
+use Fynla\Packs\Gb\Http\Requests\Chattel\UpdateChattelRequest;
 use Fynla\Packs\Gb\Http\Resources\ChattelResource;
 use App\Http\Traits\SanitizedErrorResponse;
 use Fynla\Packs\Gb\Models\Chattel;

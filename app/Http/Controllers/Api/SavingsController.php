@@ -6,12 +6,12 @@ namespace App\Http\Controllers\Api;
 
 use Fynla\Packs\Gb\Agents\SavingsAgent;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\Savings\SavingsAnalysisRequest;
-use App\Http\Requests\Savings\ScenarioRequest;
-use App\Http\Requests\Savings\StoreSavingsAccountRequest;
-use App\Http\Requests\Savings\StoreSavingsGoalRequest;
-use App\Http\Requests\Savings\UpdateSavingsAccountRequest;
-use App\Http\Requests\Savings\UpdateSavingsGoalRequest;
+use Fynla\Packs\Gb\Http\Requests\Savings\SavingsAnalysisRequest;
+use Fynla\Packs\Gb\Http\Requests\Savings\ScenarioRequest;
+use Fynla\Packs\Gb\Http\Requests\Savings\StoreSavingsAccountRequest;
+use Fynla\Packs\Gb\Http\Requests\Savings\StoreSavingsGoalRequest;
+use Fynla\Packs\Gb\Http\Requests\Savings\UpdateSavingsAccountRequest;
+use Fynla\Packs\Gb\Http\Requests\Savings\UpdateSavingsGoalRequest;
 use Fynla\Packs\Gb\Http\Resources\SavingsAccountResource;
 use App\Http\Traits\SanitizedErrorResponse;
 use Fynla\Packs\Gb\Models\SavingsAccount;

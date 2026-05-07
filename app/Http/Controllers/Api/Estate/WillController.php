@@ -5,10 +5,10 @@ declare(strict_types=1);
 namespace App\Http\Controllers\Api\Estate;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\Estate\CalculateIntestacyRequest;
-use App\Http\Requests\Estate\StoreBequestRequest;
-use App\Http\Requests\Estate\StoreWillRequest;
-use App\Http\Requests\Estate\UpdateBequestRequest;
+use Fynla\Packs\Gb\Http\Requests\Estate\CalculateIntestacyRequest;
+use Fynla\Packs\Gb\Http\Requests\Estate\StoreBequestRequest;
+use Fynla\Packs\Gb\Http\Requests\Estate\StoreWillRequest;
+use Fynla\Packs\Gb\Http\Requests\Estate\UpdateBequestRequest;
 use App\Http\Traits\SanitizedErrorResponse;
 use Fynla\Packs\Gb\Models\Estate\Bequest;
 use Fynla\Packs\Gb\Models\Estate\Trust;

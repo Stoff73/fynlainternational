@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\BusinessInterest\StoreBusinessInterestRequest;
-use App\Http\Requests\BusinessInterest\UpdateBusinessInterestRequest;
+use Fynla\Packs\Gb\Http\Requests\BusinessInterest\StoreBusinessInterestRequest;
+use Fynla\Packs\Gb\Http\Requests\BusinessInterest\UpdateBusinessInterestRequest;
 use Fynla\Packs\Gb\Http\Resources\BusinessInterestResource;
 use Fynla\Packs\Gb\Models\BusinessInterest;
 use App\Services\Business\BusinessInterestService;

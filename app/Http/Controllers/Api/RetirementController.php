@@ -6,11 +6,11 @@ namespace App\Http\Controllers\Api;
 
 use Fynla\Packs\Gb\Agents\RetirementAgent;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\Retirement\RetirementAnalysisRequest;
-use App\Http\Requests\Retirement\ScenarioRequest;
-use App\Http\Requests\Retirement\StoreDBPensionRequest;
-use App\Http\Requests\Retirement\StoreDCPensionRequest;
-use App\Http\Requests\Retirement\UpdateStatePensionRequest;
+use Fynla\Packs\Gb\Http\Requests\Retirement\RetirementAnalysisRequest;
+use Fynla\Packs\Gb\Http\Requests\Retirement\ScenarioRequest;
+use Fynla\Packs\Gb\Http\Requests\Retirement\StoreDBPensionRequest;
+use Fynla\Packs\Gb\Http\Requests\Retirement\StoreDCPensionRequest;
+use Fynla\Packs\Gb\Http\Requests\Retirement\UpdateStatePensionRequest;
 use App\Http\Traits\SanitizedErrorResponse;
 use Fynla\Packs\Gb\Models\DBPension;
 use Fynla\Packs\Gb\Models\DCPension;

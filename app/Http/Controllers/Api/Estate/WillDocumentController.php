@@ -7,7 +7,7 @@ namespace App\Http\Controllers\Api\Estate;
 use Fynla\Core\Models\Document;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\Estate\SaveWillDocumentRequest;
+use Fynla\Packs\Gb\Http\Requests\Estate\SaveWillDocumentRequest;
 use App\Http\Traits\SanitizedErrorResponse;
 use Fynla\Packs\Gb\Models\Estate\WillDocument;
 use Fynla\Packs\Gb\Estate\WillDocumentService;

@@ -5,12 +5,12 @@ declare(strict_types=1);
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\Estate\StoreAssetRequest;
-use App\Http\Requests\Estate\StoreGiftRequest;
-use App\Http\Requests\Estate\StoreLiabilityRequest;
-use App\Http\Requests\Estate\UpdateAssetRequest;
-use App\Http\Requests\Estate\UpdateGiftRequest;
-use App\Http\Requests\Estate\UpdateLiabilityRequest;
+use Fynla\Packs\Gb\Http\Requests\Estate\StoreAssetRequest;
+use Fynla\Packs\Gb\Http\Requests\Estate\StoreGiftRequest;
+use Fynla\Packs\Gb\Http\Requests\Estate\StoreLiabilityRequest;
+use Fynla\Packs\Gb\Http\Requests\Estate\UpdateAssetRequest;
+use Fynla\Packs\Gb\Http\Requests\Estate\UpdateGiftRequest;
+use Fynla\Packs\Gb\Http\Requests\Estate\UpdateLiabilityRequest;
 use Fynla\Packs\Gb\Http\Resources\Estate\AssetResource;
 use Fynla\Packs\Gb\Http\Resources\Estate\GiftResource;
 use Fynla\Packs\Gb\Http\Resources\Estate\LiabilityResource;
