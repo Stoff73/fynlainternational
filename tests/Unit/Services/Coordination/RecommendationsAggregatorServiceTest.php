@@ -6,8 +6,8 @@ use App\Agents\ProtectionAgent;
 use App\Agents\RetirementAgent;
 use App\Agents\SavingsAgent;
 use App\Models\User;
-use App\Services\Coordination\RecommendationPersonaliser;
-use App\Services\Coordination\RecommendationsAggregatorService;
+use Fynla\Packs\Gb\Coordination\RecommendationPersonaliser;
+use Fynla\Packs\Gb\Coordination\RecommendationsAggregatorService;
 use Fynla\Packs\Gb\Estate\ComprehensiveEstatePlanService;
 use App\Services\Investment\PortfolioAnalyzer;
 

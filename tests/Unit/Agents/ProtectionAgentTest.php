@@ -5,7 +5,7 @@ declare(strict_types=1);
 use App\Agents\ProtectionAgent;
 use Fynla\Packs\Gb\Models\ProtectionProfile;
 use App\Models\User;
-use App\Services\Coordination\RecommendationPersonaliser;
+use Fynla\Packs\Gb\Coordination\RecommendationPersonaliser;
 use Fynla\Packs\Gb\Protection\AdequacyScorer;
 use App\Services\Protection\CoverageGapAnalyzer;
 use Fynla\Packs\Gb\Protection\ProtectionDataReadinessService;

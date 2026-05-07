@@ -105,6 +105,13 @@ describe('Pack Isolation', function () {
             // and reference App\Agents\* (R-8 deferral) across the boundary;
             // pinned by allow-list below.
             $packDir . DIRECTORY_SEPARATOR . 'Plans' . DIRECTORY_SEPARATOR,
+            // R-7c: Coordination clean services moved into the GB pack. The
+            // 3 R-14a deferrals (CashFlowCoordinator, CrossModuleStrategyService,
+            // HouseholdPlanningService) stay in app/Services/Coordination/.
+            // Pack RecommendationsAggregatorService imports App\Agents\*
+            // (R-8 deferral) and App\Services\Investment\PortfolioAnalyzer
+            // (R-14a) across the boundary; pinned by allow-list below.
+            $packDir . DIRECTORY_SEPARATOR . 'Coordination' . DIRECTORY_SEPARATOR,
         ];
 
         $violations = [];
@@ -135,7 +142,7 @@ describe('Pack Isolation', function () {
         );
     });
 
-    it('country-gb Constants/Traits/Models/Estate/Tax/Retirement/Investment/Protection/Savings/Goals/Plans only import allow-listed App\\ namespaces (R-6/R-7 ratchet)', function () {
+    it('country-gb Constants/Traits/Models/Estate/Tax/Retirement/Investment/Protection/Savings/Goals/Plans/Coordination only import allow-listed App\\ namespaces (R-6/R-7 ratchet)', function () {
         $packDir = base_path('packs/country-gb/src');
         $targetDirs = [
             $packDir . DIRECTORY_SEPARATOR . 'Constants',
@@ -149,6 +156,7 @@ describe('Pack Isolation', function () {
             $packDir . DIRECTORY_SEPARATOR . 'Savings',
             $packDir . DIRECTORY_SEPARATOR . 'Goals',
             $packDir . DIRECTORY_SEPARATOR . 'Plans',
+            $packDir . DIRECTORY_SEPARATOR . 'Coordination',
         ];
 
         // The R-3/R-4 relocations tolerate a narrow allow-list of App\
@@ -174,6 +182,7 @@ describe('Pack Isolation', function () {
             'App\\Agents\\GoalsAgent',
             'App\\Agents\\InvestmentAgent',
             'App\\Agents\\ProtectionAgent',
+            'App\\Agents\\RetirementAgent',
             'App\\Agents\\SavingsAgent',
             // App\Services\* — relocated in R-5/R-6.
             'App\\Services\\AI\\KycGateChecker',
@@ -187,10 +196,6 @@ describe('Pack Isolation', function () {
             'App\\Services\\UKTaxCalculator',
             // App\Services\* — relocated in R-6/R-7.
             'App\\Services\\Cache\\CacheInvalidationService',
-            // R-7c target — Coordination clean services move next; pack
-            // EstatePlanService imports RecommendationPersonaliser via the
-            // boundary until that relocation lands.
-            'App\\Services\\Coordination\\RecommendationPersonaliser',
             // R-14a deferred Goals services — float-money signatures (ADR-005)
             // keep these in app/Services/Goals/ until the int-minor money
             // refactor lands. Pack GoalStrategyService imports

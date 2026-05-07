@@ -5,7 +5,7 @@ declare(strict_types=1);
 use App\Agents\EstateAgent;
 use App\Models\Goal;
 use App\Models\User;
-use App\Services\Coordination\RecommendationPersonaliser;
+use Fynla\Packs\Gb\Coordination\RecommendationPersonaliser;
 use Fynla\Packs\Gb\Estate\ComprehensiveEstatePlanService;
 use Fynla\Packs\Gb\Estate\EstateAssetAggregatorService;
 use Fynla\Packs\Gb\Estate\EstateDataReadinessService;

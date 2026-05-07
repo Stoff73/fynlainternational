@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-use App\Services\Coordination\ConflictResolver;
+use Fynla\Packs\Gb\Coordination\ConflictResolver;
 use Fynla\Packs\Gb\Tax\TaxConfigService;
 
 // Helper function to create a ConflictResolver instance with mocked TaxConfigService

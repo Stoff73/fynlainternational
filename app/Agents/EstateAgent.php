@@ -9,7 +9,7 @@ use Fynla\Packs\Gb\Models\Estate\Will;
 use App\Models\Goal;
 use Fynla\Packs\Gb\Models\LifeInsurancePolicy;
 use App\Models\User;
-use App\Services\Coordination\RecommendationPersonaliser;
+use Fynla\Packs\Gb\Coordination\RecommendationPersonaliser;
 use Fynla\Packs\Gb\Estate\ComprehensiveEstatePlanService;
 use Fynla\Packs\Gb\Estate\EstateAssetAggregatorService;
 use Fynla\Packs\Gb\Estate\EstateDataReadinessService;

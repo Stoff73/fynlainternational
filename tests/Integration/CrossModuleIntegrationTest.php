@@ -5,7 +5,7 @@ declare(strict_types=1);
 use Fynla\Packs\Gb\Models\InvestmentActionDefinition;
 use Fynla\Packs\Gb\Models\SavingsActionDefinition;
 use Fynla\Packs\Gb\Models\TaxConfiguration;
-use App\Services\Coordination\PriorityRanker;
+use Fynla\Packs\Gb\Coordination\PriorityRanker;
 
 describe('Cross-Module Integration', function () {
 

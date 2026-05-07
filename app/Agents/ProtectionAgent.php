@@ -6,7 +6,7 @@ namespace App\Agents;
 
 use App\Models\Goal;
 use App\Models\User;
-use App\Services\Coordination\RecommendationPersonaliser;
+use Fynla\Packs\Gb\Coordination\RecommendationPersonaliser;
 use Fynla\Packs\Gb\Protection\AdequacyScorer;
 use App\Services\Protection\CoverageGapAnalyzer;
 use Fynla\Packs\Gb\Protection\ProtectionDataReadinessService;

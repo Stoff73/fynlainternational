@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Services\Coordination;
+namespace Fynla\Packs\Gb\Coordination;
 
 use App\Agents\ProtectionAgent;
 use App\Agents\RetirementAgent;

@@ -7,7 +7,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Http\Traits\SanitizedErrorResponse;
 use Fynla\Core\Models\RecommendationTracking;
-use App\Services\Coordination\RecommendationsAggregatorService;
+use Fynla\Packs\Gb\Coordination\RecommendationsAggregatorService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 

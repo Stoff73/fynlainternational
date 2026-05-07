@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 use App\Agents\EstateAgent;
 use App\Models\User;
-use App\Services\Coordination\RecommendationPersonaliser;
+use Fynla\Packs\Gb\Coordination\RecommendationPersonaliser;
 use Fynla\Packs\Gb\Estate\EstateAssetAggregatorService;
 use Fynla\Packs\Gb\Estate\IHTCalculationService;
 use App\Services\Estate\IHTFormattingService;
