@@ -27,6 +27,7 @@ use Fynla\Packs\Gb\Http\Controllers\Estate\TrustController;
 use Fynla\Packs\Gb\Http\Controllers\Estate\WillController;
 use Fynla\Packs\Gb\Http\Controllers\Estate\WillDocumentController;
 use Fynla\Packs\Gb\Http\Controllers\EstateController;
+use Fynla\Packs\Gb\Http\Controllers\IncomeDefinitionsController;
 use Fynla\Packs\Gb\Http\Controllers\InvestmentActionDefinitionController;
 use Fynla\Packs\Gb\Http\Controllers\InvestmentController;
 use Fynla\Packs\Gb\Http\Controllers\Investment\AssetLocationController;
@@ -51,6 +52,10 @@ use Fynla\Packs\Gb\Http\Controllers\Retirement\DecumulationController;
 use Fynla\Packs\Gb\Http\Controllers\RetirementActionDefinitionController;
 use Fynla\Packs\Gb\Http\Controllers\RetirementController;
 use Fynla\Packs\Gb\Http\Controllers\SavingsController;
+use Fynla\Packs\Gb\Http\Controllers\Tax\TaxOptimisationController;
+use Fynla\Packs\Gb\Http\Controllers\TaxProductInfoController;
+use Fynla\Packs\Gb\Http\Controllers\TaxSettingsController;
+use Fynla\Packs\Gb\Http\Controllers\TaxYearController;
 
 // Savings module routes
 Route::middleware('auth:sanctum')->prefix('savings')->group(function () {
@@ -602,4 +607,37 @@ Route::middleware(['auth:sanctum', 'feature:pro'])->prefix('estate')->group(func
         Route::get('/{id}/compliance', [LpaController::class, 'compliance'])->where('id', '[0-9]+');
         Route::post('/{id}/register', [LpaController::class, 'markRegistered'])->where('id', '[0-9]+');
     });
+});
+
+
+// Tax Product Information routes (Tax status for products)
+Route::middleware('auth:sanctum')->prefix('tax-info')->group(function () {
+    Route::get('/investment/{accountType}', [TaxProductInfoController::class, 'getInvestmentTaxInfo']);
+    Route::get('/savings/{accountType}', [TaxProductInfoController::class, 'getSavingsTaxInfo']);
+    Route::get('/summary', [TaxProductInfoController::class, 'getTaxSummary']);
+});
+
+// Tax Optimisation routes (cross-module tax strategies)
+Route::middleware('auth:sanctum')->prefix('tax')->group(function () {
+    Route::get('/optimisation-analysis', [TaxOptimisationController::class, 'getAnalysis']);
+    Route::get('/strategies', [TaxOptimisationController::class, 'getStrategies']);
+    Route::get('/income-definitions', [IncomeDefinitionsController::class, 'show']);
+});
+
+// Lightweight active tax year endpoint — any authenticated user can read this.
+// Returns just the tax year label and effective dates so the frontend knows
+// which year to display and calculate allowances against. No sensitive admin
+// config is exposed here (that stays behind permission:admin.tax_config below).
+Route::middleware('auth:sanctum')->get('tax-year/current', [TaxYearController::class, 'current']);
+
+// Tax Settings routes (requires tax config permission)
+Route::middleware(['auth:sanctum', 'permission:admin.tax_config'])->prefix('tax-settings')->group(function () {
+    Route::get('/current', [TaxSettingsController::class, 'getCurrent']);
+    Route::get('/all', [TaxSettingsController::class, 'getAll']);
+    Route::get('/calculations', [TaxSettingsController::class, 'getCalculations']);
+    Route::post('/create', [TaxSettingsController::class, 'create']);
+    Route::put('/{id}', [TaxSettingsController::class, 'update']);
+    Route::post('/{id}/activate', [TaxSettingsController::class, 'setActive']);
+    Route::post('/{id}/duplicate', [TaxSettingsController::class, 'duplicate']);
+    Route::delete('/{id}', [TaxSettingsController::class, 'delete']);
 });

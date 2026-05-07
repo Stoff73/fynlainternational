@@ -13,7 +13,6 @@ use App\Http\Controllers\Api\GDPRController;
 use App\Http\Controllers\Api\GoalsController;
 use App\Http\Controllers\Api\HolisticPlanningController;
 use App\Http\Controllers\Api\HouseholdController;
-use App\Http\Controllers\Api\IncomeDefinitionsController;
 use App\Http\Controllers\Api\InfoGuideController;
 use App\Http\Controllers\Api\JourneyController;
 use App\Http\Controllers\Api\LetterToSpouseController;
@@ -34,7 +33,6 @@ use App\Http\Controllers\Api\RiskPreferenceController;
 use App\Http\Controllers\Api\SessionController;
 use App\Http\Controllers\Api\Settings\AssumptionsController;
 use App\Http\Controllers\Api\SpousePermissionController;
-use App\Http\Controllers\Api\Tax\TaxOptimisationController;
 use App\Http\Controllers\Api\UserProfileController;
 use App\Http\Controllers\Api\WhatIfScenarioController;
 use Illuminate\Support\Facades\Route;
@@ -428,19 +426,7 @@ Route::middleware('auth:sanctum')->prefix('recommendations')->group(function () 
     Route::patch('/{id}/notes', [RecommendationsController::class, 'updateNotes']);
 });
 
-// Tax Product Information routes (Tax status for products)
-Route::middleware('auth:sanctum')->prefix('tax-info')->group(function () {
-    Route::get('/investment/{accountType}', [\App\Http\Controllers\Api\TaxProductInfoController::class, 'getInvestmentTaxInfo']);
-    Route::get('/savings/{accountType}', [\App\Http\Controllers\Api\TaxProductInfoController::class, 'getSavingsTaxInfo']);
-    Route::get('/summary', [\App\Http\Controllers\Api\TaxProductInfoController::class, 'getTaxSummary']);
-});
-
-// Tax Optimisation routes (cross-module tax strategies)
-Route::middleware('auth:sanctum')->prefix('tax')->group(function () {
-    Route::get('/optimisation-analysis', [TaxOptimisationController::class, 'getAnalysis']);
-    Route::get('/strategies', [TaxOptimisationController::class, 'getStrategies']);
-    Route::get('/income-definitions', [IncomeDefinitionsController::class, 'show']);
-});
+// Tax Product Information + Tax Optimisation routes — relocated to packs/country-gb/routes/api.php in R-9i.
 
 // Payment routes (public)
 Route::prefix('payment')->group(function () {
@@ -563,23 +549,7 @@ Route::middleware(['auth:sanctum', 'permission:admin.access', 'throttle:30,1'])
 Route::middleware(['auth:sanctum', 'permission:admin.access'])
     ->get('admin/decision-matrix/{module}', [\App\Http\Controllers\Api\ActionDefinitionController::class, 'decisionMatrix']);
 
-// Lightweight active tax year endpoint — any authenticated user can read this.
-// Returns just the tax year label and effective dates so the frontend knows
-// which year to display and calculate allowances against. No sensitive admin
-// config is exposed here (that stays behind permission:admin.tax_config below).
-Route::middleware('auth:sanctum')->get('tax-year/current', [\App\Http\Controllers\Api\TaxYearController::class, 'current']);
-
-// Tax Settings routes (requires tax config permission)
-Route::middleware(['auth:sanctum', 'permission:admin.tax_config'])->prefix('tax-settings')->group(function () {
-    Route::get('/current', [\App\Http\Controllers\Api\TaxSettingsController::class, 'getCurrent']);
-    Route::get('/all', [\App\Http\Controllers\Api\TaxSettingsController::class, 'getAll']);
-    Route::get('/calculations', [\App\Http\Controllers\Api\TaxSettingsController::class, 'getCalculations']);
-    Route::post('/create', [\App\Http\Controllers\Api\TaxSettingsController::class, 'create']);
-    Route::put('/{id}', [\App\Http\Controllers\Api\TaxSettingsController::class, 'update']);
-    Route::post('/{id}/activate', [\App\Http\Controllers\Api\TaxSettingsController::class, 'setActive']);
-    Route::post('/{id}/duplicate', [\App\Http\Controllers\Api\TaxSettingsController::class, 'duplicate']);
-    Route::delete('/{id}', [\App\Http\Controllers\Api\TaxSettingsController::class, 'delete']);
-});
+// Tax Year + Tax Settings routes — relocated to packs/country-gb/routes/api.php in R-9i.
 
 // Document Upload & AI Extraction routes (rate limited for security)
 Route::middleware(['auth:sanctum', 'throttle:30,1'])->prefix('documents')->group(function () {

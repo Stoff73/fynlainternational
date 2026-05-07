@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace App\Http\Controllers\Api;
+namespace Fynla\Packs\Gb\Http\Controllers;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\StoreTaxConfigurationRequest;
+use Fynla\Packs\Gb\Http\Requests\Tax\StoreTaxConfigurationRequest;
 use App\Http\Traits\SanitizedErrorResponse;
 use Fynla\Packs\Gb\Models\TaxConfiguration;
 use Fynla\Packs\Gb\Models\TaxConfigurationAudit;

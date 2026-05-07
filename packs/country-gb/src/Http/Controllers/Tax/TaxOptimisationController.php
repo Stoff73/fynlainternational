@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Http\Controllers\Api\Tax;
+namespace Fynla\Packs\Gb\Http\Controllers\Tax;
 
 use App\Agents\TaxOptimisationAgent;
 use App\Http\Controllers\Controller;
