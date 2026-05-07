@@ -123,6 +123,10 @@ describe('Pack Isolation', function () {
             // App\Http\Resources\UserResource for the user / joint_owner
             // relationships; pinned by allow-list below.
             $packDir . DIRECTORY_SEPARATOR . 'Http' . DIRECTORY_SEPARATOR . 'Resources' . DIRECTORY_SEPARATOR,
+            // R-9b: 6 UK module observers moved into the GB pack. Risk
+            // observers extend App\Observers\RiskRecalculationObserver
+            // (generic base, stays in app/Observers/); pinned by allow-list.
+            $packDir . DIRECTORY_SEPARATOR . 'Observers' . DIRECTORY_SEPARATOR,
         ];
 
         $violations = [];
@@ -153,7 +157,7 @@ describe('Pack Isolation', function () {
         );
     });
 
-    it('country-gb Constants/Traits/Models/Estate/Tax/Retirement/Investment/Protection/Savings/Goals/Plans/Coordination/Agents/Http only import allow-listed App\\ namespaces (R-6/R-7/R-8/R-9 ratchet)', function () {
+    it('country-gb Constants/Traits/Models/Estate/Tax/Retirement/Investment/Protection/Savings/Goals/Plans/Coordination/Agents/Http/Observers only import allow-listed App\\ namespaces (R-6/R-7/R-8/R-9 ratchet)', function () {
         $packDir = base_path('packs/country-gb/src');
         $targetDirs = [
             $packDir . DIRECTORY_SEPARATOR . 'Constants',
@@ -170,6 +174,7 @@ describe('Pack Isolation', function () {
             $packDir . DIRECTORY_SEPARATOR . 'Coordination',
             $packDir . DIRECTORY_SEPARATOR . 'Agents',
             $packDir . DIRECTORY_SEPARATOR . 'Http' . DIRECTORY_SEPARATOR . 'Resources',
+            $packDir . DIRECTORY_SEPARATOR . 'Observers',
         ];
 
         // The R-3/R-4 relocations tolerate a narrow allow-list of App\
@@ -204,6 +209,11 @@ describe('Pack Isolation', function () {
             // Pack resources for joint-ownable models reference UserResource
             // for user / joint_owner relationships across the boundary.
             'App\\Http\\Resources\\UserResource',
+            // App\Observers\RiskRecalculationObserver — generic base class
+            // (debounced job dispatch). Stays in app/Observers/ as a non-UK
+            // helper; the 4 UK risk observers (DCPension, InvestmentAccount,
+            // Property, SavingsAccount) extend it across the boundary.
+            'App\\Observers\\RiskRecalculationObserver',
             // App\Services\* — relocated in R-5/R-6.
             'App\\Services\\AI\\AiToolDefinitions', // R-8: CoordinatingAgent imports
             'App\\Services\\AI\\KycGateChecker',
