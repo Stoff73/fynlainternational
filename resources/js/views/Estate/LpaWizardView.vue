@@ -14,7 +14,7 @@
 
 <script>
 import AppLayout from '@/layouts/AppLayout.vue';
-import LpaWizard from '@/components/Estate/LpaWizard.vue';
+import LpaWizard from '@gb/components/Estate/LpaWizard.vue';
 import ModuleStatusBar from '@/components/Shared/ModuleStatusBar.vue';
 
 export default {

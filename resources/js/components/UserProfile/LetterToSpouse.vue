@@ -764,7 +764,7 @@ import estateService from '@/services/estateService';
 import retirementService from '@/services/retirementService';
 import authService from '@/services/authService';
 import { currencyMixin } from '@/mixins/currencyMixin';
-import LetterEstateWarnings from '@/components/Estate/LetterEstateWarnings.vue';
+import LetterEstateWarnings from '@gb/components/Estate/LetterEstateWarnings.vue';
 
 import logger from '@/utils/logger';
 export default {

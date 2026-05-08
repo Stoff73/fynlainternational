@@ -191,8 +191,8 @@
 import { mapState, mapActions, mapGetters } from 'vuex';
 import axios from '@/bootstrap';
 import AppLayout from '@/layouts/AppLayout.vue';
-import TrustCard from '@/components/Trusts/TrustCard.vue';
-import TrustFormModal from '@/components/Trusts/TrustFormModal.vue';
+import TrustCard from '@gb/components/Trusts/TrustCard.vue';
+import TrustFormModal from '@gb/components/Trusts/TrustFormModal.vue';
 import DocumentUploadModal from '@/components/Shared/DocumentUploadModal.vue';
 import { currencyMixin } from '@/mixins/currencyMixin';
 import { getCurrentTaxYear } from '@/utils/dateFormatter';

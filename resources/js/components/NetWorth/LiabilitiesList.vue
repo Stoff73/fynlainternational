@@ -128,7 +128,7 @@
 import { mapState, mapActions, mapGetters } from 'vuex';
 import LiabilityCard from './LiabilityCard.vue';
 import LiabilityDetailInline from './LiabilityDetailInline.vue';
-import LiabilityForm from '@/components/Estate/LiabilityForm.vue';
+import LiabilityForm from '@gb/components/Estate/LiabilityForm.vue';
 import ConfirmDialog from '@/components/Common/ConfirmDialog.vue';
 import ModuleStatusBar from '@/components/Shared/ModuleStatusBar.vue';
 import { currencyMixin } from '@/mixins/currencyMixin';

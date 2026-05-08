@@ -22,7 +22,7 @@
 
 <script>
 import AppLayout from '@/layouts/AppLayout.vue';
-import PowerOfAttorneyTab from '@/components/Estate/PowerOfAttorneyTab.vue';
+import PowerOfAttorneyTab from '@gb/components/Estate/PowerOfAttorneyTab.vue';
 import ModuleStatusBar from '@/components/Shared/ModuleStatusBar.vue';
 
 import logger from '@/utils/logger';

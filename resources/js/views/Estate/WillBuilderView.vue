@@ -27,8 +27,8 @@
 
 <script>
 import AppLayout from '@/layouts/AppLayout.vue';
-import WillBuilderWizard from '@/components/Estate/WillBuilder/WillBuilderWizard.vue';
-import WillPlanning from '@/components/Estate/WillPlanning.vue';
+import WillBuilderWizard from '@gb/components/Estate/WillBuilder/WillBuilderWizard.vue';
+import WillPlanning from '@gb/components/Estate/WillPlanning.vue';
 import estateService from '@/services/estateService';
 import api from '@/services/api';
 import ModuleStatusBar from '@/components/Shared/ModuleStatusBar.vue';

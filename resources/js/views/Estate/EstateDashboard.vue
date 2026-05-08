@@ -72,7 +72,7 @@
 <script>
 import { mapState, mapActions } from 'vuex';
 import AppLayout from '@/layouts/AppLayout.vue';
-import IHTPlanning from '@/components/Estate/IHTPlanning.vue';
+import IHTPlanning from '@gb/components/Estate/IHTPlanning.vue';
 import estateService from '@/services/estateService';
 import ModuleStatusBar from '@/components/Shared/ModuleStatusBar.vue';
 

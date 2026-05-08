@@ -87,7 +87,7 @@ import { ref, onMounted } from 'vue';
 import OnboardingStep from '../OnboardingStep.vue';
 import UsefulResources from '@/components/Onboarding/UsefulResources.vue';
 import { STEP_RESOURCES } from '@/constants/onboardingLinks';
-import LiabilityForm from '@/components/Estate/LiabilityForm.vue';
+import LiabilityForm from '@gb/components/Estate/LiabilityForm.vue';
 import estateService from '@/services/estateService';
 import { formatCurrency } from '@/utils/currency';
 

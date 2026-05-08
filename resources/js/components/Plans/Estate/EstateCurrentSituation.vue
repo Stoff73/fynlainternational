@@ -89,7 +89,7 @@
 <script>
 import { currencyMixin } from '@/mixins/currencyMixin';
 import PlanSectionHeader from '@/components/Plans/Shared/PlanSectionHeader.vue';
-import IHTCalculationTable from '@/components/Estate/IHTCalculationTable.vue';
+import IHTCalculationTable from '@gb/components/Estate/IHTCalculationTable.vue';
 
 export default {
   name: 'EstateCurrentSituation',

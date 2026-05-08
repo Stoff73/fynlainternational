@@ -19,7 +19,7 @@
 
 <script>
 import AppLayout from '@/layouts/AppLayout.vue';
-import IHTPlanning from '@/components/Estate/IHTPlanning.vue';
+import IHTPlanning from '@gb/components/Estate/IHTPlanning.vue';
 
 export default {
   name: 'InheritanceTaxDetail',
