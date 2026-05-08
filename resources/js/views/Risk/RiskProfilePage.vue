@@ -194,8 +194,8 @@
 <script>
 import AppLayout from '@/layouts/AppLayout.vue';
 import RiskBadge from '@/components/Shared/RiskBadge.vue';
-import FactorBreakdownCard from '@/components/Risk/FactorBreakdownCard.vue';
-import InvestmentTypesAccordion from '@/components/Risk/InvestmentTypesAccordion.vue';
+import FactorBreakdownCard from '@gb/components/Risk/FactorBreakdownCard.vue';
+import InvestmentTypesAccordion from '@gb/components/Risk/InvestmentTypesAccordion.vue';
 import RiskMismatchWarning from '@/components/Investment/RiskMismatchWarning.vue';
 import riskService from '@/services/riskService';
 import ModuleStatusBar from '@/components/Shared/ModuleStatusBar.vue';

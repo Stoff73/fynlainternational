@@ -32,7 +32,7 @@ import { useStore } from 'vuex';
 import { useRouter, useRoute } from 'vue-router';
 import AppLayout from '@/layouts/AppLayout.vue';
 import LetterToSpouse from '@/components/UserProfile/LetterToSpouse.vue';
-import RiskProfileSummary from '@/components/Risk/RiskProfileSummary.vue';
+import RiskProfileSummary from '@gb/components/Risk/RiskProfileSummary.vue';
 import IncomeOccupation from '@/components/UserProfile/IncomeOccupation.vue';
 import ExpenditureOverview from '@/components/UserProfile/ExpenditureOverview.vue';
 import ModuleStatusBar from '@/components/Shared/ModuleStatusBar.vue';

@@ -190,8 +190,8 @@
 
 <script>
 import RiskBadge from '@/components/Shared/RiskBadge.vue';
-import FactorBreakdownCard from '@/components/Risk/FactorBreakdownCard.vue';
-import InvestmentTypesAccordion from '@/components/Risk/InvestmentTypesAccordion.vue';
+import FactorBreakdownCard from '@gb/components/Risk/FactorBreakdownCard.vue';
+import InvestmentTypesAccordion from '@gb/components/Risk/InvestmentTypesAccordion.vue';
 import riskService from '@/services/riskService';
 
 import logger from '@/utils/logger';
