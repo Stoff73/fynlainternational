@@ -15,8 +15,8 @@ describe('Cross-Module Integration', function () {
 
         it('emergency fund is owned by Savings engine, not Investment', function () {
             // Seed the action definitions so the tables are populated
-            $this->seed(\Database\Seeders\InvestmentActionDefinitionSeeder::class);
-            $this->seed(\Database\Seeders\SavingsActionDefinitionSeeder::class);
+            $this->seed(\Fynla\Packs\Gb\Database\Seeders\InvestmentActionDefinitionSeeder::class);
+            $this->seed(\Fynla\Packs\Gb\Database\Seeders\SavingsActionDefinitionSeeder::class);
 
             // Check SavingsActionDefinition has emergency fund triggers that are enabled
             $savingsTriggers = SavingsActionDefinition::where('key', 'like', 'emergency_fund_%')
@@ -302,8 +302,8 @@ describe('Cross-Module Integration', function () {
 
         it('no duplicate recommendations across Savings and Investment engines', function () {
             // Seed both sets of action definitions
-            $this->seed(\Database\Seeders\InvestmentActionDefinitionSeeder::class);
-            $this->seed(\Database\Seeders\SavingsActionDefinitionSeeder::class);
+            $this->seed(\Fynla\Packs\Gb\Database\Seeders\InvestmentActionDefinitionSeeder::class);
+            $this->seed(\Fynla\Packs\Gb\Database\Seeders\SavingsActionDefinitionSeeder::class);
 
             // The 7 Investment savings triggers that overlap with Savings engine must be disabled
             $disabledKeys = [
@@ -324,7 +324,7 @@ describe('Cross-Module Integration', function () {
         });
 
         it('Savings engine emergency fund triggers remain enabled after seeding', function () {
-            $this->seed(\Database\Seeders\SavingsActionDefinitionSeeder::class);
+            $this->seed(\Fynla\Packs\Gb\Database\Seeders\SavingsActionDefinitionSeeder::class);
 
             $savingsEmergencyKeys = [
                 'emergency_fund_critical',
@@ -342,8 +342,8 @@ describe('Cross-Module Integration', function () {
         });
 
         it('Investment engine core investment triggers remain enabled', function () {
-            $this->seed(\Database\Seeders\InvestmentActionDefinitionSeeder::class);
-            $this->seed(\Database\Seeders\SavingsActionDefinitionSeeder::class);
+            $this->seed(\Fynla\Packs\Gb\Database\Seeders\InvestmentActionDefinitionSeeder::class);
+            $this->seed(\Fynla\Packs\Gb\Database\Seeders\SavingsActionDefinitionSeeder::class);
 
             // These Investment-specific triggers should remain enabled
             $enabledKeys = [

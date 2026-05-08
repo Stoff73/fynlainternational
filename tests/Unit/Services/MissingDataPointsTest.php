@@ -13,7 +13,7 @@ uses(RefreshDatabase::class);
 
 beforeEach(function () {
     // Seed tax configuration
-    $this->artisan('db:seed', ['--class' => 'TaxConfigurationSeeder', '--force' => true]);
+    $this->artisan('db:seed', ['--class' => \Fynla\Packs\Gb\Database\Seeders\TaxConfigurationSeeder::class, '--force' => true]);
 });
 
 describe('Life Expectancy Override', function () {

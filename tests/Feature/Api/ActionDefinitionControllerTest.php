@@ -6,11 +6,11 @@ use Fynla\Packs\Gb\Models\ProtectionActionDefinition;
 use Fynla\Core\Models\Role;
 use Fynla\Packs\Gb\Models\TaxActionDefinition;
 use App\Models\User;
-use Database\Seeders\EstateActionDefinitionSeeder;
-use Database\Seeders\ProtectionActionDefinitionSeeder;
+use Fynla\Packs\Gb\Database\Seeders\EstateActionDefinitionSeeder;
+use Fynla\Packs\Gb\Database\Seeders\ProtectionActionDefinitionSeeder;
 use Database\Seeders\RolesPermissionsSeeder;
-use Database\Seeders\TaxActionDefinitionSeeder;
-use Database\Seeders\TaxConfigurationSeeder;
+use Fynla\Packs\Gb\Database\Seeders\TaxActionDefinitionSeeder;
+use Fynla\Packs\Gb\Database\Seeders\TaxConfigurationSeeder;
 use Laravel\Sanctum\Sanctum;
 
 beforeEach(function () {

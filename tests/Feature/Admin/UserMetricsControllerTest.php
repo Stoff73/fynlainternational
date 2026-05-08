@@ -6,7 +6,7 @@ use Fynla\Core\Models\Role;
 use Fynla\Core\Models\Subscription;
 use App\Models\User;
 use Database\Seeders\RolesPermissionsSeeder;
-use Database\Seeders\TaxConfigurationSeeder;
+use Fynla\Packs\Gb\Database\Seeders\TaxConfigurationSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
 uses(RefreshDatabase::class);

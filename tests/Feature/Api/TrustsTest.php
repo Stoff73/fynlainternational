@@ -9,7 +9,7 @@ use App\Models\Household;
 use Fynla\Packs\Gb\Models\Property;
 use App\Models\User;
 use Carbon\Carbon;
-use Database\Seeders\TaxConfigurationSeeder;
+use Fynla\Packs\Gb\Database\Seeders\TaxConfigurationSeeder;
 use Laravel\Sanctum\Sanctum;
 
 beforeEach(function () {

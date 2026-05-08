@@ -6,7 +6,7 @@ use Fynla\Core\Models\ExpenditureProfile;
 use Fynla\Packs\Gb\Models\SavingsAccount;
 use Fynla\Packs\Gb\Models\SavingsGoal;
 use App\Models\User;
-use Database\Seeders\TaxConfigurationSeeder;
+use Fynla\Packs\Gb\Database\Seeders\TaxConfigurationSeeder;
 
 beforeEach(function () {
     $this->seed(TaxConfigurationSeeder::class);

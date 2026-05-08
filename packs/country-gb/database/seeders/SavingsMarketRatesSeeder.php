@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Database\Seeders;
+namespace Fynla\Packs\Gb\Database\Seeders;
 
 use Fynla\Packs\Gb\Models\SavingsMarketRate;
 use Illuminate\Database\Seeder;

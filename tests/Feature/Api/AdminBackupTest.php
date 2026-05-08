@@ -5,7 +5,7 @@ declare(strict_types=1);
 use Fynla\Core\Models\Role;
 use App\Models\User;
 use Database\Seeders\RolesPermissionsSeeder;
-use Database\Seeders\TaxConfigurationSeeder;
+use Fynla\Packs\Gb\Database\Seeders\TaxConfigurationSeeder;
 use Illuminate\Support\Facades\Storage;
 use Laravel\Sanctum\Sanctum;
 

@@ -6,7 +6,7 @@ use App\Models\User;
 
 beforeEach(function () {
     // Seed tax configuration
-    $this->seed(\Database\Seeders\TaxConfigurationSeeder::class);
+    $this->seed(\Fynla\Packs\Gb\Database\Seeders\TaxConfigurationSeeder::class);
 
     $this->user = User::factory()->create([
         'first_name' => 'James',

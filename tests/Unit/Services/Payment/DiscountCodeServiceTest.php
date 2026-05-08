@@ -14,7 +14,7 @@ beforeEach(function () {
     $this->service = new DiscountCodeService();
     $this->user = User::factory()->create();
     // Seed tax config for RefreshDatabase
-    $this->seed(\Database\Seeders\TaxConfigurationSeeder::class);
+    $this->seed(\Fynla\Packs\Gb\Database\Seeders\TaxConfigurationSeeder::class);
 });
 
 describe('calculateDiscount', function () {

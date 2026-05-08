@@ -6,7 +6,7 @@ namespace Tests\Feature\Api;
 
 use Fynla\Packs\Gb\Models\Property;
 use App\Models\User;
-use Database\Seeders\TaxConfigurationSeeder;
+use Fynla\Packs\Gb\Database\Seeders\TaxConfigurationSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 

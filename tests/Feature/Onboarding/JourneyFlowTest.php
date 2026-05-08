@@ -6,7 +6,7 @@ use App\Models\User;
 
 describe('Journey Flow', function () {
     beforeEach(function () {
-        $this->seed(\Database\Seeders\TaxConfigurationSeeder::class);
+        $this->seed(\Fynla\Packs\Gb\Database\Seeders\TaxConfigurationSeeder::class);
         $this->user = User::factory()->create();
     });
 

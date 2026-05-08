@@ -10,7 +10,7 @@ use App\Models\User;
 
 beforeEach(function () {
     // Ensure TaxConfiguration exists for the PersonalAccountsService tax calculations
-    $this->seed(\Database\Seeders\TaxConfigurationSeeder::class);
+    $this->seed(\Fynla\Packs\Gb\Database\Seeders\TaxConfigurationSeeder::class);
 
     // Create a household
     $this->household = Household::factory()->create();

@@ -5,9 +5,9 @@ declare(strict_types=1);
 use Fynla\Packs\Gb\Models\ProtectionActionDefinition;
 use Fynla\Core\Models\Role;
 use App\Models\User;
-use Database\Seeders\ProtectionActionDefinitionSeeder;
+use Fynla\Packs\Gb\Database\Seeders\ProtectionActionDefinitionSeeder;
 use Database\Seeders\RolesPermissionsSeeder;
-use Database\Seeders\TaxConfigurationSeeder;
+use Fynla\Packs\Gb\Database\Seeders\TaxConfigurationSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Laravel\Sanctum\Sanctum;
 

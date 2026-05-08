@@ -9,7 +9,7 @@ use App\Services\Investment\PortfolioAnalyzer;
 use App\Services\Protection\ProtectionAgent;
 use App\Services\Retirement\RetirementProjector;
 use App\Services\Savings\EmergencyFundAnalyzer;
-use Database\Seeders\TaxConfigurationSeeder;
+use Fynla\Packs\Gb\Database\Seeders\TaxConfigurationSeeder;
 use Laravel\Sanctum\Sanctum;
 
 beforeEach(function () {

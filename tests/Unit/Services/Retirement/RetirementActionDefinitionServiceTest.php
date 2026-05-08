@@ -7,8 +7,8 @@ use Fynla\Packs\Gb\Models\RetirementActionDefinition;
 use Fynla\Packs\Gb\Models\RetirementProfile;
 use App\Models\User;
 use Fynla\Packs\Gb\Retirement\RetirementActionDefinitionService;
-use Database\Seeders\RetirementActionDefinitionSeeder;
-use Database\Seeders\TaxConfigurationSeeder;
+use Fynla\Packs\Gb\Database\Seeders\RetirementActionDefinitionSeeder;
+use Fynla\Packs\Gb\Database\Seeders\TaxConfigurationSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
 uses(RefreshDatabase::class);

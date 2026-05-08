@@ -12,7 +12,7 @@ use Illuminate\Support\Facades\Http;
 uses(RefreshDatabase::class);
 
 beforeEach(function () {
-    $this->seed(\Database\Seeders\TaxConfigurationSeeder::class);
+    $this->seed(\Fynla\Packs\Gb\Database\Seeders\TaxConfigurationSeeder::class);
     $this->seed(\Database\Seeders\RolesPermissionsSeeder::class);
     $this->seed(\Database\Seeders\SubscriptionPlanSeeder::class);
 });

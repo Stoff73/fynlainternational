@@ -8,7 +8,7 @@ use App\Services\Tax\IncomeDefinitionsService;
 use Fynla\Packs\Gb\Tax\TaxConfigService;
 
 beforeEach(function () {
-    $this->seed(\Database\Seeders\TaxConfigurationSeeder::class);
+    $this->seed(\Fynla\Packs\Gb\Database\Seeders\TaxConfigurationSeeder::class);
     $this->taxConfig = app(TaxConfigService::class);
     $this->service = new IncomeDefinitionsService($this->taxConfig);
 });

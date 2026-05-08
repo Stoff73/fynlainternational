@@ -8,9 +8,9 @@ use App\Services\Investment\FeeAnalyzer;
 use Fynla\Packs\Gb\Investment\InvestmentActionDefinitionService;
 use Fynla\Packs\Gb\Plans\PlanConfigService;
 use Fynla\Packs\Gb\Tax\TaxConfigService;
-use Database\Seeders\InvestmentActionDefinitionSeeder;
-use Database\Seeders\PlanConfigurationSeeder;
-use Database\Seeders\TaxConfigurationSeeder;
+use Fynla\Packs\Gb\Database\Seeders\InvestmentActionDefinitionSeeder;
+use Fynla\Packs\Gb\Database\Seeders\PlanConfigurationSeeder;
+use Fynla\Packs\Gb\Database\Seeders\TaxConfigurationSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
 uses(RefreshDatabase::class);

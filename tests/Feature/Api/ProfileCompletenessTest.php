@@ -6,7 +6,7 @@ use Fynla\Packs\Gb\Models\Estate\Asset;
 use Fynla\Core\Models\FamilyMember;
 use Fynla\Packs\Gb\Models\ProtectionProfile;
 use App\Models\User;
-use Database\Seeders\TaxConfigurationSeeder;
+use Fynla\Packs\Gb\Database\Seeders\TaxConfigurationSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Cache;
 

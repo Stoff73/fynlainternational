@@ -140,7 +140,7 @@ class PreviewController extends Controller
         if (! $previewUser) {
             return response()->json([
                 'success' => false,
-                'message' => 'Preview user not found. Please run php artisan db:seed --class=PreviewUserSeeder',
+                'message' => "Preview user not found. Please run php artisan db:seed --class='Fynla\\Packs\\Gb\\Database\\Seeders\\PreviewUserSeeder'",
             ], 404);
         }
 

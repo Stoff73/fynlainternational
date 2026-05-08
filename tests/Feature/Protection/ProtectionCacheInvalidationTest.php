@@ -5,7 +5,7 @@ declare(strict_types=1);
 use Fynla\Packs\Gb\Agents\ProtectionAgent;
 use Fynla\Packs\Gb\Models\ProtectionProfile;
 use App\Models\User;
-use Database\Seeders\TaxConfigurationSeeder;
+use Fynla\Packs\Gb\Database\Seeders\TaxConfigurationSeeder;
 use Illuminate\Support\Facades\Cache;
 
 beforeEach(function () {

@@ -4,6 +4,18 @@ declare(strict_types=1);
 
 namespace Database\Seeders;
 
+use Fynla\Packs\Gb\Database\Seeders\ActuarialLifeTablesSeeder;
+use Fynla\Packs\Gb\Database\Seeders\EstateActionDefinitionSeeder;
+use Fynla\Packs\Gb\Database\Seeders\InvestmentActionDefinitionSeeder;
+use Fynla\Packs\Gb\Database\Seeders\PlanConfigurationSeeder;
+use Fynla\Packs\Gb\Database\Seeders\PreviewUserSeeder;
+use Fynla\Packs\Gb\Database\Seeders\ProtectionActionDefinitionSeeder;
+use Fynla\Packs\Gb\Database\Seeders\RetirementActionDefinitionSeeder;
+use Fynla\Packs\Gb\Database\Seeders\SavingsActionDefinitionSeeder;
+use Fynla\Packs\Gb\Database\Seeders\SavingsMarketRatesSeeder;
+use Fynla\Packs\Gb\Database\Seeders\TaxActionDefinitionSeeder;
+use Fynla\Packs\Gb\Database\Seeders\TaxConfigurationSeeder;
+use Fynla\Packs\Gb\Database\Seeders\TaxProductReferenceSeeder;
 use Fynla\Packs\Za\Database\Seeders\ZaTaxConfigurationSeeder;
 use Illuminate\Database\Seeder;
 

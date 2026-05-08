@@ -88,7 +88,7 @@ class ResetPreviewData extends Command
             ->first();
 
         if (! $user) {
-            $this->warn("  Preview user not found for {$personaId}. Run 'php artisan db:seed --class=PreviewUserSeeder' first.");
+            $this->warn("  Preview user not found for {$personaId}. Run \"php artisan db:seed --class='Fynla\\Packs\\Gb\\Database\\Seeders\\PreviewUserSeeder'\" first.");
 
             return;
         }
@@ -118,7 +118,7 @@ class ResetPreviewData extends Command
         });
 
         // Re-run the seeder for this persona
-        $seeder = new \Database\Seeders\PreviewUserSeeder;
+        $seeder = new \Fynla\Packs\Gb\Database\Seeders\PreviewUserSeeder;
         $seeder->setCommand($this);
 
         // Create a temporary seeder that only seeds this persona

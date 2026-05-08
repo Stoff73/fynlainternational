@@ -6,7 +6,7 @@ use App\Models\User;
 use App\Services\Admin\UserModuleTrackingService;
 
 beforeEach(function () {
-    $this->seed(\Database\Seeders\TaxConfigurationSeeder::class);
+    $this->seed(\Fynla\Packs\Gb\Database\Seeders\TaxConfigurationSeeder::class);
     $this->service = new UserModuleTrackingService;
 });
 

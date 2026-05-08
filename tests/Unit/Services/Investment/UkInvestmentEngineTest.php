@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 use Fynla\Packs\Gb\Investment\UkInvestmentEngine;
 use Fynla\Packs\Gb\Tax\TaxConfigService;
-use Database\Seeders\TaxConfigurationSeeder;
+use Fynla\Packs\Gb\Database\Seeders\TaxConfigurationSeeder;
 use Fynla\Core\Contracts\InvestmentEngine;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 

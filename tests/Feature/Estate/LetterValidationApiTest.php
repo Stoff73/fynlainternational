@@ -6,7 +6,7 @@ use Fynla\Packs\Gb\Models\Estate\Will;
 use Fynla\Packs\Gb\Models\LetterToSpouse;
 use Fynla\Packs\Gb\Models\LifeInsurancePolicy;
 use App\Models\User;
-use Database\Seeders\TaxConfigurationSeeder;
+use Fynla\Packs\Gb\Database\Seeders\TaxConfigurationSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Laravel\Sanctum\Sanctum;
 

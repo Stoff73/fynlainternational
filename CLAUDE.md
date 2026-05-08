@@ -42,15 +42,15 @@ php artisan migrate && php artisan db:seed
 
 **CRITICAL: ALWAYS reseed after any operation that modifies or loses local database data.** This includes running migrations, schema dumps, database resets, table drops, or any other destructive database operation. After such operations, run `php artisan db:seed` to restore all seeded data (tax config, preview personas, market rates, etc.).
 
-**Reseed specific data:**
+**Reseed specific data:** (UK seeders live in the GB pack namespace post R-10b — the `Database\Seeders\` short-form no longer resolves for these.)
 
 | Issue | Command |
 |-------|---------|
-| Tax calculations failing | `php artisan db:seed --class=TaxConfigurationSeeder --force` |
-| Tax Status tab empty | `php artisan db:seed --class=TaxProductReferenceSeeder --force` |
-| Preview personas broken | `php artisan db:seed --class=PreviewUserSeeder --force` |
-| Life expectancy errors | `php artisan db:seed --class=ActuarialLifeTablesSeeder --force` |
-| Savings market rates missing | `php artisan db:seed --class=SavingsMarketRatesSeeder --force` |
+| Tax calculations failing | `php artisan db:seed --class='Fynla\Packs\Gb\Database\Seeders\TaxConfigurationSeeder' --force` |
+| Tax Status tab empty | `php artisan db:seed --class='Fynla\Packs\Gb\Database\Seeders\TaxProductReferenceSeeder' --force` |
+| Preview personas broken | `php artisan db:seed --class='Fynla\Packs\Gb\Database\Seeders\PreviewUserSeeder' --force` |
+| Life expectancy errors | `php artisan db:seed --class='Fynla\Packs\Gb\Database\Seeders\ActuarialLifeTablesSeeder' --force` |
+| Savings market rates missing | `php artisan db:seed --class='Fynla\Packs\Gb\Database\Seeders\SavingsMarketRatesSeeder' --force` |
 
 **Custom artisan commands:**
 
