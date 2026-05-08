@@ -6,11 +6,10 @@ use Fynla\Packs\Gb\Models\Estate\Gift;
 use Fynla\Packs\Gb\Models\Estate\IHTProfile;
 use Fynla\Packs\Gb\Models\TaxConfiguration;
 use App\Models\User;
-use App\Services\Estate\GiftingStrategy;
+use Fynla\Packs\Gb\Estate\GiftingStrategy;
 use Carbon\Carbon;
 
 beforeEach(function () {
-    // Ensure active tax configuration exists
     if (! TaxConfiguration::where('is_active', true)->exists()) {
         TaxConfiguration::factory()->create(['is_active' => true]);
     }
@@ -42,7 +41,7 @@ describe('analyzePETs', function () {
         $result = $this->strategy->analyzePETs($gifts);
 
         expect($result['active_pets_count'])->toBe(2)
-            ->and($result['total_pet_value'])->toBe(80000.0)
+            ->and($result['total_pet_value_minor'])->toBe(8_000_000)
             ->and($result['pets'])->toHaveCount(2);
     });
 
@@ -60,7 +59,7 @@ describe('analyzePETs', function () {
         $result = $this->strategy->analyzePETs($gifts);
 
         expect($result['active_pets_count'])->toBe(0)
-            ->and($result['total_pet_value'])->toBe(0.0);
+            ->and($result['total_pet_value_minor'])->toBe(0);
     });
 
     it('includes years remaining until full exemption', function () {
@@ -85,7 +84,7 @@ describe('calculateAnnualExemption', function () {
     it('returns full allowance when no gifts made', function () {
         $result = $this->strategy->calculateAnnualExemption($this->user->id, '2024');
 
-        expect($result)->toBe(6000.0); // £3k current + £3k carry forward
+        expect($result)->toBe(600_000); // £6,000 in pence (£3k current + £3k carry forward)
     });
 
     it('reduces available exemption when gifts have been made', function () {
@@ -99,11 +98,10 @@ describe('calculateAnnualExemption', function () {
 
         $result = $this->strategy->calculateAnnualExemption($this->user->id, '2024');
 
-        expect($result)->toBe(4000.0); // £1k current + £3k carry forward
+        expect($result)->toBe(400_000); // £4,000 (£1k current + £3k carry forward)
     });
 
     it('accounts for carry forward from previous year', function () {
-        // Gift in previous tax year
         Gift::create([
             'user_id' => $this->user->id,
             'gift_date' => Carbon::createFromFormat('Y-m-d', '2023-06-01'),
@@ -114,7 +112,7 @@ describe('calculateAnnualExemption', function () {
 
         $result = $this->strategy->calculateAnnualExemption($this->user->id, '2024');
 
-        expect($result)->toBe(5000.0); // £3k current + £2k carry forward
+        expect($result)->toBe(500_000); // £5,000 (£3k current + £2k carry forward)
     });
 });
 
@@ -138,7 +136,7 @@ describe('identifySmallGifts', function () {
         $result = $this->strategy->identifySmallGifts($gifts);
 
         expect($result['small_gifts_count'])->toBe(2)
-            ->and($result['total_value'])->toBe(450.0)
+            ->and($result['total_value_minor'])->toBe(45_000)
             ->and($result['by_recipient'])->toHaveCount(2);
     });
 
@@ -169,25 +167,25 @@ describe('calculateMarriageGifts', function () {
     it('returns £5,000 for child', function () {
         $amount = $this->strategy->calculateMarriageGifts('child');
 
-        expect($amount)->toBe(5000.0);
+        expect($amount)->toBe(500_000); // £5,000 in pence
     });
 
     it('returns £2,500 for grandchild', function () {
         $amount = $this->strategy->calculateMarriageGifts('grandchild');
 
-        expect($amount)->toBe(2500.0);
+        expect($amount)->toBe(250_000); // £2,500 in pence
     });
 
     it('returns £2,500 for great grandchild', function () {
         $amount = $this->strategy->calculateMarriageGifts('great_grandchild');
 
-        expect($amount)->toBe(2500.0);
+        expect($amount)->toBe(250_000); // £2,500 in pence
     });
 
     it('returns £1,000 for other relationships', function () {
         $amount = $this->strategy->calculateMarriageGifts('friend');
 
-        expect($amount)->toBe(1000.0);
+        expect($amount)->toBe(100_000); // £1,000 in pence
     });
 });
 
@@ -200,9 +198,9 @@ describe('recommendOptimalGiftingStrategy', function () {
             'charitable_giving_percent' => 0,
         ]);
 
-        $result = $this->strategy->recommendOptimalGiftingStrategy(600000, $profile);
+        $result = $this->strategy->recommendOptimalGiftingStrategy(60_000_000, $profile);
 
-        expect($result['current_iht_liability'])->toBe(110000.0);
+        expect($result['current_iht_liability_minor'])->toBe(11_000_000); // £110,000
 
         $hasAnnualExemption = collect($result['recommendations'])
             ->contains(fn ($rec) => str_contains($rec['strategy'], 'Annual Exemption'));
@@ -218,7 +216,7 @@ describe('recommendOptimalGiftingStrategy', function () {
             'charitable_giving_percent' => 0,
         ]);
 
-        $result = $this->strategy->recommendOptimalGiftingStrategy(600000, $profile);
+        $result = $this->strategy->recommendOptimalGiftingStrategy(60_000_000, $profile);
 
         $hasCharitableRecommendation = collect($result['recommendations'])
             ->contains(fn ($rec) => str_contains($rec['strategy'], 'Charitable Giving'));
@@ -234,7 +232,7 @@ describe('recommendOptimalGiftingStrategy', function () {
             'charitable_giving_percent' => 0,
         ]);
 
-        $result = $this->strategy->recommendOptimalGiftingStrategy(600000, $profile);
+        $result = $this->strategy->recommendOptimalGiftingStrategy(60_000_000, $profile);
 
         expect($result['priority'])->toBeArray()
             ->and($result['priority'][0]['strategy'])->toBe('Annual Exemption')
@@ -249,8 +247,8 @@ describe('recommendOptimalGiftingStrategy', function () {
             'charitable_giving_percent' => 0,
         ]);
 
-        $result = $this->strategy->recommendOptimalGiftingStrategy(300000, $profile);
+        $result = $this->strategy->recommendOptimalGiftingStrategy(30_000_000, $profile);
 
-        expect($result['current_iht_liability'])->toBe(0.0);
+        expect($result['current_iht_liability_minor'])->toBe(0);
     });
 });
