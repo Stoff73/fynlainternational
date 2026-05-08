@@ -338,6 +338,14 @@ describe('Pack Isolation', function () {
             // signature on updateISAUsage. Pack RateComparator imports it
             // across the boundary; relocates with the int-minor money refactor.
             'App\\Services\\Savings\\ISATracker', // R-14a
+            // R-9j deferrals — WhatIfScenarioService and LetterToSpouseService
+            // already collaborate with the GB pack (importing pack agents and
+            // models respectively) but live in app/Services/ awaiting a
+            // dedicated WhatIf / UserProfile relocation workstream. Pack
+            // WhatIfScenarioController + LetterToSpouseController import them
+            // across the boundary; relocates with the int-minor money refactor.
+            'App\\Services\\WhatIf\\WhatIfScenarioService', // R-14a
+            'App\\Services\\UserProfile\\LetterToSpouseService', // R-14a
             'App\\Services\\Risk\\RiskPreferenceService',
             'App\\Services\\Settings\\AssumptionsService',
             'App\\Services\\Shared\\CrossModuleAssetAggregator',

@@ -2,14 +2,14 @@
 
 declare(strict_types=1);
 
-namespace App\Http\Controllers\Api;
+namespace Fynla\Packs\Gb\Http\Controllers;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\StoreWhatIfScenarioRequest;
-use Fynla\Packs\Gb\Http\Resources\WhatIfScenarioResource;
 use App\Http\Traits\SanitizedErrorResponse;
-use Fynla\Packs\Gb\Models\WhatIfScenario;
 use App\Services\WhatIf\WhatIfScenarioService;
+use Fynla\Packs\Gb\Http\Requests\StoreWhatIfScenarioRequest;
+use Fynla\Packs\Gb\Http\Resources\WhatIfScenarioResource;
+use Fynla\Packs\Gb\Models\WhatIfScenario;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 

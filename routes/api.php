@@ -14,7 +14,6 @@ use App\Http\Controllers\Api\GoalsController;
 use App\Http\Controllers\Api\HouseholdController;
 use App\Http\Controllers\Api\InfoGuideController;
 use App\Http\Controllers\Api\JourneyController;
-use App\Http\Controllers\Api\LetterToSpouseController;
 use App\Http\Controllers\Api\LifeStageController;
 use App\Http\Controllers\Api\MFAController;
 use App\Http\Controllers\Api\MortgageController;
@@ -32,7 +31,6 @@ use App\Http\Controllers\Api\SessionController;
 use App\Http\Controllers\Api\Settings\AssumptionsController;
 use App\Http\Controllers\Api\SpousePermissionController;
 use App\Http\Controllers\Api\UserProfileController;
-use App\Http\Controllers\Api\WhatIfScenarioController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -183,11 +181,7 @@ Route::middleware('auth:sanctum')->prefix('user')->group(function () {
     Route::get('/spouse/financial-commitments', [UserProfileController::class, 'getSpouseFinancialCommitments']);
     Route::put('/dashboard-widget-order', [UserProfileController::class, 'updateDashboardWidgetOrder']);
 
-    // Letter to Spouse
-    Route::get('/letter-to-spouse', [LetterToSpouseController::class, 'show']);
-    Route::get('/letter-to-spouse/exists', [LetterToSpouseController::class, 'exists']);
-    Route::get('/letter-to-spouse/spouse', [LetterToSpouseController::class, 'showSpouse']);
-    Route::put('/letter-to-spouse', [LetterToSpouseController::class, 'update'])->middleware('feature:standard');
+    // Letter to Spouse routes — relocated to packs/country-gb/routes/api.php in R-9j.
 
     // Family Members CRUD
     Route::prefix('family-members')->group(function () {
@@ -530,15 +524,7 @@ Route::middleware(['auth:sanctum', 'throttle:30,1'])
 Route::middleware('auth:sanctum')
     ->get('/occupations/search', [OccupationController::class, 'search']);
 
-// What-If Scenarios
-Route::middleware(['auth:sanctum', 'feature:standard'])->prefix('what-if-scenarios')->group(function () {
-    Route::get('/', [WhatIfScenarioController::class, 'index']);
-    Route::get('/count', [WhatIfScenarioController::class, 'count']);
-    Route::get('/{id}', [WhatIfScenarioController::class, 'show']);
-    Route::post('/', [WhatIfScenarioController::class, 'store']);
-    Route::put('/{id}', [WhatIfScenarioController::class, 'update']);
-    Route::delete('/{id}', [WhatIfScenarioController::class, 'destroy']);
-});
+// What-If Scenarios — relocated to packs/country-gb/routes/api.php in R-9j.
 
 // AI Chat routes
 Route::middleware(['auth:sanctum', 'throttle:20,1'])->prefix('ai-chat')->group(function () {

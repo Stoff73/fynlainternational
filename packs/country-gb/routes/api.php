@@ -45,6 +45,7 @@ use Fynla\Packs\Gb\Http\Controllers\Investment\RebalancingCalculationController;
 use Fynla\Packs\Gb\Http\Controllers\Investment\RebalancingStrategiesController;
 use Fynla\Packs\Gb\Http\Controllers\Investment\TaxOptimizationController;
 use Fynla\Packs\Gb\Http\Controllers\InvestmentProjectionController;
+use Fynla\Packs\Gb\Http\Controllers\LetterToSpouseController;
 use Fynla\Packs\Gb\Http\Controllers\Plans\PlanController;
 use Fynla\Packs\Gb\Http\Controllers\PortfolioOptimizationController;
 use Fynla\Packs\Gb\Http\Controllers\ProtectionActionDefinitionController;
@@ -59,6 +60,7 @@ use Fynla\Packs\Gb\Http\Controllers\Tax\TaxOptimisationController;
 use Fynla\Packs\Gb\Http\Controllers\TaxProductInfoController;
 use Fynla\Packs\Gb\Http\Controllers\TaxSettingsController;
 use Fynla\Packs\Gb\Http\Controllers\TaxYearController;
+use Fynla\Packs\Gb\Http\Controllers\WhatIfScenarioController;
 
 // Savings module routes
 Route::middleware('auth:sanctum')->prefix('savings')->group(function () {
@@ -692,4 +694,24 @@ Route::middleware('auth:sanctum')->prefix('recommendations')->group(function () 
     Route::post('/{id}/in-progress', [RecommendationsController::class, 'markInProgress']);
     Route::post('/{id}/dismiss', [RecommendationsController::class, 'dismiss']);
     Route::patch('/{id}/notes', [RecommendationsController::class, 'updateNotes']);
+});
+
+
+// What-If Scenarios
+Route::middleware(['auth:sanctum', 'feature:standard'])->prefix('what-if-scenarios')->group(function () {
+    Route::get('/', [WhatIfScenarioController::class, 'index']);
+    Route::get('/count', [WhatIfScenarioController::class, 'count']);
+    Route::get('/{id}', [WhatIfScenarioController::class, 'show']);
+    Route::post('/', [WhatIfScenarioController::class, 'store']);
+    Route::put('/{id}', [WhatIfScenarioController::class, 'update']);
+    Route::delete('/{id}', [WhatIfScenarioController::class, 'destroy']);
+});
+
+
+// Letter to Spouse (lives under /api auth group, no shared prefix)
+Route::middleware('auth:sanctum')->group(function () {
+    Route::get('/letter-to-spouse', [LetterToSpouseController::class, 'show']);
+    Route::get('/letter-to-spouse/exists', [LetterToSpouseController::class, 'exists']);
+    Route::get('/letter-to-spouse/spouse', [LetterToSpouseController::class, 'showSpouse']);
+    Route::put('/letter-to-spouse', [LetterToSpouseController::class, 'update'])->middleware('feature:standard');
 });
