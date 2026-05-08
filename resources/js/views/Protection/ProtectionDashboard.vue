@@ -81,8 +81,8 @@
 <script>
 import { mapState, mapActions } from 'vuex';
 import AppLayout from '@/layouts/AppLayout.vue';
-import CurrentSituation from '@/components/Protection/CurrentSituation.vue';
-import PolicyFormModal from '@/components/Protection/PolicyFormModal.vue';
+import CurrentSituation from '@gb/components/Protection/CurrentSituation.vue';
+import PolicyFormModal from '@gb/components/Protection/PolicyFormModal.vue';
 import ModuleLifeEvents from '@/components/Shared/ModuleLifeEvents.vue';
 import ModuleStatusBar from '@/components/Shared/ModuleStatusBar.vue';
 import protectionService from '@/services/protectionService';

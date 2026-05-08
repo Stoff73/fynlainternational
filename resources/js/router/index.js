@@ -103,7 +103,7 @@ const ChattelsList = () => import('@/components/NetWorth/ChattelsList.vue');
 const LiabilitiesList = () => import('@/components/NetWorth/LiabilitiesList.vue');
 const JointAccountHistory = () => import('@/components/NetWorth/JointAccountHistory.vue');
 const ProtectionDashboard = () => import('@/views/Protection/ProtectionDashboard.vue');
-const PolicyDetail = () => import('@/components/Protection/PolicyDetail.vue');
+const PolicyDetail = () => import('@gb/components/Protection/PolicyDetail.vue');
 const SavingsDashboard = () => import('@/views/Savings/SavingsDashboard.vue');
 // ZA pages — lazy-loaded; only fetched when user has 'za' jurisdiction
 // (see jurisdiction guard in router.beforeEach).

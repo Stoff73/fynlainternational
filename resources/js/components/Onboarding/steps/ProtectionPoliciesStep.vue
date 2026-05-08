@@ -150,7 +150,7 @@ import { ref, onMounted } from 'vue';
 import OnboardingStep from '../OnboardingStep.vue';
 import UsefulResources from '@/components/Onboarding/UsefulResources.vue';
 import { STEP_RESOURCES } from '@/constants/onboardingLinks';
-import PolicyFormModal from '@/components/Protection/PolicyFormModal.vue';
+import PolicyFormModal from '@gb/components/Protection/PolicyFormModal.vue';
 import DocumentUploadModal from '@/components/Shared/DocumentUploadModal.vue';
 import protectionService from '@/services/protectionService';
 import { formatCurrency } from '@/utils/currency';
