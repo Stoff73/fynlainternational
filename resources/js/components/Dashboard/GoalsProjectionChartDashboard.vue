@@ -73,7 +73,7 @@
 import { mapState, mapActions } from 'vuex';
 import { currencyMixin } from '@/mixins/currencyMixin';
 import { PRIMARY_COLORS, SECONDARY_COLORS, BORDER_COLORS, SUCCESS_COLORS, ERROR_COLORS, TEXT_COLORS, CHART_DEFAULTS } from '@/constants/designSystem';
-import EventIcon from '@/components/Goals/EventIcon.vue';
+import EventIcon from '@gb/components/Goals/EventIcon.vue';
 
 export default {
   name: 'GoalsProjectionChartDashboard',

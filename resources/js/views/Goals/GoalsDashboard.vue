@@ -156,11 +156,11 @@
 <script>
 import { mapState, mapGetters, mapActions } from 'vuex';
 import AppLayout from '@/layouts/AppLayout.vue';
-import GoalFormModal from '@/components/Goals/GoalFormModal.vue';
-import GoalsOverview from '@/components/Goals/GoalsOverview.vue';
-import ContributionModal from '@/components/Goals/ContributionModal.vue';
-import EventsTab from '@/components/Goals/EventsTab.vue';
-import GoalDetailInline from '@/components/Goals/GoalDetailInline.vue';
+import GoalFormModal from '@gb/components/Goals/GoalFormModal.vue';
+import GoalsOverview from '@gb/components/Goals/GoalsOverview.vue';
+import ContributionModal from '@gb/components/Goals/ContributionModal.vue';
+import EventsTab from '@gb/components/Goals/EventsTab.vue';
+import GoalDetailInline from '@gb/components/Goals/GoalDetailInline.vue';
 import ModuleStatusBar from '@/components/Shared/ModuleStatusBar.vue';
 
 import logger from '@/utils/logger';

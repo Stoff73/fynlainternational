@@ -250,7 +250,7 @@ import { currencyMixin } from '@/mixins/currencyMixin';
 import { previewModeMixin } from '@/mixins/previewModeMixin';
 import { LIFE_EVENT_ICONS } from '@/constants/eventIcons';
 import { formatDateLong } from '@/utils/dateFormatter';
-import LifeEventAllocationTab from '@/components/Goals/LifeEventAllocationTab.vue';
+import LifeEventAllocationTab from '@gb/components/Goals/LifeEventAllocationTab.vue';
 
 export default {
   name: 'LifeEventDetailInline',

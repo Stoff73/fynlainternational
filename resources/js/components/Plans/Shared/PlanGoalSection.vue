@@ -139,7 +139,7 @@
 <script>
 import { currencyMixin } from '@/mixins/currencyMixin';
 import PlanSectionHeader from './PlanSectionHeader.vue';
-import GoalProgressBar from '@/components/Goals/GoalProgressBar.vue';
+import GoalProgressBar from '@gb/components/Goals/GoalProgressBar.vue';
 
 export default {
   name: 'PlanGoalSection',

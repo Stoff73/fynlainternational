@@ -178,7 +178,7 @@
 <script>
 import { currencyMixin } from '@/mixins/currencyMixin';
 import { getGoalIcon } from '@/constants/goalIcons';
-import GoalsProjectionChart from '@/components/Goals/GoalsProjectionChart.vue';
+import GoalsProjectionChart from '@gb/components/Goals/GoalsProjectionChart.vue';
 
 export default {
   name: 'GoalsOverview',

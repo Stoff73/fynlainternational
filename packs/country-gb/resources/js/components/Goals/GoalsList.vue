@@ -115,7 +115,7 @@
 </template>
 
 <script>
-import GoalCard from '@/components/Goals/GoalCard.vue';
+import GoalCard from '@gb/components/Goals/GoalCard.vue';
 
 export default {
   name: 'GoalsList',
