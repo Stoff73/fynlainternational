@@ -11,7 +11,7 @@ use Fynla\Packs\Gb\Models\SavingsAccount;
 use Fynla\Packs\Gb\Models\StatePension;
 use App\Models\User;
 use App\Services\Investment\InvestmentProjectionService;
-use App\Services\TaxBandTracker;
+use Fynla\Packs\Gb\Tax\TaxBandTracker;
 use Fynla\Packs\Gb\Retirement\RequiredCapitalCalculator;
 use Fynla\Packs\Gb\Tax\TaxConfigService;
 
@@ -796,7 +796,7 @@ class RetirementIncomeService
             } else {
                 // Taxable income - use tracker to allocate to bands
                 $breakdown['taxable_total'] += $amount;
-                $taxAllocation = $tracker->allocateIncome($amount);
+                $taxAllocation = $tracker->allocateIncome((int) round($amount * 100));
 
                 $sourceBreakdown['tax'] = $taxAllocation['total_income_tax'];
                 $sourceBreakdown['effective_rate'] = $amount > 0 ? $taxAllocation['total_income_tax'] / $amount : 0;

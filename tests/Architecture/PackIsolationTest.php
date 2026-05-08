@@ -375,7 +375,6 @@ describe('Pack Isolation', function () {
             'App\\Services\\Trust\\IHTPeriodicChargeCalculator', // R-14a
             'App\\Services\\Trust\\TrustAssetAggregatorService', // R-14a (sub-module, relocates with Estate)
             // Same deferral for Tax-side float-money services.
-            'App\\Services\\TaxBandTracker',
         ];
 
         $violations = [];

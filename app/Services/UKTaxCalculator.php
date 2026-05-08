@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Services;
 
+use Fynla\Packs\Gb\Tax\TaxBandTracker;
 use Fynla\Packs\Gb\Tax\TaxConfigService;
 
 /**
@@ -78,7 +79,7 @@ class UKTaxCalculator
             $totalTaxableEarnedIncome = $taxableEmploymentIncome + $selfEmploymentIncome + $rentalIncome + $pensionIncome;
 
             // Calculate tax on combined earned income
-            $taxAllocation = $tracker->allocateIncome($totalTaxableEarnedIncome);
+            $taxAllocation = $tracker->allocateIncome((int) round($totalTaxableEarnedIncome * 100));
 
             // Calculate NI separately for employment and self-employment
             $class1NI = $employmentIncome > 0 ? $this->calculateClass1NIDetailed($employmentIncome) : null;
@@ -340,7 +341,7 @@ class UKTaxCalculator
         };
 
         $taxableInterest = max(0, $interestIncome - $psa);
-        $taxAllocation = $tracker->allocateIncome($taxableInterest);
+        $taxAllocation = $tracker->allocateIncome((int) round($taxableInterest * 100));
 
         // Add PSA info to breakdown
         $taxAllocation['personal_savings_allowance'] = $psa;
