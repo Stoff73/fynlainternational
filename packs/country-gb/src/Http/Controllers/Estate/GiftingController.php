@@ -11,7 +11,7 @@ use Fynla\Packs\Gb\Models\Estate\IHTProfile;
 use Fynla\Packs\Gb\Estate\CashFlowProjector;
 use Fynla\Packs\Gb\Estate\EstateAssetAggregatorService;
 use Fynla\Packs\Gb\Estate\GiftingStrategyOptimizer;
-use App\Services\Estate\PersonalizedGiftingStrategyService;
+use Fynla\Packs\Gb\Estate\PersonalizedGiftingStrategyService;
 use App\Services\Estate\PersonalizedTrustStrategyService;
 use Fynla\Packs\Gb\Estate\TrustService;
 use Fynla\Packs\Gb\Tax\TaxConfigService;
@@ -283,14 +283,17 @@ class GiftingController extends Controller
                 ]);
             }
 
-            // Generate personalized strategy
+            // Generate personalized strategy (service operates in int minor)
             $personalizedStrategy = $this->personalizedGiftingStrategy->generatePersonalizedStrategy(
                 assets: $assets,
-                currentIHTLiability: $currentIHTLiability,
+                currentIHTLiabilityMinor: (int) round((float) $currentIHTLiability * 100),
                 profile: $ihtProfile,
                 user: $user,
                 yearsUntilDeath: $yearsUntilDeath
             );
+
+            // Walk *_minor keys back to pounds-shaped keys for the API contract
+            $personalizedStrategy = $this->convertPersonalizedStrategyForResponse($personalizedStrategy);
 
             // Override liquidity analysis total_value with accurate gross estate value from IHT calculation
             if ($currentGrossEstateValue !== null) {
@@ -304,6 +307,57 @@ class GiftingController extends Controller
         } catch (\Exception $e) {
             return $this->errorResponse($e, 'Generating personalised gifting strategy');
         }
+    }
+
+    /**
+     * Walk PersonalizedGiftingStrategyService output and convert pence-shaped
+     * `*_minor` keys back to pounds-shaped keys for the API response.
+     *
+     * Mirrors the int-minor → float pound boundary conversion used in
+     * R-14a-Estate-iii TrustController::convertTrustEfficiencyForResponse.
+     */
+    private function convertPersonalizedStrategyForResponse(array $strategy): array
+    {
+        $strategy['summary'] = $this->convertMinorKeysToPounds($strategy['summary'] ?? []);
+
+        if (isset($strategy['strategies']) && is_array($strategy['strategies'])) {
+            $strategy['strategies'] = array_map(
+                function (array $s): array {
+                    $s = $this->convertMinorKeysToPounds($s);
+
+                    if (isset($s['gift_schedule']) && is_array($s['gift_schedule'])) {
+                        $s['gift_schedule'] = array_map(
+                            fn (array $entry): array => $this->convertMinorKeysToPounds($entry),
+                            $s['gift_schedule']
+                        );
+                    }
+
+                    return $s;
+                },
+                $strategy['strategies']
+            );
+        }
+
+        return $strategy;
+    }
+
+    /**
+     * Replace each `*_minor` int key with its pounds-shaped float equivalent
+     * (key without the `_minor` suffix). Non-`_minor` keys pass through.
+     */
+    private function convertMinorKeysToPounds(array $row): array
+    {
+        $out = [];
+        foreach ($row as $key => $value) {
+            if (is_string($key) && str_ends_with($key, '_minor') && is_int($value)) {
+                $poundsKey = substr($key, 0, -strlen('_minor'));
+                $out[$poundsKey] = round($value / 100, 2);
+            } else {
+                $out[$key] = $value;
+            }
+        }
+
+        return $out;
     }
 
     /**

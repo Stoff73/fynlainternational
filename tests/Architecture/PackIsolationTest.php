@@ -366,7 +366,6 @@ describe('Pack Isolation', function () {
             // collaborates with them imports across the boundary until
             // they relocate.
             'App\\Services\\Estate\\PersonalizedTrustStrategyService',
-            'App\\Services\\Estate\\PersonalizedGiftingStrategyService',
             'App\\Services\\Estate\\IHTFormattingService',
             // R-9h surfaced two App\Services\Trust\* peers used by pack
             // TrustController + WillController. IHTPeriodicChargeCalculator

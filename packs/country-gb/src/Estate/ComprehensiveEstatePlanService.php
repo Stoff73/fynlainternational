@@ -6,7 +6,7 @@ namespace Fynla\Packs\Gb\Estate;
 
 use App\Services\Estate\PersonalizedTrustStrategyService;
 
-use App\Services\Estate\PersonalizedGiftingStrategyService;
+use Fynla\Packs\Gb\Estate\PersonalizedGiftingStrategyService;
 
 use Fynla\Packs\Gb\Models\ActuarialLifeTable;
 use Fynla\Packs\Gb\Models\Estate\IHTProfile;
@@ -99,14 +99,16 @@ class ComprehensiveEstatePlanService
         // Calculate years until death (life expectancy)
         $yearsUntilDeath = $this->calculateYearsUntilDeath($user);
 
-        // Generate individual strategies
+        // Generate individual strategies (gifting service operates in int minor;
+        // walk output back to pounds-shaped before downstream consumers read it).
         $giftingPlan = $this->giftingStrategy->generatePersonalizedStrategy(
             $assets,
-            $currentIHTLiability,
+            (int) round((float) $currentIHTLiability * 100),
             $ihtProfile,
             $user,
             $yearsUntilDeath
         );
+        $giftingPlan = $this->convertPersonalizedStrategyForResponse($giftingPlan);
 
         $trustPlan = $this->trustStrategy->generatePersonalizedTrustStrategy(
             $assets,
@@ -1308,5 +1310,52 @@ class ComprehensiveEstatePlanService
     public function invalidateCache(User $user): void
     {
         $this->ihtCalculationService->invalidateCache($user);
+    }
+
+    /**
+     * Walk PersonalizedGiftingStrategyService output and convert pence-shaped
+     * `*_minor` keys back to pounds-shaped keys for downstream consumers.
+     */
+    private function convertPersonalizedStrategyForResponse(array $strategy): array
+    {
+        $strategy['summary'] = $this->convertMinorKeysToPounds($strategy['summary'] ?? []);
+
+        if (isset($strategy['strategies']) && is_array($strategy['strategies'])) {
+            $strategy['strategies'] = array_map(
+                function (array $s): array {
+                    $s = $this->convertMinorKeysToPounds($s);
+
+                    if (isset($s['gift_schedule']) && is_array($s['gift_schedule'])) {
+                        $s['gift_schedule'] = array_map(
+                            fn (array $entry): array => $this->convertMinorKeysToPounds($entry),
+                            $s['gift_schedule']
+                        );
+                    }
+
+                    return $s;
+                },
+                $strategy['strategies']
+            );
+        }
+
+        return $strategy;
+    }
+
+    /**
+     * Replace each `*_minor` int key with its pounds-shaped float equivalent.
+     */
+    private function convertMinorKeysToPounds(array $row): array
+    {
+        $out = [];
+        foreach ($row as $key => $value) {
+            if (is_string($key) && str_ends_with($key, '_minor') && is_int($value)) {
+                $poundsKey = substr($key, 0, -strlen('_minor'));
+                $out[$poundsKey] = round($value / 100, 2);
+            } else {
+                $out[$key] = $value;
+            }
+        }
+
+        return $out;
     }
 }
