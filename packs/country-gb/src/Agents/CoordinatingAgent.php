@@ -1014,7 +1014,7 @@ class CoordinatingAgent extends BaseAgent
         // income_definitions is per-user (not cacheable globally)
         if ($topic === 'income_definitions') {
             return Cache::remember("ai_income_defs_{$user->id}", 120, function () use ($user) {
-                $incomeService = app(\App\Services\Tax\IncomeDefinitionsService::class);
+                $incomeService = app(\Fynla\Packs\Gb\Tax\IncomeDefinitionsService::class);
 
                 return $incomeService->calculate($user->id);
             });

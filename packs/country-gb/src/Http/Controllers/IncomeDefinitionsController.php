@@ -6,7 +6,7 @@ namespace Fynla\Packs\Gb\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use App\Http\Traits\SanitizedErrorResponse;
-use App\Services\Tax\IncomeDefinitionsService;
+use Fynla\Packs\Gb\Tax\IncomeDefinitionsService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
