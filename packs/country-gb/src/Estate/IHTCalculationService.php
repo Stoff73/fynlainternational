@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Fynla\Packs\Gb\Estate;
 
-use App\Services\Estate\FutureValueCalculator;
+use Fynla\Packs\Gb\Estate\FutureValueCalculator;
 
 use Fynla\Packs\Gb\Models\DCPension;
 use Fynla\Packs\Gb\Models\Estate\Gift;
@@ -892,7 +892,7 @@ class IHTCalculationService
         $customRate = ($assumptions['custom_investment_rate'] ?? 5.0) / 100;
         $currentValue = $this->getCurrentInvestmentValue($user, $spouse, $dataSharingEnabled);
 
-        return $this->futureValueCalculator->calculateFutureValue($currentValue, $customRate, $yearsToProject);
+        return $this->futureValueCalculator->calculateFutureValue((int) round($currentValue * 100), $customRate, $yearsToProject) / 100;
     }
 
     /**
@@ -934,12 +934,12 @@ class IHTCalculationService
             } else {
                 // Fallback: compound at fallback rate instead of zero growth
                 $currentValue = (float) InvestmentAccount::where('user_id', $user->id)->sum('current_value');
-                $projectedValue += $this->futureValueCalculator->calculateFutureValue($currentValue, $fallbackRate, $yearsToProject);
+                $projectedValue += $this->futureValueCalculator->calculateFutureValue((int) round($currentValue * 100), $fallbackRate, $yearsToProject) / 100;
             }
         } catch (\Exception $e) {
             // Fallback: compound at fallback rate instead of zero growth
             $currentValue = (float) InvestmentAccount::where('user_id', $user->id)->sum('current_value');
-            $projectedValue += $this->futureValueCalculator->calculateFutureValue($currentValue, $fallbackRate, $yearsToProject);
+            $projectedValue += $this->futureValueCalculator->calculateFutureValue((int) round($currentValue * 100), $fallbackRate, $yearsToProject) / 100;
         }
 
         // Include spouse's investments
@@ -954,11 +954,11 @@ class IHTCalculationService
                     $projectedValue += $spouseProjections['portfolio']['projections'][$yearsToProject]['percentiles']['p20'];
                 } else {
                     $currentValue = (float) InvestmentAccount::where('user_id', $spouse->id)->sum('current_value');
-                    $projectedValue += $this->futureValueCalculator->calculateFutureValue($currentValue, $fallbackRate, $yearsToProject);
+                    $projectedValue += $this->futureValueCalculator->calculateFutureValue((int) round($currentValue * 100), $fallbackRate, $yearsToProject) / 100;
                 }
             } catch (\Exception $e) {
                 $currentValue = (float) InvestmentAccount::where('user_id', $spouse->id)->sum('current_value');
-                $projectedValue += $this->futureValueCalculator->calculateFutureValue($currentValue, $fallbackRate, $yearsToProject);
+                $projectedValue += $this->futureValueCalculator->calculateFutureValue((int) round($currentValue * 100), $fallbackRate, $yearsToProject) / 100;
             }
         }
 
@@ -988,7 +988,7 @@ class IHTCalculationService
             return $currentPropertyValue;
         }
 
-        return $this->futureValueCalculator->calculateFutureValue($currentPropertyValue, $propertyGrowthRate, $yearsToProject);
+        return $this->futureValueCalculator->calculateFutureValue((int) round($currentPropertyValue * 100), $propertyGrowthRate, $yearsToProject) / 100;
     }
 
     /**

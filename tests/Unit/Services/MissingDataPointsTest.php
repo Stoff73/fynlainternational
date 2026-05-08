@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 use Fynla\Packs\Gb\Models\Estate\Will;
 use App\Models\User;
-use App\Services\Estate\FutureValueCalculator;
+use Fynla\Packs\Gb\Estate\FutureValueCalculator;
 use App\Services\Retirement\DecumulationPlanner;
 use Carbon\Carbon;
 use Illuminate\Foundation\Testing\RefreshDatabase;

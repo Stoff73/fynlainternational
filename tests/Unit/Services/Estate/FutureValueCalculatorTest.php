@@ -3,10 +3,9 @@
 declare(strict_types=1);
 
 use Fynla\Packs\Gb\Models\TaxConfiguration;
-use App\Services\Estate\FutureValueCalculator;
+use Fynla\Packs\Gb\Estate\FutureValueCalculator;
 
 beforeEach(function () {
-    // Ensure active tax configuration exists
     if (! TaxConfiguration::where('is_active', true)->exists()) {
         TaxConfiguration::factory()->create(['is_active' => true]);
     }
@@ -16,24 +15,24 @@ beforeEach(function () {
 });
 
 it('calculates future value correctly', function () {
-    $presentValue = 100000;
-    $growthRate = 0.05; // 5%
+    $presentValueMinor = 10_000_000; // £100,000
+    $growthRate = 0.05;
     $years = 10;
 
-    $futureValue = $this->calculator->calculateFutureValue($presentValue, $growthRate, $years);
+    $futureValueMinor = $this->calculator->calculateFutureValue($presentValueMinor, $growthRate, $years);
 
-    // FV = 100000 * (1.05)^10 = 162,889.46
-    expect($futureValue)->toBeFloat()
-        ->and($futureValue)->toBeGreaterThan($presentValue)
-        ->and($futureValue)->toBeGreaterThan(162800)
-        ->and($futureValue)->toBeLessThan(162900);
+    // FV = 100000 * (1.05)^10 = 162,889.46 → 16,288,946 pence (rounded)
+    expect($futureValueMinor)->toBeInt()
+        ->and($futureValueMinor)->toBeGreaterThan($presentValueMinor)
+        ->and($futureValueMinor)->toBeGreaterThan(16_280_000)
+        ->and($futureValueMinor)->toBeLessThan(16_290_000);
 });
 
 it('returns present value when zero years', function () {
-    $presentValue = 50000;
-    $futureValue = $this->calculator->calculateFutureValue($presentValue, 0.05, 0);
+    $presentValueMinor = 5_000_000; // £50,000
+    $futureValueMinor = $this->calculator->calculateFutureValue($presentValueMinor, 0.05, 0);
 
-    expect($futureValue)->toBe(50000.0);
+    expect($futureValueMinor)->toBe(5_000_000);
 });
 
 it('calculates portfolio future value', function () {
@@ -46,9 +45,9 @@ it('calculates portfolio future value', function () {
     $result = $this->calculator->calculatePortfolioFutureValue($assets, 0.05, 10);
 
     expect($result)->toBeArray()
-        ->and($result)->toHaveKeys(['total_current_value', 'total_future_value', 'total_growth', 'asset_projections'])
-        ->and($result['total_current_value'])->toBe(450000.0)
-        ->and($result['total_future_value'])->toBeGreaterThan(450000.0)
+        ->and($result)->toHaveKeys(['total_current_value_minor', 'total_future_value_minor', 'total_growth_minor', 'asset_projections'])
+        ->and($result['total_current_value_minor'])->toBe(45_000_000) // £450k in pence
+        ->and($result['total_future_value_minor'])->toBeGreaterThan(45_000_000)
         ->and($result['asset_projections'])->toHaveCount(3);
 });
 
@@ -59,8 +58,8 @@ it('calculates portfolio future value with different growth rates by asset type'
     ]);
 
     $growthRates = [
-        'property' => 0.03, // 3%
-        'investment' => 0.07, // 7%
+        'property' => 0.03,
+        'investment' => 0.07,
         'default' => 0.05,
     ];
 
@@ -69,7 +68,6 @@ it('calculates portfolio future value with different growth rates by asset type'
     expect($result)->toBeArray()
         ->and($result['asset_projections'])->toHaveCount(2);
 
-    // Check that different growth rates were applied
     $propertyProjection = collect($result['asset_projections'])->firstWhere('asset_type', 'property');
     $investmentProjection = collect($result['asset_projections'])->firstWhere('asset_type', 'investment');
 
@@ -87,20 +85,17 @@ it('provides default growth rates', function () {
 });
 
 it('calculates real future value adjusted for inflation', function () {
-    $presentValue = 100000;
-    $nominalRate = 0.07; // 7%
-    $inflationRate = 0.02; // 2%
+    $presentValueMinor = 10_000_000; // £100,000
+    $nominalRate = 0.07;
+    $inflationRate = 0.02;
     $years = 10;
 
-    $realFV = $this->calculator->calculateRealFutureValue($presentValue, $nominalRate, $inflationRate, $years);
+    $realFvMinor = $this->calculator->calculateRealFutureValue($presentValueMinor, $nominalRate, $inflationRate, $years);
+    $nominalFvMinor = $this->calculator->calculateFutureValue($presentValueMinor, $nominalRate, $years);
 
-    // Real growth rate = ((1.07)/(1.02)) - 1 ≈ 4.9%
-    // Should be less than nominal FV but greater than PV
-    $nominalFV = $this->calculator->calculateFutureValue($presentValue, $nominalRate, $years);
-
-    expect($realFV)->toBeFloat()
-        ->and($realFV)->toBeGreaterThan($presentValue)
-        ->and($realFV)->toBeLessThan($nominalFV);
+    expect($realFvMinor)->toBeInt()
+        ->and($realFvMinor)->toBeGreaterThan($presentValueMinor)
+        ->and($realFvMinor)->toBeLessThan($nominalFvMinor);
 });
 
 it('projects estate at death', function () {
@@ -115,22 +110,22 @@ it('projects estate at death', function () {
 
     expect($projection)->toBeArray()
         ->and($projection)->toHaveKeys([
-            'current_estate_value',
-            'projected_estate_value_at_death',
-            'projected_growth',
+            'current_estate_value_minor',
+            'projected_estate_value_at_death_minor',
+            'projected_growth_minor',
             'years_until_death',
             'asset_projections',
         ])
         ->and($projection['years_until_death'])->toBe(20)
-        ->and($projection['projected_estate_value_at_death'])->toBeGreaterThan($projection['current_estate_value']);
+        ->and($projection['projected_estate_value_at_death_minor'])->toBeGreaterThan($projection['current_estate_value_minor']);
 });
 
 it('calculates required growth rate to reach target', function () {
-    $presentValue = 100000;
-    $targetValue = 200000; // Double
+    $presentValueMinor = 10_000_000; // £100,000
+    $targetValueMinor = 20_000_000; // £200,000 (double)
     $years = 10;
 
-    $requiredCAGR = $this->calculator->calculateRequiredGrowthRate($presentValue, $targetValue, $years);
+    $requiredCAGR = $this->calculator->calculateRequiredGrowthRate($presentValueMinor, $targetValueMinor, $years);
 
     // To double in 10 years: (2)^(1/10) - 1 ≈ 7.18%
     expect($requiredCAGR)->toBeFloat()

@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace Fynla\Packs\Gb\Estate;
 
-use App\Services\Estate\FutureValueCalculator;
-
 use App\Models\User;
 use Fynla\Packs\Gb\Goals\LifeEventService;
 use Fynla\Packs\Gb\Tax\TaxConfigService;
