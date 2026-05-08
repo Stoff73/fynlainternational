@@ -11,7 +11,7 @@ use Fynla\Packs\Gb\Models\LifeInsurancePolicy;
 use App\Models\User;
 use Fynla\Packs\Gb\Estate\EstateAssetAggregatorService;
 use Fynla\Packs\Gb\Estate\IHTCalculationService;
-use App\Services\Estate\IHTFormattingService;
+use Fynla\Packs\Gb\Estate\IHTFormattingService;
 use Fynla\Packs\Gb\Tax\TaxConfigService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -52,19 +52,24 @@ class IHTController extends Controller
                 ? $this->assetAggregator->gatherUserAssets($spouse)
                 : collect();
 
-            $assetsBreakdown = $this->formattingService->formatAssetsBreakdown(
-                $userAssets,
-                $spouseAssets,
-                $dataSharingEnabled,
-                $user,
-                $spouse,
-                $calculation
+            // Service emits *_minor keys — walk back to pounds-shaped at the boundary.
+            $assetsBreakdown = $this->convertMinorKeysToPoundsRecursive(
+                $this->formattingService->formatAssetsBreakdown(
+                    $userAssets,
+                    $spouseAssets,
+                    $dataSharingEnabled,
+                    $user,
+                    $spouse,
+                    $calculation
+                )
             );
 
-            $liabilitiesBreakdown = $this->formattingService->formatLiabilitiesBreakdown(
-                $user,
-                $spouse,
-                $dataSharingEnabled
+            $liabilitiesBreakdown = $this->convertMinorKeysToPoundsRecursive(
+                $this->formattingService->formatLiabilitiesBreakdown(
+                    $user,
+                    $spouse,
+                    $dataSharingEnabled
+                )
             );
 
             // Calculate total liabilities (current and projected)
@@ -144,18 +149,44 @@ class IHTController extends Controller
                 'executor_name' => $will?->executor_name,
             ];
 
-            // Add cash projection breakdown for transparency
-            $response['cash_projection_breakdown'] = $this->formattingService->generateCashProjectionBreakdown(
-                $user,
-                $spouse,
-                $dataSharingEnabled,
-                $calculation
+            // Add cash projection breakdown for transparency (walk *_minor → pounds)
+            $response['cash_projection_breakdown'] = $this->convertMinorKeysToPoundsRecursive(
+                $this->formattingService->generateCashProjectionBreakdown(
+                    $user,
+                    $spouse,
+                    $dataSharingEnabled,
+                    $calculation
+                )
             );
 
             return response()->json($response);
         } catch (\Exception $e) {
             return $this->errorResponse($e, 'IHT calculation');
         }
+    }
+
+    /**
+     * Walk an array recursively and convert every `*_minor` int key to its
+     * pounds-shaped float equivalent. Used at the IHTFormattingService
+     * boundary (R-14a-Estate-vii) so the IHT response shape is unchanged.
+     */
+    private function convertMinorKeysToPoundsRecursive(array $row): array
+    {
+        $out = [];
+        foreach ($row as $key => $value) {
+            if (is_array($value)) {
+                $value = $this->convertMinorKeysToPoundsRecursive($value);
+            }
+
+            if (is_string($key) && str_ends_with($key, '_minor') && is_int($value)) {
+                $poundsKey = substr($key, 0, -strlen('_minor'));
+                $out[$poundsKey] = round($value / 100, 2);
+            } else {
+                $out[$key] = $value;
+            }
+        }
+
+        return $out;
     }
 
     /**

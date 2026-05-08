@@ -13,7 +13,7 @@ use Fynla\Packs\Gb\Coordination\RecommendationPersonaliser;
 use App\Services\Plans\BasePlanService;
 use Fynla\Packs\Gb\Estate\EstateAssetAggregatorService;
 use Fynla\Packs\Gb\Estate\IHTCalculationService;
-use App\Services\Estate\IHTFormattingService;
+use Fynla\Packs\Gb\Estate\IHTFormattingService;
 use Fynla\Packs\Gb\Tax\TaxConfigService;
 
 class EstatePlanService extends BasePlanService
@@ -392,20 +392,25 @@ class EstatePlanService extends BasePlanService
             ? $this->assetAggregator->gatherUserAssets($spouse)
             : collect();
 
-        // Format breakdowns using IHTFormattingService
-        $assetsBreakdown = $this->formattingService->formatAssetsBreakdown(
-            $userAssets,
-            $spouseAssets,
-            $dataSharingEnabled,
-            $user,
-            $spouse,
-            $ihtCalc
+        // Format breakdowns using IHTFormattingService — service emits *_minor keys;
+        // walk back to pounds-shaped at the boundary so downstream code reads pounds.
+        $assetsBreakdown = $this->convertMinorKeysToPoundsRecursive(
+            $this->formattingService->formatAssetsBreakdown(
+                $userAssets,
+                $spouseAssets,
+                $dataSharingEnabled,
+                $user,
+                $spouse,
+                $ihtCalc
+            )
         );
 
-        $liabilitiesBreakdown = $this->formattingService->formatLiabilitiesBreakdown(
-            $user,
-            $spouse,
-            $dataSharingEnabled
+        $liabilitiesBreakdown = $this->convertMinorKeysToPoundsRecursive(
+            $this->formattingService->formatLiabilitiesBreakdown(
+                $user,
+                $spouse,
+                $dataSharingEnabled
+            )
         );
 
         // Recalculate projected liabilities from formatting service (same as IHTController)
@@ -764,5 +769,30 @@ class EstatePlanService extends BasePlanService
                 'savings_map' => $savingsMap,
             ],
         ];
+    }
+
+    /**
+     * Walk an array recursively and convert every `*_minor` int key to its
+     * pounds-shaped float equivalent. Used at the IHTFormattingService
+     * boundary (R-14a-Estate-vii) so downstream EstatePlanService code can
+     * keep reading pounds-shaped keys (`total`, `projected_total`, etc.).
+     */
+    private function convertMinorKeysToPoundsRecursive(array $row): array
+    {
+        $out = [];
+        foreach ($row as $key => $value) {
+            if (is_array($value)) {
+                $value = $this->convertMinorKeysToPoundsRecursive($value);
+            }
+
+            if (is_string($key) && str_ends_with($key, '_minor') && is_int($value)) {
+                $poundsKey = substr($key, 0, -strlen('_minor'));
+                $out[$poundsKey] = round($value / 100, 2);
+            } else {
+                $out[$key] = $value;
+            }
+        }
+
+        return $out;
     }
 }

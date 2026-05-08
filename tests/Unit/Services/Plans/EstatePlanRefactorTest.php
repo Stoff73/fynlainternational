@@ -7,7 +7,7 @@ use App\Models\User;
 use Fynla\Packs\Gb\Coordination\RecommendationPersonaliser;
 use Fynla\Packs\Gb\Estate\EstateAssetAggregatorService;
 use Fynla\Packs\Gb\Estate\IHTCalculationService;
-use App\Services\Estate\IHTFormattingService;
+use Fynla\Packs\Gb\Estate\IHTFormattingService;
 use Fynla\Packs\Gb\Plans\DisposableIncomeAccessor;
 use Fynla\Packs\Gb\Plans\EstatePlanService;
 use Fynla\Packs\Gb\Plans\PlanConfigService;
