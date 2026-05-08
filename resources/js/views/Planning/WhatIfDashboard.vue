@@ -49,7 +49,7 @@
 <script>
 import { mapState, mapActions } from 'vuex';
 import AppLayout from '@/layouts/AppLayout.vue';
-import ScenarioCard from '@/components/WhatIf/ScenarioCard.vue';
+import ScenarioCard from '@gb/components/WhatIf/ScenarioCard.vue';
 import { previewModeMixin } from '@/mixins/previewModeMixin';
 import ModuleStatusBar from '@/components/Shared/ModuleStatusBar.vue';
 

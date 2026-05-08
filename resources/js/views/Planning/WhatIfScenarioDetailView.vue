@@ -78,7 +78,7 @@
 <script>
 import { mapState, mapActions } from 'vuex';
 import AppLayout from '@/layouts/AppLayout.vue';
-import ModuleComparison from '@/components/WhatIf/ModuleComparison.vue';
+import ModuleComparison from '@gb/components/WhatIf/ModuleComparison.vue';
 import ModuleStatusBar from '@/components/Shared/ModuleStatusBar.vue';
 
 export default {
