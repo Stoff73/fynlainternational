@@ -317,8 +317,8 @@
 <script>
 import { mapState } from 'vuex';
 import AppLayout from '@/layouts/AppLayout.vue';
-import UnifiedPensionForm from '@/components/Retirement/UnifiedPensionForm.vue';
-import PensionPotProjectionChart from '@/components/Retirement/PensionPotProjectionChart.vue';
+import UnifiedPensionForm from '@gb/components/Retirement/UnifiedPensionForm.vue';
+import PensionPotProjectionChart from '@gb/components/Retirement/PensionPotProjectionChart.vue';
 import { currencyMixin } from '@/mixins/currencyMixin';
 import retirementService from '@/services/retirementService';
 

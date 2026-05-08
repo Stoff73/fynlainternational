@@ -417,14 +417,14 @@
 <script>
 import { mapState, mapActions, mapGetters } from 'vuex';
 import PensionDetailInline from './PensionDetailInline.vue';
-import UnifiedPensionForm from '@/components/Retirement/UnifiedPensionForm.vue';
+import UnifiedPensionForm from '@gb/components/Retirement/UnifiedPensionForm.vue';
 import DocumentUploadModal from '@/components/Shared/DocumentUploadModal.vue';
 import RiskBadge from '@/components/Shared/RiskBadge.vue';
-import PensionPotProjectionChart from '@/components/Retirement/PensionPotProjectionChart.vue';
-import FutureValueTab from '@/components/Retirement/FutureValueTab.vue';
-import RetirementIncomeTab from '@/components/Retirement/RetirementIncomeTab.vue';
-import CapitalAdequacyTab from '@/components/Retirement/CapitalAdequacyTab.vue';
-import DecumulationStrategyCard from '@/components/Retirement/DecumulationStrategyCard.vue';
+import PensionPotProjectionChart from '@gb/components/Retirement/PensionPotProjectionChart.vue';
+import FutureValueTab from '@gb/components/Retirement/FutureValueTab.vue';
+import RetirementIncomeTab from '@gb/components/Retirement/RetirementIncomeTab.vue';
+import CapitalAdequacyTab from '@gb/components/Retirement/CapitalAdequacyTab.vue';
+import DecumulationStrategyCard from '@gb/components/Retirement/DecumulationStrategyCard.vue';
 import ModuleStatusBar from '@/components/Shared/ModuleStatusBar.vue';
 import { currencyMixin } from '@/mixins/currencyMixin';
 
