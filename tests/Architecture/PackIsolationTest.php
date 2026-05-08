@@ -216,9 +216,10 @@ describe('Pack Isolation', function () {
             'App\\Agents\\BaseAgent',
             // App\Agents\TaxOptimisationAgent — implements the
             // TaxOptimisationEngine contract; bound by GbPackServiceProvider
-            // as `pack.gb.tax_optimisation`. Stays in app/Agents/ pending its
-            // App\Services\Tax\TaxOptimisationService dependency relocating
-            // in R-14a. Pack CoordinatingAgent injects it across the boundary.
+            // as `pack.gb.tax_optimisation`. Stays in app/Agents/ awaiting
+            // its own R-8 follow-up agent relocation; its TaxOptimisationService
+            // dependency now lives in pack (R-14a-Tax-iii). Pack CoordinatingAgent
+            // injects it across the boundary.
             'App\\Agents\\TaxOptimisationAgent',
             // App\Http\Resources\UserResource — wraps the deferred App\Models\User.
             // Stays in app/Http/Resources/ until User relocation in R-14b.
@@ -374,7 +375,6 @@ describe('Pack Isolation', function () {
             'App\\Services\\Trust\\IHTPeriodicChargeCalculator', // R-14a
             'App\\Services\\Trust\\TrustAssetAggregatorService', // R-14a (sub-module, relocates with Estate)
             // Same deferral for Tax-side float-money services.
-            'App\\Services\\Tax\\TaxOptimisationService',
             'App\\Services\\TaxBandTracker',
         ];
 

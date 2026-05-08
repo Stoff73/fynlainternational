@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace App\Agents;
 
 use App\Models\User;
-use App\Services\Tax\TaxOptimisationService;
+use Fynla\Packs\Gb\Tax\TaxOptimisationService;
 use Fynla\Packs\Gb\Tax\TaxConfigService;
 use Fynla\Core\Contracts\TaxOptimisationEngine;
 

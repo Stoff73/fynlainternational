@@ -2,14 +2,13 @@
 
 declare(strict_types=1);
 
-namespace App\Services\Tax;
+namespace Fynla\Packs\Gb\Tax;
 
 use Fynla\Packs\Gb\Constants\TaxDefaults;
 use Fynla\Packs\Gb\Models\Investment\InvestmentAccount;
 use Fynla\Packs\Gb\Models\SavingsAccount;
 use App\Models\User;
 use App\Services\Retirement\AnnualAllowanceChecker;
-use Fynla\Packs\Gb\Tax\TaxConfigService;
 use Fynla\Packs\Gb\Traits\ResolvesIncome;
 
 /**
@@ -51,8 +50,8 @@ class TaxOptimisationService
     {
         $strategies = [];
         $allowanceUsage = $this->analyzeAllowanceUsage($user);
-        $grossIncome = $this->resolveGrossAnnualIncome($user);
-        $taxBand = $this->determineTaxBand($grossIncome);
+        $grossIncomeMinor = self::poundsToMinor($this->resolveGrossAnnualIncome($user));
+        $taxBand = $this->determineTaxBand($grossIncomeMinor);
 
         // ISA strategy
         $isaStrategy = $this->buildISAStrategy($user, $allowanceUsage['isa'], $taxBand);
@@ -61,7 +60,7 @@ class TaxOptimisationService
         }
 
         // Pension strategy
-        $pensionStrategy = $this->buildPensionStrategy($user, $allowanceUsage['pension_annual_allowance'], $grossIncome, $taxBand);
+        $pensionStrategy = $this->buildPensionStrategy($user, $allowanceUsage['pension_annual_allowance'], $grossIncomeMinor, $taxBand);
         if ($pensionStrategy !== null) {
             $strategies[] = $pensionStrategy;
         }
@@ -73,7 +72,7 @@ class TaxOptimisationService
         }
 
         // Spousal optimisation (if married)
-        $spousalStrategy = $this->buildSpousalStrategy($user, $grossIncome, $taxBand);
+        $spousalStrategy = $this->buildSpousalStrategy($user, $grossIncomeMinor, $taxBand);
         if ($spousalStrategy !== null) {
             $strategies[] = $spousalStrategy;
         }
@@ -210,8 +209,8 @@ class TaxOptimisationService
 
     private function analyzePersonalSavingsAllowance(User $user): array
     {
-        $grossIncome = $this->resolveGrossAnnualIncome($user);
-        $taxBand = $this->determineTaxBand($grossIncome);
+        $grossIncomeMinor = self::poundsToMinor($this->resolveGrossAnnualIncome($user));
+        $taxBand = $this->determineTaxBand($grossIncomeMinor);
 
         $psaAmount = (float) $this->taxConfig->getPersonalSavingsAllowance($taxBand);
 
@@ -269,7 +268,7 @@ class TaxOptimisationService
         ];
     }
 
-    private function buildPensionStrategy(User $user, array $pensionAA, float $grossIncome, string $taxBand): ?array
+    private function buildPensionStrategy(User $user, array $pensionAA, int $grossIncomeMinor, string $taxBand): ?array
     {
         $remainingAA = $pensionAA['remaining_allowance'] + $pensionAA['carry_forward_available'];
 
@@ -289,8 +288,9 @@ class TaxOptimisationService
             default => $basicRate,
         };
 
-        // Estimate saving if user contributed more
-        $suggestedAdditional = min($remainingAA, $grossIncome * 0.10);
+        // Estimate saving if user contributed more (10% of gross income, capped at remaining AA).
+        $tenPercentIncomePounds = ($grossIncomeMinor * 0.10) / 100;
+        $suggestedAdditional = min($remainingAA, $tenPercentIncomePounds);
         $estimatedSaving = round($suggestedAdditional * $reliefRate, 2);
 
         $description = sprintf(
@@ -378,7 +378,7 @@ class TaxOptimisationService
         return null;
     }
 
-    private function buildSpousalStrategy(User $user, float $grossIncome, string $taxBand): ?array
+    private function buildSpousalStrategy(User $user, int $grossIncomeMinor, string $taxBand): ?array
     {
         if ($user->marital_status !== 'married' || ! $user->spouse_id) {
             return null;
@@ -389,8 +389,8 @@ class TaxOptimisationService
             return null;
         }
 
-        $spouseIncome = $this->resolveGrossAnnualIncome($spouse);
-        $spouseTaxBand = $this->determineTaxBand($spouseIncome);
+        $spouseIncomeMinor = self::poundsToMinor($this->resolveGrossAnnualIncome($spouse));
+        $spouseTaxBand = $this->determineTaxBand($spouseIncomeMinor);
 
         // Only suggest if there is a tax band difference
         if ($taxBand === $spouseTaxBand) {
@@ -398,20 +398,21 @@ class TaxOptimisationService
         }
 
         // Higher earner should be the one receiving the recommendation
-        $higherEarner = $grossIncome >= $spouseIncome ? $user : $spouse;
-        $lowerEarner = $grossIncome >= $spouseIncome ? $spouse : $user;
-        $higherBand = $grossIncome >= $spouseIncome ? $taxBand : $spouseTaxBand;
-        $lowerBand = $grossIncome >= $spouseIncome ? $spouseTaxBand : $taxBand;
+        $higherEarner = $grossIncomeMinor >= $spouseIncomeMinor ? $user : $spouse;
+        $lowerEarner = $grossIncomeMinor >= $spouseIncomeMinor ? $spouse : $user;
+        $higherBand = $grossIncomeMinor >= $spouseIncomeMinor ? $taxBand : $spouseTaxBand;
+        $lowerBand = $grossIncomeMinor >= $spouseIncomeMinor ? $spouseTaxBand : $taxBand;
 
         $estimatedSaving = 0.0;
         $actions = [];
 
         // Marriage Allowance check (basic rate to non-taxpayer transfer)
         $incomeTaxConfig = $this->taxConfig->getIncomeTax();
-        $personalAllowance = (float) ($incomeTaxConfig['personal_allowance'] ?? TaxDefaults::PERSONAL_ALLOWANCE);
+        $personalAllowanceMinor = self::poundsToMinor($incomeTaxConfig['personal_allowance'] ?? TaxDefaults::PERSONAL_ALLOWANCE);
+        $personalAllowance = $personalAllowanceMinor / 100;
 
-        $lowerEarnerIncome = $grossIncome >= $spouseIncome ? $spouseIncome : $grossIncome;
-        if ($lowerEarnerIncome < $personalAllowance && $higherBand === 'basic') {
+        $lowerEarnerIncomeMinor = $grossIncomeMinor >= $spouseIncomeMinor ? $spouseIncomeMinor : $grossIncomeMinor;
+        if ($lowerEarnerIncomeMinor < $personalAllowanceMinor && $higherBand === 'basic') {
             $marriageAllowanceSaving = round($personalAllowance * 0.10 * 0.20, 2); // 10% of PA at 20%
             $estimatedSaving += $marriageAllowanceSaving;
             $actions[] = 'Apply for Marriage Allowance to transfer unused personal allowance';
@@ -471,23 +472,31 @@ class TaxOptimisationService
     // Helpers
     // =========================================================================
 
-    private function determineTaxBand(float $grossIncome): string
+    private function determineTaxBand(int $grossIncomeMinor): string
     {
         $incomeTax = $this->taxConfig->getIncomeTax();
-        $personalAllowance = (float) ($incomeTax['personal_allowance'] ?? 12570);
-        $basicRateLimit = $personalAllowance + (float) ($incomeTax['bands'][0]['max'] ?? 37700);
-        $additionalThreshold = (float) ($incomeTax['additional_rate_threshold'] ?? 125140);
+        $personalAllowanceMinor = self::poundsToMinor($incomeTax['personal_allowance'] ?? 12570);
+        $basicRateLimitMinor = $personalAllowanceMinor + self::poundsToMinor($incomeTax['bands'][0]['max'] ?? 37700);
+        $additionalThresholdMinor = self::poundsToMinor($incomeTax['additional_rate_threshold'] ?? 125140);
 
-        if ($grossIncome <= $personalAllowance) {
+        if ($grossIncomeMinor <= $personalAllowanceMinor) {
             return 'non_taxpayer';
         }
-        if ($grossIncome <= $basicRateLimit) {
+        if ($grossIncomeMinor <= $basicRateLimitMinor) {
             return 'basic';
         }
-        if ($grossIncome <= $additionalThreshold) {
+        if ($grossIncomeMinor <= $additionalThresholdMinor) {
             return 'higher';
         }
 
         return 'additional';
+    }
+
+    /**
+     * Convert a pounds value (int / float / numeric string / null) to pence.
+     */
+    private static function poundsToMinor(int|float|string|null $pounds): int
+    {
+        return (int) round(((float) ($pounds ?? 0)) * 100);
     }
 }
