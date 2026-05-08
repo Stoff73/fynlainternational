@@ -745,6 +745,20 @@ const routes = [
       ],
     },
   },
+  // R-14: legacy /za/* soft-redirect. Specific /za/* routes above match
+  // first; this catch-all only fires when those specific routes get
+  // extracted into the SA pack's routes.js (a later workstream) and
+  // start mounting unprefixed (/savings, /protection, etc.). Until
+  // then it's dormant. Pack scoping handles SA-vs-UK isolation; the
+  // /za/ URL prefix is being retired.
+  {
+    path: '/za/:pathMatch(.*)*',
+    redirect: to => {
+      const match = to.params.pathMatch;
+      const rest = Array.isArray(match) ? match.join('/') : (match ?? '');
+      return { path: '/' + rest, query: to.query, hash: to.hash };
+    },
+  },
   {
     path: '/goals',
     name: 'Goals',

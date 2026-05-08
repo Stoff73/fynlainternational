@@ -25,10 +25,13 @@ use Symfony\Component\HttpFoundation\Response;
 class LegacyApiRewrite
 {
     /**
-     * API path prefixes that are UK-specific and should be rewritten.
+     * Legacy /api/{module} prefixes that the GB pack now serves under /api/gb/.
      *
-     * These are the module route prefixes that will move under /api/gb/
-     * in Workstream E. Auth, health, and other core routes are NOT rewritten.
+     * Only includes prefixes whose routes have actually relocated into
+     * packs/country-gb/routes/api.php — rewriting a prefix that has no
+     * /api/gb/* counterpart would 404 otherwise-working core routes.
+     * Add to this list as further controllers relocate (e.g. dashboard,
+     * goals, property, household, life-events gate on R-14b).
      */
     private const REWRITABLE_PREFIXES = [
         'api/protection',
@@ -36,28 +39,18 @@ class LegacyApiRewrite
         'api/investment',
         'api/retirement',
         'api/estate',
-        'api/goals',
-        'api/property',
-        'api/properties',
-        'api/mortgages',
-        'api/dashboard',
         'api/plans',
-        'api/net-worth',
-        'api/profile-completeness',
+        'api/holistic',
         'api/recommendations',
-        'api/family-members',
-        'api/household',
-        'api/onboarding',
-        'api/journey',
-        'api/life-stage',
-        'api/life-events',
-        'api/business-interests',
-        'api/chattels',
-        'api/cash-accounts',
-        'api/personal-accounts',
+        'api/what-if-scenarios',
+        'api/letter-to-spouse',
+        'api/tax-info',
+        'api/tax-settings',
+        'api/tax-year',
         'api/tax',
-        'api/holistic-planning',
-        'api/income-definitions',
+        'api/admin/protection-actions',
+        'api/admin/investment-actions',
+        'api/admin/retirement-actions',
     ];
 
     /**

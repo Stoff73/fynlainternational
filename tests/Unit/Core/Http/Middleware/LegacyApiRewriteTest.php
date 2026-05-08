@@ -68,13 +68,16 @@ it('preserves POST data through rewrite', function () {
     expect($response->getContent())->toBe('test:api/gb/protection/policies');
 });
 
-it('rewrites all known module prefixes', function () {
+it('rewrites all known pack-relocated module prefixes', function () {
     $middleware = new LegacyApiRewrite();
 
+    // Mirrors LegacyApiRewrite::REWRITABLE_PREFIXES — modules whose
+    // controllers have relocated into packs/country-gb/routes/api.php.
     $prefixes = [
         'protection', 'savings', 'investment', 'retirement', 'estate',
-        'goals', 'property', 'properties', 'mortgages', 'dashboard',
-        'plans', 'net-worth', 'family-members', 'household',
+        'plans', 'holistic', 'recommendations', 'what-if-scenarios',
+        'letter-to-spouse', 'tax-info', 'tax-settings', 'tax-year', 'tax',
+        'admin/protection-actions', 'admin/investment-actions', 'admin/retirement-actions',
     ];
 
     foreach ($prefixes as $prefix) {
@@ -86,5 +89,30 @@ it('rewrites all known module prefixes', function () {
 
         expect($response->getContent())->toBe("api/gb/{$prefix}/test",
             "Failed to rewrite /api/{$prefix}/test");
+    }
+});
+
+it('does not rewrite UK module prefixes still resident in core routes', function () {
+    // These modules' controllers haven't relocated to packs/country-gb yet
+    // (gated on R-14b). Their /api/{module}/* paths must stay as-is so
+    // core's routes/api.php continues to serve them.
+    $middleware = new LegacyApiRewrite();
+
+    $coreResidentPrefixes = [
+        'goals', 'property', 'properties', 'mortgages', 'dashboard',
+        'net-worth', 'family-members', 'household', 'profile-completeness',
+        'onboarding', 'journey', 'life-stage', 'life-events',
+        'business-interests', 'chattels', 'cash-accounts', 'personal-accounts',
+    ];
+
+    foreach ($coreResidentPrefixes as $prefix) {
+        $request = Request::create("/api/{$prefix}/test", 'GET');
+
+        $response = $middleware->handle($request, function (Request $r) {
+            return new Response($r->path());
+        });
+
+        expect($response->getContent())->toBe("api/{$prefix}/test",
+            "Should not have rewritten /api/{$prefix}/test (still resident in core routes)");
     }
 });

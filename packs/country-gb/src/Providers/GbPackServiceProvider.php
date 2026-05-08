@@ -77,13 +77,14 @@ class GbPackServiceProvider extends ServiceProvider
             'routes' => [],
         ]));
 
-        // R-9d: mount pack routes under the same /api prefix and api
-        // middleware group as routes/api.php. Per the R-9 URL-strategy
-        // decision, GB routes mount WITHOUT a /api/gb/ prefix so URL
-        // paths stay identical and feature tests keep passing. The
-        // Option X prefix + redirect layer ships in R-14.
+        // R-14: GB pack routes mount under /api/gb/* (Option X prefix).
+        // Legacy /api/{module} URLs are rewritten transparently to
+        // /api/gb/{module} by Fynla\Core\Http\Middleware\LegacyApiRewrite,
+        // wired in the global $middleware stack so the rewrite happens
+        // before route matching. Existing clients (mobile + web) keep
+        // working unchanged for the 60-day deprecation window.
         Route::middleware('api')
-            ->prefix('api')
+            ->prefix('api/gb')
             ->group(__DIR__.'/../../routes/api.php');
 
         // R-10: pack-owned migrations (UK schema alters and creates).

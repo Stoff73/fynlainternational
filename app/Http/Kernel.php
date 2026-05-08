@@ -29,6 +29,13 @@ class Kernel extends HttpKernel
         \Illuminate\Foundation\Http\Middleware\ValidatePostSize::class,
         \App\Http\Middleware\TrimStrings::class,
         \Illuminate\Foundation\Http\Middleware\ConvertEmptyStringsToNull::class,
+        // R-14: rewrite legacy /api/{module} → /api/gb/{module} before
+        // routing so existing clients keep working while the GB pack
+        // serves prefixed URLs. Must run as global middleware (before
+        // route matching); placement after HandleCors keeps preflights
+        // cheap and before SecurityHeaders so headers apply to the
+        // rewritten request.
+        \Fynla\Core\Http\Middleware\LegacyApiRewrite::class,
         \App\Http\Middleware\SecurityHeaders::class,
         \App\Http\Middleware\CaptureAwcCookie::class,
     ];
@@ -57,11 +64,11 @@ class Kernel extends HttpKernel
             \App\Http\Middleware\PreviewWriteInterceptor::class, // Intercept writes for preview users
             \App\Http\Middleware\CheckSubscription::class, // Feature-flagged subscription enforcement
             // No-op for routes without a {cc} parameter; enforces pack and
-            // user entitlement on jurisdictional /api/{cc}/* routes once they
-            // exist. LegacyApiRewrite is NOT wired here: it would rewrite
-            // every /api/{module} request to /api/gb/{module} which has no
-            // matching route today. Wire it only when the /api/gb/* routes
-            // land (Workstream 0.6+).
+            // user entitlement on jurisdictional /api/{cc}/* routes. The
+            // GB pack mounts under /api/gb/* via Route::prefix('api/gb')
+            // (R-14); LegacyApiRewrite is wired in global $middleware
+            // above so requests on legacy /api/{module} URLs are
+            // rewritten before this middleware runs.
             \Fynla\Core\Http\Middleware\ActiveJurisdictionMiddleware::class,
         ],
     ];
