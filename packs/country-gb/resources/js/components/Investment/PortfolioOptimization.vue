@@ -146,9 +146,9 @@
 </template>
 
 <script>
-import EfficientFrontier from '@/components/Investment/EfficientFrontier.vue';
-import PortfolioOptimizer from '@/components/Investment/PortfolioOptimizer.vue';
-import CorrelationMatrix from '@/components/Investment/CorrelationMatrix.vue';
+import EfficientFrontier from '@gb/components/Investment/EfficientFrontier.vue';
+import PortfolioOptimizer from '@gb/components/Investment/PortfolioOptimizer.vue';
+import CorrelationMatrix from '@gb/components/Investment/CorrelationMatrix.vue';
 
 import logger from '@/utils/logger';
 export default {

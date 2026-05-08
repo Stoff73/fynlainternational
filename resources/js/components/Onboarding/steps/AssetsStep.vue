@@ -504,7 +504,7 @@ import { useStore } from 'vuex';
 import OnboardingStep from '../OnboardingStep.vue';
 import PropertyForm from '@/components/NetWorth/Property/PropertyForm.vue';
 import PropertyCard from '@/components/NetWorth/PropertyCard.vue';
-import AccountForm from '@/components/Investment/AccountForm.vue';
+import AccountForm from '@gb/components/Investment/AccountForm.vue';
 import SaveAccountModal from '@gb/components/Savings/SaveAccountModal.vue';
 import DCPensionForm from '@gb/components/Retirement/DCPensionForm.vue';
 import DBPensionForm from '@gb/components/Retirement/DBPensionForm.vue';

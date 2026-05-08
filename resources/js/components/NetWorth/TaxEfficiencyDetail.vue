@@ -20,7 +20,7 @@
 </template>
 
 <script>
-import TaxEfficiencyPanel from '@/components/Investment/TaxEfficiencyPanel.vue';
+import TaxEfficiencyPanel from '@gb/components/Investment/TaxEfficiencyPanel.vue';
 
 export default {
   name: 'TaxEfficiencyDetail',

@@ -20,7 +20,7 @@
 </template>
 
 <script>
-import Holdings from '@/components/Investment/Holdings.vue';
+import Holdings from '@gb/components/Investment/Holdings.vue';
 
 export default {
   name: 'HoldingsDetail',

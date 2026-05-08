@@ -222,16 +222,16 @@
 <script>
 import { mapState, mapGetters, mapActions } from 'vuex';
 import InvestmentProjections from './InvestmentProjections.vue';
-import AccountForm from '@/components/Investment/AccountForm.vue';
+import AccountForm from '@gb/components/Investment/AccountForm.vue';
 import DocumentUploadModal from '@/components/Shared/DocumentUploadModal.vue';
-import Holdings from '@/components/Investment/Holdings.vue';
-import Performance from '@/components/Investment/Performance.vue';
-import PortfolioOptimization from '@/components/Investment/PortfolioOptimization.vue';
-import AssetLocationOptimizer from '@/components/Investment/AssetLocationOptimizer.vue';
-import WrapperOptimizer from '@/components/Investment/WrapperOptimizer.vue';
-import FeeBreakdown from '@/components/Investment/FeeBreakdown.vue';
-import TaxEfficiencyPanel from '@/components/Investment/TaxEfficiencyPanel.vue';
-import RiskMismatchWarning from '@/components/Investment/RiskMismatchWarning.vue';
+import Holdings from '@gb/components/Investment/Holdings.vue';
+import Performance from '@gb/components/Investment/Performance.vue';
+import PortfolioOptimization from '@gb/components/Investment/PortfolioOptimization.vue';
+import AssetLocationOptimizer from '@gb/components/Investment/AssetLocationOptimizer.vue';
+import WrapperOptimizer from '@gb/components/Investment/WrapperOptimizer.vue';
+import FeeBreakdown from '@gb/components/Investment/FeeBreakdown.vue';
+import TaxEfficiencyPanel from '@gb/components/Investment/TaxEfficiencyPanel.vue';
+import RiskMismatchWarning from '@gb/components/Investment/RiskMismatchWarning.vue';
 import ModuleStatusBar from '@/components/Shared/ModuleStatusBar.vue';
 import riskService from '@/services/riskService';
 import { currencyMixin } from '@/mixins/currencyMixin';

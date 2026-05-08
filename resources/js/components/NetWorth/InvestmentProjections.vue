@@ -472,16 +472,16 @@ import rebalancingService from '@/services/rebalancingService';
 import api from '@/services/api';
 
 // Modal components
-import AccountForm from '@/components/Investment/AccountForm.vue';
+import AccountForm from '@gb/components/Investment/AccountForm.vue';
 import ConfirmDialog from '@/components/Common/ConfirmDialog.vue';
-import HoldingForm from '@/components/Investment/HoldingForm.vue';
+import HoldingForm from '@gb/components/Investment/HoldingForm.vue';
 
 // Drill-down panels
 import AccountSummaryPanel from '@/views/Investment/AccountSummaryPanel.vue';
 import AccountHoldingsPanel from '@/views/Investment/AccountHoldingsPanel.vue';
 import AccountFeesPanel from '@/views/Investment/AccountFeesPanel.vue';
 import AccountRebalancingPanel from '@/views/Investment/AccountRebalancingPanel.vue';
-import DiversificationTab from '@/components/Investment/DiversificationTab.vue';
+import DiversificationTab from '@gb/components/Investment/DiversificationTab.vue';
 import TaxStatusPanel from '@/components/Common/TaxStatusPanel.vue';
 
 // Specialized detail views

@@ -456,7 +456,7 @@
 <script>
 import { mapState, mapGetters } from 'vuex';
 import RiskLevelSelector from '@/components/Shared/RiskLevelSelector.vue';
-import InlineHoldingsEditor from '@/components/Investment/InlineHoldingsEditor.vue';
+import InlineHoldingsEditor from '@gb/components/Investment/InlineHoldingsEditor.vue';
 import riskService from '@/services/riskService';
 import { currencyMixin } from '@/mixins/currencyMixin';
 

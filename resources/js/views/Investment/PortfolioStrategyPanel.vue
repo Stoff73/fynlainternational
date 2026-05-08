@@ -271,11 +271,11 @@
 
 <script>
 import investmentService from '@/services/investmentService';
-import StrategyRecommendationCard from '@/components/Investment/StrategyRecommendationCard.vue';
-import ISATransferModal from '@/components/Investment/ISATransferModal.vue';
-import BedAndISAWizardModal from '@/components/Investment/BedAndISAWizardModal.vue';
-import HarvestLossModal from '@/components/Investment/HarvestLossModal.vue';
-import BondWrapperInfoModal from '@/components/Investment/BondWrapperInfoModal.vue';
+import StrategyRecommendationCard from '@gb/components/Investment/StrategyRecommendationCard.vue';
+import ISATransferModal from '@gb/components/Investment/ISATransferModal.vue';
+import BedAndISAWizardModal from '@gb/components/Investment/BedAndISAWizardModal.vue';
+import HarvestLossModal from '@gb/components/Investment/HarvestLossModal.vue';
+import BondWrapperInfoModal from '@gb/components/Investment/BondWrapperInfoModal.vue';
 import { currencyMixin } from '@/mixins/currencyMixin';
 
 import logger from '@/utils/logger';

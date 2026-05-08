@@ -20,7 +20,7 @@
 </template>
 
 <script>
-import FeeBreakdown from '@/components/Investment/FeeBreakdown.vue';
+import FeeBreakdown from '@gb/components/Investment/FeeBreakdown.vue';
 
 export default {
   name: 'FeesDetail',

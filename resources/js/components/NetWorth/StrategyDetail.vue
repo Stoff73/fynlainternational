@@ -20,7 +20,7 @@
 </template>
 
 <script>
-import InvestmentRecommendationsTracker from '@/components/Investment/InvestmentRecommendationsTracker.vue';
+import InvestmentRecommendationsTracker from '@gb/components/Investment/InvestmentRecommendationsTracker.vue';
 
 export default {
   name: 'StrategyDetail',
