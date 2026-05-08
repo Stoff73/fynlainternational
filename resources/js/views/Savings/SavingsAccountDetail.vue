@@ -199,7 +199,7 @@
 <script>
 import { mapActions } from 'vuex';
 import AppLayout from '@/layouts/AppLayout.vue';
-import SaveAccountModal from '@/components/Savings/SaveAccountModal.vue';
+import SaveAccountModal from '@gb/components/Savings/SaveAccountModal.vue';
 import ConfirmDialog from '@/components/Common/ConfirmDialog.vue';
 import { currencyMixin } from '@/mixins/currencyMixin';
 

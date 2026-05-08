@@ -319,7 +319,7 @@ import currencyMixin from '@/mixins/currencyMixin';
 import AccountSummaryPanel from '@/components/Cash/AccountSummaryPanel.vue';
 import CashInsightsPanel from '@/components/Cash/CashInsightsPanel.vue';
 import CashActionsPanel from '@/components/Cash/CashActionsPanel.vue';
-import SaveAccountModal from '@/components/Savings/SaveAccountModal.vue';
+import SaveAccountModal from '@gb/components/Savings/SaveAccountModal.vue';
 import SavingsAccountDetailInline from '@/views/Savings/SavingsAccountDetailInline.vue';
 import ModuleStatusBar from '@/components/Shared/ModuleStatusBar.vue';
 

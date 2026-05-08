@@ -133,10 +133,10 @@
 <script>
 import { mapState, mapActions } from 'vuex';
 import AppLayout from '@/layouts/AppLayout.vue';
-import CurrentSituation from '@/components/Savings/CurrentSituation.vue';
-import EmergencyFund from '@/components/Savings/EmergencyFund.vue';
-import Recommendations from '@/components/Savings/Recommendations.vue';
-import AccountDetails from '@/components/Savings/AccountDetails.vue';
+import CurrentSituation from '@gb/components/Savings/CurrentSituation.vue';
+import EmergencyFund from '@gb/components/Savings/EmergencyFund.vue';
+import Recommendations from '@gb/components/Savings/Recommendations.vue';
+import AccountDetails from '@gb/components/Savings/AccountDetails.vue';
 import SavingsAccountDetailInline from '@/views/Savings/SavingsAccountDetailInline.vue';
 import ModuleLifeEvents from '@/components/Shared/ModuleLifeEvents.vue';
 import ModuleGoalStrategies from '@/components/Shared/ModuleGoalStrategies.vue';

@@ -505,7 +505,7 @@ import OnboardingStep from '../OnboardingStep.vue';
 import PropertyForm from '@/components/NetWorth/Property/PropertyForm.vue';
 import PropertyCard from '@/components/NetWorth/PropertyCard.vue';
 import AccountForm from '@/components/Investment/AccountForm.vue';
-import SaveAccountModal from '@/components/Savings/SaveAccountModal.vue';
+import SaveAccountModal from '@gb/components/Savings/SaveAccountModal.vue';
 import DCPensionForm from '@/components/Retirement/DCPensionForm.vue';
 import DBPensionForm from '@/components/Retirement/DBPensionForm.vue';
 import StatePensionForm from '@/components/Retirement/StatePensionForm.vue';

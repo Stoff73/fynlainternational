@@ -230,7 +230,7 @@
 
 <script>
 import { mapActions } from 'vuex';
-import SaveAccountModal from '@/components/Savings/SaveAccountModal.vue';
+import SaveAccountModal from '@gb/components/Savings/SaveAccountModal.vue';
 import ConfirmDialog from '@/components/Common/ConfirmDialog.vue';
 import TaxStatusPanel from '@/components/Common/TaxStatusPanel.vue';
 import { currencyMixin } from '@/mixins/currencyMixin';
