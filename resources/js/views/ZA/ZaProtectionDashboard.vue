@@ -30,9 +30,9 @@
 import { mapActions, mapGetters, mapState } from 'vuex';
 import AppLayout from '@/layouts/AppLayout.vue';
 import ModuleStatusBar from '@/components/Shared/ModuleStatusBar.vue';
-import ZaPoliciesTable from '@/components/ZA/Protection/ZaPoliciesTable.vue';
-import ZaCoverageGapDashboard from '@/components/ZA/Protection/ZaCoverageGapDashboard.vue';
-import ZaBeneficiariesTab from '@/components/ZA/Protection/ZaBeneficiariesTab.vue';
+import ZaPoliciesTable from '@za/components/Protection/ZaPoliciesTable.vue';
+import ZaCoverageGapDashboard from '@za/components/Protection/ZaCoverageGapDashboard.vue';
+import ZaBeneficiariesTab from '@za/components/Protection/ZaBeneficiariesTab.vue';
 
 export default {
   name: 'ZaProtectionDashboard',

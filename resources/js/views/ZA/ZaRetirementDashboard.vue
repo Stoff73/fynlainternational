@@ -47,18 +47,18 @@
 import { mapActions } from 'vuex';
 import AppLayout from '@/layouts/AppLayout.vue';
 import ModuleStatusBar from '@/components/Shared/ModuleStatusBar.vue';
-import ZaRetirementSummary from '@/components/ZA/Retirement/ZaRetirementSummary.vue';
-import ZaRetirementTabs from '@/components/ZA/Retirement/ZaRetirementTabs.vue';
-import ZaRetirementFundsList from '@/components/ZA/Retirement/ZaRetirementFundsList.vue';
-import ZaRetirementFundForm from '@/components/ZA/Retirement/ZaRetirementFundForm.vue';
-import ZaContributionModal from '@/components/ZA/Retirement/ZaContributionModal.vue';
-import ZaSection11fReliefCalculator from '@/components/ZA/Retirement/ZaSection11fReliefCalculator.vue';
-import ZaSavingsPotWithdrawalCard from '@/components/ZA/Retirement/ZaSavingsPotWithdrawalCard.vue';
-import ZaLivingAnnuitySlider from '@/components/ZA/Retirement/ZaLivingAnnuitySlider.vue';
-import ZaLifeAnnuityQuote from '@/components/ZA/Retirement/ZaLifeAnnuityQuote.vue';
-import ZaCompulsoryAnnuitisationCard from '@/components/ZA/Retirement/ZaCompulsoryAnnuitisationCard.vue';
-import ZaReg28AllocationForm from '@/components/ZA/Retirement/ZaReg28AllocationForm.vue';
-import ZaReg28SnapshotHistory from '@/components/ZA/Retirement/ZaReg28SnapshotHistory.vue';
+import ZaRetirementSummary from '@za/components/Retirement/ZaRetirementSummary.vue';
+import ZaRetirementTabs from '@za/components/Retirement/ZaRetirementTabs.vue';
+import ZaRetirementFundsList from '@za/components/Retirement/ZaRetirementFundsList.vue';
+import ZaRetirementFundForm from '@za/components/Retirement/ZaRetirementFundForm.vue';
+import ZaContributionModal from '@za/components/Retirement/ZaContributionModal.vue';
+import ZaSection11fReliefCalculator from '@za/components/Retirement/ZaSection11fReliefCalculator.vue';
+import ZaSavingsPotWithdrawalCard from '@za/components/Retirement/ZaSavingsPotWithdrawalCard.vue';
+import ZaLivingAnnuitySlider from '@za/components/Retirement/ZaLivingAnnuitySlider.vue';
+import ZaLifeAnnuityQuote from '@za/components/Retirement/ZaLifeAnnuityQuote.vue';
+import ZaCompulsoryAnnuitisationCard from '@za/components/Retirement/ZaCompulsoryAnnuitisationCard.vue';
+import ZaReg28AllocationForm from '@za/components/Retirement/ZaReg28AllocationForm.vue';
+import ZaReg28SnapshotHistory from '@za/components/Retirement/ZaReg28SnapshotHistory.vue';
 
 const VALID_TABS = ['accumulation', 'decumulation', 'compliance'];
 

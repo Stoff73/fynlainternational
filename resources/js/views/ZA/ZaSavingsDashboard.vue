@@ -13,8 +13,8 @@
 <script>
 import AppLayout from '@/layouts/AppLayout.vue';
 import ModuleStatusBar from '@/components/Shared/ModuleStatusBar.vue';
-import TfsaDashboard from '@/components/ZA/Savings/TfsaDashboard.vue';
-import ZaEmergencyFundGauge from '@/components/ZA/Savings/ZaEmergencyFundGauge.vue';
+import TfsaDashboard from '@za/components/Savings/TfsaDashboard.vue';
+import ZaEmergencyFundGauge from '@za/components/Savings/ZaEmergencyFundGauge.vue';
 
 export default {
   name: 'ZaSavingsDashboard',

@@ -43,15 +43,15 @@
 import { mapActions } from 'vuex';
 import AppLayout from '@/layouts/AppLayout.vue';
 import ModuleStatusBar from '@/components/Shared/ModuleStatusBar.vue';
-import ZaInvestmentSummary from '@/components/ZA/Investment/ZaInvestmentSummary.vue';
-import ZaSdaSummaryWidget from '@/components/ZA/Investment/ZaSdaSummaryWidget.vue';
-import ZaInvestmentAccountsList from '@/components/ZA/Investment/ZaInvestmentAccountsList.vue';
-import ZaInvestmentForm from '@/components/ZA/Investment/ZaInvestmentForm.vue';
-import ZaHoldingsList from '@/components/ZA/Investment/ZaHoldingsList.vue';
-import ZaPurchaseModal from '@/components/ZA/Investment/ZaPurchaseModal.vue';
-import ZaDisposalModal from '@/components/ZA/Investment/ZaDisposalModal.vue';
-import ZaCgtCalculatorCard from '@/components/ZA/Investment/ZaCgtCalculatorCard.vue';
-import ZaCgtProjectionPanel from '@/components/ZA/Investment/ZaCgtProjectionPanel.vue';
+import ZaInvestmentSummary from '@za/components/Investment/ZaInvestmentSummary.vue';
+import ZaSdaSummaryWidget from '@za/components/Investment/ZaSdaSummaryWidget.vue';
+import ZaInvestmentAccountsList from '@za/components/Investment/ZaInvestmentAccountsList.vue';
+import ZaInvestmentForm from '@za/components/Investment/ZaInvestmentForm.vue';
+import ZaHoldingsList from '@za/components/Investment/ZaHoldingsList.vue';
+import ZaPurchaseModal from '@za/components/Investment/ZaPurchaseModal.vue';
+import ZaDisposalModal from '@za/components/Investment/ZaDisposalModal.vue';
+import ZaCgtCalculatorCard from '@za/components/Investment/ZaCgtCalculatorCard.vue';
+import ZaCgtProjectionPanel from '@za/components/Investment/ZaCgtProjectionPanel.vue';
 
 export default {
   name: 'ZaInvestmentDashboard',
