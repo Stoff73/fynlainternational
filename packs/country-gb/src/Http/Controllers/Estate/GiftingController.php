@@ -12,7 +12,7 @@ use Fynla\Packs\Gb\Estate\CashFlowProjector;
 use Fynla\Packs\Gb\Estate\EstateAssetAggregatorService;
 use Fynla\Packs\Gb\Estate\GiftingStrategyOptimizer;
 use Fynla\Packs\Gb\Estate\PersonalizedGiftingStrategyService;
-use App\Services\Estate\PersonalizedTrustStrategyService;
+use Fynla\Packs\Gb\Estate\PersonalizedTrustStrategyService;
 use Fynla\Packs\Gb\Estate\TrustService;
 use Fynla\Packs\Gb\Tax\TaxConfigService;
 use Illuminate\Http\JsonResponse;
@@ -318,37 +318,25 @@ class GiftingController extends Controller
      */
     private function convertPersonalizedStrategyForResponse(array $strategy): array
     {
-        $strategy['summary'] = $this->convertMinorKeysToPounds($strategy['summary'] ?? []);
-
-        if (isset($strategy['strategies']) && is_array($strategy['strategies'])) {
-            $strategy['strategies'] = array_map(
-                function (array $s): array {
-                    $s = $this->convertMinorKeysToPounds($s);
-
-                    if (isset($s['gift_schedule']) && is_array($s['gift_schedule'])) {
-                        $s['gift_schedule'] = array_map(
-                            fn (array $entry): array => $this->convertMinorKeysToPounds($entry),
-                            $s['gift_schedule']
-                        );
-                    }
-
-                    return $s;
-                },
-                $strategy['strategies']
-            );
-        }
-
-        return $strategy;
+        return $this->convertMinorKeysToPoundsRecursive($strategy);
     }
 
     /**
-     * Replace each `*_minor` int key with its pounds-shaped float equivalent
-     * (key without the `_minor` suffix). Non-`_minor` keys pass through.
+     * Walk an array recursively and convert every `*_minor` int key to its
+     * pounds-shaped float equivalent (key without the `_minor` suffix).
+     * Non-`_minor` keys and non-array values pass through unchanged.
+     *
+     * Used at the controller boundary for both PersonalizedGiftingStrategyService
+     * and PersonalizedTrustStrategyService outputs (R-14a-Estate-v + Estate-vi).
      */
-    private function convertMinorKeysToPounds(array $row): array
+    private function convertMinorKeysToPoundsRecursive(array $row): array
     {
         $out = [];
         foreach ($row as $key => $value) {
+            if (is_array($value)) {
+                $value = $this->convertMinorKeysToPoundsRecursive($value);
+            }
+
             if (is_string($key) && str_ends_with($key, '_minor') && is_int($value)) {
                 $poundsKey = substr($key, 0, -strlen('_minor'));
                 $out[$poundsKey] = round($value / 100, 2);
@@ -428,14 +416,17 @@ class GiftingController extends Controller
                 ]);
             }
 
-            // Generate personalized trust strategy
+            // Generate personalized trust strategy (service operates in int minor)
             $trustStrategy = $this->personalizedTrustStrategy->generatePersonalizedTrustStrategy(
                 assets: $assets,
-                currentIHTLiability: $currentIHTLiability,
+                currentIHTLiabilityMinor: (int) round((float) $currentIHTLiability * 100),
                 profile: $ihtProfile,
                 user: $user,
                 yearsUntilDeath: $yearsUntilDeath
             );
+
+            // Walk *_minor keys back to pounds-shaped keys for the API contract
+            $trustStrategy = $this->convertMinorKeysToPoundsRecursive($trustStrategy);
 
             // Override liquidity analysis total_value with accurate gross estate value from IHT calculation
             if ($currentGrossEstateValue !== null) {

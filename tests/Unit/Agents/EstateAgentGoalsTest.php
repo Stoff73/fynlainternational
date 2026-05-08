@@ -12,7 +12,7 @@ use Fynla\Packs\Gb\Estate\EstateDataReadinessService;
 use Fynla\Packs\Gb\Estate\GiftingStrategyOptimizer;
 use Fynla\Packs\Gb\Estate\IHTCalculationService;
 use Fynla\Packs\Gb\Estate\LifeCoverCalculator;
-use App\Services\Estate\PersonalizedTrustStrategyService;
+use Fynla\Packs\Gb\Estate\PersonalizedTrustStrategyService;
 use Fynla\Packs\Gb\Estate\WillAnalysisService;
 use Fynla\Packs\Gb\Tax\TaxConfigService;
 use Illuminate\Support\Collection;

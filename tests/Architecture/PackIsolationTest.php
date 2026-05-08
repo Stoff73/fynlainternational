@@ -365,7 +365,6 @@ describe('Pack Isolation', function () {
             // pending the int-minor money refactor (ADR-005). Pack code that
             // collaborates with them imports across the boundary until
             // they relocate.
-            'App\\Services\\Estate\\PersonalizedTrustStrategyService',
             'App\\Services\\Estate\\IHTFormattingService',
             // R-9h surfaced two App\Services\Trust\* peers used by pack
             // TrustController + WillController. IHTPeriodicChargeCalculator

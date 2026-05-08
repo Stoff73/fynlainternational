@@ -18,7 +18,7 @@ use Fynla\Packs\Gb\Estate\EstateDataReadinessService;
 use Fynla\Packs\Gb\Estate\GiftingStrategyOptimizer;
 use Fynla\Packs\Gb\Estate\IHTCalculationService;
 use Fynla\Packs\Gb\Estate\LifeCoverCalculator;
-use App\Services\Estate\PersonalizedTrustStrategyService;
+use Fynla\Packs\Gb\Estate\PersonalizedTrustStrategyService;
 use Fynla\Packs\Gb\Estate\WillAnalysisService;
 use Fynla\Packs\Gb\Tax\TaxConfigService;
 use Illuminate\Support\Facades\Cache;
@@ -133,17 +133,19 @@ class EstateAgent extends BaseAgent
                 // Continue without IHT calculation
             }
 
-            // Get trust recommendations
+            // Get trust recommendations (service operates in int minor; walk *_minor
+            // keys back to pounds-shaped keys before embedding in response).
             $trustRecommendations = [];
             if ($user->ihtProfile) {
                 try {
                     $assets = $this->assetAggregator->gatherUserAssets($user);
                     $trustRecommendations = $this->trustStrategyService->generatePersonalizedTrustStrategy(
                         $assets,
-                        $ihtLiability,
+                        (int) round((float) $ihtLiability * 100),
                         $user->ihtProfile,
                         $user
                     );
+                    $trustRecommendations = $this->convertMinorKeysToPoundsRecursive($trustRecommendations);
                 } catch (\Throwable $e) {
                     report($e);
                     // Continue without trust recommendations
@@ -1574,5 +1576,30 @@ class EstateAgent extends BaseAgent
         $this->invalidateUserCache($userId, [
             "estate_analysis_{$userId}",
         ]);
+    }
+
+    /**
+     * Walk an array recursively and convert every `*_minor` int key to its
+     * pounds-shaped float equivalent. Used at the boundary of
+     * PersonalizedTrustStrategyService (R-14a-Estate-vi) to preserve the
+     * pre-refactor pounds-shaped response contract for `trust_recommendations`.
+     */
+    private function convertMinorKeysToPoundsRecursive(array $row): array
+    {
+        $out = [];
+        foreach ($row as $key => $value) {
+            if (is_array($value)) {
+                $value = $this->convertMinorKeysToPoundsRecursive($value);
+            }
+
+            if (is_string($key) && str_ends_with($key, '_minor') && is_int($value)) {
+                $poundsKey = substr($key, 0, -strlen('_minor'));
+                $out[$poundsKey] = round($value / 100, 2);
+            } else {
+                $out[$key] = $value;
+            }
+        }
+
+        return $out;
     }
 }

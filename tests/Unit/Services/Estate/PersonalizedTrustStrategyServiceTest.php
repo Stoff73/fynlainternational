@@ -7,7 +7,7 @@ use Fynla\Packs\Gb\Models\Estate\IHTProfile;
 use Fynla\Packs\Gb\Models\TaxConfiguration;
 use App\Models\User;
 use Fynla\Packs\Gb\Estate\AssetLiquidityAnalyzer;
-use App\Services\Estate\PersonalizedTrustStrategyService;
+use Fynla\Packs\Gb\Estate\PersonalizedTrustStrategyService;
 use App\Services\Risk\RiskPreferenceService;
 use App\Services\Settings\AssumptionsService;
 
@@ -55,7 +55,7 @@ describe('PersonalizedTrustStrategyService', function () {
 
         $result = $this->service->generatePersonalizedTrustStrategy(
             assets: $assets,
-            currentIHTLiability: 80000,
+            currentIHTLiabilityMinor: 80000 * 100,
             profile: $this->profile,
             user: $this->user,
             yearsUntilDeath: 20
@@ -68,8 +68,8 @@ describe('PersonalizedTrustStrategyService', function () {
         // Check Strategy 1: Immediate CLT
         $strategy1 = $result['strategies'][0];
         expect($strategy1['strategy_name'])->toBe('Immediate Discretionary Trust (CLT)');
-        expect($strategy1['amount'])->toBe(200000.0);
-        expect($strategy1['lifetime_tax_charge'])->toBe(0.0); // Within NRB
+        expect($strategy1['amount_minor'])->toBe(200000 * 100);
+        expect($strategy1['lifetime_tax_charge_minor'])->toBe(0); // Within NRB
         expect($strategy1['priority'])->toBe(1);
     });
 
@@ -84,7 +84,7 @@ describe('PersonalizedTrustStrategyService', function () {
 
         $result = $this->service->generatePersonalizedTrustStrategy(
             assets: $assets,
-            currentIHTLiability: 200000,
+            currentIHTLiabilityMinor: 200000 * 100,
             profile: $this->profile,
             user: $this->user,
             yearsUntilDeath: 20
@@ -94,12 +94,12 @@ describe('PersonalizedTrustStrategyService', function () {
 
         // £500k - £325k NRB = £175k excess
         // 20% charge on excess = £35,000
-        expect($strategy1['lifetime_tax_charge'])->toBe(35000.0);
+        expect($strategy1['lifetime_tax_charge_minor'])->toBe(35000 * 100);
 
         // Check tax treatment details
-        expect($strategy1['tax_treatment']['immediate_charge'])->toBe(35000.0);
-        expect($strategy1['tax_treatment']['death_within_7_years'])->toBe(70000.0); // 40% total = £70k
-        expect($strategy1['tax_treatment']['after_7_years'])->toBe(35000.0); // Only lifetime charge remains
+        expect($strategy1['tax_treatment']['immediate_charge_minor'])->toBe(35000 * 100);
+        expect($strategy1['tax_treatment']['death_within_7_years_minor'])->toBe(70000 * 100); // 40% total = £70k
+        expect($strategy1['tax_treatment']['after_7_years_minor'])->toBe(35000 * 100); // Only lifetime charge remains
     });
 
     it('generates multi-cycle CLT strategy for large estates', function () {
@@ -113,7 +113,7 @@ describe('PersonalizedTrustStrategyService', function () {
 
         $result = $this->service->generatePersonalizedTrustStrategy(
             assets: $assets,
-            currentIHTLiability: 400000,
+            currentIHTLiabilityMinor: 400000 * 100,
             profile: $this->profile,
             user: $this->user,
             yearsUntilDeath: 20
@@ -130,8 +130,8 @@ describe('PersonalizedTrustStrategyService', function () {
 
         // Each cycle should use full NRB
         foreach ($strategy2['clt_schedule'] as $cycle) {
-            expect($cycle['amount'])->toBe(325000.0);
-            expect($cycle['immediate_charge'])->toBe(0.0); // Within NRB each cycle
+            expect($cycle['amount_minor'])->toBe(325000 * 100);
+            expect($cycle['immediate_charge_minor'])->toBe(0); // Within NRB each cycle
         }
     });
 
@@ -146,7 +146,7 @@ describe('PersonalizedTrustStrategyService', function () {
 
         $result = $this->service->generatePersonalizedTrustStrategy(
             assets: $assets,
-            currentIHTLiability: 160000,
+            currentIHTLiabilityMinor: 160000 * 100,
             profile: $this->profile,
             user: $this->user,
             yearsUntilDeath: 20
@@ -155,9 +155,9 @@ describe('PersonalizedTrustStrategyService', function () {
         $strategy3 = $result['strategies'][2]; // Loan Trust Strategy
 
         expect($strategy3['strategy_name'])->toBe('Loan Trust Strategy');
-        expect($strategy3['amount'])->toBe(400000.0);
-        expect($strategy3['lifetime_tax_charge'])->toBe(0.0); // No charge on loan
-        expect($strategy3['potential_death_charge'])->toBe(0.0); // Loan stays in estate
+        expect($strategy3['amount_minor'])->toBe(400000 * 100);
+        expect($strategy3['lifetime_tax_charge_minor'])->toBe(0); // No charge on loan
+        expect($strategy3['potential_death_charge_minor'])->toBe(0); // Loan stays in estate
         expect($strategy3['risk_level'])->toBe('Low');
     });
 
@@ -172,7 +172,7 @@ describe('PersonalizedTrustStrategyService', function () {
 
         $result = $this->service->generatePersonalizedTrustStrategy(
             assets: $assets,
-            currentIHTLiability: 200000,
+            currentIHTLiabilityMinor: 200000 * 100,
             profile: $this->profile,
             user: $this->user,
             yearsUntilDeath: 20
@@ -181,12 +181,12 @@ describe('PersonalizedTrustStrategyService', function () {
         $strategy4 = $result['strategies'][3]; // Discounted Gift Trust
 
         expect($strategy4['strategy_name'])->toBe('Discounted Gift Trust');
-        expect($strategy4)->toHaveKey('discount_value');
-        expect($strategy4)->toHaveKey('chargeable_amount');
+        expect($strategy4)->toHaveKey('discount_value_minor');
+        expect($strategy4)->toHaveKey('chargeable_amount_minor');
 
         // Discount should reduce the chargeable amount
-        expect($strategy4['chargeable_amount'])->toBeLessThan($strategy4['amount']);
-        expect($strategy4['discount_value'])->toBeGreaterThan(0);
+        expect($strategy4['chargeable_amount_minor'])->toBeLessThan($strategy4['amount_minor']);
+        expect($strategy4['discount_value_minor'])->toBeGreaterThan(0);
     });
 
     it('identifies main residence for property trust strategy', function () {
@@ -203,7 +203,7 @@ describe('PersonalizedTrustStrategyService', function () {
 
         $result = $this->service->generatePersonalizedTrustStrategy(
             assets: $assets,
-            currentIHTLiability: 240000,
+            currentIHTLiabilityMinor: 240000 * 100,
             profile: $this->profile,
             user: $this->user,
             yearsUntilDeath: 20
@@ -214,7 +214,7 @@ describe('PersonalizedTrustStrategyService', function () {
         expect($strategy5['strategy_name'])->toBe('Property Trust Planning');
         expect($strategy5['applicable'])->toBeTrue();
         expect($strategy5)->toHaveKey('property_details');
-        expect($strategy5['property_details']['current_value'])->toBe(600000.0);
+        expect($strategy5['property_details']['current_value_minor'])->toBe(600000 * 100);
     });
 
     it('calculates taper relief correctly for multi-cycle death charge', function () {
@@ -229,7 +229,7 @@ describe('PersonalizedTrustStrategyService', function () {
         // Simulate death in 5 years (within 7-year window for first cycle)
         $result = $this->service->generatePersonalizedTrustStrategy(
             assets: $assets,
-            currentIHTLiability: 260000,
+            currentIHTLiabilityMinor: 260000 * 100,
             profile: $this->profile,
             user: $this->user,
             yearsUntilDeath: 5 // Dies in 5 years
@@ -238,7 +238,7 @@ describe('PersonalizedTrustStrategyService', function () {
         $strategy2 = $result['strategies'][1]; // Multi-Cycle CLT Strategy
 
         // Death at year 5 means taper relief applies (60% of 40% charge)
-        expect($strategy2['potential_death_charge'])->toBeGreaterThan(0);
+        expect($strategy2['potential_death_charge_minor'])->toBeGreaterThan(0);
     });
 
     it('calculates overall strategy impact correctly', function () {
@@ -250,11 +250,11 @@ describe('PersonalizedTrustStrategyService', function () {
             ]),
         ]);
 
-        $currentIHTLiability = 320000.0;
+        $currentIHTLiabilityMinor = 320000 * 100;
 
         $result = $this->service->generatePersonalizedTrustStrategy(
             assets: $assets,
-            currentIHTLiability: $currentIHTLiability,
+            currentIHTLiabilityMinor: $currentIHTLiabilityMinor,
             profile: $this->profile,
             user: $this->user,
             yearsUntilDeath: 20
@@ -263,21 +263,21 @@ describe('PersonalizedTrustStrategyService', function () {
         $impact = $result['strategy_impact'];
 
         expect($impact)->toHaveKeys([
-            'total_amount_transferred',
-            'total_iht_saving',
-            'total_lifetime_charges',
-            'total_potential_death_charges',
-            'net_saving',
-            'worst_case_cost',
-            'worst_case_net_saving',
+            'total_amount_transferred_minor',
+            'total_iht_saving_minor',
+            'total_lifetime_charges_minor',
+            'total_potential_death_charges_minor',
+            'net_saving_minor',
+            'worst_case_cost_minor',
+            'worst_case_net_saving_minor',
         ]);
 
         // Net saving should be IHT saving minus lifetime charges
-        $expectedNetSaving = $impact['total_iht_saving'] - $impact['total_lifetime_charges'];
-        expect($impact['net_saving'])->toBe($expectedNetSaving);
+        $expectedNetSaving = $impact['total_iht_saving_minor'] - $impact['total_lifetime_charges_minor'];
+        expect($impact['net_saving_minor'])->toBe($expectedNetSaving);
 
         // Worst case cost includes both lifetime and death charges
-        expect($impact['worst_case_cost'])->toBeGreaterThanOrEqual($impact['total_lifetime_charges']);
+        expect($impact['worst_case_cost_minor'])->toBeGreaterThanOrEqual($impact['total_lifetime_charges_minor']);
     });
 
     it('generates appropriate summary and effectiveness rating', function () {
@@ -291,7 +291,7 @@ describe('PersonalizedTrustStrategyService', function () {
 
         $result = $this->service->generatePersonalizedTrustStrategy(
             assets: $assets,
-            currentIHTLiability: 200000,
+            currentIHTLiabilityMinor: 200000 * 100,
             profile: $this->profile,
             user: $this->user,
             yearsUntilDeath: 20
@@ -300,17 +300,17 @@ describe('PersonalizedTrustStrategyService', function () {
         $summary = $result['summary'];
 
         expect($summary)->toHaveKeys([
-            'current_iht_liability',
+            'current_iht_liability_minor',
             'total_strategies',
             'recommended_strategy',
-            'maximum_estate_reduction',
-            'maximum_iht_saving',
-            'total_costs',
-            'net_benefit',
+            'maximum_estate_reduction_minor',
+            'maximum_iht_saving_minor',
+            'total_costs_minor',
+            'net_benefit_minor',
             'effectiveness_rating',
         ]);
 
-        expect($summary['current_iht_liability'])->toBe(200000.0);
+        expect($summary['current_iht_liability_minor'])->toBe(200000 * 100);
         expect($summary['total_strategies'])->toBeGreaterThan(0);
         expect($summary['effectiveness_rating'])->toBeIn(['Excellent', 'Very Good', 'Good', 'Moderate', 'Limited', 'N/A - No IHT liability']);
     });
@@ -333,7 +333,7 @@ describe('PersonalizedTrustStrategyService', function () {
 
         $result = $this->service->generatePersonalizedTrustStrategy(
             assets: $assets,
-            currentIHTLiability: 240000,
+            currentIHTLiabilityMinor: 240000 * 100,
             profile: $this->profile,
             user: $this->user,
             yearsUntilDeath: 20
@@ -358,13 +358,13 @@ describe('PersonalizedTrustStrategyService', function () {
 
         $result = $this->service->generatePersonalizedTrustStrategy(
             assets: $assets,
-            currentIHTLiability: 0, // No IHT liability
+            currentIHTLiabilityMinor: 0, // No IHT liability
             profile: $this->profile,
             user: $this->user,
             yearsUntilDeath: 20
         );
 
-        expect($result['summary']['current_iht_liability'])->toBe(0.0);
+        expect($result['summary']['current_iht_liability_minor'])->toBe(0);
         expect($result['summary']['effectiveness_rating'])->toBe('N/A - No IHT liability');
     });
 
@@ -380,7 +380,7 @@ describe('PersonalizedTrustStrategyService', function () {
 
         $result = $this->service->generatePersonalizedTrustStrategy(
             assets: $assets,
-            currentIHTLiability: 400000,
+            currentIHTLiabilityMinor: 400000 * 100,
             profile: $this->profile,
             user: $this->user,
             yearsUntilDeath: 20
@@ -389,15 +389,15 @@ describe('PersonalizedTrustStrategyService', function () {
         $giftableAmounts = $result['giftable_amounts'];
 
         // Cash = Liquid (investments are now semi-liquid)
-        expect($giftableAmounts['immediately_giftable'])->toBe(100000.0);
+        expect($giftableAmounts['immediately_giftable_minor'])->toBe(100000 * 100);
 
         // Investments + Rental property = Semi-liquid
-        expect($giftableAmounts['giftable_with_planning'])->toBe(500000.0);
+        expect($giftableAmounts['giftable_with_planning_minor'])->toBe(500000 * 100);
 
         // Main residence = Illiquid (pensions also illiquid but none in this test)
-        expect($giftableAmounts['not_giftable'])->toBe(500000.0);
+        expect($giftableAmounts['not_giftable_minor'])->toBe(500000 * 100);
 
-        expect($giftableAmounts['total_giftable'])->toBe(600000.0);
+        expect($giftableAmounts['total_giftable_minor'])->toBe(600000 * 100);
     });
 
     it('prioritizes strategies correctly', function () {
@@ -411,7 +411,7 @@ describe('PersonalizedTrustStrategyService', function () {
 
         $result = $this->service->generatePersonalizedTrustStrategy(
             assets: $assets,
-            currentIHTLiability: 320000,
+            currentIHTLiabilityMinor: 320000 * 100,
             profile: $this->profile,
             user: $this->user,
             yearsUntilDeath: 20
