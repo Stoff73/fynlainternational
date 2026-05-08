@@ -1,54 +1,51 @@
-# Tech Debt Report — Session 2026-05-05 (session-2-clear)
+# Tech Debt Report — Session 2026-05-08 (R-11)
 
-**Files analysed:** 10 (1 new, 9 modified — all from commit `63763ae`)
-**Issues found:** 2
-**Severity breakdown:** 0 critical, 1 warning, 1 suggestion
+**Files analysed:** 11
+**Issues found:** 2 (0 critical, 0 warnings, 2 suggestions)
+**Severity breakdown:** 0 critical, 0 warnings, 2 suggestions
 
-## Warnings
+R-11 was a small, contract-aligned workstream (4 new GB pack classes + 4 unit tests + provider wiring). All files cleared the Fynla convention checks (strict types, type hints, no `DB` facade misuse, no hardcoded tax values, no banned colours, no acronyms in user copy, no `sole` ownership type). No critical issues, no warnings.
 
-### W1 — `Shared/ConfirmModal.vue` uses raspberry/horizon focus rings instead of violet
-**File:** `resources/js/components/Shared/ConfirmModal.vue:39, 48`
-**Category:** Convention violation (CLAUDE.md Rule 9 — design system)
-**What's wrong:** CLAUDE.md Rule 9 mandates `violet-*` for warnings and focus states. `ConfirmModal` uses:
-- Confirm button (`danger` variant): `focus:ring-raspberry-500`
-- Confirm button (`primary` variant): `focus:ring-raspberry-500`
-- Cancel button: `focus:ring-horizon-500`
+The two items below are suggestions for **future** workstreams, not blockers for shipping R-11.
 
-The reference `Shared/SpouseSuccessModal.vue:81` correctly uses `focus:ring-violet-500`.
-**Suggested fix:** swap all three focus rings to `focus:ring-violet-500` to match the rule and the existing modal pattern. Affects 3 lines, no behaviour change.
+---
 
 ## Suggestions
 
-### S1 — Chrome wrapper duplicated across 5 SA dashboards (scoped out — codebase-wide pattern)
-**Files:** `resources/js/views/ZA/Za{Savings,Investment,ExchangeControl,Retirement,Protection}Dashboard.vue`
-**Category:** Duplicate code (cross-file)
-**What's wrong:** All 5 SA dashboards now repeat the same chrome-wrapper pattern:
-```vue
-<AppLayout>
-  <div class="module-gradient py-2 sm:py-6">
-    <ModuleStatusBar />
-    <div class="max-w-7xl mx-auto ...">
-      ...
-    </div>
-  </div>
-</AppLayout>
-```
-This duplication is intentional — it mirrors the UK convention which already repeats this pattern across 20+ module dashboards (e.g. `Protection/ProtectionDashboard.vue`, `Estate/EstateDashboard.vue`, `Savings/SavingsDashboard.vue`, etc.).
-**Suggested fix:** extract into a shared `Shared/ModulePageLayout.vue` (slot-based) and refactor UK + SA consumers in one PR. **Out of scope for this rework** — separate refactor like the deferred `Tabs.vue` and `ConfirmModal.vue` extraction PRs already on the queue.
+### 1. Existing consumers of `actuarial_life_tables` should be migrated to use the new `pack.gb.life_tables` binding
 
-## Categories with no findings
+**Files:**
+- `app/Services/Estate/FutureValueCalculator.php:84-130` (`lookupLifeExpectancy`)
+- `app/Services/Estate/TrustService.php:345`
+- `packs/country-gb/src/Estate/ComprehensiveEstatePlanService.php:196`
 
-- **Dead & redundant code** — all new code is reachable; no commented-out blocks; no `console.log` / `dd` / `dump` left in
-- **Complexity** — largest changed file is `ZaPoliciesTable.vue` at ~100 lines; new `formatRand` helper in `ZaProtectionEngine.php` is 4 lines
-- **Security** — no user-input handling changes (F1 is a string format; F3 is a Vuex dispatch refetch)
-- **Other convention checks**:
-  - `declare(strict_types=1);` present in PHP ✓
-  - All Vue components are multi-word ✓
-  - No hardcoded hex in `<style>` blocks ✓
-  - No `amber-*` / `orange-*` / out-of-palette tokens ✓
-  - No new acronyms in user-facing text ✓
-  - No scores/ratings introduced ✓
-  - PHP types and return types present on `formatRand` helper ✓
+**Category:** Cross-file duplication / inconsistent pattern.
+
+**What's wrong:** The new `Fynla\Packs\Gb\LifeTables\GbLifeTableProvider` re-implements the exact linear interpolation (exact match → lower row → upper row → interpolated value) that `FutureValueCalculator::lookupLifeExpectancy` has been doing for months. R-11 deliberately created the new provider to satisfy the contract surface, but it leaves the old direct-query code paths untouched. Long-term this is a duplicate-logic risk — a fix to interpolation behaviour now has to land in two places.
+
+**Suggested fix:** Schedule a follow-up after R-14b (when the deferred Estate float-money services move and the cross-pack query layer arrives) to migrate these three call sites to inject `app('pack.gb.life_tables')` and call `getLifeExpectancy()` / `getSurvivalProbability()`. Then delete the inline interpolation. Don't do this inside R-11 — the spec scope was strictly "create the binding, replace the Null impl."
+
+### 2. `GbLifeTableProvider` could extract a shared interpolation helper
+
+**File:** `packs/country-gb/src/LifeTables/GbLifeTableProvider.php:55-141`
+
+**Category:** Within-file duplication / minor maintainability.
+
+**What's wrong:** `interpolatedLifeExpectancy()` and `interpolatedProbabilityOfDeath()` share the same shape — exact match query → lower row → upper row → linear interpolation between bounds. Only the column name and the edge-case behaviour differ (life expectancy has the "younger than min / older than max" extrapolation; probability of death falls back to the nearest row).
+
+**Suggested fix:** Extract a private `interpolateColumn(int $age, string $gender, string $column, ?callable $edgeCase = null): float` helper. Defer until either method gains a third behaviour or a third column needs lookup — premature extraction is its own kind of debt. Worth noting in case R-12/R-14 calls add another lookup column (e.g. `qx` derivatives, joint-life mortality).
 
 ---
-*Generated by tech-debt-session skill*
+
+## What was *not* a problem
+
+For the record (so the next reviewer doesn't re-flag these):
+
+- **Magic number `80.0` fallback** in `interpolatedLifeExpectancy()` — defensive, unreachable in practice (table is seeded with both genders), matches `NullLifeTableProvider`'s default. Fine.
+- **`number_format` vs ZA's `padCents()` helper** — GB's `number_format($abs / 100, 2, '.', ',')` is cleaner than ZA's manual padding. Not a regression.
+- **Validators in `Validation/` (GB) vs `Identity/` + `Banking/` (ZA)** — GB matches `architecture-plan-v3.md` § 13 exactly (`packs/country-gb/src/Validation/{NinoValidator,GbBankingValidator}.php`). Not a divergence.
+- **NINO regex doesn't validate every HMRC issuance edge case** — e.g. doesn't reject the `TN` admin prefix retroactively or check the temporary-NINO suffix. Fine — the contract is "format validation," not a HMRC issuance authority.
+- **`getSurvivalProbability` iterates by single year** — could be cached or precomputed for hot paths, but no current call sites are hot (Monte Carlo decumulation runs once per request). Premature optimisation deferred.
+
+---
+*Generated by tech-debt-session skill — R-11, 2026-05-08*
