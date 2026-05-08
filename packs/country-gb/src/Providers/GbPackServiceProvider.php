@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace Fynla\Packs\Gb\Providers;
 
-use Fynla\Core\LifeTables\NullLifeTableProvider;
-use Fynla\Core\Localisation\NullLocalisation;
 use Fynla\Core\Registry\PackManifest as CorePackManifest;
 use Fynla\Core\Registry\PackRegistry;
-use Fynla\Core\Validation\NullBankingValidator;
-use Fynla\Core\Validation\NullIdentityValidator;
+use Fynla\Packs\Gb\LifeTables\GbLifeTableProvider;
+use Fynla\Packs\Gb\Localisation\GbLocalisation;
+use Fynla\Packs\Gb\Validation\GbBankingValidator;
+use Fynla\Packs\Gb\Validation\NinoValidator;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\ServiceProvider;
 
@@ -22,10 +22,9 @@ use Illuminate\Support\ServiceProvider;
  * subsequent workstream (R-3 → R-9) moves files and updates the
  * corresponding binding's FQCN to the new namespace.
  *
- * The four contracts without a real UK implementation today
- * (Localisation, IdentityValidator, BankingValidator, LifeTableProvider)
- * resolve to core's Null implementations. R-11 replaces them with
- * GbLocalisation / NinoValidator / GbBankingValidator / GbLifeTableProvider.
+ * R-11 replaced the four Null bindings (Localisation, IdentityValidator,
+ * BankingValidator, LifeTableProvider) with the real UK implementations
+ * GbLocalisation, NinoValidator, GbBankingValidator, GbLifeTableProvider.
  */
 class GbPackServiceProvider extends ServiceProvider
 {
@@ -42,14 +41,11 @@ class GbPackServiceProvider extends ServiceProvider
         $this->app->bind('pack.gb.exchange_control', \App\Services\ExchangeControl\UkExchangeControl::class);
         $this->app->bind('pack.gb.tax_optimisation', \App\Agents\TaxOptimisationAgent::class);
 
-        // 4 contracts where the GB pack does not yet have a real
-        // implementation. Null implementations live in core and are
-        // shared across packs that haven't built out the surface yet.
-        // R-11 replaces these GB bindings with real classes.
-        $this->app->bind('pack.gb.localisation', NullLocalisation::class);
-        $this->app->bind('pack.gb.identity', NullIdentityValidator::class);
-        $this->app->bind('pack.gb.banking', NullBankingValidator::class);
-        $this->app->bind('pack.gb.life_tables', NullLifeTableProvider::class);
+        // R-11: real GB implementations of the 4 remaining contracts.
+        $this->app->bind('pack.gb.localisation', GbLocalisation::class);
+        $this->app->bind('pack.gb.identity', NinoValidator::class);
+        $this->app->bind('pack.gb.banking', GbBankingValidator::class);
+        $this->app->bind('pack.gb.life_tables', GbLifeTableProvider::class);
     }
 
     public function boot(PackRegistry $registry): void

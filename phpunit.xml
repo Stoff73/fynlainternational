@@ -9,11 +9,13 @@
     <testsuites>
         <testsuite name="Unit">
             <directory>tests/Unit</directory>
+            <directory>packs/country-gb/tests/Unit</directory>
             <directory>packs/country-za/tests/Unit</directory>
         </testsuite>
         <testsuite name="Feature">
             <directory>tests/Feature</directory>
             <directory>packs/country-xx-smoke/tests/Feature</directory>
+            <directory>packs/country-gb/tests/Feature</directory>
             <directory>packs/country-za/tests/Feature</directory>
         </testsuite>
         <testsuite name="Architecture">

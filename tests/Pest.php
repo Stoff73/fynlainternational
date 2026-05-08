@@ -60,6 +60,8 @@ uses(
     Illuminate\Foundation\Testing\RefreshDatabase::class,
 )->in(
     __DIR__ . '/../packs/country-xx-smoke/tests/Feature',
+    __DIR__ . '/../packs/country-gb/tests/Unit',
+    __DIR__ . '/../packs/country-gb/tests/Feature',
     __DIR__ . '/../packs/country-za/tests/Unit',
     __DIR__ . '/../packs/country-za/tests/Feature',
 );
