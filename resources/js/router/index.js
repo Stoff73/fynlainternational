@@ -94,14 +94,14 @@ const PrivacySettings = () => import('@/views/Settings/PrivacySettings.vue');
 const AssumptionsSettings = () => import('@/views/Settings/AssumptionsSettings.vue');
 const UserProfile = () => import('@/views/UserProfile.vue');
 const NetWorthDashboard = () => import('@/views/NetWorth/NetWorthDashboard.vue');
-const NetWorthWealthSummary = () => import('@/components/NetWorth/NetWorthWealthSummary.vue');
-const PropertyList = () => import('@/components/NetWorth/PropertyList.vue');
-const PensionList = () => import('@/components/NetWorth/PensionList.vue');
-const InvestmentList = () => import('@/components/NetWorth/InvestmentList.vue');
-const BusinessInterestsList = () => import('@/components/NetWorth/BusinessInterestsList.vue');
-const ChattelsList = () => import('@/components/NetWorth/ChattelsList.vue');
-const LiabilitiesList = () => import('@/components/NetWorth/LiabilitiesList.vue');
-const JointAccountHistory = () => import('@/components/NetWorth/JointAccountHistory.vue');
+const NetWorthWealthSummary = () => import('@gb/components/NetWorth/NetWorthWealthSummary.vue');
+const PropertyList = () => import('@gb/components/NetWorth/PropertyList.vue');
+const PensionList = () => import('@gb/components/NetWorth/PensionList.vue');
+const InvestmentList = () => import('@gb/components/NetWorth/InvestmentList.vue');
+const BusinessInterestsList = () => import('@gb/components/NetWorth/BusinessInterestsList.vue');
+const ChattelsList = () => import('@gb/components/NetWorth/ChattelsList.vue');
+const LiabilitiesList = () => import('@gb/components/NetWorth/LiabilitiesList.vue');
+const JointAccountHistory = () => import('@gb/components/NetWorth/JointAccountHistory.vue');
 const ProtectionDashboard = () => import('@/views/Protection/ProtectionDashboard.vue');
 const PolicyDetail = () => import('@gb/components/Protection/PolicyDetail.vue');
 const SavingsDashboard = () => import('@/views/Savings/SavingsDashboard.vue');
@@ -568,27 +568,27 @@ const routes = [
       {
         path: 'investment-detail',
         name: 'InvestmentDetail',
-        component: () => import('@/components/NetWorth/InvestmentProjections.vue'),
+        component: () => import('@gb/components/NetWorth/InvestmentProjections.vue'),
       },
       {
         path: 'tax-efficiency',
         name: 'TaxEfficiencyDetail',
-        component: () => import('@/components/NetWorth/TaxEfficiencyDetail.vue'),
+        component: () => import('@gb/components/NetWorth/TaxEfficiencyDetail.vue'),
       },
       {
         path: 'holdings-detail',
         name: 'HoldingsDetail',
-        component: () => import('@/components/NetWorth/HoldingsDetail.vue'),
+        component: () => import('@gb/components/NetWorth/HoldingsDetail.vue'),
       },
       {
         path: 'fees-detail',
         name: 'FeesDetail',
-        component: () => import('@/components/NetWorth/FeesDetail.vue'),
+        component: () => import('@gb/components/NetWorth/FeesDetail.vue'),
       },
       {
         path: 'strategy-detail',
         name: 'StrategyDetail',
-        component: () => import('@/components/NetWorth/StrategyDetail.vue'),
+        component: () => import('@gb/components/NetWorth/StrategyDetail.vue'),
       },
       {
         path: 'cash',
@@ -1182,27 +1182,27 @@ const routes = [
       {
         path: 'investment-detail',
         name: 'PreviewInvestmentDetail',
-        component: () => import('@/components/NetWorth/InvestmentProjections.vue'),
+        component: () => import('@gb/components/NetWorth/InvestmentProjections.vue'),
       },
       {
         path: 'tax-efficiency',
         name: 'PreviewTaxEfficiencyDetail',
-        component: () => import('@/components/NetWorth/TaxEfficiencyDetail.vue'),
+        component: () => import('@gb/components/NetWorth/TaxEfficiencyDetail.vue'),
       },
       {
         path: 'holdings-detail',
         name: 'PreviewHoldingsDetail',
-        component: () => import('@/components/NetWorth/HoldingsDetail.vue'),
+        component: () => import('@gb/components/NetWorth/HoldingsDetail.vue'),
       },
       {
         path: 'fees-detail',
         name: 'PreviewFeesDetail',
-        component: () => import('@/components/NetWorth/FeesDetail.vue'),
+        component: () => import('@gb/components/NetWorth/FeesDetail.vue'),
       },
       {
         path: 'strategy-detail',
         name: 'PreviewStrategyDetail',
-        component: () => import('@/components/NetWorth/StrategyDetail.vue'),
+        component: () => import('@gb/components/NetWorth/StrategyDetail.vue'),
       },
       {
         path: 'liabilities',

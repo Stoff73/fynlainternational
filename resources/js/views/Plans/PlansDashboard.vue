@@ -106,7 +106,7 @@
 import { mapGetters, mapActions } from 'vuex';
 import { currencyMixin } from '@/mixins/currencyMixin';
 import AppLayout from '@/layouts/AppLayout.vue';
-import PlanDashboardCard from '@/components/Plans/Shared/PlanDashboardCard.vue';
+import PlanDashboardCard from '@gb/components/Plans/Shared/PlanDashboardCard.vue';
 import ModuleStatusBar from '@/components/Shared/ModuleStatusBar.vue';
 
 export default {

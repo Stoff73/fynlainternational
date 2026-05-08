@@ -502,8 +502,8 @@
 import { ref, computed, watch, onMounted } from 'vue';
 import { useStore } from 'vuex';
 import OnboardingStep from '../OnboardingStep.vue';
-import PropertyForm from '@/components/NetWorth/Property/PropertyForm.vue';
-import PropertyCard from '@/components/NetWorth/PropertyCard.vue';
+import PropertyForm from '@gb/components/NetWorth/Property/PropertyForm.vue';
+import PropertyCard from '@gb/components/NetWorth/PropertyCard.vue';
 import AccountForm from '@gb/components/Investment/AccountForm.vue';
 import SaveAccountModal from '@gb/components/Savings/SaveAccountModal.vue';
 import DCPensionForm from '@gb/components/Retirement/DCPensionForm.vue';

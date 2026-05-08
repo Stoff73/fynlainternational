@@ -19,9 +19,9 @@
 
 <script>
 import { mapGetters, mapActions } from 'vuex';
-import PlanPageLayout from '@/components/Plans/Shared/PlanPageLayout.vue';
-import RetirementPlanContent from '@/components/Plans/Retirement/RetirementPlanContent.vue';
-import { planPrintMixin } from '@/components/Plans/Shared/planPrintMixin';
+import PlanPageLayout from '@gb/components/Plans/Shared/PlanPageLayout.vue';
+import RetirementPlanContent from '@gb/components/Plans/Retirement/RetirementPlanContent.vue';
+import { planPrintMixin } from '@gb/components/Plans/Shared/planPrintMixin';
 
 export default {
   name: 'RetirementPlan',

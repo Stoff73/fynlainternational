@@ -34,9 +34,9 @@
 
 <script>
 import { mapGetters, mapActions } from 'vuex';
-import PlanPageLayout from '@/components/Plans/Shared/PlanPageLayout.vue';
-import EstatePlanContent from '@/components/Plans/Estate/EstatePlanContent.vue';
-import { planPrintMixin } from '@/components/Plans/Shared/planPrintMixin';
+import PlanPageLayout from '@gb/components/Plans/Shared/PlanPageLayout.vue';
+import EstatePlanContent from '@gb/components/Plans/Estate/EstatePlanContent.vue';
+import { planPrintMixin } from '@gb/components/Plans/Shared/planPrintMixin';
 
 export default {
   name: 'EstatePlan',

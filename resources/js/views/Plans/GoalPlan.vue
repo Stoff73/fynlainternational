@@ -18,9 +18,9 @@
 
 <script>
 import { mapGetters, mapActions } from 'vuex';
-import PlanPageLayout from '@/components/Plans/Shared/PlanPageLayout.vue';
-import GoalPlanContent from '@/components/Plans/Goals/GoalPlanContent.vue';
-import { planPrintMixin } from '@/components/Plans/Shared/planPrintMixin';
+import PlanPageLayout from '@gb/components/Plans/Shared/PlanPageLayout.vue';
+import GoalPlanContent from '@gb/components/Plans/Goals/GoalPlanContent.vue';
+import { planPrintMixin } from '@gb/components/Plans/Shared/planPrintMixin';
 
 export default {
   name: 'GoalPlan',
