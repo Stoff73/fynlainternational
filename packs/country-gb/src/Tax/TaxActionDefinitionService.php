@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Services\Tax;
+namespace Fynla\Packs\Gb\Tax;
 
 use Fynla\Packs\Gb\Constants\TaxDefaults;
 use Fynla\Packs\Gb\Models\Investment\InvestmentAccount;
@@ -10,7 +10,6 @@ use Fynla\Packs\Gb\Models\SavingsAccount;
 use Fynla\Packs\Gb\Models\TaxActionDefinition;
 use App\Models\User;
 use App\Services\Retirement\AnnualAllowanceChecker;
-use Fynla\Packs\Gb\Tax\TaxConfigService;
 use App\Traits\FormatsCurrency;
 use Fynla\Core\Traits\StructuredLogging;
 
@@ -21,6 +20,15 @@ use Fynla\Core\Traits\StructuredLogging;
  * Mirrors InvestmentActionDefinitionService — each trigger condition
  * maps to one private evaluator method that checks the condition
  * and returns zero or more recommendations.
+ *
+ * R-14a-Tax-i: relocated from app/Services/Tax/ → packs/country-gb/src/Tax/.
+ * Internal helpers and local money state are int-minor (pence). The
+ * `estimated_impact` recommendation key remains float-pounds because it is
+ * the shared cross-pack action shape consumed by frontend, BasePlanService,
+ * and the other *ActionDefinitionService siblings (Estate, Savings, etc.) —
+ * touching that key here would break the contract one service ahead of the
+ * coordinated migration. Template-rendered `£` display strings render from
+ * pence at print time.
  */
 class TaxActionDefinitionService
 {
@@ -99,29 +107,33 @@ class TaxActionDefinitionService
         int $priority
     ): array {
         $isaConfig = $this->taxConfig->getISAAllowances();
-        $isaAllowance = (float) ($isaConfig['annual_allowance'] ?? TaxDefaults::ISA_ALLOWANCE);
+        $isaAllowanceMinor = self::poundsToMinor($isaConfig['annual_allowance'] ?? TaxDefaults::ISA_ALLOWANCE);
 
         // Investment ISAs
-        $investmentISASubscribed = (float) InvestmentAccount::where('user_id', $user->id)
-            ->whereIn('account_type', ['isa', 'stocks_shares_isa'])
-            ->sum('isa_subscription_current_year');
+        $investmentISASubscribedMinor = self::poundsToMinor(
+            InvestmentAccount::where('user_id', $user->id)
+                ->whereIn('account_type', ['isa', 'stocks_shares_isa'])
+                ->sum('isa_subscription_current_year')
+        );
 
         // Cash ISAs from savings
-        $cashISASubscribed = (float) SavingsAccount::where('user_id', $user->id)
-            ->where('account_type', 'isa')
-            ->sum('isa_subscription_amount');
+        $cashISASubscribedMinor = self::poundsToMinor(
+            SavingsAccount::where('user_id', $user->id)
+                ->where('account_type', 'isa')
+                ->sum('isa_subscription_amount')
+        );
 
-        $totalUsed = $investmentISASubscribed + $cashISASubscribed;
-        $remaining = $isaAllowance - $totalUsed;
+        $totalUsedMinor = $investmentISASubscribedMinor + $cashISASubscribedMinor;
+        $remainingMinor = $isaAllowanceMinor - $totalUsedMinor;
 
-        if ($remaining <= 0) {
+        if ($remainingMinor <= 0) {
             return [];
         }
 
         $vars = [
-            'isa_used' => '£'.number_format($totalUsed, 0),
-            'isa_allowance' => '£'.number_format($isaAllowance, 0),
-            'isa_remaining' => '£'.number_format($remaining, 0),
+            'isa_used' => '£'.number_format($totalUsedMinor / 100, 0),
+            'isa_allowance' => '£'.number_format($isaAllowanceMinor / 100, 0),
+            'isa_remaining' => '£'.number_format($remainingMinor / 100, 0),
         ];
 
         return [$this->buildRecommendation($definition, $vars, $priority)];
@@ -138,22 +150,23 @@ class TaxActionDefinitionService
         $taxYear = $this->taxConfig->getTaxYear();
         $allowanceResult = $this->allowanceChecker->checkAnnualAllowance($user->id, $taxYear);
 
-        $carryForward = $allowanceResult['carry_forward_available'] ?? 0;
+        $carryForwardMinor = self::poundsToMinor($allowanceResult['carry_forward_available'] ?? 0);
 
-        if ($carryForward <= 0) {
+        if ($carryForwardMinor <= 0) {
             return [];
         }
 
-        $grossIncome = $user->annual_employment_income ?? 0;
-        $taxRate = $this->determineMarginalRate($grossIncome);
+        $grossIncomeMinor = self::poundsToMinor($user->annual_employment_income ?? 0);
+        $taxRate = $this->determineMarginalRate($grossIncomeMinor);
 
         $vars = [
-            'carry_forward' => '£'.number_format($carryForward, 0),
+            'carry_forward' => '£'.number_format($carryForwardMinor / 100, 0),
             'tax_rate' => (string) $taxRate,
         ];
 
         $rec = $this->buildRecommendation($definition, $vars, $priority);
-        $rec['estimated_impact'] = round($carryForward * ($taxRate / 100), 2);
+        // Cross-pack action contract: estimated_impact is float pounds.
+        $rec['estimated_impact'] = round(($carryForwardMinor * $taxRate / 100) / 100, 2);
 
         return [$rec];
     }
@@ -175,40 +188,43 @@ class TaxActionDefinitionService
             return [];
         }
 
-        $userIncome = (float) ($user->annual_employment_income ?? 0);
-        $spouseIncome = (float) ($spouse->annual_employment_income ?? 0);
+        $userIncomeMinor = self::poundsToMinor($user->annual_employment_income ?? 0);
+        $spouseIncomeMinor = self::poundsToMinor($spouse->annual_employment_income ?? 0);
 
-        $userBand = $this->determineTaxBand($userIncome);
-        $spouseBand = $this->determineTaxBand($spouseIncome);
+        $userBand = $this->determineTaxBand($userIncomeMinor);
+        $spouseBand = $this->determineTaxBand($spouseIncomeMinor);
 
         if ($userBand === $spouseBand) {
             return [];
         }
 
         // Estimate potential saving from income shifting
-        $higherRate = $this->determineMarginalRate(max($userIncome, $spouseIncome));
-        $lowerRate = $this->determineMarginalRate(min($userIncome, $spouseIncome));
-        $rateDifference = ($higherRate - $lowerRate) / 100;
+        $higherRate = $this->determineMarginalRate(max($userIncomeMinor, $spouseIncomeMinor));
+        $lowerRate = $this->determineMarginalRate(min($userIncomeMinor, $spouseIncomeMinor));
+        $rateDifferenceBps = $higherRate - $lowerRate; // percentage-point difference
 
-        // Conservative estimate: shift 10% of investment income
-        $giaValue = (float) InvestmentAccount::where('user_id', $user->id)
-            ->where('account_type', 'gia')
-            ->sum('current_value');
-        $estimatedInvestmentIncome = $giaValue * 0.04;
-        $potentialSaving = round($estimatedInvestmentIncome * $rateDifference, 2);
+        // Conservative estimate: shift 4% of GIA value as investment income
+        $giaValueMinor = self::poundsToMinor(
+            InvestmentAccount::where('user_id', $user->id)
+                ->where('account_type', 'gia')
+                ->sum('current_value')
+        );
+        $estimatedInvestmentIncomeMinor = (int) round($giaValueMinor * 0.04);
+        $potentialSavingMinor = (int) round($estimatedInvestmentIncomeMinor * $rateDifferenceBps / 100);
 
-        if ($potentialSaving <= 0) {
-            $potentialSaving = 200.0; // Conservative fallback
+        if ($potentialSavingMinor <= 0) {
+            $potentialSavingMinor = 20000; // £200 conservative fallback
         }
 
         $vars = [
-            'user_band' => $userIncome >= $spouseIncome ? $userBand : $spouseBand,
-            'spouse_band' => $userIncome >= $spouseIncome ? $spouseBand : $userBand,
-            'potential_saving' => '£'.number_format($potentialSaving, 0),
+            'user_band' => $userIncomeMinor >= $spouseIncomeMinor ? $userBand : $spouseBand,
+            'spouse_band' => $userIncomeMinor >= $spouseIncomeMinor ? $spouseBand : $userBand,
+            'potential_saving' => '£'.number_format($potentialSavingMinor / 100, 0),
         ];
 
         $rec = $this->buildRecommendation($definition, $vars, $priority);
-        $rec['estimated_impact'] = $potentialSaving;
+        // Cross-pack action contract: estimated_impact is float pounds.
+        $rec['estimated_impact'] = round($potentialSavingMinor / 100, 2);
 
         return [$rec];
     }
@@ -223,7 +239,7 @@ class TaxActionDefinitionService
         int $priority
     ): array {
         $cgtConfig = $this->taxConfig->getCapitalGainsTax();
-        $annualExempt = (float) ($cgtConfig['annual_exempt_amount'] ?? TaxDefaults::CGT_ANNUAL_EXEMPT);
+        $annualExemptMinor = self::poundsToMinor($cgtConfig['annual_exempt_amount'] ?? TaxDefaults::CGT_ANNUAL_EXEMPT);
 
         $giaAccounts = InvestmentAccount::where('user_id', $user->id)
             ->where('account_type', 'gia')
@@ -234,28 +250,28 @@ class TaxActionDefinitionService
             return [];
         }
 
-        $unrealisedGains = 0.0;
-        $totalGiaValue = 0.0;
+        $unrealisedGainsMinor = 0;
+        $totalGiaValueMinor = 0;
 
         foreach ($giaAccounts as $account) {
-            $totalGiaValue += (float) $account->current_value;
+            $totalGiaValueMinor += self::poundsToMinor($account->current_value);
             foreach ($account->holdings as $holding) {
                 if ($holding->cost_basis && $holding->current_value) {
-                    $gainLoss = (float) $holding->current_value - (float) $holding->cost_basis;
-                    if ($gainLoss > 0) {
-                        $unrealisedGains += $gainLoss;
+                    $gainLossMinor = self::poundsToMinor($holding->current_value) - self::poundsToMinor($holding->cost_basis);
+                    if ($gainLossMinor > 0) {
+                        $unrealisedGainsMinor += $gainLossMinor;
                     }
                 }
             }
         }
 
-        if ($unrealisedGains <= 0) {
+        if ($unrealisedGainsMinor <= 0) {
             return [];
         }
 
         $vars = [
-            'gia_value' => '£'.number_format($totalGiaValue, 0),
-            'cgt_exemption' => '£'.number_format($annualExempt, 0),
+            'gia_value' => '£'.number_format($totalGiaValueMinor / 100, 0),
+            'cgt_exemption' => '£'.number_format($annualExemptMinor / 100, 0),
         ];
 
         return [$this->buildRecommendation($definition, $vars, $priority)];
@@ -271,38 +287,44 @@ class TaxActionDefinitionService
         int $priority
     ): array {
         $config = $definition->trigger_config;
-        $minGiaValue = (float) ($config['min_gia_value'] ?? 10000);
+        $minGiaValueMinor = self::poundsToMinor($config['min_gia_value'] ?? 10000);
 
-        $giaValue = (float) InvestmentAccount::where('user_id', $user->id)
-            ->where('account_type', 'gia')
-            ->sum('current_value');
+        $giaValueMinor = self::poundsToMinor(
+            InvestmentAccount::where('user_id', $user->id)
+                ->where('account_type', 'gia')
+                ->sum('current_value')
+        );
 
-        if ($giaValue < $minGiaValue) {
+        if ($giaValueMinor < $minGiaValueMinor) {
             return [];
         }
 
         // Check if user has ISA remaining capacity
         $isaConfig = $this->taxConfig->getISAAllowances();
-        $isaAllowance = (float) ($isaConfig['annual_allowance'] ?? TaxDefaults::ISA_ALLOWANCE);
+        $isaAllowanceMinor = self::poundsToMinor($isaConfig['annual_allowance'] ?? TaxDefaults::ISA_ALLOWANCE);
 
-        $investmentISASubscribed = (float) InvestmentAccount::where('user_id', $user->id)
-            ->whereIn('account_type', ['isa', 'stocks_shares_isa'])
-            ->sum('isa_subscription_current_year');
-        $cashISASubscribed = (float) SavingsAccount::where('user_id', $user->id)
-            ->where('account_type', 'isa')
-            ->sum('isa_subscription_amount');
+        $investmentISASubscribedMinor = self::poundsToMinor(
+            InvestmentAccount::where('user_id', $user->id)
+                ->whereIn('account_type', ['isa', 'stocks_shares_isa'])
+                ->sum('isa_subscription_current_year')
+        );
+        $cashISASubscribedMinor = self::poundsToMinor(
+            SavingsAccount::where('user_id', $user->id)
+                ->where('account_type', 'isa')
+                ->sum('isa_subscription_amount')
+        );
 
-        $isaRemaining = $isaAllowance - ($investmentISASubscribed + $cashISASubscribed);
-        if ($isaRemaining <= 0) {
+        $isaRemainingMinor = $isaAllowanceMinor - ($investmentISASubscribedMinor + $cashISASubscribedMinor);
+        if ($isaRemainingMinor <= 0) {
             return [];
         }
 
         $dividendTaxConfig = $this->taxConfig->getDividendTax();
-        $dividendAllowance = (float) ($dividendTaxConfig['allowance'] ?? 500);
+        $dividendAllowanceMinor = self::poundsToMinor($dividendTaxConfig['allowance'] ?? 500);
 
         $vars = [
-            'gia_value' => '£'.number_format($giaValue, 0),
-            'dividend_allowance' => '£'.number_format($dividendAllowance, 0),
+            'gia_value' => '£'.number_format($giaValueMinor / 100, 0),
+            'dividend_allowance' => '£'.number_format($dividendAllowanceMinor / 100, 0),
         ];
 
         return [$this->buildRecommendation($definition, $vars, $priority)];
@@ -333,24 +355,24 @@ class TaxActionDefinitionService
     }
 
     /**
-     * Determine the marginal tax rate for a given gross income.
+     * Determine the marginal tax rate for a given gross income in pence.
      */
-    private function determineMarginalRate(float $grossIncome): int
+    private function determineMarginalRate(int $grossIncomeMinor): int
     {
         $incomeTax = $this->taxConfig->getIncomeTax();
-        $personalAllowance = (float) ($incomeTax['personal_allowance'] ?? 12570);
-        $basicRateLimit = $personalAllowance + (float) ($incomeTax['bands'][0]['max'] ?? 37700);
-        $additionalThreshold = (float) ($incomeTax['additional_rate_threshold'] ?? 125140);
+        $personalAllowanceMinor = self::poundsToMinor($incomeTax['personal_allowance'] ?? 12570);
+        $basicRateLimitMinor = $personalAllowanceMinor + self::poundsToMinor($incomeTax['bands'][0]['max'] ?? 37700);
+        $additionalThresholdMinor = self::poundsToMinor($incomeTax['additional_rate_threshold'] ?? 125140);
 
-        if ($grossIncome <= $personalAllowance) {
+        if ($grossIncomeMinor <= $personalAllowanceMinor) {
             return 0;
         }
 
-        if ($grossIncome <= $basicRateLimit) {
+        if ($grossIncomeMinor <= $basicRateLimitMinor) {
             return 20;
         }
 
-        if ($grossIncome <= $additionalThreshold) {
+        if ($grossIncomeMinor <= $additionalThresholdMinor) {
             return 40;
         }
 
@@ -358,27 +380,35 @@ class TaxActionDefinitionService
     }
 
     /**
-     * Determine the tax band name for a given gross income.
+     * Determine the tax band name for a given gross income in pence.
      */
-    private function determineTaxBand(float $grossIncome): string
+    private function determineTaxBand(int $grossIncomeMinor): string
     {
         $incomeTax = $this->taxConfig->getIncomeTax();
-        $personalAllowance = (float) ($incomeTax['personal_allowance'] ?? 12570);
-        $basicRateLimit = $personalAllowance + (float) ($incomeTax['bands'][0]['max'] ?? 37700);
-        $additionalThreshold = (float) ($incomeTax['additional_rate_threshold'] ?? 125140);
+        $personalAllowanceMinor = self::poundsToMinor($incomeTax['personal_allowance'] ?? 12570);
+        $basicRateLimitMinor = $personalAllowanceMinor + self::poundsToMinor($incomeTax['bands'][0]['max'] ?? 37700);
+        $additionalThresholdMinor = self::poundsToMinor($incomeTax['additional_rate_threshold'] ?? 125140);
 
-        if ($grossIncome <= $personalAllowance) {
+        if ($grossIncomeMinor <= $personalAllowanceMinor) {
             return 'non-taxpayer';
         }
 
-        if ($grossIncome <= $basicRateLimit) {
+        if ($grossIncomeMinor <= $basicRateLimitMinor) {
             return 'basic rate';
         }
 
-        if ($grossIncome <= $additionalThreshold) {
+        if ($grossIncomeMinor <= $additionalThresholdMinor) {
             return 'higher rate';
         }
 
         return 'additional rate';
+    }
+
+    /**
+     * Convert a pounds value (int / float / numeric string / null) to pence.
+     */
+    private static function poundsToMinor(int|float|string|null $pounds): int
+    {
+        return (int) round(((float) ($pounds ?? 0)) * 100);
     }
 }

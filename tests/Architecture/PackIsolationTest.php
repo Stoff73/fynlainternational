@@ -376,7 +376,6 @@ describe('Pack Isolation', function () {
             // Same deferral for Tax-side float-money services.
             'App\\Services\\Tax\\IncomeDefinitionsService',
             'App\\Services\\Tax\\TaxOptimisationService',
-            'App\\Services\\Tax\\TaxActionDefinitionService',
             'App\\Services\\TaxBandTracker',
         ];
 

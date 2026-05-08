@@ -9,7 +9,7 @@ use Fynla\Packs\Gb\Models\SavingsAccount;
 use Fynla\Packs\Gb\Models\TaxActionDefinition;
 use App\Models\User;
 use App\Services\Retirement\AnnualAllowanceChecker;
-use App\Services\Tax\TaxActionDefinitionService;
+use Fynla\Packs\Gb\Tax\TaxActionDefinitionService;
 use Fynla\Packs\Gb\Database\Seeders\TaxActionDefinitionSeeder;
 use Fynla\Packs\Gb\Database\Seeders\TaxConfigurationSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
