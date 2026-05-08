@@ -11,7 +11,6 @@ use App\Http\Controllers\Api\DocumentController;
 use App\Http\Controllers\Api\FamilyMembersController;
 use App\Http\Controllers\Api\GDPRController;
 use App\Http\Controllers\Api\GoalsController;
-use App\Http\Controllers\Api\HolisticPlanningController;
 use App\Http\Controllers\Api\HouseholdController;
 use App\Http\Controllers\Api\InfoGuideController;
 use App\Http\Controllers\Api\JourneyController;
@@ -28,7 +27,6 @@ use App\Http\Controllers\Api\PostcodeLookupController;
 use App\Http\Controllers\Api\PreviewController;
 use App\Http\Controllers\Api\ProfileCompletenessController;
 use App\Http\Controllers\Api\PropertyController;
-use App\Http\Controllers\Api\RecommendationsController;
 use App\Http\Controllers\Api\RiskPreferenceController;
 use App\Http\Controllers\Api\SessionController;
 use App\Http\Controllers\Api\Settings\AssumptionsController;
@@ -372,21 +370,7 @@ Route::middleware('auth:sanctum')->prefix('life-events')->group(function () {
 
 // Retirement module routes — relocated to packs/country-gb/routes/api.php in R-9g.
 
-// Plans routes (comprehensive cross-module plans)
-Route::middleware('auth:sanctum')->prefix('plans')->group(function () {
-    // Plan system
-    Route::get('/statuses', [\App\Http\Controllers\Api\Plans\PlanController::class, 'statuses']);
-    Route::get('/goal/{goalId}', [\App\Http\Controllers\Api\Plans\PlanController::class, 'generateGoalPlan']);
-    Route::post('/goal/{goalId}/recalculate', [\App\Http\Controllers\Api\Plans\PlanController::class, 'recalculateGoalPlan']);
-    Route::get('/{type}', [\App\Http\Controllers\Api\Plans\PlanController::class, 'generate'])
-        ->where('type', 'investment|protection|retirement|estate');
-    Route::post('/{type}/recalculate', [\App\Http\Controllers\Api\Plans\PlanController::class, 'recalculate'])
-        ->where('type', 'investment|protection|retirement|estate');
-    Route::delete('/{type}/clear-cache', [\App\Http\Controllers\Api\Plans\PlanController::class, 'clearCache'])
-        ->where('type', 'investment|protection|retirement|estate');
-    Route::put('/{type}/funding-source', [\App\Http\Controllers\Api\Plans\PlanController::class, 'updateFundingSource'])
-        ->where('type', 'investment|protection|retirement|estate');
-});
+// Plans routes (comprehensive cross-module plans) — relocated to packs/country-gb/routes/api.php in R-9j.
 
 // Household coordination routes (spousal planning)
 Route::middleware('auth:sanctum')->prefix('household')->group(function () {
@@ -395,36 +379,9 @@ Route::middleware('auth:sanctum')->prefix('household')->group(function () {
     Route::get('/death-scenario', [HouseholdController::class, 'getDeathScenario']);
 });
 
-// Holistic Planning routes (coordinating agent)
-Route::middleware(['auth:sanctum', 'feature:pro'])->prefix('holistic')->group(function () {
-    // Main holistic analysis and plan
-    Route::post('/analyze', [HolisticPlanningController::class, 'analyze']);
-    Route::post('/plan', [HolisticPlanningController::class, 'plan']);
-    Route::get('/recommendations', [HolisticPlanningController::class, 'recommendations']);
-    Route::get('/cash-flow-analysis', [HolisticPlanningController::class, 'cashFlowAnalysis']);
+// Holistic Planning routes (coordinating agent) — relocated to packs/country-gb/routes/api.php in R-9j.
 
-    // Recommendation tracking
-    Route::post('/recommendations/{id}/mark-done', [HolisticPlanningController::class, 'markRecommendationDone']);
-    Route::post('/recommendations/{id}/in-progress', [HolisticPlanningController::class, 'markRecommendationInProgress']);
-    Route::post('/recommendations/{id}/dismiss', [HolisticPlanningController::class, 'dismissRecommendation']);
-    Route::get('/recommendations/completed', [HolisticPlanningController::class, 'completedRecommendations']);
-    Route::patch('/recommendations/{id}/notes', [HolisticPlanningController::class, 'updateRecommendationNotes']);
-});
-
-// Unified Recommendations routes (Phase 5)
-Route::middleware('auth:sanctum')->prefix('recommendations')->group(function () {
-    // Main recommendations endpoints
-    Route::get('/', [RecommendationsController::class, 'index']);
-    Route::get('/summary', [RecommendationsController::class, 'summary']);
-    Route::get('/top', [RecommendationsController::class, 'top']);
-    Route::get('/completed', [RecommendationsController::class, 'completed']);
-
-    // Recommendation tracking actions
-    Route::post('/{id}/mark-done', [RecommendationsController::class, 'markDone']);
-    Route::post('/{id}/in-progress', [RecommendationsController::class, 'markInProgress']);
-    Route::post('/{id}/dismiss', [RecommendationsController::class, 'dismiss']);
-    Route::patch('/{id}/notes', [RecommendationsController::class, 'updateNotes']);
-});
+// Unified Recommendations routes (Phase 5) — relocated to packs/country-gb/routes/api.php in R-9j.
 
 // Tax Product Information + Tax Optimisation routes — relocated to packs/country-gb/routes/api.php in R-9i.
 

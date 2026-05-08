@@ -27,6 +27,7 @@ use Fynla\Packs\Gb\Http\Controllers\Estate\TrustController;
 use Fynla\Packs\Gb\Http\Controllers\Estate\WillController;
 use Fynla\Packs\Gb\Http\Controllers\Estate\WillDocumentController;
 use Fynla\Packs\Gb\Http\Controllers\EstateController;
+use Fynla\Packs\Gb\Http\Controllers\HolisticPlanningController;
 use Fynla\Packs\Gb\Http\Controllers\IncomeDefinitionsController;
 use Fynla\Packs\Gb\Http\Controllers\InvestmentActionDefinitionController;
 use Fynla\Packs\Gb\Http\Controllers\InvestmentController;
@@ -44,9 +45,11 @@ use Fynla\Packs\Gb\Http\Controllers\Investment\RebalancingCalculationController;
 use Fynla\Packs\Gb\Http\Controllers\Investment\RebalancingStrategiesController;
 use Fynla\Packs\Gb\Http\Controllers\Investment\TaxOptimizationController;
 use Fynla\Packs\Gb\Http\Controllers\InvestmentProjectionController;
+use Fynla\Packs\Gb\Http\Controllers\Plans\PlanController;
 use Fynla\Packs\Gb\Http\Controllers\PortfolioOptimizationController;
 use Fynla\Packs\Gb\Http\Controllers\ProtectionActionDefinitionController;
 use Fynla\Packs\Gb\Http\Controllers\ProtectionController;
+use Fynla\Packs\Gb\Http\Controllers\RecommendationsController;
 use Fynla\Packs\Gb\Http\Controllers\Retirement\DCPensionHoldingsController;
 use Fynla\Packs\Gb\Http\Controllers\Retirement\DecumulationController;
 use Fynla\Packs\Gb\Http\Controllers\RetirementActionDefinitionController;
@@ -640,4 +643,53 @@ Route::middleware(['auth:sanctum', 'permission:admin.tax_config'])->prefix('tax-
     Route::post('/{id}/activate', [TaxSettingsController::class, 'setActive']);
     Route::post('/{id}/duplicate', [TaxSettingsController::class, 'duplicate']);
     Route::delete('/{id}', [TaxSettingsController::class, 'delete']);
+});
+
+
+// Plans routes (comprehensive cross-module plans)
+Route::middleware('auth:sanctum')->prefix('plans')->group(function () {
+    Route::get('/statuses', [PlanController::class, 'statuses']);
+    Route::get('/goal/{goalId}', [PlanController::class, 'generateGoalPlan']);
+    Route::post('/goal/{goalId}/recalculate', [PlanController::class, 'recalculateGoalPlan']);
+    Route::get('/{type}', [PlanController::class, 'generate'])
+        ->where('type', 'investment|protection|retirement|estate');
+    Route::post('/{type}/recalculate', [PlanController::class, 'recalculate'])
+        ->where('type', 'investment|protection|retirement|estate');
+    Route::delete('/{type}/clear-cache', [PlanController::class, 'clearCache'])
+        ->where('type', 'investment|protection|retirement|estate');
+    Route::put('/{type}/funding-source', [PlanController::class, 'updateFundingSource'])
+        ->where('type', 'investment|protection|retirement|estate');
+});
+
+
+// Holistic Planning routes (coordinating agent)
+Route::middleware(['auth:sanctum', 'feature:pro'])->prefix('holistic')->group(function () {
+    // Main holistic analysis and plan
+    Route::post('/analyze', [HolisticPlanningController::class, 'analyze']);
+    Route::post('/plan', [HolisticPlanningController::class, 'plan']);
+    Route::get('/recommendations', [HolisticPlanningController::class, 'recommendations']);
+    Route::get('/cash-flow-analysis', [HolisticPlanningController::class, 'cashFlowAnalysis']);
+
+    // Recommendation tracking
+    Route::post('/recommendations/{id}/mark-done', [HolisticPlanningController::class, 'markRecommendationDone']);
+    Route::post('/recommendations/{id}/in-progress', [HolisticPlanningController::class, 'markRecommendationInProgress']);
+    Route::post('/recommendations/{id}/dismiss', [HolisticPlanningController::class, 'dismissRecommendation']);
+    Route::get('/recommendations/completed', [HolisticPlanningController::class, 'completedRecommendations']);
+    Route::patch('/recommendations/{id}/notes', [HolisticPlanningController::class, 'updateRecommendationNotes']);
+});
+
+
+// Unified Recommendations routes (Phase 5)
+Route::middleware('auth:sanctum')->prefix('recommendations')->group(function () {
+    // Main recommendations endpoints
+    Route::get('/', [RecommendationsController::class, 'index']);
+    Route::get('/summary', [RecommendationsController::class, 'summary']);
+    Route::get('/top', [RecommendationsController::class, 'top']);
+    Route::get('/completed', [RecommendationsController::class, 'completed']);
+
+    // Recommendation tracking actions
+    Route::post('/{id}/mark-done', [RecommendationsController::class, 'markDone']);
+    Route::post('/{id}/in-progress', [RecommendationsController::class, 'markInProgress']);
+    Route::post('/{id}/dismiss', [RecommendationsController::class, 'dismiss']);
+    Route::patch('/{id}/notes', [RecommendationsController::class, 'updateNotes']);
 });
