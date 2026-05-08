@@ -89,5 +89,8 @@ class GbPackServiceProvider extends ServiceProvider
         Route::middleware('api')
             ->prefix('api')
             ->group(__DIR__.'/../../routes/api.php');
+
+        // R-10: pack-owned migrations (UK schema alters and creates).
+        $this->loadMigrationsFrom(__DIR__.'/../../database/migrations');
     }
 }
