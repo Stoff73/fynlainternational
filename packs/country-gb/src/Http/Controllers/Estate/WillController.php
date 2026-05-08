@@ -14,7 +14,7 @@ use Fynla\Packs\Gb\Models\Estate\Bequest;
 use Fynla\Packs\Gb\Models\Estate\Trust;
 use Fynla\Packs\Gb\Models\Estate\Will;
 use App\Services\Cache\CacheInvalidationService;
-use App\Services\Estate\IntestacyCalculator;
+use Fynla\Packs\Gb\Estate\IntestacyCalculator;
 use App\Services\Trust\IHTPeriodicChargeCalculator;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -240,11 +240,20 @@ class WillController extends Controller
         $user = $request->user();
         $validated = $request->validated();
 
-        // Use the estate value provided by the frontend (which calls calculate-iht first)
-        $estateValue = $validated['estate_value'] ?? 0;
+        // Convert pounds (frontend) → pence (service) at the API boundary per ADR-005.
+        $estateValueMinor = (int) round((float) ($validated['estate_value'] ?? 0) * 100);
 
         try {
-            $distribution = $this->intestacyCalculator->calculateDistribution($user->id, $estateValue);
+            $distribution = $this->intestacyCalculator->calculateDistribution($user->id, $estateValueMinor);
+
+            // Convert pence → pounds on the way back out so the API contract is preserved.
+            $distribution['estate_value'] = $distribution['estate_value_minor'] / 100;
+            unset($distribution['estate_value_minor']);
+            foreach ($distribution['beneficiaries'] as &$beneficiary) {
+                $beneficiary['amount'] = $beneficiary['amount_minor'] / 100;
+                unset($beneficiary['amount_minor']);
+            }
+            unset($beneficiary);
 
             return response()->json([
                 'success' => true,

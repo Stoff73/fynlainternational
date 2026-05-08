@@ -2,19 +2,26 @@
 
 declare(strict_types=1);
 
-namespace App\Services\Estate;
+namespace Fynla\Packs\Gb\Estate;
 
 use Fynla\Core\Models\FamilyMember;
 use App\Models\User;
 
 class IntestacyCalculator
 {
-    private const THRESHOLD_SPOUSE_CHILDREN = 322000;
+    private const THRESHOLD_SPOUSE_CHILDREN_MINOR = 32_200_000;
 
     /**
-     * Calculate how estate would be distributed under UK intestacy rules
+     * Calculate how the estate would be distributed under UK intestacy rules.
+     *
+     * Amounts are in minor units (pence) per ADR-005. Per-N divisions use
+     * `intdiv` with the remainder allocated to the first beneficiary so the
+     * sum of distributed amounts equals the total estate exactly.
+     *
+     * @param  int  $userId
+     * @param  int  $estateValueMinor  Estate total in pence.
      */
-    public function calculateDistribution(int $userId, float $estateValue): array
+    public function calculateDistribution(int $userId, int $estateValueMinor): array
     {
         $user = User::find($userId);
 
@@ -22,7 +29,6 @@ class IntestacyCalculator
             throw new \Exception('User not found');
         }
 
-        // Check if married - either by spouse_id OR by having a spouse in family_members
         $hasLinkedSpouse = in_array($user->marital_status, ['married', 'civil_partnership']) && $user->spouse_id !== null;
         $familyMembers = FamilyMember::where('user_id', $userId)->get();
         $hasSpouseFamilyMember = $familyMembers->where('relationship', 'spouse')->count() > 0;
@@ -43,7 +49,6 @@ class IntestacyCalculator
         $explanation = '';
         $goesToCrown = false;
 
-        // Decision tree logic based on UK intestacy rules
         $decisionPath[] = [
             'question' => 'Are you married/civil partnered?',
             'answer' => $isMarried ? 'YES' : 'NO',
@@ -56,17 +61,17 @@ class IntestacyCalculator
             ];
 
             if ($children > 0) {
-                // Married with children
+                $thresholdPounds = intdiv(self::THRESHOLD_SPOUSE_CHILDREN_MINOR, 100);
                 $decisionPath[] = [
-                    'question' => 'Is your estate worth more than £'.number_format(self::THRESHOLD_SPOUSE_CHILDREN).'?',
-                    'answer' => $estateValue > self::THRESHOLD_SPOUSE_CHILDREN ? 'YES' : 'NO',
+                    'question' => 'Is your estate worth more than £'.number_format($thresholdPounds).'?',
+                    'answer' => $estateValueMinor > self::THRESHOLD_SPOUSE_CHILDREN_MINOR ? 'YES' : 'NO',
                 ];
 
-                if ($estateValue > self::THRESHOLD_SPOUSE_CHILDREN) {
-                    // Spouse gets first £250k + half of rest, children get other half
-                    $spouseAmount = self::THRESHOLD_SPOUSE_CHILDREN + (($estateValue - self::THRESHOLD_SPOUSE_CHILDREN) / 2);
-                    $childrenAmount = ($estateValue - self::THRESHOLD_SPOUSE_CHILDREN) / 2;
-                    $perChildAmount = $childrenAmount / $children;
+                if ($estateValueMinor > self::THRESHOLD_SPOUSE_CHILDREN_MINOR) {
+                    $surplusMinor = $estateValueMinor - self::THRESHOLD_SPOUSE_CHILDREN_MINOR;
+                    $childrenAmountMinor = intdiv($surplusMinor, 2);
+                    $spouseAmountMinor = self::THRESHOLD_SPOUSE_CHILDREN_MINOR + ($surplusMinor - $childrenAmountMinor);
+                    $perChildAmountMinor = intdiv($childrenAmountMinor, $children);
 
                     $scenario = 'Married with Children - Estate over £322,000';
                     $explanation = 'Your spouse/civil partner receives the first £322,000 plus half of the remaining estate. Your children share the other half equally.';
@@ -74,92 +79,85 @@ class IntestacyCalculator
                     $beneficiaries[] = [
                         'relationship' => 'Spouse/Civil Partner',
                         'name' => null,
-                        'amount' => $spouseAmount,
-                        'percentage' => round(($spouseAmount / $estateValue) * 100, 2),
-                        'share_description' => 'First £322,000 + half of remaining (£'.number_format($estateValue - self::THRESHOLD_SPOUSE_CHILDREN).')',
+                        'amount_minor' => $spouseAmountMinor,
+                        'percentage' => round(($spouseAmountMinor / $estateValueMinor) * 100, 2),
+                        'share_description' => 'First £322,000 + half of remaining (£'.number_format(intdiv($surplusMinor, 100)).')',
                         'count' => 1,
                     ];
 
                     $beneficiaries[] = [
                         'relationship' => 'Children',
                         'name' => null,
-                        'amount' => $childrenAmount,
-                        'percentage' => round(($childrenAmount / $estateValue) * 100, 2),
-                        'share_description' => 'Half of remaining estate, £'.number_format($perChildAmount).' each',
+                        'amount_minor' => $childrenAmountMinor,
+                        'percentage' => round(($childrenAmountMinor / $estateValueMinor) * 100, 2),
+                        'share_description' => 'Half of remaining estate, £'.number_format(intdiv($perChildAmountMinor, 100)).' each',
                         'count' => $children,
                     ];
                 } else {
-                    // Estate <= £250k, spouse gets all
                     $scenario = 'Married with Children - Estate under £322,000';
                     $explanation = 'Because your estate is worth less than £322,000, your spouse/civil partner inherits everything.';
 
                     $beneficiaries[] = [
                         'relationship' => 'Spouse/Civil Partner',
                         'name' => null,
-                        'amount' => $estateValue,
+                        'amount_minor' => $estateValueMinor,
                         'percentage' => 100,
                         'share_description' => 'Entire estate',
                         'count' => 1,
                     ];
                 }
             } else {
-                // Married with no children - spouse gets all
                 $scenario = 'Married without Children';
                 $explanation = 'Your spouse/civil partner inherits your entire estate.';
 
                 $beneficiaries[] = [
                     'relationship' => 'Spouse/Civil Partner',
                     'name' => null,
-                    'amount' => $estateValue,
+                    'amount_minor' => $estateValueMinor,
                     'percentage' => 100,
                     'share_description' => 'Entire estate',
                     'count' => 1,
                 ];
             }
         } else {
-            // Not married - check for children
             $decisionPath[] = [
                 'question' => 'Do you have any children?',
                 'answer' => $children > 0 ? 'YES' : 'NO',
             ];
 
             if ($children > 0) {
-                // Children inherit everything equally
                 $scenario = 'Not Married - Children Inherit';
                 $explanation = 'Your children share your entire estate equally.';
-                $perChildAmount = $estateValue / $children;
+                $perChildAmountMinor = intdiv($estateValueMinor, $children);
 
                 $beneficiaries[] = [
                     'relationship' => 'Children',
                     'name' => null,
-                    'amount' => $estateValue,
+                    'amount_minor' => $estateValueMinor,
                     'percentage' => 100,
-                    'share_description' => '£'.number_format($perChildAmount).' each',
+                    'share_description' => '£'.number_format(intdiv($perChildAmountMinor, 100)).' each',
                     'count' => $children,
                 ];
             } else {
-                // No children - check parents
                 $decisionPath[] = [
                     'question' => 'Do you have living parents?',
                     'answer' => $parents > 0 ? 'YES' : 'NO',
                 ];
 
                 if ($parents > 0) {
-                    // Parents inherit everything equally
                     $scenario = 'No Children - Parents Inherit';
                     $explanation = 'Your parents share your entire estate equally.';
-                    $perParentAmount = $estateValue / $parents;
+                    $perParentAmountMinor = intdiv($estateValueMinor, $parents);
 
                     $beneficiaries[] = [
                         'relationship' => 'Parents',
                         'name' => null,
-                        'amount' => $estateValue,
+                        'amount_minor' => $estateValueMinor,
                         'percentage' => 100,
-                        'share_description' => $parents > 1 ? '£'.number_format($perParentAmount).' each' : 'Entire estate',
+                        'share_description' => $parents > 1 ? '£'.number_format(intdiv($perParentAmountMinor, 100)).' each' : 'Entire estate',
                         'count' => $parents,
                     ];
                 } else {
-                    // No parents - check siblings
                     $decisionPath[] = [
                         'question' => 'Do you have brothers/sisters?',
                         'answer' => $siblings > 0 ? 'YES' : 'NO',
@@ -168,18 +166,17 @@ class IntestacyCalculator
                     if ($siblings > 0) {
                         $scenario = 'No Children or Parents - Siblings Inherit';
                         $explanation = 'Your brothers and sisters share your entire estate equally.';
-                        $perSiblingAmount = $estateValue / $siblings;
+                        $perSiblingAmountMinor = intdiv($estateValueMinor, $siblings);
 
                         $beneficiaries[] = [
                             'relationship' => 'Siblings',
                             'name' => null,
-                            'amount' => $estateValue,
+                            'amount_minor' => $estateValueMinor,
                             'percentage' => 100,
-                            'share_description' => '£'.number_format($perSiblingAmount).' each',
+                            'share_description' => '£'.number_format(intdiv($perSiblingAmountMinor, 100)).' each',
                             'count' => $siblings,
                         ];
                     } else {
-                        // No siblings - check half-siblings
                         $decisionPath[] = [
                             'question' => 'Do you have half brothers/sisters?',
                             'answer' => $halfSiblings > 0 ? 'YES' : 'NO',
@@ -188,18 +185,17 @@ class IntestacyCalculator
                         if ($halfSiblings > 0) {
                             $scenario = 'No Siblings - Half-Siblings Inherit';
                             $explanation = 'Your half-brothers and half-sisters share your entire estate equally.';
-                            $perHalfSiblingAmount = $estateValue / $halfSiblings;
+                            $perHalfSiblingAmountMinor = intdiv($estateValueMinor, $halfSiblings);
 
                             $beneficiaries[] = [
                                 'relationship' => 'Half-Siblings',
                                 'name' => null,
-                                'amount' => $estateValue,
+                                'amount_minor' => $estateValueMinor,
                                 'percentage' => 100,
-                                'share_description' => '£'.number_format($perHalfSiblingAmount).' each',
+                                'share_description' => '£'.number_format(intdiv($perHalfSiblingAmountMinor, 100)).' each',
                                 'count' => $halfSiblings,
                             ];
                         } else {
-                            // No half-siblings - check grandparents
                             $decisionPath[] = [
                                 'question' => 'Do you have living grandparents?',
                                 'answer' => $grandparents > 0 ? 'YES' : 'NO',
@@ -208,18 +204,17 @@ class IntestacyCalculator
                             if ($grandparents > 0) {
                                 $scenario = 'Grandparents Inherit';
                                 $explanation = 'Your grandparents share your entire estate equally.';
-                                $perGrandparentAmount = $estateValue / $grandparents;
+                                $perGrandparentAmountMinor = intdiv($estateValueMinor, $grandparents);
 
                                 $beneficiaries[] = [
                                     'relationship' => 'Grandparents',
                                     'name' => null,
-                                    'amount' => $estateValue,
+                                    'amount_minor' => $estateValueMinor,
                                     'percentage' => 100,
-                                    'share_description' => '£'.number_format($perGrandparentAmount).' each',
+                                    'share_description' => '£'.number_format(intdiv($perGrandparentAmountMinor, 100)).' each',
                                     'count' => $grandparents,
                                 ];
                             } else {
-                                // No grandparents - check aunts/uncles
                                 $decisionPath[] = [
                                     'question' => 'Do you have aunts/uncles?',
                                     'answer' => $auntsUncles > 0 ? 'YES' : 'NO',
@@ -228,18 +223,17 @@ class IntestacyCalculator
                                 if ($auntsUncles > 0) {
                                     $scenario = 'Aunts and Uncles Inherit';
                                     $explanation = 'Your aunts and uncles share your entire estate equally.';
-                                    $perAuntUncleAmount = $estateValue / $auntsUncles;
+                                    $perAuntUncleAmountMinor = intdiv($estateValueMinor, $auntsUncles);
 
                                     $beneficiaries[] = [
                                         'relationship' => 'Aunts and Uncles',
                                         'name' => null,
-                                        'amount' => $estateValue,
+                                        'amount_minor' => $estateValueMinor,
                                         'percentage' => 100,
-                                        'share_description' => '£'.number_format($perAuntUncleAmount).' each',
+                                        'share_description' => '£'.number_format(intdiv($perAuntUncleAmountMinor, 100)).' each',
                                         'count' => $auntsUncles,
                                     ];
                                 } else {
-                                    // No aunts/uncles - check half-blood aunts/uncles
                                     $decisionPath[] = [
                                         'question' => "Do you have aunts/uncles 'of the half blood'?",
                                         'answer' => $auntsUnclesHalfBlood > 0 ? 'YES' : 'NO',
@@ -248,18 +242,17 @@ class IntestacyCalculator
                                     if ($auntsUnclesHalfBlood > 0) {
                                         $scenario = 'Half-Blood Aunts and Uncles Inherit';
                                         $explanation = "Your aunts and uncles of the half blood (your parent's half-siblings) share your entire estate equally.";
-                                        $perAmount = $estateValue / $auntsUnclesHalfBlood;
+                                        $perAmountMinor = intdiv($estateValueMinor, $auntsUnclesHalfBlood);
 
                                         $beneficiaries[] = [
                                             'relationship' => 'Aunts/Uncles (Half Blood)',
                                             'name' => null,
-                                            'amount' => $estateValue,
+                                            'amount_minor' => $estateValueMinor,
                                             'percentage' => 100,
-                                            'share_description' => '£'.number_format($perAmount).' each',
+                                            'share_description' => '£'.number_format(intdiv($perAmountMinor, 100)).' each',
                                             'count' => $auntsUnclesHalfBlood,
                                         ];
                                     } else {
-                                        // No relatives - goes to Crown
                                         $scenario = 'No Eligible Relatives - Crown Inherits';
                                         $explanation = 'With no eligible relatives, your entire estate passes to the Crown (government).';
                                         $goesToCrown = true;
@@ -267,7 +260,7 @@ class IntestacyCalculator
                                         $beneficiaries[] = [
                                             'relationship' => 'The Crown (Government)',
                                             'name' => null,
-                                            'amount' => $estateValue,
+                                            'amount_minor' => $estateValueMinor,
                                             'percentage' => 100,
                                             'share_description' => 'Entire estate (bona vacantia)',
                                             'count' => 1,
@@ -284,7 +277,7 @@ class IntestacyCalculator
         return [
             'scenario' => $scenario,
             'explanation' => $explanation,
-            'estate_value' => $estateValue,
+            'estate_value_minor' => $estateValueMinor,
             'beneficiaries' => $beneficiaries,
             'decision_path' => $decisionPath,
             'goes_to_crown' => $goesToCrown,

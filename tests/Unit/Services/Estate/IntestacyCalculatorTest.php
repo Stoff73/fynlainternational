@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 use Fynla\Core\Models\FamilyMember;
 use App\Models\User;
-use App\Services\Estate\IntestacyCalculator;
+use Fynla\Packs\Gb\Estate\IntestacyCalculator;
 
 describe('IntestacyCalculator', function () {
     beforeEach(function () {
@@ -18,17 +18,17 @@ describe('IntestacyCalculator', function () {
             'spouse_id' => $spouse->id,
         ]);
 
-        $result = $this->calculator->calculateDistribution($user->id, 500000);
+        $result = $this->calculator->calculateDistribution($user->id, 50_000_000);
 
         expect($result['scenario'])->toBe('Married without Children');
         expect($result['beneficiaries'])->toHaveCount(1);
         expect($result['beneficiaries'][0]['relationship'])->toBe('Spouse/Civil Partner');
-        expect($result['beneficiaries'][0]['amount'])->toBe(500000.0);
+        expect($result['beneficiaries'][0]['amount_minor'])->toBe(50_000_000);
         expect($result['beneficiaries'][0]['percentage'])->toBe(100);
         expect($result['goes_to_crown'])->toBe(false);
     });
 
-    it('calculates distribution for married person with children - estate under £250k', function () {
+    it('calculates distribution for married person with children - estate under £322k', function () {
         $spouse = User::factory()->create();
         $user = User::factory()->create([
             'marital_status' => 'married',
@@ -50,15 +50,15 @@ describe('IntestacyCalculator', function () {
             'last_name' => 'Two',
         ]);
 
-        $result = $this->calculator->calculateDistribution($user->id, 200000);
+        $result = $this->calculator->calculateDistribution($user->id, 20_000_000);
 
         expect($result['scenario'])->toBe('Married with Children - Estate under £322,000');
         expect($result['beneficiaries'])->toHaveCount(1);
         expect($result['beneficiaries'][0]['relationship'])->toBe('Spouse/Civil Partner');
-        expect($result['beneficiaries'][0]['amount'])->toBe(200000.0);
+        expect($result['beneficiaries'][0]['amount_minor'])->toBe(20_000_000);
     });
 
-    it('calculates distribution for married person with children - estate over £250k', function () {
+    it('calculates distribution for married person with children - estate over £322k', function () {
         $spouse = User::factory()->create();
         $user = User::factory()->create([
             'marital_status' => 'married',
@@ -80,18 +80,18 @@ describe('IntestacyCalculator', function () {
             'last_name' => 'Two',
         ]);
 
-        $result = $this->calculator->calculateDistribution($user->id, 500000);
+        $result = $this->calculator->calculateDistribution($user->id, 50_000_000);
 
         expect($result['scenario'])->toBe('Married with Children - Estate over £322,000');
         expect($result['beneficiaries'])->toHaveCount(2);
 
         // Spouse gets first £322k + half of remaining £178k = £411k
         expect($result['beneficiaries'][0]['relationship'])->toBe('Spouse/Civil Partner');
-        expect($result['beneficiaries'][0]['amount'])->toBe(411000.0);
+        expect($result['beneficiaries'][0]['amount_minor'])->toBe(41_100_000);
 
         // Children share other half of remaining £178k = £89k
         expect($result['beneficiaries'][1]['relationship'])->toBe('Children');
-        expect($result['beneficiaries'][1]['amount'])->toBe(89000.0);
+        expect($result['beneficiaries'][1]['amount_minor'])->toBe(8_900_000);
     });
 
     it('calculates distribution for single person with children', function () {
@@ -114,12 +114,12 @@ describe('IntestacyCalculator', function () {
             'last_name' => 'Two',
         ]);
 
-        $result = $this->calculator->calculateDistribution($user->id, 300000);
+        $result = $this->calculator->calculateDistribution($user->id, 30_000_000);
 
         expect($result['scenario'])->toBe('Not Married - Children Inherit');
         expect($result['beneficiaries'])->toHaveCount(1);
         expect($result['beneficiaries'][0]['relationship'])->toBe('Children');
-        expect($result['beneficiaries'][0]['amount'])->toBe(300000.0);
+        expect($result['beneficiaries'][0]['amount_minor'])->toBe(30_000_000);
         expect($result['beneficiaries'][0]['count'])->toBe(2);
     });
 
@@ -143,12 +143,12 @@ describe('IntestacyCalculator', function () {
             'last_name' => 'Two',
         ]);
 
-        $result = $this->calculator->calculateDistribution($user->id, 300000);
+        $result = $this->calculator->calculateDistribution($user->id, 30_000_000);
 
         expect($result['scenario'])->toBe('No Children - Parents Inherit');
         expect($result['beneficiaries'])->toHaveCount(1);
         expect($result['beneficiaries'][0]['relationship'])->toBe('Parents');
-        expect($result['beneficiaries'][0]['amount'])->toBe(300000.0);
+        expect($result['beneficiaries'][0]['amount_minor'])->toBe(30_000_000);
         expect($result['beneficiaries'][0]['count'])->toBe(2);
     });
 
@@ -157,12 +157,12 @@ describe('IntestacyCalculator', function () {
             'marital_status' => 'single',
         ]);
 
-        $result = $this->calculator->calculateDistribution($user->id, 500000);
+        $result = $this->calculator->calculateDistribution($user->id, 50_000_000);
 
         expect($result['scenario'])->toBe('No Eligible Relatives - Crown Inherits');
         expect($result['beneficiaries'])->toHaveCount(1);
         expect($result['beneficiaries'][0]['relationship'])->toBe('The Crown (Government)');
-        expect($result['beneficiaries'][0]['amount'])->toBe(500000.0);
+        expect($result['beneficiaries'][0]['amount_minor'])->toBe(50_000_000);
         expect($result['goes_to_crown'])->toBe(true);
     });
 
@@ -173,7 +173,7 @@ describe('IntestacyCalculator', function () {
             'spouse_id' => $spouse->id,
         ]);
 
-        $result = $this->calculator->calculateDistribution($user->id, 500000);
+        $result = $this->calculator->calculateDistribution($user->id, 50_000_000);
 
         expect($result['decision_path'])->toBeArray();
         expect($result['decision_path'])->not->toBeEmpty();
