@@ -14,7 +14,7 @@ use Fynla\Packs\Gb\Models\Estate\Trust;
 use Fynla\Packs\Gb\Models\Estate\Will;
 use App\Services\Cache\CacheInvalidationService;
 use Fynla\Packs\Gb\Estate\IHTCalculationService;
-use App\Services\Estate\TrustService;
+use Fynla\Packs\Gb\Estate\TrustService;
 use Fynla\Packs\Gb\Tax\TaxConfigService;
 use App\Services\Trust\IHTPeriodicChargeCalculator;
 use App\Services\Trust\TrustAssetAggregatorService;
@@ -160,7 +160,7 @@ class TrustController extends Controller
 
         return response()->json([
             'success' => true,
-            'data' => $analysis,
+            'data' => self::convertTrustEfficiencyForResponse($analysis),
         ]);
     }
 
@@ -207,9 +207,12 @@ class TrustController extends Controller
             'needs_flexibility' => $request->input('needs_flexibility', false),
         ];
 
+        $estateValueMinor = (int) round((float) $ihtCalculation['total_gross_assets'] * 100);
+        $ihtLiabilityMinor = (int) round((float) $ihtCalculation['iht_liability'] * 100);
+
         $recommendations = $this->trustService->getTrustRecommendations(
-            $ihtCalculation['total_gross_assets'], // gross estate value
-            $ihtCalculation['iht_liability'],
+            $estateValueMinor,
+            $ihtLiabilityMinor,
             $circumstances
         );
 
@@ -236,14 +239,65 @@ class TrustController extends Controller
 
         $estimate = $this->trustService->estimateDiscountedGiftDiscount(
             $validated['age'],
-            $validated['gift_value'],
-            $validated['annual_income']
+            (int) round((float) $validated['gift_value'] * 100),
+            (int) round((float) $validated['annual_income'] * 100),
         );
 
         return response()->json([
             'success' => true,
-            'data' => $estimate,
+            'data' => self::convertDiscountedGiftEstimateForResponse($estimate),
         ]);
+    }
+
+    /**
+     * Convert TrustService::analyzeTrustEfficiency() pence-shaped output back
+     * to the float-pounds shape the frontend currently expects.
+     */
+    private static function convertTrustEfficiencyForResponse(array $analysis): array
+    {
+        $analysis['initial_value'] = ($analysis['initial_value_minor'] ?? 0) / 100;
+        $analysis['current_value'] = ($analysis['current_value_minor'] ?? 0) / 100;
+        $analysis['growth'] = ($analysis['growth_minor'] ?? 0) / 100;
+        $analysis['value_in_estate'] = ($analysis['value_in_estate_minor'] ?? 0) / 100;
+        $analysis['value_outside_estate'] = ($analysis['value_outside_estate_minor'] ?? 0) / 100;
+        unset(
+            $analysis['initial_value_minor'],
+            $analysis['current_value_minor'],
+            $analysis['growth_minor'],
+            $analysis['value_in_estate_minor'],
+            $analysis['value_outside_estate_minor'],
+        );
+
+        if (isset($analysis['periodic_charge_info']) && is_array($analysis['periodic_charge_info'])) {
+            $pc = $analysis['periodic_charge_info'];
+            $pc['charge_amount'] = ($pc['charge_amount_minor'] ?? 0) / 100;
+            if (isset($pc['trust_value_minor'])) {
+                $pc['trust_value'] = $pc['trust_value_minor'] / 100;
+                $pc['nrb'] = ($pc['nrb_minor'] ?? 0) / 100;
+                $pc['excess_over_nrb'] = ($pc['excess_over_nrb_minor'] ?? 0) / 100;
+            }
+            unset($pc['charge_amount_minor'], $pc['trust_value_minor'], $pc['nrb_minor'], $pc['excess_over_nrb_minor']);
+            $analysis['periodic_charge_info'] = $pc;
+        }
+
+        return $analysis;
+    }
+
+    /**
+     * Convert TrustService::estimateDiscountedGiftDiscount() pence-shaped output
+     * back to the float-pounds shape the frontend currently expects.
+     */
+    private static function convertDiscountedGiftEstimateForResponse(array $estimate): array
+    {
+        return [
+            'gift_value' => ($estimate['gift_value_minor'] ?? 0) / 100,
+            'discount_amount' => ($estimate['discount_amount_minor'] ?? 0) / 100,
+            'discount_percent' => $estimate['discount_percent'] ?? 0,
+            'gifted_value' => ($estimate['gifted_value_minor'] ?? 0) / 100,
+            'retained_value' => ($estimate['retained_value_minor'] ?? 0) / 100,
+            'annual_income' => ($estimate['annual_income_minor'] ?? 0) / 100,
+            'estimated_life_expectancy' => $estimate['estimated_life_expectancy'] ?? 0,
+        ];
     }
 
     /**

@@ -13,7 +13,7 @@ use Fynla\Packs\Gb\Estate\EstateAssetAggregatorService;
 use Fynla\Packs\Gb\Estate\GiftingStrategyOptimizer;
 use App\Services\Estate\PersonalizedGiftingStrategyService;
 use App\Services\Estate\PersonalizedTrustStrategyService;
-use App\Services\Estate\TrustService;
+use Fynla\Packs\Gb\Estate\TrustService;
 use Fynla\Packs\Gb\Tax\TaxConfigService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -411,14 +411,22 @@ class GiftingController extends Controller
 
         $estimate = $this->trustService->estimateDiscountedGiftDiscount(
             $validated['age'],
-            $validated['gift_value'],
-            $validated['annual_income'],
+            (int) round((float) $validated['gift_value'] * 100),
+            (int) round((float) $validated['annual_income'] * 100),
             $validated['gender'] ?? null
         );
 
         return response()->json([
             'success' => true,
-            'data' => $estimate,
+            'data' => [
+                'gift_value' => ($estimate['gift_value_minor'] ?? 0) / 100,
+                'discount_amount' => ($estimate['discount_amount_minor'] ?? 0) / 100,
+                'discount_percent' => $estimate['discount_percent'] ?? 0,
+                'gifted_value' => ($estimate['gifted_value_minor'] ?? 0) / 100,
+                'retained_value' => ($estimate['retained_value_minor'] ?? 0) / 100,
+                'annual_income' => ($estimate['annual_income_minor'] ?? 0) / 100,
+                'estimated_life_expectancy' => $estimate['estimated_life_expectancy'] ?? 0,
+            ],
         ]);
     }
 }

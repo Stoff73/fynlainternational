@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Services\Estate;
+namespace Fynla\Packs\Gb\Estate;
 
 use Fynla\Packs\Gb\Constants\TaxDefaults;
 use Fynla\Packs\Gb\Models\ActuarialLifeTable;
@@ -11,15 +11,20 @@ use Fynla\Packs\Gb\Tax\TaxConfigService;
 use Carbon\Carbon;
 use Illuminate\Support\Collection;
 
+/**
+ * Trust analysis service for IHT planning.
+ *
+ * Money values are passed and returned in minor units (pence) per ADR-005.
+ * The service reads its config and DB-backed money fields from `TaxConfigService`
+ * and `Trust` model attributes (which still expose pounds) and converts at
+ * the read site via `poundsToMinor`.
+ */
 class TrustService
 {
     public function __construct(
         private readonly TaxConfigService $taxConfig
     ) {}
 
-    /**
-     * Calculate the next periodic charge date for a relevant property trust
-     */
     public function calculateNextPeriodicChargeDate(Trust $trust): ?Carbon
     {
         if (! $trust->isRelevantPropertyTrust()) {
@@ -35,20 +40,18 @@ class TrustService
             return $lastChargeDate->copy()->addYears(10);
         }
 
-        // First charge is 10 years after creation
         return $creationDate->copy()->addYears(10);
     }
 
     /**
-     * Calculate periodic charge for a relevant property trust (10-year anniversary)
-     *
-     * Charge is up to 6% of trust value, based on cumulative transfers
+     * Calculate periodic charge for a relevant property trust (10-year anniversary).
+     * Charge is up to 6% of trust value, based on cumulative transfers.
      */
     public function calculatePeriodicCharge(Trust $trust): array
     {
         if (! $trust->isRelevantPropertyTrust()) {
             return [
-                'charge_amount' => 0,
+                'charge_amount_minor' => 0,
                 'effective_rate' => 0,
                 'next_charge_date' => null,
             ];
@@ -56,69 +59,64 @@ class TrustService
 
         $trustsConfig = $this->taxConfig->getTrusts();
         $ihtConfig = $this->taxConfig->getInheritanceTax();
-        $nrb = $ihtConfig['nil_rate_band'];
+        $nrbMinor = self::poundsToMinor($ihtConfig['nil_rate_band']);
 
-        // Get max periodic charge rate from trusts config (defaults to 6%)
-        $maxRate = $trustsConfig['periodic_charges']['max_rate'] ?? 0.06;
+        $maxRate = (float) ($trustsConfig['periodic_charges']['max_rate'] ?? 0.06);
 
-        // Simplified calculation - in practice this is complex
-        // Rate is up to 6% based on how much trust exceeds NRB
-        $trustValue = (float) $trust->current_value;
-        $excessOverNRB = max(0, $trustValue - $nrb);
+        $trustValueMinor = self::poundsToMinor($trust->current_value);
+        $excessOverNrbMinor = max(0, $trustValueMinor - $nrbMinor);
 
-        // Effective rate calculation (simplified)
-        // If trust value is zero, avoid division by zero
-        $effectiveRate = $trustValue > 0
-            ? min($maxRate, ($excessOverNRB / $trustValue) * 0.06)
-            : 0;
+        $effectiveRate = $trustValueMinor > 0
+            ? min($maxRate, ($excessOverNrbMinor / $trustValueMinor) * 0.06)
+            : 0.0;
 
-        $chargeAmount = $trustValue * $effectiveRate;
+        $chargeAmountMinor = (int) round($trustValueMinor * $effectiveRate);
 
         return [
-            'charge_amount' => round($chargeAmount, 2),
+            'charge_amount_minor' => $chargeAmountMinor,
             'effective_rate' => round($effectiveRate, 4),
-            'trust_value' => round($trustValue, 2),
-            'nrb' => round($nrb, 2),
-            'excess_over_nrb' => round($excessOverNRB, 2),
+            'trust_value_minor' => $trustValueMinor,
+            'nrb_minor' => $nrbMinor,
+            'excess_over_nrb_minor' => $excessOverNrbMinor,
             'next_charge_date' => $this->calculateNextPeriodicChargeDate($trust)?->format('Y-m-d'),
         ];
     }
 
     /**
-     * Calculate the IHT value of all trusts for a user
-     * Returns the amount that should be included in estate value
+     * Calculate the IHT value of all trusts for a user. The returned amount
+     * is in pence and should be included in estate value calculations.
      */
-    public function calculateTotalIHTValue(Collection $trusts): float
+    public function calculateTotalIHTValue(Collection $trusts): int
     {
-        return $trusts->sum(function ($trust) {
-            return $trust->getIHTValue();
-        });
+        return $trusts->reduce(
+            fn (int $carry, $trust) => $carry + self::poundsToMinor($trust->getIHTValue()),
+            0
+        );
     }
 
     /**
-     * Analyze trust efficiency for IHT planning
+     * Analyze trust efficiency for IHT planning.
      */
     public function analyzeTrustEfficiency(Trust $trust): array
     {
         $trustsConfig = $this->taxConfig->getTrusts();
         $trustTypeConfig = $trustsConfig['types'][$trust->trust_type] ?? null;
 
-        $valueInEstate = $trust->getIHTValue();
-        $currentValue = (float) $trust->current_value;
-        $initialValue = (float) $trust->initial_value;
-        $valueOutsideEstate = $currentValue - $valueInEstate;
-        $efficiencyPercent = $currentValue > 0
-            ? ($valueOutsideEstate / $currentValue) * 100
+        $valueInEstateMinor = self::poundsToMinor($trust->getIHTValue());
+        $currentValueMinor = self::poundsToMinor($trust->current_value);
+        $initialValueMinor = self::poundsToMinor($trust->initial_value);
+        $valueOutsideEstateMinor = $currentValueMinor - $valueInEstateMinor;
+        $efficiencyPercent = $currentValueMinor > 0
+            ? ($valueOutsideEstateMinor / $currentValueMinor) * 100
             : 0;
 
-        $growth = $currentValue - $initialValue;
-        $growthRate = $initialValue > 0
-            ? (($currentValue - $initialValue) / $initialValue) * 100
+        $growthMinor = $currentValueMinor - $initialValueMinor;
+        $growthRate = $initialValueMinor > 0
+            ? (($currentValueMinor - $initialValueMinor) / $initialValueMinor) * 100
             : 0;
 
         $yearsActive = Carbon::parse($trust->trust_creation_date)->diffInYears(Carbon::now());
 
-        // Get tax rates for this trust type
         $taxRates = $this->getTrustTaxRates($trust->trust_type);
 
         return [
@@ -127,12 +125,12 @@ class TrustService
             'trust_type' => $trust->trust_type,
             'trust_type_name' => $trustTypeConfig['name'] ?? ucwords(str_replace('_', ' ', $trust->trust_type)),
             'trust_type_description' => $trustTypeConfig['description'] ?? null,
-            'initial_value' => round($initialValue, 2),
-            'current_value' => round($currentValue, 2),
-            'growth' => round($growth, 2),
+            'initial_value_minor' => $initialValueMinor,
+            'current_value_minor' => $currentValueMinor,
+            'growth_minor' => $growthMinor,
             'growth_rate_percent' => round($growthRate, 2),
-            'value_in_estate' => round($valueInEstate, 2),
-            'value_outside_estate' => round($valueOutsideEstate, 2),
+            'value_in_estate_minor' => $valueInEstateMinor,
+            'value_outside_estate_minor' => $valueOutsideEstateMinor,
             'iht_efficiency_percent' => round($efficiencyPercent, 2),
             'years_active' => $yearsActive,
             'is_relevant_property_trust' => $trust->isRelevantPropertyTrust(),
@@ -146,104 +144,96 @@ class TrustService
     }
 
     /**
-     * Get income and CGT tax rates for a specific trust type
+     * Get income and CGT tax rates for a specific trust type. Money-named
+     * fields (`*_exempt_amount`, `tax_free_allowance`) are returned in pence.
      */
     public function getTrustTaxRates(string $trustType): array
     {
         $trustsConfig = $this->taxConfig->getTrusts();
         $trustTypeConfig = $trustsConfig['types'][$trustType] ?? null;
 
-        // Default rates for discretionary trusts (from config, with fallbacks)
         $discretionaryConfig = $trustsConfig['income_tax']['discretionary'] ?? [];
         $incomeTaxRates = [
             'standard_rate' => (float) ($discretionaryConfig['standard_rate'] ?? $this->taxConfig->getIncomeTax()['additional_rate'] ?? 0.45),
             'dividend_rate' => (float) ($discretionaryConfig['dividend_rate'] ?? TaxDefaults::DIVIDEND_ADDITIONAL_RATE),
         ];
 
-        // Determine income tax treatment based on trust type
         $incomeTaxTreatment = $trustTypeConfig['income_tax_treatment'] ?? 'trust_discretionary';
 
         if ($incomeTaxTreatment === 'trust_iip' || $trustType === 'interest_in_possession') {
-            // Interest in Possession trusts have lower rates — fallback to basic rate from TaxConfigService
             $basicRate = (float) ($this->taxConfig->getIncomeTax()['bands'][0]['rate'] ?? 0.20);
             $incomeTaxRates = $trustsConfig['income_tax']['interest_in_possession'] ?? [
                 'standard_rate' => $basicRate,
                 'dividend_rate' => 0.0875,
             ];
         } elseif ($incomeTaxTreatment === 'beneficiary' || $trustType === 'bare') {
-            // Bare trusts - taxed as beneficiary's income
             $incomeTaxRates = [
                 'standard_rate' => null,
                 'dividend_rate' => null,
                 'note' => 'Taxed as beneficiary\'s income using their personal rates',
             ];
         } elseif ($incomeTaxTreatment === 'settlor' || $trustType === 'settlor_interested') {
-            // Settlor-interested trusts - taxed on settlor
             $incomeTaxRates = [
                 'standard_rate' => null,
                 'dividend_rate' => null,
                 'note' => 'Taxed as settlor\'s income using their personal rates',
             ];
         } elseif ($incomeTaxTreatment === 'none' || $trustType === 'life_insurance') {
-            // Life insurance trusts - no regular income
             $incomeTaxRates = [
                 'standard_rate' => null,
                 'dividend_rate' => null,
                 'note' => 'No regular income - policy proceeds on death',
             ];
         } else {
-            // Discretionary and accumulation trusts
             $incomeTaxRates = $trustsConfig['income_tax']['discretionary'] ?? [
                 'standard_rate' => $this->taxConfig->getIncomeTax()['additional_rate'] ?? 0.45,
                 'dividend_rate' => TaxDefaults::DIVIDEND_ADDITIONAL_RATE,
             ];
         }
 
-        // Get CGT rates
         $cgtConfig = $trustsConfig['capital_gains_tax'] ?? [];
         $cgtTreatment = $trustTypeConfig['cgt_treatment'] ?? 'trust';
 
         $cgtRates = match ($cgtTreatment) {
             'beneficiary' => [
                 'rate' => null,
-                'annual_exempt_amount' => null,
+                'annual_exempt_amount_minor' => null,
                 'note' => 'Uses beneficiary\'s CGT allowance and rates',
             ],
             'settlor' => [
                 'rate' => null,
-                'annual_exempt_amount' => null,
+                'annual_exempt_amount_minor' => null,
                 'note' => 'Uses settlor\'s CGT allowance and rates',
             ],
             'none' => [
                 'rate' => null,
-                'annual_exempt_amount' => null,
+                'annual_exempt_amount_minor' => null,
                 'note' => 'No CGT on life policy proceeds',
             ],
             default => [
                 'rate' => $cgtConfig['rate'] ?? 0.24,
-                'annual_exempt_amount' => $cgtConfig['annual_exempt_amount'] ?? 1500,
-                'vulnerable_beneficiary_exempt_amount' => $cgtConfig['vulnerable_beneficiary_exempt_amount'] ?? 3000,
+                'annual_exempt_amount_minor' => self::poundsToMinor($cgtConfig['annual_exempt_amount'] ?? 1500),
+                'vulnerable_beneficiary_exempt_amount_minor' => self::poundsToMinor($cgtConfig['vulnerable_beneficiary_exempt_amount'] ?? 3000),
             ],
         };
 
         return [
             'income_tax' => $incomeTaxRates,
             'capital_gains_tax' => $cgtRates,
-            'tax_free_allowance' => $trustsConfig['income_tax']['tax_free_allowance'] ?? 500,
+            'tax_free_allowance_minor' => self::poundsToMinor($trustsConfig['income_tax']['tax_free_allowance'] ?? 500),
             'iht_treatment' => $trustTypeConfig['iht_treatment'] ?? 'unknown',
         ];
     }
 
     /**
-     * Get trust recommendations based on user's estate and circumstances
+     * Get trust recommendations based on user's estate and circumstances.
      */
-    public function getTrustRecommendations(float $estateValue, float $ihtLiability, array $circumstances = []): array
+    public function getTrustRecommendations(int $estateValueMinor, int $ihtLiabilityMinor, array $circumstances = []): array
     {
         $recommendations = [];
         $trustsConfig = $this->taxConfig->getTrusts();
         $trustTypes = $trustsConfig['types'] ?? [];
 
-        // Default descriptions if not in database
         $defaultDescriptions = [
             'life_insurance' => 'Life insurance policy written in trust to pay IHT liability',
             'discounted_gift' => 'Gift assets to trust while retaining income rights',
@@ -252,13 +242,13 @@ class TrustService
             'discretionary' => 'Flexible trust allowing trustees to decide distributions',
         ];
 
-        // If significant IHT liability
-        if ($ihtLiability > 50000) {
-            // Recommend life insurance trust to cover liability
+        // £50,000 in pence
+        if ($ihtLiabilityMinor > 5_000_000) {
+            $ihtLiabilityPounds = intdiv($ihtLiabilityMinor, 100);
             $recommendations[] = [
                 'trust_type' => 'life_insurance',
                 'priority' => 'high',
-                'reason' => 'Cover IHT liability of £'.number_format($ihtLiability, 0).' without depleting estate assets',
+                'reason' => 'Cover IHT liability of £'.number_format($ihtLiabilityPounds, 0).' without depleting estate assets',
                 'description' => $trustTypes['life_insurance']['description'] ?? $defaultDescriptions['life_insurance'],
                 'benefits' => [
                     'Policy proceeds paid outside estate',
@@ -267,8 +257,8 @@ class TrustService
                 ],
             ];
 
-            // If estate is large, consider discounted gift trust
-            if ($estateValue > 1000000) {
+            // £1,000,000 in pence
+            if ($estateValueMinor > 100_000_000) {
                 $recommendations[] = [
                     'trust_type' => 'discounted_gift',
                     'priority' => 'high',
@@ -282,7 +272,6 @@ class TrustService
                 ];
             }
 
-            // Loan trust for flexibility
             $recommendations[] = [
                 'trust_type' => 'loan',
                 'priority' => 'medium',
@@ -296,7 +285,6 @@ class TrustService
             ];
         }
 
-        // If have children
         if ($circumstances['has_children'] ?? false) {
             $recommendations[] = [
                 'trust_type' => 'bare',
@@ -311,7 +299,6 @@ class TrustService
             ];
         }
 
-        // If want flexibility for beneficiaries
         if ($circumstances['needs_flexibility'] ?? false) {
             $recommendations[] = [
                 'trust_type' => 'discretionary',
@@ -335,12 +322,11 @@ class TrustService
     }
 
     /**
-     * Calculate discounted gift trust discount based on age, income, and gender
-     * Uses actuarial tables when gender is provided for more accurate estimates
+     * Calculate discounted gift trust discount based on age, income, and gender.
+     * Uses actuarial tables when gender is provided for more accurate estimates.
      */
-    public function estimateDiscountedGiftDiscount(int $age, float $giftValue, float $annualIncome, ?string $gender = null): array
+    public function estimateDiscountedGiftDiscount(int $age, int $giftValueMinor, int $annualIncomeMinor, ?string $gender = null): array
     {
-        // Use actuarial tables when gender is available
         if ($gender) {
             $actuarialExpectancy = ActuarialLifeTable::where('gender', $gender)
                 ->where('age', '<=', $age)
@@ -355,24 +341,36 @@ class TrustService
             $lifeExpectancy = max(5, 90 - $age);
         }
 
-        // Total expected income payments
-        $totalExpectedIncome = $annualIncome * $lifeExpectancy;
+        $totalExpectedIncomeMinor = $annualIncomeMinor * $lifeExpectancy;
 
-        // Discount is NPV of future income stream (simplified - no discounting applied)
-        // In practice, this uses actuarial tables and discount rates
-        $discount = min($giftValue * 0.60, $totalExpectedIncome * 0.8); // Max 60% discount
+        // Discount is the lesser of (60% of gift value) or (80% of total expected income).
+        $discountMinor = (int) round((float) min(
+            $giftValueMinor * 0.60,
+            $totalExpectedIncomeMinor * 0.8
+        ));
 
-        $giftedValue = $giftValue - $discount;
-        $discountPercent = ($discount / $giftValue) * 100;
+        $giftedValueMinor = $giftValueMinor - $discountMinor;
+        $discountPercent = $giftValueMinor > 0
+            ? ($discountMinor / $giftValueMinor) * 100
+            : 0;
 
         return [
-            'gift_value' => round($giftValue, 2),
-            'discount_amount' => round($discount, 2),
+            'gift_value_minor' => $giftValueMinor,
+            'discount_amount_minor' => $discountMinor,
             'discount_percent' => round($discountPercent, 2),
-            'gifted_value' => round($giftedValue, 2), // This is the PET
-            'retained_value' => round($discount, 2), // This stays in estate
-            'annual_income' => round($annualIncome, 2),
+            'gifted_value_minor' => $giftedValueMinor,
+            'retained_value_minor' => $discountMinor,
+            'annual_income_minor' => $annualIncomeMinor,
             'estimated_life_expectancy' => $lifeExpectancy,
         ];
+    }
+
+    private static function poundsToMinor(int|float|string|null $pounds): int
+    {
+        if ($pounds === null) {
+            return 0;
+        }
+
+        return (int) round((float) $pounds * 100);
     }
 }

@@ -369,7 +369,6 @@ describe('Pack Isolation', function () {
             'App\\Services\\Estate\\PersonalizedTrustStrategyService',
             'App\\Services\\Estate\\PersonalizedGiftingStrategyService',
             'App\\Services\\Estate\\IHTFormattingService',
-            'App\\Services\\Estate\\TrustService',
             // R-9h surfaced two App\Services\Trust\* peers used by pack
             // TrustController + WillController. IHTPeriodicChargeCalculator
             // has float-money signatures (calculateExitCharge / calculateEntryCharge)
