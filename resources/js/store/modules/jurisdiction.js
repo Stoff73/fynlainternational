@@ -18,61 +18,20 @@
  * opt-in (ADR: product model memory).
  */
 
-// Module registry, keyed by jurisdiction code. UK entries are bare
-// module-name strings (UK sidebar composition is hardcoded today). ZA
-// entries carry the full sidebar config needed by the data-driven ZA
-// section in SideMenu.vue — added this way from the start so later SA
-// workstreams (WS 1.3c / 1.4d / 1.5b / 1.6b) only need to append one
-// entry here and their sidebar item appears.
-//
-// ZA entry shape: { key, label, route, icon, section }
-//   - key: stable identifier, prefix 'za-' to avoid UK name collision
-//   - label: user-facing label (British spelling; TFSA abbreviation allowed)
-//   - route: absolute SPA path under /za/*
-//   - icon: name from resources/js/components/SideMenuIcon.vue allow-list
-//   - section: section key (must exist in SideMenu.vue expandedSections)
-const MODULES_BY_JURISDICTION = {
-  gb: [
-    'protection',
-    'savings',
-    'investment',
-    'retirement',
-    'estate',
-    'goals',
-    'coordination',
-  ],
-  za: [
-    {
-      key: 'za-savings',
-      label: 'Savings (TFSA)',
-      route: '/za/savings',
-      icon: 'banknotes',
-      section: 'zaSection',
-    },
-    {
-      key: 'za-investment',
-      label: 'Investments',
-      route: '/za/investments',
-      icon: 'trending-up',
-      section: 'zaSection',
-    },
-    {
-      key: 'za-exchange-control',
-      label: 'Exchange Control',
-      route: '/za/exchange-control',
-      icon: 'map',
-      section: 'zaSection',
-    },
-    {
-      key: 'za-retirement',
-      label: 'Retirement',
-      route: '/za/retirement',
-      icon: 'briefcase',
-      section: 'zaSection',
-    },
-    { key: 'za-protection', label: 'Protection', route: '/za/protection', icon: 'shield', section: 'zaSection' },
-    // WS 1.6b will add za-estate here
-  ],
+import gbNavigation from '@gb/navigation';
+import zaNavigation from '@za/navigation';
+
+// Per-pack navigation registry (R-12). Each pack ships a default-exported
+// `navigation()` thunk that returns its sidebar manifest:
+//   { code, modules: [...] }
+// where `modules` is a flat list of strings (UK — used by `sidebarModules`
+// for route guards / feature gating) or full config objects (ZA — used by
+// SideMenu.vue's data-driven `<SideMenuItem v-for>`). When R-13a converts
+// the UK sidebar to data-driven rendering, the GB manifest gains the
+// richer `rootItems` + `sections` shape without touching the registry.
+const PACK_NAVIGATIONS = {
+  gb: gbNavigation,
+  za: zaNavigation,
 };
 
 const CROSS_BORDER_MODULES = ['cross-border'];
@@ -95,11 +54,11 @@ const getters = {
   sidebarModules: (state) => {
     const modules = [];
     for (const code of state.activeJurisdictions) {
-      const jurisdictionModules = MODULES_BY_JURISDICTION[code];
-      if (jurisdictionModules) {
-        for (const entry of jurisdictionModules) {
-          modules.push(typeof entry === 'string' ? entry : entry.key);
-        }
+      const pack = PACK_NAVIGATIONS[code];
+      if (!pack) continue;
+      const entries = pack()?.modules || [];
+      for (const entry of entries) {
+        modules.push(typeof entry === 'string' ? entry : entry.key);
       }
     }
     if (state.crossBorder) {
@@ -116,7 +75,9 @@ const getters = {
    */
   zaModules: (state) => {
     if (!state.activeJurisdictions.includes('za')) return [];
-    const entries = MODULES_BY_JURISDICTION.za || [];
+    const pack = PACK_NAVIGATIONS.za;
+    if (!pack) return [];
+    const entries = pack()?.modules || [];
     return entries.filter((e) => typeof e === 'object');
   },
 

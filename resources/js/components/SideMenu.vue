@@ -99,8 +99,8 @@
 
         <!-- South Africa — data-driven from jurisdiction/zaModules (WS 1.2b).
              Later SA UI workstreams (1.3c, 1.4d, 1.5b, 1.6b) append entries
-             to MODULES_BY_JURISDICTION.za and the items appear here without
-             further edits. -->
+             to packs/country-za/resources/js/navigation.js and the items
+             appear here without further edits. -->
         <SideMenuSection v-if="hasZa" label="South Africa" :collapsed="effectiveCollapsed" :expanded="isSectionExpanded('zaSection')" @toggle="toggleSection('zaSection')">
           <SideMenuItem
             v-for="mod in zaModules"
@@ -240,8 +240,9 @@ export default {
     const isPreviewMode = computed(() => store.getters['preview/isPreviewMode']);
     // WS 1.2b — data-driven ZA sidebar. zaModules returns config objects
     // ({ key, label, route, icon, section }) from the jurisdiction store.
-    // Later SA workstreams append entries to MODULES_BY_JURISDICTION.za
-    // and the sidebar picks them up without further edits here.
+    // Later SA workstreams append entries to the ZA pack navigation
+    // manifest (packs/country-za/resources/js/navigation.js) and the
+    // sidebar picks them up without further edits here.
     const zaModules = computed(() => store.getters['jurisdiction/zaModules']);
     const hasZa = computed(() => zaModules.value.length > 0);
     const hasSpouse = computed(() => {

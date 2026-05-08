@@ -194,6 +194,8 @@ export default defineConfig({
     resolve: {
         alias: {
             '@': path.resolve(__dirname, 'resources/js'),
+            '@gb': path.resolve(__dirname, 'packs/country-gb/resources/js'),
+            '@za': path.resolve(__dirname, 'packs/country-za/resources/js'),
         },
     },
     build: {
