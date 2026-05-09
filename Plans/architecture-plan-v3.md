@@ -2,8 +2,10 @@
 type: plan
 date: 2026-05-06
 audited: 2026-05-06 (inline audit step, no formal PRD per user instruction)
-status: ready for R-0
+amended: 2026-05-09 — § 16b R-14b re-scoped after PRD audit (5 hr → 11 hr; one contract → three; R-9-final pre-condition added; UserResource added to scope)
+status: R-0 → R-14a CLOSED (14/14); R-14b PRD complete; R-9-final pending kickoff
 companion_spec: Plans/architecture-spec-v3.md
+prd: May/May9Updates/PRD-r-14b-container-query-layer.md
 supersedes:
   - Plans/Implementation_Plan_v2.md
   - May/May5Updates/architecture-plan-realigned-2026-05-05.md
@@ -99,9 +101,9 @@ Plan original total: **~39 hr**. After audit corrections: **~50 hr**. After sess
 | R-13b (SA FE, new) | — | 3 | 3 |
 | R-14 | 3 | 3 | 3 |
 | **R-14a (new — ADR-005 int-minor)** | — | — | **6** |
-| **R-14b (new — query layer + 6 core models)** | — | — | **5** |
+| **R-14b (new — query layer + 6 core models)** | — | — | **11** (revised 2026-05-09 from provisional 5 hr after R-14b kickoff audit; see § 16b) |
 | R-15 | 3 | 3 | 3 (no longer absorbs the deferral burden — stays at 3) |
-| **Total** | **39** | **~50** | **~61** |
+| **Total** | **39** | **~50** | **~67** |
 
 The 11-hour delta from audit → post-session-4 reflects the explicit workstreams CSJ scheduled to clean up the deferrals R-3/R-4/R-5 accumulated (and R-6/R-7/R-8/R-9 will continue to accumulate). Without R-14a/R-14b, R-15 would balloon from 3 hr to ~10–15 hr and become the actual hard workstream. Hours-not-days mandate still holds at workstream level — flag drift if any single workstream blows past its updated estimate.
 
@@ -146,10 +148,10 @@ Order is mandatory — earlier workstreams establish the namespace and binding p
 | R-13 | Relocate UK frontend — Vue components (~440 UK), views (~70), Vuex modules (~24 UK) | 6 hr | `packs/country-gb/resources/js/{components,views,store,services}/` — dynamic-imported on auth |
 | R-14 | Routing realignment — country-prefixed backend URLs (`/api/gb/*`), pack-isolated frontend routes, redirect layer for legacy URLs | 3 hr | UK clients see no break; SA `/za/*` URLs drop to unprefixed inside the SA pack scope |
 | **R-14a** | **ADR-005 int-minor money refactor — convert all `float $amount`-style signatures on the deferred-from-R-3/R-5/R-6/R-7 services + traits to int-minor; relocate them into the GB pack; close their PackIsolationTest allow-list entries** | **6 hr** | **All 12+ deferred float-money services + 2 traits relocated into `packs/country-gb/src/`. NoFloatMoneyTest passes inside `packs/`. Allow-list shrinks by ~14 entries.** |
-| **R-14b** | **Container-resolved query layer + relocate 6 deferred core models (`User`, `Household`, `Goal`, `GoalContribution`, `LifeEvent`, `LifeEventAllocation`) to core. Designs an `AssetQueryService`-style abstraction for cross-pack relationships so `hasMany(\Fynla\Packs\Gb\Models\X::class)` literals come out of the moved models** | **5 hr** | **6 models in `core/app/Core/Models/` (or equivalent) under `Fynla\Core\Models\`. CoreIndependenceTest passes. Allow-list shrinks by ~6 entries.** |
+| **R-14b** | **Container-resolved query layer + relocate 6 deferred core models (`User`, `Household`, `Goal`, `GoalContribution`, `LifeEvent`, `LifeEventAllocation`) to core. Designs three typed contracts (`PackAssetRepository`, `PackEstateRepository`, `PackAssetResolver`) so `hasMany(\Fynla\Packs\Gb\Models\X::class)` literals come out of the moved models. Also relocates `UserResource` to core and resolves R-9 residual UK-specific controllers as a Phase-0 pre-condition.** | **11 hr** (revised 2026-05-09 from provisional 5 hr) | **6 models in `core/app/Core/Models/` under `Fynla\Core\Models\`. UserResource in `core/app/Core/Http/Resources/`. CoreIndependenceTest passes. PackIsolationTest allow-list shrinks by 7 entries (6 core models + UserResource).** |
 | R-15 | Full Pest + Playwright regression — UK-only journey, SA-only journey, dual-user smoke | 3 hr | Phase 1 acceptance per Spec § 10 |
 
-**Total: ~50 hours after audit + 11 hours for R-14a/R-14b = ~61 hours of focused mechanical execution.** R-14a and R-14b are sized provisionally; both should be re-scoped at workstream kickoff once R-6/R-7/R-8/R-9 have settled how many extra services land on the deferral list.
+**Total: ~50 hours after audit + 17 hours for R-14a/R-14b = ~67 hours of focused mechanical execution.** R-14a and R-14b are sized provisionally; both should be re-scoped at workstream kickoff once R-6/R-7/R-8/R-9 have settled how many extra services land on the deferral list.
 
 The previous "days/weeks" framing assumed scope drift, off-piste exploration, and re-planning loops. Held to the plan as written — with disciplined namespace-renames, scripted `use`-statement updates, and Pest-green-after-every-commit cadence — this is hours of work, not weeks. Any blow-out beyond the per-workstream estimates is a signal to stop and re-check whether the work has drifted from the plan, not to extend the estimate.
 
@@ -758,10 +760,27 @@ Already-bound services (`pack.gb.tax`, `pack.gb.estate` etc.) get their `bind()`
 
 ---
 
-## 16b. R-14b — Container-Resolved Query Layer + Relocation of 6 Deferred Core Models (5 hr — provisional)
+## 16b. R-14b — Container-Resolved Query Layer + Relocation of 6 Deferred Core Models (11 hr — revised 2026-05-09)
+
+> **Revision note (2026-05-09 session 4 PRD kickoff):** Original 5 hr provisional was written before the contract surface was known. After auditing the actual coupling shape (6 deferred models hold 17+ pack-relationship literals; 417 import lines need updating; 64 method-call sites need redirection through the contract; 162 test files reference `App\Models\User`; R-9 left ~8 UK-specific controllers in `app/Http/Controllers/Api/`), the realistic estimate is 11 hr broken into 9 sub-batches plus a pre-condition R-9-final batch. Single `AssetQueryService` example replaced with three typed contracts grounded in actual call shapes. See `May/May9Updates/PRD-r-14b-container-query-layer.md` for full validation, sub-batch decomposition, and amendment rationale.
+
+### Pre-condition: R-9-final residual controllers (~1.5 hr, executed before R-14b proper)
+
+R-9 closed only ~50% of UK-specific controllers. The following 8 controllers remain in `app/Http/Controllers/Api/` and must relocate into `packs/country-gb/src/Http/Controllers/` before R-14b kicks off proper, otherwise the contract surface is designed against a moving target:
+
+- `GoalsController` (15 `Goal::` static calls — heaviest)
+- `LifeEventController`
+- `LifeEventAllocationController`
+- `HouseholdController`
+- `PropertyController`
+- `MortgageController`
+- `BusinessInterestController`
+- `ChattelController`
+
+Track this batch as R-9-final (separate commit chain, not numbered as R-14b-N). Standard R-9 mechanics: `git mv`, namespace bump, route registration update, allow-list adjustment.
 
 ### Goal
-Design and implement a small core-side query abstraction so the 6 deferred core models — `User`, `Household`, `Goal`, `GoalContribution`, `LifeEvent`, `LifeEventAllocation` — can be relocated to `core/app/Core/Models/` (under `Fynla\Core\Models\`) without their relationship arrows pointing into the GB pack and tripping `CoreIndependenceTest`.
+Design and implement a typed core-side query abstraction so the 6 deferred core models — `User`, `Household`, `Goal`, `GoalContribution`, `LifeEvent`, `LifeEventAllocation` — can be relocated to `core/app/Core/Models/` (under `Fynla\Core\Models\`) without their relationship arrows pointing into the GB pack and tripping `CoreIndependenceTest`. Also relocates `app/Http/Resources/UserResource.php` to core (its allow-list comment already promises R-14b).
 
 ### Why these 6 stayed put
 After R-4a (35 jurisdiction-agnostic models → core) and R-4b (53 UK models → GB pack), these 6 models have:
@@ -771,46 +790,82 @@ After R-4a (35 jurisdiction-agnostic models → core) and R-4b (53 UK models →
 
 Currently held in `App\Models\` (back-compat namespace) precisely because of this. The architecture-test allow-list has 6 entries tagged with R-14b ratchet markers.
 
-### Approach
+### Approach (revised 2026-05-09 — three typed contracts, not one)
 
-A core-mediated query layer expressed as a contract on the registry:
+The original single `AssetQueryService::ownedBy(User)` example does not fit the actual coupling shape. User has 6 Estate methods that are independently queried (never merged into a flat collection by any caller), 1+ Investment aggregation method, plus pack-asset listings via Savings/Retirement/Protection/Property paths. Goal has typed FK arrows (`linkedSavingsAccount`, `linkedInvestmentAccount`, `savingsAccounts`) that don't fit `ownedBy()` shape — they're typed pointers via FK column, not aggregations. Three typed contracts grounded in real call shapes:
 
 ```php
-// core/app/Core/Contracts/AssetQueryService.php
-interface AssetQueryService
+// core/app/Core/Contracts/PackAssetRepository.php
+// Aggregation contract — listings per user/household.
+interface PackAssetRepository
 {
-    /** @return Collection<\Fynla\Core\Models\AssetSummary> */
-    public function ownedBy(User $user): Collection;
+    /** @return Collection<\Fynla\Core\Query\AssetSummary> */
+    public function userAccounts(int $userId): Collection;
 
-    /** Aggregate value across all packs for a household. */
-    public function totalValueForHousehold(Household $household): int; // minor units (post-R-14a)
+    /** @return Collection<\Fynla\Core\Query\AssetSummary> */
+    public function householdAssets(int $householdId): Collection;
+}
+
+// core/app/Core/Contracts/PackEstateRepository.php
+// Typed Estate queries (each callable independently — no flat aggregation).
+interface PackEstateRepository
+{
+    public function liabilitiesForUser(int $userId): Collection;
+    public function trustsForUser(int $userId): Collection;
+    public function ihtProfileForUser(int $userId): ?Model;
+    public function estateAssetsForUser(int $userId): Collection;
+    public function giftsForUser(int $userId): Collection;
+    public function lpasForUser(int $userId): Collection;
+}
+
+// core/app/Core/Contracts/PackAssetResolver.php
+// FK-by-id resolution for Goal's typed arrow relations.
+interface PackAssetResolver
+{
+    /** Resolve a single asset by pack-namespaced type tag and primary key. Returns null if not found. */
+    public function resolveAccount(string $assetType, int $id): ?Model;
 }
 ```
 
-Each pack provides an implementation that knows which of its models count as "assets":
+Type tags are pack-namespaced strings (`'gb.savings_account'`, `'gb.investment_account'`). The GB pack provides one implementation per contract:
+
+- `packs/country-gb/src/Query/GbPackAssetRepository.php` (binds `pack.gb.asset_repo`)
+- `packs/country-gb/src/Query/GbPackEstateRepository.php` (binds `pack.gb.estate_repo`)
+- `packs/country-gb/src/Query/GbPackAssetResolver.php` (binds `pack.gb.asset_resolver`)
+
+The ZA pack ships Null implementations of all three (empty collections, null returns) bound under `pack.za.*` keys.
+
+Core ships a `CompositePackAssetRepository` (and equivalents for the other two contracts) that iterates `PackRegistry::all()`, resolves each pack's `pack.{code}.asset_repo` binding, and merges results. Core's default `PackAssetRepository` binding resolves to the composite; pack-specific bindings are also addressable directly when needed.
+
+The 6 core models call out via `app(PackAssetRepository::class)->userAccounts($this->id)` (etc.) instead of declaring `hasMany` literals into pack namespaces. The arrow direction reverses: core depends on a contract; packs provide implementations. Goal's `linkedSavingsAccount()` becomes:
 
 ```php
-// packs/country-gb/src/Query/GbAssetQueryService.php
-public function ownedBy(User $user): Collection
+public function linkedSavingsAccount()
 {
-    return $user->morphsLikely()->concat(
-        $user->isaContributions, ...
-    )->map(fn($m) => AssetSummary::from($m));
+    if ($this->linked_savings_account_id === null) return null;
+    return app(PackAssetResolver::class)->resolveAccount('gb.savings_account', $this->linked_savings_account_id);
 }
 ```
 
-The 6 core models then call out via `app(AssetQueryService::class)->ownedBy($this)` instead of declaring `hasMany` literals into pack namespaces. The arrow direction reverses: instead of core referring to pack, pack provides a service core depends on.
+The FK column `linked_savings_account_id` stays in the `goals` table; only the Eloquent relation method changes.
 
-### Tasks
+### Sub-batches (executed in order; one commit per sub-batch)
 
-1. Design `AssetQueryService` (or equivalent — final shape decided at kickoff once R-9 has shown how controllers actually query these 6 models).
-2. Add the contract to `core/app/Core/Contracts/`.
-3. Add a 15th binding key (`pack.gb.asset_query`) and bind it in `GbPackServiceProvider`.
-4. Add equivalent stubs in `ZaPackServiceProvider` (Null impl returning empty collection until SA needs the surface).
-5. Refactor User/Household/Goal/GoalContribution/LifeEvent/LifeEventAllocation to call through the service in place of `hasMany`/`belongsToMany` literals into packs. Keep `hasMany` to *core* models (User → Household, Household → User, Goal → User, etc.).
-6. Move all 6 to `core/app/Core/Models/` under namespace `Fynla\Core\Models\`. Standard relocation procedure (namespace, `use` statements, factories, sed of bare refs).
-7. Update Eloquent morph-map registrations so polymorphic relations from pack models still resolve User correctly across the namespace change.
-8. Remove the 6 allow-list entries from `tests/Architecture/PackIsolationTest.php`.
+Total estimate: **11 hr** across 9 sub-batches (R-9-final pre-condition is separate, ~1.5 hr).
+
+| # | Sub-batch | Work | Hr |
+|---|-----------|------|----|
+| R-14b-i | Contracts | Add `PackAssetRepository`, `PackEstateRepository`, `PackAssetResolver` to `core/app/Core/Contracts/`. Add `AssetSummary` value object to `core/app/Core/Query/`. Add `CompositePackAssetRepository`/`CompositePackEstateRepository`/`CompositePackAssetResolver` defaults to `core/app/Core/Query/`. Bind composites as default `PackAssetRepository`/etc. resolution in `CoreServiceProvider`. | 1.5 |
+| R-14b-ii | GB implementations | Write `GbPackAssetRepository`, `GbPackEstateRepository`, `GbPackAssetResolver` in `packs/country-gb/src/Query/`. Add 3 bindings to `GbPackServiceProvider`. | 1.5 |
+| R-14b-iii | ZA Null implementations | Write `ZaPackAssetRepository`/etc. in `packs/country-za/src/Query/` returning empty collections / null. Add 3 bindings to `ZaPackServiceProvider`. | 0.5 |
+| R-14b-iv | Relocate clean models | Move `GoalContribution`, `LifeEvent`, `LifeEventAllocation` to `core/app/Core/Models/`. These are clean (no pack literals). Standard namespace + caller import update. | 1 |
+| R-14b-v | Relocate Goal | Move `Goal` to core. Replace 3 pack FK relations with `PackAssetResolver` calls. Update `GoalObserver`, `GoalsAgent`, R-9-final-relocated `GoalsController` callers. | 1.5 |
+| R-14b-vi | Relocate Household | Move `Household` to core. Replace 6 pack `hasMany` with `PackAssetRepository::householdAssets()` calls. Update `HouseholdController` and consumer services. | 1 |
+| R-14b-vii | Relocate User | Move `User` to core (largest single sub-batch). Replace 6 Estate `hasMany` with `PackEstateRepository` calls. Replace pack-asset `hasMany` (Investment/Savings/Retirement/Protection/Property) with `PackAssetRepository::userAccounts()`. Verify `HasApiTokens` morph resolution. Relocate `UserResource` to `core/app/Core/Http/Resources/`. | 2.5 |
+| R-14b-viii | Morph-map + mass import update | Register morph alias `'user' => Fynla\Core\Models\User::class` in `CoreServiceProvider`. Run row-count check on `personal_access_tokens.tokenable_type` and `audit_logs.model_type`; if non-zero, write a follow-up backfill migration. Sed-replace `App\Models\User/Household/Goal/etc.` across 162 test files + 103 GB pack files + 30 core model files + remaining controllers. Update `config/auth.php` line 65 to `Fynla\Core\Models\User::class`. | 1.5 |
+| R-14b-ix | Verification | `./vendor/bin/pest --testsuite=Architecture` green (CoreIndependenceTest active for `core/app/Core/Models/`). PackIsolationTest allow-list -7 entries (6 core models + UserResource). Full Pest suite green. Spot-check UK dashboard renders the same totals; SA login resolves the new core User. | 0.5 |
+
+Strategy B (R-14a's caller-migration shortcut) does NOT apply here. R-14b is a structural refactor — relationship literals come out of core models entirely, replaced by service calls. Caller updates are mandatory and unavoidable.
 
 ### Why after R-14, not before
 - R-9 (controllers + observers) is what actually exercises the query surface. Designing the abstraction before R-9 has settled means designing against speculative call patterns. After R-14, the controllers are in the GB pack, the URL prefixing is settled, and the real call sites are visible.
@@ -825,9 +880,11 @@ The 6 core models then call out via `app(AssetQueryService::class)->ownedBy($thi
 
 ### Risks
 
-- **Morph-map churn.** Six core models with polymorphic relations from pack models means the morph map needs to be re-registered for the new core namespace. If R-4b's polymorphic data migration left any rows pointing at `App\Models\User`, those need a follow-up backfill (write a one-shot migration as part of this workstream).
-- **Eloquent global scopes.** Any global scope on User/Household that filters by jurisdiction needs to live in core but be aware of pack data. Contract on the registry handles this; verify no global scope leaks into a pack namespace.
-- **Dual-jurisdiction users.** A user whose household has both UK and SA assets means `AssetQueryService::ownedBy($user)` must merge results across packs. The default implementation should iterate registered packs and call each one's local query service. This is the moment to settle that pattern before Phase 2 builds on it.
+- **Morph-map churn (bounded).** Audit found NO `App\Models\User` strings in the 2 GB pack `morphTo` columns (`joint_account_logs.accountable_type`, `holdings.holdable_type`) — neither morphs to User. The actual exposure is `personal_access_tokens.tokenable_type` (Sanctum's morph storage for User) and `audit_logs.model_type` (manual polymorphic lookup in `AuditLog`). Mitigation: register morph alias `'user' => Fynla\Core\Models\User::class` in `CoreServiceProvider` (graceful fallback for any legacy rows) and run a row-count check at sub-batch viii kickoff; if non-zero, write a targeted backfill migration. Pack provider's prior comment forbidding morph-map registration applied to pack models, not to the User identity model.
+- **Eloquent global scopes.** Verified at audit: no global scopes on any of the 6 deferred models. No risk.
+- **Dual-jurisdiction users.** Plan now specifies the merge pattern: core's `CompositePackAssetRepository` iterates `PackRegistry::all()`, resolves each pack's `pack.{code}.asset_repo` binding (skipping packs without one), and merges results. The GB implementation never knows about ZA, and vice versa. This is the moment to settle that pattern before Phase 2 builds on it.
+- **R-9 close gate.** R-14b proper requires R-9-final (~1.5 hr) to land first — see pre-condition section above. Skipping it means designing the contract surface against a moving target (8 controllers still in `app/` would be relocated mid-R-14b, churning the call sites the contracts are supposed to satisfy).
+- **Test atomicity.** 162 test files import `App\Models\User`. The mass sed-replace must be atomic — any partial state leaves tests pointing at a non-existent class. Sub-batch viii commits the User move + morph alias + sed-replace + `config/auth.php` update together.
 
 ---
 
