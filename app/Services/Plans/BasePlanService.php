@@ -8,7 +8,7 @@ use App\Models\Goal;
 use Fynla\Packs\Gb\Models\Investment\InvestmentAccount;
 use Fynla\Packs\Gb\Models\SavingsAccount;
 use App\Models\User;
-use App\Traits\FormatsCurrency;
+use Fynla\Packs\Gb\Traits\FormatsCurrency;
 use Fynla\Packs\Gb\Traits\ResolvesExpenditure;
 
 abstract class BasePlanService

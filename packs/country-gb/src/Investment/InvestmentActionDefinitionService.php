@@ -10,7 +10,7 @@ use Fynla\Packs\Gb\Models\InvestmentActionDefinition;
 use Fynla\Packs\Gb\Plans\PlanConfigService;
 use App\Services\Investment\FeeAnalyzer;
 use Fynla\Packs\Gb\Tax\TaxConfigService;
-use App\Traits\FormatsCurrency;
+use Fynla\Packs\Gb\Traits\FormatsCurrency;
 
 /**
  * Evaluates investment action definitions against user data

@@ -1578,28 +1578,4 @@ class EstateAgent extends BaseAgent
         ]);
     }
 
-    /**
-     * Walk an array recursively and convert every `*_minor` int key to its
-     * pounds-shaped float equivalent. Used at the boundary of
-     * PersonalizedTrustStrategyService (R-14a-Estate-vi) to preserve the
-     * pre-refactor pounds-shaped response contract for `trust_recommendations`.
-     */
-    private function convertMinorKeysToPoundsRecursive(array $row): array
-    {
-        $out = [];
-        foreach ($row as $key => $value) {
-            if (is_array($value)) {
-                $value = $this->convertMinorKeysToPoundsRecursive($value);
-            }
-
-            if (is_string($key) && str_ends_with($key, '_minor') && is_int($value)) {
-                $poundsKey = substr($key, 0, -strlen('_minor'));
-                $out[$poundsKey] = round($value / 100, 2);
-            } else {
-                $out[$key] = $value;
-            }
-        }
-
-        return $out;
-    }
 }

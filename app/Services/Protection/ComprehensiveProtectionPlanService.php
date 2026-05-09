@@ -9,7 +9,7 @@ use Fynla\Packs\Gb\Models\ProtectionProfile;
 use Fynla\Packs\Gb\Protection\AdequacyScorer;
 use Fynla\Packs\Gb\Protection\RecommendationEngine;
 use App\Models\User;
-use App\Traits\FormatsCurrency;
+use Fynla\Packs\Gb\Traits\FormatsCurrency;
 
 /**
  * Generates a comprehensive protection plan combining:

@@ -15,11 +15,13 @@ use Fynla\Packs\Gb\Estate\PersonalizedGiftingStrategyService;
 use Fynla\Packs\Gb\Estate\PersonalizedTrustStrategyService;
 use Fynla\Packs\Gb\Estate\TrustService;
 use Fynla\Packs\Gb\Tax\TaxConfigService;
+use Fynla\Packs\Gb\Traits\FormatsCurrency;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
 class GiftingController extends Controller
 {
+    use FormatsCurrency;
     use SanitizedErrorResponse;
 
     public function __construct(
@@ -319,33 +321,6 @@ class GiftingController extends Controller
     private function convertPersonalizedStrategyForResponse(array $strategy): array
     {
         return $this->convertMinorKeysToPoundsRecursive($strategy);
-    }
-
-    /**
-     * Walk an array recursively and convert every `*_minor` int key to its
-     * pounds-shaped float equivalent (key without the `_minor` suffix).
-     * Non-`_minor` keys and non-array values pass through unchanged.
-     *
-     * Used at the controller boundary for both PersonalizedGiftingStrategyService
-     * and PersonalizedTrustStrategyService outputs (R-14a-Estate-v + Estate-vi).
-     */
-    private function convertMinorKeysToPoundsRecursive(array $row): array
-    {
-        $out = [];
-        foreach ($row as $key => $value) {
-            if (is_array($value)) {
-                $value = $this->convertMinorKeysToPoundsRecursive($value);
-            }
-
-            if (is_string($key) && str_ends_with($key, '_minor') && is_int($value)) {
-                $poundsKey = substr($key, 0, -strlen('_minor'));
-                $out[$poundsKey] = round($value / 100, 2);
-            } else {
-                $out[$key] = $value;
-            }
-        }
-
-        return $out;
     }
 
     /**

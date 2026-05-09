@@ -11,7 +11,7 @@ use Fynla\Packs\Gb\Retirement\RequiredCapitalCalculator;
 use Fynla\Packs\Gb\Tax\TaxConfigService;
 use Fynla\Packs\Gb\Tax\UKTaxCalculator;
 use App\Services\UserProfile\UserProfileService;
-use App\Traits\FormatsCurrency;
+use Fynla\Packs\Gb\Traits\FormatsCurrency;
 
 /**
  * Retirement Strategy Service

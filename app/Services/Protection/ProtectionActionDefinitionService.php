@@ -11,7 +11,7 @@ use Fynla\Packs\Gb\Models\ProtectionActionDefinition;
 use Fynla\Packs\Gb\Models\ProtectionProfile;
 use App\Models\User;
 use Fynla\Packs\Gb\Tax\TaxConfigService;
-use App\Traits\FormatsCurrency;
+use Fynla\Packs\Gb\Traits\FormatsCurrency;
 use Carbon\Carbon;
 
 class ProtectionActionDefinitionService

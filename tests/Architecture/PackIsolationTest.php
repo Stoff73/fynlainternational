@@ -355,9 +355,9 @@ describe('Pack Isolation', function () {
             // UserProfile module. RequiredCapitalCalculator imports it
             // for income-source resolution.
             'App\\Services\\UserProfile\\UserProfileService',
-            // App\Traits\* — FormatsCurrency/CalculatesOCF stay in app/Traits
-            // pending the int-minor money refactor (ADR-005).
-            'App\\Traits\\FormatsCurrency',
+            // App\Traits\CalculatesOCF — stays in app/Traits pending the
+            // int-minor money refactor (ADR-005). FormatsCurrency relocated
+            // in R-14a-Traits-i and now lives at Fynla\Packs\Gb\Traits\FormatsCurrency.
             'App\\Traits\\CalculatesOCF',
             // App\Services\Estate\* — these stay in app/Services/Estate
             // pending the int-minor money refactor (ADR-005). Pack code that

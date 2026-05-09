@@ -8,7 +8,7 @@ use App\Models\User;
 use App\Services\Retirement\DecumulationPlanner;
 use App\Services\Retirement\PensionContributionOptimizer;
 use App\Services\Retirement\SalarySacrificeAnalyzer;
-use App\Traits\FormatsCurrency;
+use Fynla\Packs\Gb\Traits\FormatsCurrency;
 use Fynla\Packs\Gb\Constants\TaxDefaults;
 use Fynla\Packs\Gb\Models\DCPension;
 use Fynla\Packs\Gb\Models\RetirementActionDefinition;

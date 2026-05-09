@@ -7,7 +7,7 @@ namespace Fynla\Packs\Gb\Coordination;
 use Fynla\Packs\Gb\Constants\TaxDefaults;
 use App\Models\User;
 use Fynla\Packs\Gb\Tax\TaxConfigService;
-use App\Traits\FormatsCurrency;
+use Fynla\Packs\Gb\Traits\FormatsCurrency;
 
 /**
  * Enriches raw recommendations with personalised context based on user circumstances.

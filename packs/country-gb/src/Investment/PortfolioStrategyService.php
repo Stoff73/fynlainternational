@@ -13,7 +13,7 @@ use Fynla\Packs\Gb\Investment\Rebalancing\DriftAnalyzer;
 use App\Services\Investment\Tax\TaxOptimizationAnalyzer;
 use App\Services\Risk\RiskPreferenceService;
 use Fynla\Packs\Gb\Tax\TaxConfigService;
-use App\Traits\FormatsCurrency;
+use Fynla\Packs\Gb\Traits\FormatsCurrency;
 
 /**
  * Portfolio Strategy Service

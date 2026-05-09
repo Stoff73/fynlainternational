@@ -13,7 +13,7 @@ use Fynla\Packs\Gb\Models\EstateActionDefinition;
 use Fynla\Packs\Gb\Models\LifeInsurancePolicy;
 use App\Models\User;
 use Fynla\Packs\Gb\Tax\TaxConfigService;
-use App\Traits\FormatsCurrency;
+use Fynla\Packs\Gb\Traits\FormatsCurrency;
 use Fynla\Core\Traits\StructuredLogging;
 use Carbon\Carbon;
 

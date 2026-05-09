@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace App\Agents;
 
 use Fynla\Packs\Gb\Constants\TaxDefaults;
-use App\Traits\FormatsCurrency;
+use Fynla\Packs\Gb\Traits\FormatsCurrency;
 use Illuminate\Support\Facades\Cache;
 
 abstract class BaseAgent
