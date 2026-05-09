@@ -8,7 +8,7 @@ use Fynla\Packs\Gb\Models\Property;
 use App\Models\User;
 use App\Services\Benefits\ChildBenefitService;
 use App\Services\Shared\CrossModuleAssetAggregator;
-use App\Services\UKTaxCalculator;
+use Fynla\Packs\Gb\Tax\UKTaxCalculator;
 
 class UserProfileService
 {
@@ -365,26 +365,26 @@ class UserProfileService
 
         // Get detailed tax breakdown (new method with per-income breakdowns)
         $detailedTax = $this->taxCalculator->calculateDetailedNetIncome(
-            $employmentIncome,
-            $selfEmploymentIncome,
-            $rentalIncome,
-            $pensionIncome,
-            $trustIncome,
-            $interestIncome,
-            $dividendIncome,
+            (int) round($employmentIncome * 100),
+            (int) round($selfEmploymentIncome * 100),
+            (int) round($rentalIncome * 100),
+            (int) round($pensionIncome * 100),
+            (int) round($trustIncome * 100),
+            (int) round($interestIncome * 100),
+            (int) round($dividendIncome * 100),
             $trustType,
-            $pensionContributions,
-            $section24Credit
+            (int) round($pensionContributions * 100),
+            (int) round($section24Credit * 100)
         );
 
         // Get simple calculation for backwards compatibility
         $simpleTax = $this->taxCalculator->calculateNetIncome(
-            $employmentIncome,
-            $selfEmploymentIncome,
-            $rentalIncome,
-            $dividendIncome,
-            $interestIncome,
-            $trustIncome + $pensionIncome + $otherIncome
+            (int) round($employmentIncome * 100),
+            (int) round($selfEmploymentIncome * 100),
+            (int) round($rentalIncome * 100),
+            (int) round($dividendIncome * 100),
+            (int) round($interestIncome * 100),
+            (int) round(($trustIncome + $pensionIncome + $otherIncome) * 100)
         );
 
         // Calculate expenditure once (includes financial commitments to match Expenditure tab)

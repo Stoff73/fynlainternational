@@ -8,7 +8,7 @@ use App\Models\Goal;
 use App\Models\User;
 use App\Services\NetWorth\NetWorthService;
 use App\Services\Settings\AssumptionsService;
-use App\Services\UKTaxCalculator;
+use Fynla\Packs\Gb\Tax\UKTaxCalculator;
 use Fynla\Packs\Gb\Traits\ResolvesIncome;
 use Carbon\Carbon;
 use Illuminate\Support\Collection;

@@ -8,7 +8,7 @@ use Fynla\Packs\Gb\Models\Investment\Holding;
 use Fynla\Packs\Gb\Models\Investment\InvestmentAccount;
 use App\Services\Risk\RiskPreferenceService;
 use Fynla\Packs\Gb\Tax\TaxConfigService;
-use App\Services\UKTaxCalculator;
+use Fynla\Packs\Gb\Tax\UKTaxCalculator;
 
 /**
  * Tax Drag Calculator

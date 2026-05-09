@@ -249,9 +249,6 @@ describe('Pack Isolation', function () {
             'App\\Services\\AI\\XaiClient',
             'App\\Services\\AI\\XaiToolDefinitions',
             'App\\Services\\PrerequisiteGateService',
-            // App\Services\UKTaxCalculator stays put — float-money signatures
-            // (ADR-005) prevent moving into pack scope until int-minor refactor.
-            'App\\Services\\UKTaxCalculator',
             // App\Services\* — relocated in R-6/R-7.
             'App\\Services\\Cache\\CacheInvalidationService',
             // R-14a deferred Coordination services — float-money signatures

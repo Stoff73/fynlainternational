@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Fynla\Packs\Gb\Traits;
 
 use App\Models\User;
-use App\Services\UKTaxCalculator;
+use Fynla\Packs\Gb\Tax\UKTaxCalculator;
 
 trait ResolvesIncome
 {
@@ -46,12 +46,12 @@ trait ResolvesIncome
         }
 
         $taxResult = $this->getIncomeTaxCalculator()->calculateNetIncome(
-            $employmentIncome,
-            $selfEmploymentIncome,
-            $rentalIncome,
-            $dividendIncome,
-            $interestIncome,
-            $otherIncome
+            (int) round($employmentIncome * 100),
+            (int) round($selfEmploymentIncome * 100),
+            (int) round($rentalIncome * 100),
+            (int) round($dividendIncome * 100),
+            (int) round($interestIncome * 100),
+            (int) round($otherIncome * 100)
         );
 
         return (float) ($taxResult['net_income'] ?? 0);

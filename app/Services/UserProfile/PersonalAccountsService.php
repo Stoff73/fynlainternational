@@ -6,7 +6,7 @@ namespace App\Services\UserProfile;
 
 use Fynla\Packs\Gb\Models\SavingsAccount;
 use App\Models\User;
-use App\Services\UKTaxCalculator;
+use Fynla\Packs\Gb\Tax\UKTaxCalculator;
 use Fynla\Core\Traits\CalculatesOwnershipShare;
 use Carbon\Carbon;
 
@@ -117,12 +117,12 @@ class PersonalAccountsService
 
         // Calculate tax using UKTaxCalculator with TaxConfigService rates
         $taxBreakdown = $this->taxCalculator->calculateNetIncome(
-            (float) ($user->annual_employment_income ?? 0),
-            (float) ($user->annual_self_employment_income ?? 0),
-            (float) ($user->annual_rental_income ?? 0),
-            (float) ($user->annual_dividend_income ?? 0),
-            (float) ($user->annual_interest_income ?? 0),
-            (float) ($user->annual_other_income ?? 0) + (float) ($user->annual_trust_income ?? 0) + $pensionIncome
+            (int) round(((float) ($user->annual_employment_income ?? 0)) * 100),
+            (int) round(((float) ($user->annual_self_employment_income ?? 0)) * 100),
+            (int) round(((float) ($user->annual_rental_income ?? 0)) * 100),
+            (int) round(((float) ($user->annual_dividend_income ?? 0)) * 100),
+            (int) round(((float) ($user->annual_interest_income ?? 0)) * 100),
+            (int) round(((float) ($user->annual_other_income ?? 0) + (float) ($user->annual_trust_income ?? 0) + $pensionIncome) * 100)
         );
 
         return [

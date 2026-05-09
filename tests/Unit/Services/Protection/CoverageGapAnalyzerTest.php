@@ -6,7 +6,7 @@ use Fynla\Packs\Gb\Models\ProtectionProfile;
 use App\Models\User;
 use App\Services\Protection\CoverageGapAnalyzer;
 use Fynla\Packs\Gb\Tax\TaxConfigService;
-use App\Services\UKTaxCalculator;
+use Fynla\Packs\Gb\Tax\UKTaxCalculator;
 
 beforeEach(function () {
     // Mock TaxConfigService

@@ -6,7 +6,7 @@ namespace Fynla\Packs\Gb\Goals;
 
 use App\Models\Goal;
 use App\Models\User;
-use App\Services\UKTaxCalculator;
+use Fynla\Packs\Gb\Tax\UKTaxCalculator;
 use Fynla\Packs\Gb\Traits\ResolvesExpenditure;
 use Fynla\Packs\Gb\Traits\ResolvesIncome;
 use Carbon\Carbon;

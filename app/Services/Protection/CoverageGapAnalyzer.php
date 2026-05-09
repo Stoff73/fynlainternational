@@ -6,7 +6,7 @@ namespace App\Services\Protection;
 
 use Fynla\Packs\Gb\Models\ProtectionProfile;
 use Fynla\Packs\Gb\Tax\TaxConfigService;
-use App\Services\UKTaxCalculator;
+use Fynla\Packs\Gb\Tax\UKTaxCalculator;
 use Fynla\Packs\Gb\Traits\ResolvesExpenditure;
 use Fynla\Packs\Gb\Traits\ResolvesIncome;
 use Illuminate\Support\Collection;
@@ -297,11 +297,11 @@ class CoverageGapAnalyzer
         // Calculate USER'S NET annual income after tax and NI (EMPLOYMENT/SELF-EMPLOYMENT ONLY)
         // These are earned income streams that STOP on death
         $userTaxCalculation = $this->taxCalculator->calculateNetIncome(
-            (float) ($user->annual_employment_income ?? 0),
-            (float) ($user->annual_self_employment_income ?? 0),
+            (int) round(((float) ($user->annual_employment_income ?? 0)) * 100),
+            (int) round(((float) ($user->annual_self_employment_income ?? 0)) * 100),
             0, // Rental income calculated separately
             0, // Dividend income calculated separately
-            (float) ($user->annual_other_income ?? 0)
+            (int) round(((float) ($user->annual_other_income ?? 0)) * 100)
         );
 
         $userGrossIncome = $userTaxCalculation['gross_income'];
@@ -334,11 +334,11 @@ class CoverageGapAnalyzer
 
                     // Spouse earned income (employment/self-employment)
                     $spouseTaxCalc = $this->taxCalculator->calculateNetIncome(
-                        $spouseEmploymentIncome,
-                        $spouseSelfEmploymentIncome,
+                        (int) round($spouseEmploymentIncome * 100),
+                        (int) round($spouseSelfEmploymentIncome * 100),
                         0, // Rental income calculated separately
                         0, // Dividend income calculated separately
-                        $spouseOtherIncome
+                        (int) round($spouseOtherIncome * 100)
                     );
 
                     $spouseGrossIncome = $spouseTaxCalc['gross_income'];

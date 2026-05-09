@@ -13,6 +13,7 @@ use Fynla\Packs\Gb\Models\SavingsAccount;
 use App\Models\User;
 use App\Services\Risk\RiskPreferenceService;
 use Fynla\Packs\Gb\Tax\TaxConfigService;
+use Fynla\Packs\Gb\Tax\UKTaxCalculator;
 use Fynla\Packs\Gb\Traits\ResolvesExpenditure;
 use Fynla\Packs\Gb\Traits\ResolvesIncome;
 use Carbon\Carbon;
@@ -33,7 +34,7 @@ class UserContextBuilder
     public function __construct(
         private readonly TaxConfigService $taxConfig,
         private readonly RiskPreferenceService $riskPreferenceService,
-        private readonly \App\Services\UKTaxCalculator $taxCalculator
+        private readonly UKTaxCalculator $taxCalculator
     ) {}
 
     /**
@@ -490,7 +491,7 @@ class UserContextBuilder
     /**
      * Provide the UKTaxCalculator for the ResolvesIncome trait.
      */
-    protected function getIncomeTaxCalculator(): \App\Services\UKTaxCalculator
+    protected function getIncomeTaxCalculator(): UKTaxCalculator
     {
         return $this->taxCalculator;
     }

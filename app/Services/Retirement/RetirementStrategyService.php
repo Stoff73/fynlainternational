@@ -9,7 +9,7 @@ use Fynla\Packs\Gb\Models\SavingsAccount;
 use App\Models\User;
 use Fynla\Packs\Gb\Retirement\RequiredCapitalCalculator;
 use Fynla\Packs\Gb\Tax\TaxConfigService;
-use App\Services\UKTaxCalculator;
+use Fynla\Packs\Gb\Tax\UKTaxCalculator;
 use App\Services\UserProfile\UserProfileService;
 use App\Traits\FormatsCurrency;
 
