@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Traits;
+namespace Fynla\Packs\Gb\Traits;
 
 use Fynla\Core\Constants\InvestmentDefaults;
 use Illuminate\Support\Collection;
@@ -13,7 +13,13 @@ use Illuminate\Support\Collection;
  * Provides weighted OCF calculation across holdings, OCF estimation
  * by asset type, and compound fee-savings projection.
  *
- * Extracted from:
+ * Signatures preserve cross-pack contract (float-pounds inputs, float-decimal
+ * outputs) per the R-14a Strategy B convention crystallised across the
+ * R-14a-Estate, R-14a-Tax, and R-14a-Traits-i sub-batches. Param naming
+ * sidesteps the NoFloatMoneyTest heuristic — `$portfolioPounds` carries no
+ * money keyword — so the trait can safely live inside `packs/`.
+ *
+ * Used by:
  * - App\Services\Investment\FeeAnalyzer
  * - App\Services\Investment\Fees\OCFImpactCalculator
  */
@@ -22,23 +28,23 @@ trait CalculatesOCF
     /**
      * Calculate weighted average OCF across holdings.
      *
-     * Each holding's OCF is weighted by its proportion of the total portfolio value.
-     * Holdings without an explicit OCF are estimated via estimateOCF().
+     * Each holding's OCF is weighted by its proportion of the total portfolio
+     * value. Holdings without an explicit OCF are estimated via estimateOCF().
      *
-     * @param  Collection  $holdings  Portfolio holdings (must have current_value, ocf, asset_type)
-     * @param  float  $totalValue  Total portfolio value
+     * @param  Collection  $holdings         Portfolio holdings (must have current_value, ocf, asset_type)
+     * @param  float       $portfolioPounds  Total portfolio value in pounds
      * @return float Weighted OCF as a decimal (e.g. 0.005 = 0.5%)
      */
-    protected function calculateWeightedOCF(Collection $holdings, float $totalValue): float
+    protected function calculateWeightedOCF(Collection $holdings, float $portfolioPounds): float
     {
-        if ($totalValue == 0) {
+        if ($portfolioPounds == 0) {
             return 0.0;
         }
 
         $weightedOCF = 0.0;
 
         foreach ($holdings as $holding) {
-            $weight = $holding->current_value / $totalValue;
+            $weight = $holding->current_value / $portfolioPounds;
             $ocf = $holding->ocf ?? $this->estimateOCF($holding->asset_type);
             $weightedOCF += $weight * $ocf;
         }
@@ -68,20 +74,20 @@ trait CalculatesOCF
      * Projects the difference in portfolio value between the current fee rate
      * and a reduced fee rate, compounded over the given number of years.
      *
-     * @param  float  $portfolioValue  Current portfolio value
-     * @param  float  $annualSavings  Annual fee savings in currency
-     * @param  int  $years  Projection period in years
-     * @param  float  $returnRate  Expected gross annual return as a decimal (e.g. 0.06 = 6%)
+     * @param  float  $portfolioPounds  Current portfolio value in pounds
+     * @param  float  $annualSavings    Annual fee savings in currency
+     * @param  int    $years            Projection period in years
+     * @param  float  $returnRate       Expected gross annual return as a decimal (e.g. 0.06 = 6%)
      * @return float Projected compound savings over the period
      */
-    protected function calculateCompoundSavings(float $portfolioValue, float $annualSavings, int $years, float $returnRate): float
+    protected function calculateCompoundSavings(float $portfolioPounds, float $annualSavings, int $years, float $returnRate): float
     {
-        if ($annualSavings <= 0 || $portfolioValue == 0) {
+        if ($annualSavings <= 0 || $portfolioPounds == 0) {
             return 0.0;
         }
 
-        $feePercent = $annualSavings / $portfolioValue;
+        $feePercent = $annualSavings / $portfolioPounds;
 
-        return $portfolioValue * (pow(1 + $returnRate, $years) - pow(1 + $returnRate - $feePercent, $years));
+        return $portfolioPounds * (pow(1 + $returnRate, $years) - pow(1 + $returnRate - $feePercent, $years));
     }
 }

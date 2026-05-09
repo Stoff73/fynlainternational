@@ -7,7 +7,7 @@ namespace App\Services\Investment\Fees;
 use Fynla\Core\Constants\InvestmentDefaults;
 use Fynla\Packs\Gb\Models\Investment\Holding;
 use App\Services\Risk\RiskPreferenceService;
-use App\Traits\CalculatesOCF;
+use Fynla\Packs\Gb\Traits\CalculatesOCF;
 use Illuminate\Support\Collection;
 
 /**
