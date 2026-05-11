@@ -235,6 +235,13 @@ describe('Pack Isolation', function () {
             'App\\Http\\Requests\\Goals\\UpdateGoalRequest',
             'App\\Http\\Resources\\GoalContributionResource',
             'App\\Http\\Resources\\GoalResource',
+            // R-9-final-ii: LifeEvent-shaped Requests wrap the deferred
+            // App\Models\LifeEvent (one of the 6 R-14b core models). They
+            // stay in app/Http/Requests/ until the LifeEvent relocation in
+            // R-14b sub-batch vi; pack LifeEventController imports them
+            // across the boundary.
+            'App\\Http\\Requests\\StoreLifeEventRequest',
+            'App\\Http\\Requests\\UpdateLifeEventRequest',
             // R-9d: pack controllers extend the Laravel base controller and
             // use the cross-cutting SanitizedErrorResponse trait. Both stay
             // in core as framework / shared infrastructure.

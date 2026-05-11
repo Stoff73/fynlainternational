@@ -310,17 +310,7 @@ Route::middleware('auth:sanctum')->prefix('dashboard')->group(function () {
 
 // Goals module routes — relocated to packs/country-gb/routes/api.php in R-9-final-i.
 
-// Life Events routes (future occurrences impacting net worth)
-Route::middleware('auth:sanctum')->prefix('life-events')->group(function () {
-    Route::get('/', [\App\Http\Controllers\Api\LifeEventController::class, 'index']);
-    Route::get('/types', [\App\Http\Controllers\Api\LifeEventController::class, 'getEventTypes']);
-    Route::get('/by-age', [\App\Http\Controllers\Api\LifeEventController::class, 'getByAge']);
-    Route::post('/', [\App\Http\Controllers\Api\LifeEventController::class, 'store']);
-    Route::get('/{id}', [\App\Http\Controllers\Api\LifeEventController::class, 'show']);
-    Route::put('/{id}', [\App\Http\Controllers\Api\LifeEventController::class, 'update']);
-    Route::delete('/{id}', [\App\Http\Controllers\Api\LifeEventController::class, 'destroy']);
-    Route::post('/{id}/complete', [\App\Http\Controllers\Api\LifeEventController::class, 'markCompleted']);
-});
+// Life Events routes — relocated to packs/country-gb/routes/api.php in R-9-final-ii.
 
 // Investment module routes — relocated to packs/country-gb/routes/api.php in R-9f.
 

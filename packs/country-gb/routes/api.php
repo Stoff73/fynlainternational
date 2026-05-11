@@ -47,6 +47,7 @@ use Fynla\Packs\Gb\Http\Controllers\Investment\RebalancingStrategiesController;
 use Fynla\Packs\Gb\Http\Controllers\Investment\TaxOptimizationController;
 use Fynla\Packs\Gb\Http\Controllers\InvestmentProjectionController;
 use Fynla\Packs\Gb\Http\Controllers\LetterToSpouseController;
+use Fynla\Packs\Gb\Http\Controllers\LifeEventController;
 use Fynla\Packs\Gb\Http\Controllers\Plans\PlanController;
 use Fynla\Packs\Gb\Http\Controllers\PortfolioOptimizationController;
 use Fynla\Packs\Gb\Http\Controllers\ProtectionActionDefinitionController;
@@ -715,6 +716,18 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/letter-to-spouse/exists', [LetterToSpouseController::class, 'exists']);
     Route::get('/letter-to-spouse/spouse', [LetterToSpouseController::class, 'showSpouse']);
     Route::put('/letter-to-spouse', [LetterToSpouseController::class, 'update'])->middleware('feature:standard');
+});
+
+// Life Events routes (future occurrences impacting net worth) — R-9-final-ii
+Route::middleware('auth:sanctum')->prefix('life-events')->group(function () {
+    Route::get('/', [LifeEventController::class, 'index']);
+    Route::get('/types', [LifeEventController::class, 'getEventTypes']);
+    Route::get('/by-age', [LifeEventController::class, 'getByAge']);
+    Route::post('/', [LifeEventController::class, 'store']);
+    Route::get('/{id}', [LifeEventController::class, 'show']);
+    Route::put('/{id}', [LifeEventController::class, 'update']);
+    Route::delete('/{id}', [LifeEventController::class, 'destroy']);
+    Route::post('/{id}/complete', [LifeEventController::class, 'markCompleted']);
 });
 
 // Goals module routes (unified goals-based planning) — R-9-final-i

@@ -80,6 +80,8 @@ it('rewrites all known pack-relocated module prefixes', function () {
         'admin/protection-actions', 'admin/investment-actions', 'admin/retirement-actions',
         // R-9-final-i: Goals relocated.
         'goals',
+        // R-9-final-ii: LifeEvent relocated.
+        'life-events',
     ];
 
     foreach ($prefixes as $prefix) {
@@ -103,7 +105,7 @@ it('does not rewrite UK module prefixes still resident in core routes', function
     $coreResidentPrefixes = [
         'property', 'properties', 'mortgages', 'dashboard',
         'net-worth', 'family-members', 'household', 'profile-completeness',
-        'onboarding', 'journey', 'life-stage', 'life-events',
+        'onboarding', 'journey', 'life-stage',
         'business-interests', 'chattels', 'cash-accounts', 'personal-accounts',
     ];
 

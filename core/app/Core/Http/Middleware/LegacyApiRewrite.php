@@ -53,6 +53,8 @@ class LegacyApiRewrite
         'api/admin/retirement-actions',
         // R-9-final-i: Goals controller relocated to pack.
         'api/goals',
+        // R-9-final-ii: LifeEvent controller relocated to pack.
+        'api/life-events',
     ];
 
     /**
