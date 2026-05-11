@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Database\Seeders;
 
-use App\Models\Household;
+use Fynla\Core\Models\Household;
 use Fynla\Core\Models\Subscription;
 use App\Models\User;
 use Illuminate\Database\Seeder;

@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Fynla\Packs\Gb\Models;
 
-use App\Models\Household;
+use Fynla\Core\Models\Household;
 
 use App\Models\User;
 

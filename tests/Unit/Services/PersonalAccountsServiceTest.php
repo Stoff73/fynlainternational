@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-use App\Models\Household;
+use Fynla\Core\Models\Household;
 use Fynla\Packs\Gb\Models\Investment\InvestmentAccount;
 use Fynla\Packs\Gb\Models\Mortgage;
 use Fynla\Packs\Gb\Models\Property;

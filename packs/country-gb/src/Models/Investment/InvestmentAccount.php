@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Fynla\Packs\Gb\Models\Investment;
 
 use Fynla\Packs\Gb\Models\Estate\Trust;
-use App\Models\Household;
+use Fynla\Core\Models\Household;
 use App\Models\User;
 use Fynla\Packs\Gb\Investment\EmployeeSchemeCalculationService;
 use Fynla\Core\Traits\Auditable;

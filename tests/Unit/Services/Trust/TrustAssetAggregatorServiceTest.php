@@ -5,7 +5,7 @@ declare(strict_types=1);
 use Fynla\Packs\Gb\Models\BusinessInterest;
 use Fynla\Packs\Gb\Models\CashAccount;
 use Fynla\Packs\Gb\Models\Estate\Trust;
-use App\Models\Household;
+use Fynla\Core\Models\Household;
 use Fynla\Packs\Gb\Models\Property;
 use App\Models\User;
 use App\Services\Trust\TrustAssetAggregatorService;

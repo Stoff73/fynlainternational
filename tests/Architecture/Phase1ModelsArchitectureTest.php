@@ -12,7 +12,7 @@ declare(strict_types=1);
 // Test: All new models extend Eloquent Model
 arch('all new Phase 1 models extend Eloquent Model')
     ->expect([
-        'App\Models\Household',
+        'Fynla\Core\Models\Household',
         'Fynla\Core\Models\FamilyMember',
         'Fynla\Packs\Gb\Models\Property',
         'Fynla\Packs\Gb\Models\Mortgage',
@@ -26,7 +26,7 @@ arch('all new Phase 1 models extend Eloquent Model')
 // Test: All new models use HasFactory trait
 arch('new Phase 1 models use HasFactory trait')
     ->expect([
-        'App\Models\Household',
+        'Fynla\Core\Models\Household',
         'Fynla\Core\Models\FamilyMember',
         'Fynla\Packs\Gb\Models\Property',
         'Fynla\Packs\Gb\Models\Mortgage',
@@ -39,7 +39,7 @@ arch('new Phase 1 models use HasFactory trait')
 
 // Test: All new models use strict types
 arch('new Phase 1 models use strict types')
-    ->expect('App\Models\Household')
+    ->expect('Fynla\Core\Models\Household')
     ->toUseStrictTypes()
     ->and('Fynla\Core\Models\FamilyMember')
     ->toUseStrictTypes()
@@ -58,7 +58,7 @@ arch('new Phase 1 models use strict types')
 
 // Test: Models use Eloquent relationships
 arch('Household model uses relationships')
-    ->expect('App\Models\Household')
+    ->expect('Fynla\Core\Models\Household')
     ->toUse('Illuminate\Database\Eloquent\Relations\HasMany');
 
 arch('Property model uses relationships')
@@ -73,7 +73,7 @@ arch('Mortgage model uses relationships')
 // Test: Models are properly namespaced
 arch('all Phase 1 models are in App\Models namespace')
     ->expect([
-        'App\Models\Household',
+        'Fynla\Core\Models\Household',
         'Fynla\Core\Models\FamilyMember',
         'Fynla\Packs\Gb\Models\Property',
         'Fynla\Packs\Gb\Models\Mortgage',
@@ -87,7 +87,7 @@ arch('all Phase 1 models are in App\Models namespace')
 // Test: Models do not use business logic services directly
 arch('Phase 1 models do not use external services')
     ->expect([
-        'App\Models\Household',
+        'Fynla\Core\Models\Household',
         'Fynla\Core\Models\FamilyMember',
         'Fynla\Packs\Gb\Models\Property',
         'Fynla\Packs\Gb\Models\Mortgage',

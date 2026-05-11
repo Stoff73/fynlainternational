@@ -5,7 +5,7 @@ namespace Database\Factories;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Household>
+ * @extends \Illuminate\Database\Eloquent\Factories\Factory<\Fynla\Core\Models\Household>
  */
 class HouseholdFactory extends Factory
 {

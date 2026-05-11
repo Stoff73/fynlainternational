@@ -3,7 +3,7 @@
 declare(strict_types=1);
 
 use Fynla\Core\Models\Goal;
-use App\Models\Household;
+use Fynla\Core\Models\Household;
 use Fynla\Core\Models\LifeEvent;
 use Fynla\Packs\Gb\Models\SavingsAccount;
 use App\Models\User;

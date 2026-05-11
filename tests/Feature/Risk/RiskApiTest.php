@@ -3,7 +3,7 @@
 declare(strict_types=1);
 
 use Fynla\Packs\Gb\Models\DCPension;
-use App\Models\Household;
+use Fynla\Core\Models\Household;
 use Fynla\Packs\Gb\Models\Investment\InvestmentAccount;
 use Fynla\Packs\Gb\Models\Investment\RiskProfile;
 use Fynla\Packs\Gb\Models\SavingsAccount;

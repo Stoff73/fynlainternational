@@ -6,7 +6,7 @@ namespace Fynla\Core\Models;
 
 use App\Models\User;
 
-use App\Models\Household;
+use Fynla\Core\Models\Household;
 
 use Fynla\Core\Traits\Auditable;
 use Illuminate\Database\Eloquent\Casts\Attribute;

@@ -204,11 +204,11 @@ describe('Pack Isolation', function () {
             // workstream that introduces a container-resolved query layer
             // for cross-pack reads. R-14b-iv closed GoalContribution +
             // LifeEvent + LifeEventAllocation (3 clean models). R-14b-v
-            // closed Goal (now Fynla\Core\Models\Goal — FK relations are
-            // PackAssetResolver-backed accessors, accessor magic preserves
-            // the property-style call surface). Household, User remain
-            // pinned until R-14b-vi / vii respectively.
-            'App\\Models\\Household',
+            // closed Goal (FK relations are PackAssetResolver-backed
+            // accessors). R-14b-vi closed Household (6 unused pack
+            // hasMany relations dropped, householdAssets accessor routes
+            // through PackAssetRepository). User remains pinned until
+            // R-14b-vii.
             'App\\Models\\User',
             // App\Agents\BaseAgent — abstract parent of all module agents.
             // Stays in app/Agents/ as a generic orchestrator base (no UK-only
