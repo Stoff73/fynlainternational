@@ -488,7 +488,7 @@
 import { mapState, mapActions } from 'vuex';
 import PropertyForm from './PropertyForm.vue';
 import PropertyFinancials from './PropertyFinancials.vue';
-import ConfirmDialog from '../../Common/ConfirmDialog.vue';
+import ConfirmDialog from '@/components/Common/ConfirmDialog.vue';
 import { currencyMixin } from '@/mixins/currencyMixin';
 
 import logger from '@/utils/logger';

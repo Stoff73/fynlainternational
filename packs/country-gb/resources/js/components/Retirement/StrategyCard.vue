@@ -130,7 +130,7 @@
 </template>
 
 <script>
-import retirementService from '../../services/retirementService';
+import retirementService from '@/services/retirementService';
 import VueApexCharts from 'vue3-apexcharts';
 import { currencyMixin } from '@/mixins/currencyMixin';
 import { SUCCESS_COLORS, TEXT_COLORS, BORDER_COLORS, SECONDARY_COLORS, CHART_DEFAULTS } from '@/constants/designSystem';

@@ -647,8 +647,8 @@ import LifeCoverRecommendations from './LifeCoverRecommendations.vue';
 import IHTCalculationTable from './IHTCalculationTable.vue';
 import EstateLifeEventsImpact from './EstateLifeEventsImpact.vue';
 import LetterEstateWarnings from './LetterEstateWarnings.vue';
-import estateService from '../../services/estateService';
-import userProfileService from '../../services/userProfileService';
+import estateService from '@/services/estateService';
+import userProfileService from '@/services/userProfileService';
 import { currencyMixin } from '@/mixins/currencyMixin';
 import { IHT_NIL_RATE_BAND, IHT_STANDARD_RATE, IHT_REDUCED_RATE, ANNUAL_GIFT_EXEMPTION } from '@/constants/taxConfig';
 

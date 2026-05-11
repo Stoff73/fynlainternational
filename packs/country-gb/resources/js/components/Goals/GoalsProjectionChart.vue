@@ -133,7 +133,7 @@ import {
   TEXT_COLORS,
   CHART_DEFAULTS,
 } from '@/constants/designSystem';
-import ViewToggle from '../Shared/ViewToggle.vue';
+import ViewToggle from '@/components/Shared/ViewToggle.vue';
 import ProjectionSummaryCards from './ProjectionSummaryCards.vue';
 import EventIconLegend from './EventIconLegend.vue';
 import AssumptionsDisclosure from './AssumptionsDisclosure.vue';

@@ -141,7 +141,7 @@
 
 <script>
 import { mapGetters } from 'vuex';
-import estateService from '../../services/estateService';
+import estateService from '@/services/estateService';
 import { currencyMixin } from '@/mixins/currencyMixin';
 
 import logger from '@/utils/logger';

@@ -173,7 +173,7 @@ class ComprehensiveEstatePlanService
     private function convertToAssetModels(Collection $aggregatedAssets, User $user): Collection
     {
         return $aggregatedAssets->map(function ($asset) use ($user) {
-            return new \App\Models\Estate\Asset([
+            return new \Fynla\Packs\Gb\Models\Estate\Asset([
                 'user_id' => $user->id,
                 'asset_type' => $asset->asset_type,
                 'asset_name' => $asset->asset_name,
