@@ -61,6 +61,8 @@ class LegacyApiRewrite
         'api/properties',
         // R-9-final-vi: Mortgage controller relocated to pack.
         'api/mortgages',
+        // R-9-final-vii: BusinessInterest controller relocated to pack.
+        'api/business-interests',
     ];
 
     /**

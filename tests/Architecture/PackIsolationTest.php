@@ -261,6 +261,11 @@ describe('Pack Isolation', function () {
             // services workstream.
             'App\\Http\\Requests\\StoreMortgageRequest',
             'App\\Http\\Requests\\UpdateMortgageRequest',
+            // R-9-final-vii: BusinessInterestService straddles the boundary
+            // (BusinessInterest model already in pack, service references
+            // App\Models\User). Relocates with a future Business services
+            // workstream.
+            'App\\Services\\Business\\BusinessInterestService',
             // R-9d: pack controllers extend the Laravel base controller and
             // use the cross-cutting SanitizedErrorResponse trait. Both stay
             // in core as framework / shared infrastructure.

@@ -3,7 +3,6 @@
 use App\Http\Controllers\Api\AiChatController;
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\BugReportController;
-use App\Http\Controllers\Api\BusinessInterestController;
 use App\Http\Controllers\Api\ChattelController;
 use App\Http\Controllers\Api\ContactFormController;
 use App\Http\Controllers\Api\DashboardController;
@@ -246,16 +245,7 @@ Route::middleware('auth:sanctum')->prefix('joint-account-logs')->group(function 
 
 // Mortgage routes — relocated to packs/country-gb/routes/api.php in R-9-final-vi.
 
-// Business Interest routes
-Route::middleware(['auth:sanctum', 'feature:standard'])->prefix('business-interests')->group(function () {
-    Route::get('/', [BusinessInterestController::class, 'index']);
-    Route::post('/', [BusinessInterestController::class, 'store']);
-    Route::get('/{id}', [BusinessInterestController::class, 'show']);
-    Route::put('/{id}', [BusinessInterestController::class, 'update']);
-    Route::delete('/{id}', [BusinessInterestController::class, 'destroy']);
-    Route::get('/{id}/tax-deadlines', [BusinessInterestController::class, 'taxDeadlines']);
-    Route::get('/{id}/exit-calculation', [BusinessInterestController::class, 'exitCalculation']);
-});
+// Business Interest routes — relocated to packs/country-gb/routes/api.php in R-9-final-vii.
 
 // Chattel routes (personal property / chattels & valuables)
 Route::middleware(['auth:sanctum', 'feature:standard'])->prefix('chattels')->group(function () {

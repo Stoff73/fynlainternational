@@ -18,6 +18,7 @@ use Illuminate\Support\Facades\Route;
 */
 
 use App\Http\Controllers\Api\RiskPreferenceController;
+use Fynla\Packs\Gb\Http\Controllers\BusinessInterestController;
 use Fynla\Packs\Gb\Http\Controllers\Estate\GiftingController;
 use Fynla\Packs\Gb\Http\Controllers\Estate\IHTController;
 use Fynla\Packs\Gb\Http\Controllers\Estate\LetterValidationController;
@@ -742,6 +743,17 @@ Route::middleware(['auth:sanctum', 'feature:standard'])->prefix('properties')->g
         Route::put('/{mortgageId}', [MortgageController::class, 'update']);
         Route::delete('/{mortgageId}', [MortgageController::class, 'destroy']);
     });
+});
+
+// Business Interest routes — R-9-final-vii
+Route::middleware(['auth:sanctum', 'feature:standard'])->prefix('business-interests')->group(function () {
+    Route::get('/', [BusinessInterestController::class, 'index']);
+    Route::post('/', [BusinessInterestController::class, 'store']);
+    Route::get('/{id}', [BusinessInterestController::class, 'show']);
+    Route::put('/{id}', [BusinessInterestController::class, 'update']);
+    Route::delete('/{id}', [BusinessInterestController::class, 'destroy']);
+    Route::get('/{id}/tax-deadlines', [BusinessInterestController::class, 'taxDeadlines']);
+    Route::get('/{id}/exit-calculation', [BusinessInterestController::class, 'exitCalculation']);
 });
 
 // Mortgage routes (Phase 4) — R-9-final-vi
