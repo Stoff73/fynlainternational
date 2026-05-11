@@ -78,6 +78,8 @@ it('rewrites all known pack-relocated module prefixes', function () {
         'plans', 'holistic', 'recommendations', 'what-if-scenarios',
         'letter-to-spouse', 'tax-info', 'tax-settings', 'tax-year', 'tax',
         'admin/protection-actions', 'admin/investment-actions', 'admin/retirement-actions',
+        // R-9-final-i: Goals relocated.
+        'goals',
     ];
 
     foreach ($prefixes as $prefix) {
@@ -99,7 +101,7 @@ it('does not rewrite UK module prefixes still resident in core routes', function
     $middleware = new LegacyApiRewrite();
 
     $coreResidentPrefixes = [
-        'goals', 'property', 'properties', 'mortgages', 'dashboard',
+        'property', 'properties', 'mortgages', 'dashboard',
         'net-worth', 'family-members', 'household', 'profile-completeness',
         'onboarding', 'journey', 'life-stage', 'life-events',
         'business-interests', 'chattels', 'cash-accounts', 'personal-accounts',

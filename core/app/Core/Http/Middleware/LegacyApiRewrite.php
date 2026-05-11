@@ -51,6 +51,8 @@ class LegacyApiRewrite
         'api/admin/protection-actions',
         'api/admin/investment-actions',
         'api/admin/retirement-actions',
+        // R-9-final-i: Goals controller relocated to pack.
+        'api/goals',
     ];
 
     /**

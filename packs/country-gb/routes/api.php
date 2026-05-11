@@ -27,6 +27,7 @@ use Fynla\Packs\Gb\Http\Controllers\Estate\TrustController;
 use Fynla\Packs\Gb\Http\Controllers\Estate\WillController;
 use Fynla\Packs\Gb\Http\Controllers\Estate\WillDocumentController;
 use Fynla\Packs\Gb\Http\Controllers\EstateController;
+use Fynla\Packs\Gb\Http\Controllers\GoalsController;
 use Fynla\Packs\Gb\Http\Controllers\HolisticPlanningController;
 use Fynla\Packs\Gb\Http\Controllers\IncomeDefinitionsController;
 use Fynla\Packs\Gb\Http\Controllers\InvestmentActionDefinitionController;
@@ -714,4 +715,41 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/letter-to-spouse/exists', [LetterToSpouseController::class, 'exists']);
     Route::get('/letter-to-spouse/spouse', [LetterToSpouseController::class, 'showSpouse']);
     Route::put('/letter-to-spouse', [LetterToSpouseController::class, 'update'])->middleware('feature:standard');
+});
+
+// Goals module routes (unified goals-based planning) — R-9-final-i
+Route::middleware('auth:sanctum')->prefix('goals')->group(function () {
+    // Main goals data and analysis
+    Route::get('/', [GoalsController::class, 'index']);
+    Route::get('/analysis', [GoalsController::class, 'analysis']);
+    Route::get('/dashboard-overview', [GoalsController::class, 'dashboardOverview']);
+
+    // Projection (net worth chart with events)
+    Route::get('/projection', [GoalsController::class, 'getProjection']);
+    Route::get('/household-summary', [GoalsController::class, 'getHouseholdSummary']);
+    Route::get('/financial-forecast', [GoalsController::class, 'getFinancialForecast']);
+
+    // Reference data
+    Route::get('/types', [GoalsController::class, 'getGoalTypes']);
+    Route::get('/risk-levels', [GoalsController::class, 'getRiskLevels']);
+
+    // Property cost calculator
+    Route::post('/calculate-property-costs', [GoalsController::class, 'calculatePropertyCosts']);
+
+    // Goal CRUD
+    Route::post('/', [GoalsController::class, 'store']);
+    Route::get('/{id}', [GoalsController::class, 'show']);
+    Route::put('/{id}', [GoalsController::class, 'update']);
+    Route::delete('/{id}', [GoalsController::class, 'destroy']);
+
+    // Goal-specific operations
+    Route::post('/{id}/contribution', [GoalsController::class, 'recordContribution']);
+    Route::get('/{id}/projections', [GoalsController::class, 'getProjections']);
+    Route::get('/{id}/scenarios', [GoalsController::class, 'getScenarios']);
+    Route::get('/{id}/contributions', [GoalsController::class, 'getContributionHistory']);
+
+    // Goal dependencies
+    Route::get('/{id}/dependencies', [GoalsController::class, 'getDependencies']);
+    Route::post('/{id}/dependencies', [GoalsController::class, 'addDependency']);
+    Route::delete('/{id}/dependencies/{dependsOnId}', [GoalsController::class, 'removeDependency']);
 });

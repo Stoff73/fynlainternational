@@ -10,7 +10,6 @@ use App\Http\Controllers\Api\DashboardController;
 use App\Http\Controllers\Api\DocumentController;
 use App\Http\Controllers\Api\FamilyMembersController;
 use App\Http\Controllers\Api\GDPRController;
-use App\Http\Controllers\Api\GoalsController;
 use App\Http\Controllers\Api\HouseholdController;
 use App\Http\Controllers\Api\InfoGuideController;
 use App\Http\Controllers\Api\JourneyController;
@@ -309,42 +308,7 @@ Route::middleware('auth:sanctum')->prefix('dashboard')->group(function () {
 
 // Savings module routes — relocated to packs/country-gb/routes/api.php in R-9d.
 
-// Goals module routes (unified goals-based planning)
-Route::middleware('auth:sanctum')->prefix('goals')->group(function () {
-    // Main goals data and analysis
-    Route::get('/', [GoalsController::class, 'index']);
-    Route::get('/analysis', [GoalsController::class, 'analysis']);
-    Route::get('/dashboard-overview', [GoalsController::class, 'dashboardOverview']);
-
-    // Projection (net worth chart with events)
-    Route::get('/projection', [GoalsController::class, 'getProjection']);
-    Route::get('/household-summary', [GoalsController::class, 'getHouseholdSummary']);
-    Route::get('/financial-forecast', [GoalsController::class, 'getFinancialForecast']);
-
-    // Reference data
-    Route::get('/types', [GoalsController::class, 'getGoalTypes']);
-    Route::get('/risk-levels', [GoalsController::class, 'getRiskLevels']);
-
-    // Property cost calculator
-    Route::post('/calculate-property-costs', [GoalsController::class, 'calculatePropertyCosts']);
-
-    // Goal CRUD
-    Route::post('/', [GoalsController::class, 'store']);
-    Route::get('/{id}', [GoalsController::class, 'show']);
-    Route::put('/{id}', [GoalsController::class, 'update']);
-    Route::delete('/{id}', [GoalsController::class, 'destroy']);
-
-    // Goal-specific operations
-    Route::post('/{id}/contribution', [GoalsController::class, 'recordContribution']);
-    Route::get('/{id}/projections', [GoalsController::class, 'getProjections']);
-    Route::get('/{id}/scenarios', [GoalsController::class, 'getScenarios']);
-    Route::get('/{id}/contributions', [GoalsController::class, 'getContributionHistory']);
-
-    // Goal dependencies
-    Route::get('/{id}/dependencies', [GoalsController::class, 'getDependencies']);
-    Route::post('/{id}/dependencies', [GoalsController::class, 'addDependency']);
-    Route::delete('/{id}/dependencies/{dependsOnId}', [GoalsController::class, 'removeDependency']);
-});
+// Goals module routes — relocated to packs/country-gb/routes/api.php in R-9-final-i.
 
 // Life Events routes (future occurrences impacting net worth)
 Route::middleware('auth:sanctum')->prefix('life-events')->group(function () {

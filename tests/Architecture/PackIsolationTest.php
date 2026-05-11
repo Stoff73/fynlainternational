@@ -226,6 +226,15 @@ describe('Pack Isolation', function () {
             // Pack resources for joint-ownable models reference UserResource
             // for user / joint_owner relationships across the boundary.
             'App\\Http\\Resources\\UserResource',
+            // R-9-final-i: Goal-shaped Requests/Resources wrap the deferred
+            // App\Models\Goal (one of the 6 R-14b core models). They stay in
+            // app/Http/Requests/Goals and app/Http/Resources/ until the Goal
+            // relocation in R-14b sub-batch vi; pack GoalsController imports
+            // them across the boundary.
+            'App\\Http\\Requests\\Goals\\StoreGoalRequest',
+            'App\\Http\\Requests\\Goals\\UpdateGoalRequest',
+            'App\\Http\\Resources\\GoalContributionResource',
+            'App\\Http\\Resources\\GoalResource',
             // R-9d: pack controllers extend the Laravel base controller and
             // use the cross-cutting SanitizedErrorResponse trait. Both stay
             // in core as framework / shared infrastructure.
