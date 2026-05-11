@@ -91,6 +91,23 @@ class CoreServiceProvider extends ServiceProvider
         $router->aliasMiddleware('pack.enabled', EnsurePackEnabled::class);
         $router->aliasMiddleware('legacy.api.rewrite', LegacyApiRewrite::class);
 
+        // R-14b-viii: backwards-compat class alias for User after the
+        // App\Models → Fynla\Core namespace move. Sanctum's
+        // `personal_access_tokens.tokenable_type` and `audit_logs.model_type`
+        // store the model FQCN; any legacy rows still holding the
+        // `App\Models\User` literal would otherwise fail class_exists()
+        // when Eloquent tries to resolve them. The alias makes the legacy
+        // FQCN point at the new class so reads keep working — without
+        // forcing new writes to use the legacy string (a morph map would
+        // do the opposite — store 'App\Models\User' for new tokens too).
+        //
+        // Pre-flight row count was zero locally; alias registered for
+        // production safety so a non-empty deploy doesn't break
+        // authenticated requests at switch-over.
+        if (! class_exists('App\\Models\\User', false)) {
+            class_alias(\Fynla\Core\Models\User::class, 'App\\Models\\User');
+        }
+
         // Core migrations live in database/migrations/ (standard Laravel path)
         // to avoid duplicate-run issues with loadMigrationsFrom().
 
