@@ -117,6 +117,12 @@ class ZaPackServiceProvider extends ServiceProvider
         $this->app->bind('pack.za.asset_repo', \Fynla\Packs\Za\Query\ZaPackAssetRepository::class);
         $this->app->bind('pack.za.estate_repo', \Fynla\Packs\Za\Query\ZaPackEstateRepository::class);
         $this->app->bind('pack.za.asset_resolver', \Fynla\Packs\Za\Query\ZaPackAssetResolver::class);
+
+        // R-14b-vii-prep: Null user-relation provider for SA. Phase 1 SA
+        // doesn't model UK-equivalent per-module surfaces; bound for
+        // structural symmetry so the composite finds a real implementation
+        // under `pack.za.user_relations` rather than silently skipping.
+        $this->app->bind('pack.za.user_relations', \Fynla\Packs\Za\Query\ZaPackUserRelationProvider::class);
     }
 
     public function boot(): void

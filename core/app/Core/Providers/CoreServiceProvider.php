@@ -7,6 +7,7 @@ namespace Fynla\Core\Providers;
 use Fynla\Core\Contracts\PackAssetRepository;
 use Fynla\Core\Contracts\PackAssetResolver;
 use Fynla\Core\Contracts\PackEstateRepository;
+use Fynla\Core\Contracts\PackUserRelationProvider;
 use Fynla\Core\Http\Middleware\ActiveJurisdictionMiddleware;
 use Fynla\Core\Http\Middleware\EnsurePackEnabled;
 use Fynla\Core\Http\Middleware\LegacyApiRewrite;
@@ -14,6 +15,7 @@ use Fynla\Core\Jurisdiction\ActiveJurisdictions;
 use Fynla\Core\Query\CompositePackAssetRepository;
 use Fynla\Core\Query\CompositePackAssetResolver;
 use Fynla\Core\Query\CompositePackEstateRepository;
+use Fynla\Core\Query\CompositePackUserRelationProvider;
 use Fynla\Core\Registry\PackRegistry;
 use Fynla\Core\TaxYear\TaxYearResolver;
 use Illuminate\Contracts\Container\Container;
@@ -63,6 +65,15 @@ class CoreServiceProvider extends ServiceProvider
 
         $this->app->singleton(PackAssetResolver::class, function (Container $app): PackAssetResolver {
             return new CompositePackAssetResolver($app, $app->make(PackRegistry::class));
+        });
+
+        // R-14b-vii-prep: container-resolved user-scoped relation provider.
+        // Returns full Eloquent Models (not AssetSummary VOs) so core User's
+        // per-module relations (Protection, Property, Mortgage, Investment,
+        // Savings, DC/DB pensions, etc.) can be resolved by pack at read
+        // time without core holding pack-namespaced `hasMany` literals.
+        $this->app->singleton(PackUserRelationProvider::class, function (Container $app): PackUserRelationProvider {
+            return new CompositePackUserRelationProvider($app, $app->make(PackRegistry::class));
         });
     }
 

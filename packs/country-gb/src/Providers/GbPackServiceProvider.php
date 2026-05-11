@@ -11,6 +11,7 @@ use Fynla\Packs\Gb\Localisation\GbLocalisation;
 use Fynla\Packs\Gb\Query\GbPackAssetRepository;
 use Fynla\Packs\Gb\Query\GbPackAssetResolver;
 use Fynla\Packs\Gb\Query\GbPackEstateRepository;
+use Fynla\Packs\Gb\Query\GbPackUserRelationProvider;
 use Fynla\Packs\Gb\Validation\GbBankingValidator;
 use Fynla\Packs\Gb\Validation\NinoValidator;
 use Illuminate\Support\Facades\Route;
@@ -58,6 +59,13 @@ class GbPackServiceProvider extends ServiceProvider
         $this->app->bind('pack.gb.asset_repo', GbPackAssetRepository::class);
         $this->app->bind('pack.gb.estate_repo', GbPackEstateRepository::class);
         $this->app->bind('pack.gb.asset_resolver', GbPackAssetResolver::class);
+
+        // R-14b-vii-prep: user-scoped relation provider. Returns full
+        // Eloquent Models for User's per-module hasMany/hasOne relations
+        // (Protection, Property, Investment, Savings, Pensions, etc.) so
+        // core User can resolve them through the contract instead of
+        // holding pack-namespaced `hasMany` literals.
+        $this->app->bind('pack.gb.user_relations', GbPackUserRelationProvider::class);
 
         // R-14b-v: bind the GoalCalculationEngine contract to the GB
         // pack's concrete service. Core Goal's accessor methods
