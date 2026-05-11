@@ -63,6 +63,8 @@ class LegacyApiRewrite
         'api/mortgages',
         // R-9-final-vii: BusinessInterest controller relocated to pack.
         'api/business-interests',
+        // R-9-final-viii: Chattel controller relocated to pack. (closes R-9-final)
+        'api/chattels',
     ];
 
     /**

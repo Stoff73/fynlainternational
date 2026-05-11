@@ -90,6 +90,8 @@ it('rewrites all known pack-relocated module prefixes', function () {
         'mortgages',
         // R-9-final-vii: BusinessInterest relocated.
         'business-interests',
+        // R-9-final-viii: Chattel relocated.
+        'chattels',
     ];
 
     foreach ($prefixes as $prefix) {
@@ -114,7 +116,7 @@ it('does not rewrite UK module prefixes still resident in core routes', function
         'property', 'dashboard',
         'net-worth', 'family-members', 'profile-completeness',
         'onboarding', 'journey', 'life-stage',
-        'chattels', 'cash-accounts', 'personal-accounts',
+        'cash-accounts', 'personal-accounts',
     ];
 
     foreach ($coreResidentPrefixes as $prefix) {

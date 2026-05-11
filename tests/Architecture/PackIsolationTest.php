@@ -266,6 +266,12 @@ describe('Pack Isolation', function () {
             // App\Models\User). Relocates with a future Business services
             // workstream.
             'App\\Services\\Business\\BusinessInterestService',
+            // R-9-final-viii: ChattelCGTService straddles the boundary
+            // (Chattel model already in pack, service references the still-
+            // in-core TaxConfigService consumption pattern via
+            // App\Services\Tax helpers). Relocates with a future Chattel
+            // services workstream.
+            'App\\Services\\Chattel\\ChattelCGTService',
             // R-9d: pack controllers extend the Laravel base controller and
             // use the cross-cutting SanitizedErrorResponse trait. Both stay
             // in core as framework / shared infrastructure.

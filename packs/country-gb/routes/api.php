@@ -19,6 +19,7 @@ use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\Api\RiskPreferenceController;
 use Fynla\Packs\Gb\Http\Controllers\BusinessInterestController;
+use Fynla\Packs\Gb\Http\Controllers\ChattelController;
 use Fynla\Packs\Gb\Http\Controllers\Estate\GiftingController;
 use Fynla\Packs\Gb\Http\Controllers\Estate\IHTController;
 use Fynla\Packs\Gb\Http\Controllers\Estate\LetterValidationController;
@@ -743,6 +744,16 @@ Route::middleware(['auth:sanctum', 'feature:standard'])->prefix('properties')->g
         Route::put('/{mortgageId}', [MortgageController::class, 'update']);
         Route::delete('/{mortgageId}', [MortgageController::class, 'destroy']);
     });
+});
+
+// Chattel routes (personal property / chattels & valuables) — R-9-final-viii
+Route::middleware(['auth:sanctum', 'feature:standard'])->prefix('chattels')->group(function () {
+    Route::get('/', [ChattelController::class, 'index']);
+    Route::post('/', [ChattelController::class, 'store']);
+    Route::get('/{id}', [ChattelController::class, 'show']);
+    Route::put('/{id}', [ChattelController::class, 'update']);
+    Route::delete('/{id}', [ChattelController::class, 'destroy']);
+    Route::post('/{id}/calculate-cgt', [ChattelController::class, 'calculateCGT']);
 });
 
 // Business Interest routes — R-9-final-vii

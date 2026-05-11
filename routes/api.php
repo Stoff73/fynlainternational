@@ -3,7 +3,6 @@
 use App\Http\Controllers\Api\AiChatController;
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\BugReportController;
-use App\Http\Controllers\Api\ChattelController;
 use App\Http\Controllers\Api\ContactFormController;
 use App\Http\Controllers\Api\DashboardController;
 use App\Http\Controllers\Api\DocumentController;
@@ -247,15 +246,7 @@ Route::middleware('auth:sanctum')->prefix('joint-account-logs')->group(function 
 
 // Business Interest routes — relocated to packs/country-gb/routes/api.php in R-9-final-vii.
 
-// Chattel routes (personal property / chattels & valuables)
-Route::middleware(['auth:sanctum', 'feature:standard'])->prefix('chattels')->group(function () {
-    Route::get('/', [ChattelController::class, 'index']);
-    Route::post('/', [ChattelController::class, 'store']);
-    Route::get('/{id}', [ChattelController::class, 'show']);
-    Route::put('/{id}', [ChattelController::class, 'update']);
-    Route::delete('/{id}', [ChattelController::class, 'destroy']);
-    Route::post('/{id}/calculate-cgt', [ChattelController::class, 'calculateCGT']);
-});
+// Chattel routes — relocated to packs/country-gb/routes/api.php in R-9-final-viii.
 
 // Dashboard routes (aggregated data from all modules)
 Route::middleware('auth:sanctum')->prefix('dashboard')->group(function () {
