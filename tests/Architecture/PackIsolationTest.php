@@ -202,12 +202,12 @@ describe('Pack Isolation', function () {
             // App\Models\* — these are deferred from R-4 because their
             // relationships span every pack. They relocate in a follow-up
             // workstream that introduces a container-resolved query layer
-            // for cross-pack reads.
+            // for cross-pack reads. R-14b-iv closed GoalContribution +
+            // LifeEvent + LifeEventAllocation (3 clean models — now under
+            // Fynla\Core\Models\). Goal, Household, User remain pinned
+            // until R-14b-v / vi / vii respectively.
             'App\\Models\\Goal',
-            'App\\Models\\GoalContribution',
             'App\\Models\\Household',
-            'App\\Models\\LifeEvent',
-            'App\\Models\\LifeEventAllocation',
             'App\\Models\\User',
             // App\Agents\BaseAgent — abstract parent of all module agents.
             // Stays in app/Agents/ as a generic orchestrator base (no UK-only

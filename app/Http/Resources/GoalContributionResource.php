@@ -8,7 +8,7 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 /**
- * @mixin \App\Models\GoalContribution
+ * @mixin \Fynla\Core\Models\GoalContribution
  */
 class GoalContributionResource extends JsonResource
 {

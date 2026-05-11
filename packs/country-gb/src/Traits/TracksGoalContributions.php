@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Fynla\Packs\Gb\Traits;
 
 use App\Models\Goal;
-use App\Models\GoalContribution;
+use Fynla\Core\Models\GoalContribution;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Log;
 

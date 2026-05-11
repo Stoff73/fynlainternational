@@ -344,7 +344,7 @@ class SystemPromptBuilder
             }
 
             // Life Events
-            $activeEvents = \App\Models\LifeEvent::forUserOrJoint($user->id)
+            $activeEvents = \Fynla\Core\Models\LifeEvent::forUserOrJoint($user->id)
                 ->active()
                 ->orderBy('expected_date')
                 ->get();

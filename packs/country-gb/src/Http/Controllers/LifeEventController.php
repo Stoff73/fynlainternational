@@ -8,7 +8,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreLifeEventRequest;
 use App\Http\Requests\UpdateLifeEventRequest;
 use App\Http\Traits\SanitizedErrorResponse;
-use App\Models\LifeEvent;
+use Fynla\Core\Models\LifeEvent;
 use Fynla\Packs\Gb\Goals\LifeEventService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;

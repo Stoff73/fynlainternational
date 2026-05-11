@@ -2,8 +2,10 @@
 
 declare(strict_types=1);
 
-namespace App\Models;
+namespace Fynla\Core\Models;
 
+use App\Models\Goal;
+use App\Models\User;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;

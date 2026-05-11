@@ -8,7 +8,7 @@ use App\Agents\BaseAgent;
 
 use App\Models\Goal;
 use Fynla\Packs\Gb\Models\Investment\InvestmentAccount;
-use App\Models\LifeEvent;
+use Fynla\Core\Models\LifeEvent;
 use Fynla\Packs\Gb\Models\SavingsAccount;
 use Fynla\Packs\Gb\Models\SavingsGoal;
 use App\Models\User;

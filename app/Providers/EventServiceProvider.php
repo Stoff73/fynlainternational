@@ -14,7 +14,7 @@ use Fynla\Packs\Gb\Models\Estate\Liability as EstateLiability;
 use Fynla\Core\Models\FamilyMember;
 use Fynla\Packs\Gb\Models\IncomeProtectionPolicy;
 use Fynla\Packs\Gb\Models\Investment\InvestmentAccount;
-use App\Models\LifeEvent;
+use Fynla\Core\Models\LifeEvent;
 use Fynla\Packs\Gb\Models\LifeInsurancePolicy;
 use Fynla\Packs\Gb\Models\Mortgage;
 use Fynla\Packs\Gb\Models\Property;

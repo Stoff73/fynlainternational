@@ -6,8 +6,8 @@ namespace Fynla\Packs\Gb\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use App\Http\Traits\SanitizedErrorResponse;
-use App\Models\LifeEvent;
-use App\Models\LifeEventAllocation;
+use Fynla\Core\Models\LifeEvent;
+use Fynla\Core\Models\LifeEventAllocation;
 use App\Services\Goals\LifeEventAllocationService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;

@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 use App\Models\Goal;
 use App\Models\Household;
-use App\Models\LifeEvent;
+use Fynla\Core\Models\LifeEvent;
 use Fynla\Packs\Gb\Models\SavingsAccount;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;

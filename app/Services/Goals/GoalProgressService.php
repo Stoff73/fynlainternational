@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace App\Services\Goals;
 
 use App\Models\Goal;
-use App\Models\GoalContribution;
+use Fynla\Core\Models\GoalContribution;
 
 /**
  * Service for calculating goal progress, streaks, and milestones.

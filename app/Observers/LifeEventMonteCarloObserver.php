@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Observers;
 
-use App\Models\LifeEvent;
+use Fynla\Core\Models\LifeEvent;
 use App\Services\Cache\CacheInvalidationService;
 use Fynla\Packs\Gb\Goals\GoalsProjectionService;
 use Fynla\Packs\Gb\Investment\MonteCarloSimulator;

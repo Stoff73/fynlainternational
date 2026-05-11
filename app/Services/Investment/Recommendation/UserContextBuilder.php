@@ -8,7 +8,7 @@ use Fynla\Packs\Gb\Constants\TaxDefaults;
 use Fynla\Packs\Gb\Models\Estate\Liability;
 use Fynla\Packs\Gb\Models\Investment\InvestmentAccount;
 use Fynla\Packs\Gb\Models\Investment\RiskProfile;
-use App\Models\LifeEvent;
+use Fynla\Core\Models\LifeEvent;
 use Fynla\Packs\Gb\Models\SavingsAccount;
 use App\Models\User;
 use App\Services\Risk\RiskPreferenceService;

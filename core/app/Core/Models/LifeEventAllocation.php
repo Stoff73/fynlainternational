@@ -2,8 +2,9 @@
 
 declare(strict_types=1);
 
-namespace App\Models;
+namespace Fynla\Core\Models;
 
+use App\Models\User;
 use Fynla\Core\Traits\Auditable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;

@@ -20,7 +20,7 @@ use Fynla\Core\Models\FamilyMember;
 use App\Models\Goal;
 use Fynla\Packs\Gb\Models\IncomeProtectionPolicy;
 use Fynla\Packs\Gb\Models\Investment\InvestmentAccount;
-use App\Models\LifeEvent;
+use Fynla\Core\Models\LifeEvent;
 use Fynla\Packs\Gb\Models\LifeInsurancePolicy;
 use Fynla\Packs\Gb\Models\Mortgage;
 use Fynla\Packs\Gb\Models\Property;
@@ -921,7 +921,7 @@ class CoordinatingAgent extends BaseAgent
 
     private function handleListLifeEvents(User $user): array
     {
-        $events = \App\Models\LifeEvent::forUserOrJoint($user->id)
+        $events = \Fynla\Core\Models\LifeEvent::forUserOrJoint($user->id)
             ->orderBy('expected_date')
             ->get();
 

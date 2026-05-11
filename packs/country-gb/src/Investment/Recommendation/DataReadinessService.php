@@ -6,7 +6,7 @@ namespace Fynla\Packs\Gb\Investment\Recommendation;
 
 use Fynla\Packs\Gb\Models\Investment\InvestmentAccount;
 use Fynla\Packs\Gb\Models\Investment\RiskProfile;
-use App\Models\LifeEvent;
+use Fynla\Core\Models\LifeEvent;
 use App\Models\User;
 
 /**

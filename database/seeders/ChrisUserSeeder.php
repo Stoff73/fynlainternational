@@ -16,7 +16,7 @@ use Fynla\Packs\Gb\Models\Investment\Holding;
 use Fynla\Packs\Gb\Models\Investment\InvestmentAccount;
 use Fynla\Packs\Gb\Models\Investment\RiskProfile;
 use Fynla\Packs\Gb\Models\ISAAllowanceTracking;
-use App\Models\LifeEvent;
+use Fynla\Core\Models\LifeEvent;
 use Fynla\Packs\Gb\Models\LifeInsurancePolicy;
 use Fynla\Packs\Gb\Models\Mortgage;
 use Fynla\Core\Models\OnboardingProgress;
