@@ -107,6 +107,16 @@ class ZaPackServiceProvider extends ServiceProvider
         $this->app->bind('pack.za.localisation', \Fynla\Packs\Za\Localisation\ZaLocalisation::class);
         $this->app->bind('pack.za.identity', \Fynla\Packs\Za\Identity\ZaIdValidator::class);
         $this->app->bind('pack.za.banking', \Fynla\Packs\Za\Banking\ZaBankingValidator::class);
+
+        // R-14b-iii: Null implementations of the three cross-pack query
+        // contracts. Bound for structural symmetry with the GB pack so
+        // CompositePack*::iterate(PackRegistry::codes()) finds a real
+        // implementation under pack.za.* rather than silently skipping.
+        // Real implementations land per-model with WS 1.2/1.3/1.4
+        // feature workstreams that follow R-14b.
+        $this->app->bind('pack.za.asset_repo', \Fynla\Packs\Za\Query\ZaPackAssetRepository::class);
+        $this->app->bind('pack.za.estate_repo', \Fynla\Packs\Za\Query\ZaPackEstateRepository::class);
+        $this->app->bind('pack.za.asset_resolver', \Fynla\Packs\Za\Query\ZaPackAssetResolver::class);
     }
 
     public function boot(): void
