@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace App\Models;
+namespace Fynla\Core\Models;
 
-use Fynla\Packs\Gb\Models\SavingsAccount;
-
-use Fynla\Packs\Gb\Goals\GoalCalculationService;
+use App\Models\User;
+use Fynla\Core\Contracts\GoalCalculationEngine;
+use Fynla\Core\Contracts\PackAssetResolver;
 use Fynla\Core\Traits\Auditable;
 use Fynla\Core\Traits\HasJointOwnership;
 use Illuminate\Database\Eloquent\Builder;
@@ -16,6 +16,8 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\DB;
 
 class Goal extends Model
 {
@@ -32,7 +34,7 @@ class Goal extends Model
      *
      * - linked_savings_account_id (FK): Legacy single savings account link. Being superseded
      *   by the goal_savings_account pivot table (many-to-many). Retained for backwards
-     *   compatibility; do NOT use for new code — use the savingsAccounts() relationship instead.
+     *   compatibility.
      *
      * - linked_investment_account_id (FK): Single investment account link used by the
      *   TracksGoalContributions trait for auto-recording contributions when account value changes.
@@ -115,49 +117,51 @@ class Goal extends Model
         'display_goal_type',
     ];
 
-    /**
-     * User relationship.
-     */
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
     }
 
-    /**
-     * Joint owner relationship.
-     */
     public function jointOwner(): BelongsTo
     {
         return $this->belongsTo(User::class, 'joint_owner_id');
     }
 
     /**
-     * Linked savings account relationship.
+     * Resolve the linked savings account via PackAssetResolver.
+     *
+     * Pre-R-14b-v this was a `belongsTo(SavingsAccount::class)` relation.
+     * After Goal moved to core, the pack-namespaced literal was replaced
+     * with a contract call so core no longer references the SA model.
+     *
+     * Accessed as `$goal->linkedSavingsAccount` via Eloquent's accessor
+     * magic on the matching `getLinkedSavingsAccountAttribute()`.
      */
-    public function linkedSavingsAccount(): BelongsTo
+    public function getLinkedSavingsAccountAttribute(): ?Model
     {
-        return $this->belongsTo(SavingsAccount::class, 'linked_savings_account_id');
+        if ($this->linked_savings_account_id === null) {
+            return null;
+        }
+
+        return app(PackAssetResolver::class)
+            ->resolveAccount('gb.savings_account', (int) $this->linked_savings_account_id);
     }
 
-    /**
-     * Linked investment account relationship.
-     */
-    public function linkedInvestmentAccount(): BelongsTo
+    public function getLinkedInvestmentAccountAttribute(): ?Model
     {
-        return $this->belongsTo(\Fynla\Packs\Gb\Models\Investment\InvestmentAccount::class, 'linked_investment_account_id');
+        if ($this->linked_investment_account_id === null) {
+            return null;
+        }
+
+        return app(PackAssetResolver::class)
+            ->resolveAccount('gb.investment_account', (int) $this->linked_investment_account_id);
     }
 
-    /**
-     * Contributions relationship.
-     */
     public function contributions(): HasMany
     {
         return $this->hasMany(GoalContribution::class);
     }
 
-    /**
-     * Goals that this goal depends on (prerequisites).
-     */
     public function dependsOn(): BelongsToMany
     {
         return $this->belongsToMany(self::class, 'goal_dependencies', 'goal_id', 'depends_on_goal_id')
@@ -166,18 +170,33 @@ class Goal extends Model
     }
 
     /**
-     * Savings accounts linked to this goal via pivot table.
+     * Savings accounts linked to this goal via the goal_savings_account
+     * pivot table. Pre-R-14b-v this was a `belongsToMany(SavingsAccount)`
+     * relation; the pack model literal was replaced with a per-row
+     * PackAssetResolver call so core no longer references the pack model.
+     *
+     * Returns a Collection of resolved Model instances (skipping rows
+     * the resolver returns null for — e.g. a soft-deleted account). The
+     * pivot table's own attributes (allocated_amount, is_primary,
+     * priority_rank) are NOT attached to the model — callers that need
+     * them should query the pivot table directly. None of the current
+     * call sites in app/ or packs/ read pivot columns.
+     *
+     * Accessed as `$goal->savingsAccounts` via accessor magic; the
+     * snake-case form `$goal->savings_accounts` also works.
      */
-    public function savingsAccounts(): BelongsToMany
+    public function getSavingsAccountsAttribute(): Collection
     {
-        return $this->belongsToMany(SavingsAccount::class, 'goal_savings_account')
-            ->withPivot('allocated_amount', 'is_primary', 'priority_rank')
-            ->withTimestamps();
+        $resolver = app(PackAssetResolver::class);
+
+        return DB::table('goal_savings_account')
+            ->where('goal_id', $this->id)
+            ->pluck('savings_account_id')
+            ->map(fn ($id) => $resolver->resolveAccount('gb.savings_account', (int) $id))
+            ->filter()
+            ->values();
     }
 
-    /**
-     * Goals that depend on this goal (dependants).
-     */
     public function dependedOnBy(): BelongsToMany
     {
         return $this->belongsToMany(self::class, 'goal_dependencies', 'depends_on_goal_id', 'goal_id')
@@ -185,9 +204,6 @@ class Goal extends Model
             ->withTimestamps();
     }
 
-    /**
-     * Check if this goal is blocked by any incomplete prerequisite.
-     */
     public function isBlocked(): bool
     {
         return $this->dependsOn()
@@ -196,41 +212,26 @@ class Goal extends Model
             ->exists();
     }
 
-    /**
-     * Get progress percentage.
-     */
     public function getProgressPercentageAttribute(): float
     {
-        return app(GoalCalculationService::class)->calculateProgressPercentage($this);
+        return app(GoalCalculationEngine::class)->calculateProgressPercentage($this);
     }
 
-    /**
-     * Get days remaining until target date.
-     */
     public function getDaysRemainingAttribute(): int
     {
-        return app(GoalCalculationService::class)->calculateDaysRemaining($this);
+        return app(GoalCalculationEngine::class)->calculateDaysRemaining($this);
     }
 
-    /**
-     * Get months remaining until target date.
-     */
     public function getMonthsRemainingAttribute(): int
     {
-        return app(GoalCalculationService::class)->calculateMonthsRemaining($this);
+        return app(GoalCalculationEngine::class)->calculateMonthsRemaining($this);
     }
 
-    /**
-     * Check if goal is on track based on linear projection.
-     */
     public function getIsOnTrackAttribute(): bool
     {
-        return app(GoalCalculationService::class)->calculateIsOnTrack($this);
+        return app(GoalCalculationEngine::class)->calculateIsOnTrack($this);
     }
 
-    /**
-     * Get display-friendly goal type.
-     */
     public function getDisplayGoalTypeAttribute(): string
     {
         if ($this->goal_type === 'custom' && $this->custom_goal_type_name) {
@@ -253,89 +254,56 @@ class Goal extends Model
         };
     }
 
-    /**
-     * Get amount remaining to reach target.
-     */
     public function getAmountRemainingAttribute(): float
     {
-        return app(GoalCalculationService::class)->calculateAmountRemaining($this);
+        return app(GoalCalculationEngine::class)->calculateAmountRemaining($this);
     }
 
-    /**
-     * Get required monthly contribution to reach target on time.
-     */
     public function getRequiredMonthlyContributionAttribute(): float
     {
-        return app(GoalCalculationService::class)->calculateRequiredMonthlyContribution($this);
+        return app(GoalCalculationEngine::class)->calculateRequiredMonthlyContribution($this);
     }
 
-    /**
-     * Check if goal is a property goal.
-     */
     public function isPropertyGoal(): bool
     {
         return in_array($this->goal_type, ['property_purchase', 'home_deposit']);
     }
 
-    /**
-     * Check if goal is an investment goal.
-     */
     public function isInvestmentGoal(): bool
     {
         return $this->assigned_module === 'investment';
     }
 
-    /**
-     * Check if goal is jointly owned.
-     */
     public function isJoint(): bool
     {
         return $this->ownership_type === 'joint' && $this->joint_owner_id !== null;
     }
 
-    /**
-     * Get the current milestone reached (25, 50, 75, or 100).
-     */
     public function getCurrentMilestoneAttribute(): ?int
     {
-        return app(GoalCalculationService::class)->calculateCurrentMilestone($this);
+        return app(GoalCalculationEngine::class)->calculateCurrentMilestone($this);
     }
 
-    /**
-     * Get the next milestone target (25, 50, 75, or 100).
-     */
     public function getNextMilestoneAttribute(): ?int
     {
-        return app(GoalCalculationService::class)->calculateNextMilestone($this);
+        return app(GoalCalculationEngine::class)->calculateNextMilestone($this);
     }
 
-    /**
-     * Scope for active goals.
-     */
     public function scopeActive(Builder $query): Builder
     {
         return $query->where('status', 'active');
     }
 
-    /**
-     * Scope for completed goals.
-     */
     public function scopeCompleted(Builder $query): Builder
     {
         return $query->where('status', 'completed');
     }
 
-    /**
-     * Scope by assigned module.
-     */
     public function scopeForModule(Builder $query, string $module): Builder
     {
         return $query->where('assigned_module', $module);
     }
 
-    /**
-     * Scope by priority.
-     */
     public function scopeByPriority(Builder $query, string $priority): Builder
     {
         return $query->where('priority', $priority);

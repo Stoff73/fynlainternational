@@ -6,7 +6,7 @@ namespace Fynla\Packs\Gb\Agents;
 
 use App\Agents\BaseAgent;
 
-use App\Models\Goal;
+use Fynla\Core\Models\Goal;
 use App\Models\User;
 use Fynla\Packs\Gb\Goals\GoalAffordabilityService;
 use App\Services\Goals\GoalAssignmentService;

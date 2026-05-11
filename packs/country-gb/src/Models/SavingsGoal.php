@@ -12,7 +12,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 /**
- * @deprecated Use App\Models\Goal instead. This legacy savings goal model
+ * @deprecated Use Fynla\Core\Models\Goal instead. This legacy savings goal model
  * is retained for read-only compatibility. New goals should be created
  * via the Goals module.
  */

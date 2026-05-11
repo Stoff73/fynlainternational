@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-use App\Models\Goal;
+use Fynla\Core\Models\Goal;
 use Fynla\Core\Models\GoalContribution;
 use Fynla\Packs\Gb\Models\SavingsAccount;
 use App\Models\User;

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Models;
 
+use Fynla\Core\Models\Goal;
 use Fynla\Packs\Gb\Models\StatePension;
 
 use Fynla\Packs\Gb\Models\SicknessIllnessPolicy;

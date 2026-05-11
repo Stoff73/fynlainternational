@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Fynla\Packs\Gb\Goals;
 
-use App\Models\Goal;
+use Fynla\Core\Models\Goal;
 use App\Models\User;
 use App\Services\NetWorth\NetWorthService;
 use App\Services\Settings\AssumptionsService;

@@ -11,7 +11,7 @@ use Fynla\Packs\Gb\Models\Estate\Gift;
 use Fynla\Packs\Gb\Models\Estate\Liability;
 use Fynla\Packs\Gb\Models\Estate\Trust;
 use Fynla\Core\Models\FamilyMember;
-use App\Models\Goal;
+use Fynla\Core\Models\Goal;
 use Fynla\Packs\Gb\Models\Investment\Holding;
 use Fynla\Packs\Gb\Models\Investment\InvestmentAccount;
 use Fynla\Packs\Gb\Models\Investment\RiskProfile;

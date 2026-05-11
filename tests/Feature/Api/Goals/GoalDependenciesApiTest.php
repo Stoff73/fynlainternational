@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-use App\Models\Goal;
+use Fynla\Core\Models\Goal;
 use App\Models\User;
 
 beforeEach(function () {

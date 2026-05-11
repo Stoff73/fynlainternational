@@ -21,7 +21,7 @@ use Fynla\Packs\Gb\Models\Estate\Trust;
 use Fynla\Packs\Gb\Models\Estate\Will;
 use Fynla\Packs\Gb\Models\Estate\WillDocument;
 use Fynla\Core\Models\FamilyMember;
-use App\Models\Goal;
+use Fynla\Core\Models\Goal;
 use Fynla\Packs\Gb\Models\IncomeProtectionPolicy;
 use Fynla\Packs\Gb\Models\Investment\Holding;
 use Fynla\Packs\Gb\Models\Investment\InvestmentAccount;

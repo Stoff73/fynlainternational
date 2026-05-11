@@ -6,7 +6,7 @@ namespace App\Services\Goals;
 
 use Fynla\Packs\Gb\Constants\TaxDefaults;
 use Fynla\Packs\Gb\Models\DCPension;
-use App\Models\Goal;
+use Fynla\Core\Models\Goal;
 use Fynla\Packs\Gb\Models\Investment\InvestmentAccount;
 use Fynla\Core\Models\LifeEvent;
 use Fynla\Core\Models\LifeEventAllocation;

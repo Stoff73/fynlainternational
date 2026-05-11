@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Fynla\Packs\Gb\Goals;
 
-use App\Models\Goal;
+use Fynla\Core\Models\Goal;
 use Fynla\Packs\Gb\Models\Investment\RiskProfile;
 use App\Models\User;
 use App\Services\Shared\MonteCarloEngine;

@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Fynla\Packs\Gb\Traits;
 
-use App\Models\Goal;
+use Fynla\Core\Models\Goal;
 use Fynla\Core\Models\GoalContribution;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Log;
@@ -87,10 +87,15 @@ trait TracksGoalContributions
     {
         $linkedField = $this->getLinkedField();
 
-        // Savings accounts: prefer the pivot table, fall back to legacy FK
+        // Savings accounts: prefer the pivot table, fall back to legacy FK.
+        // R-14b-v: savingsAccounts() is no longer an Eloquent relation
+        // (Goal is now in core and can't reference pack SavingsAccount).
+        // whereHas was replaced with an explicit pivot-table subquery.
         if ($linkedField === 'linked_savings_account_id') {
-            $pivotGoals = Goal::whereHas('savingsAccounts', function ($query) use ($account) {
-                $query->where('savings_account_id', $account->id);
+            $pivotGoals = Goal::whereIn('id', function ($q) use ($account) {
+                $q->select('goal_id')
+                    ->from('goal_savings_account')
+                    ->where('savings_account_id', $account->id);
             })
                 ->where('status', 'active')
                 ->get();

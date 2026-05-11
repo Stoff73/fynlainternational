@@ -4,9 +4,10 @@ declare(strict_types=1);
 
 namespace Fynla\Packs\Gb\Goals;
 
-use App\Models\Goal;
+use Fynla\Core\Contracts\GoalCalculationEngine;
+use Fynla\Core\Models\Goal;
 
-class GoalCalculationService
+class GoalCalculationService implements GoalCalculationEngine
 {
     /**
      * Calculate the progress percentage toward the goal target.

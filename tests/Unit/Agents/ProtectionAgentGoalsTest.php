@@ -3,7 +3,7 @@
 declare(strict_types=1);
 
 use Fynla\Packs\Gb\Agents\ProtectionAgent;
-use App\Models\Goal;
+use Fynla\Core\Models\Goal;
 use Fynla\Packs\Gb\Models\ProtectionProfile;
 use App\Models\User;
 use Fynla\Packs\Gb\Coordination\RecommendationPersonaliser;

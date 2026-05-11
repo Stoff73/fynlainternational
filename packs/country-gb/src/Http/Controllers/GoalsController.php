@@ -11,7 +11,7 @@ use App\Http\Requests\Goals\UpdateGoalRequest;
 use App\Http\Resources\GoalContributionResource;
 use App\Http\Resources\GoalResource;
 use App\Http\Traits\SanitizedErrorResponse;
-use App\Models\Goal;
+use Fynla\Core\Models\Goal;
 use Fynla\Packs\Gb\Goals\FinancialForecastService;
 use Fynla\Packs\Gb\Goals\GoalAffordabilityService;
 use App\Services\Goals\GoalAssignmentService;

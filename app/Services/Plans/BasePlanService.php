@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Services\Plans;
 
-use App\Models\Goal;
+use Fynla\Core\Models\Goal;
 use Fynla\Packs\Gb\Models\Investment\InvestmentAccount;
 use Fynla\Packs\Gb\Models\SavingsAccount;
 use App\Models\User;

@@ -52,13 +52,13 @@ describe('Goal Dependencies', function () {
     it('detects blocked goals', function () {
         $user = User::factory()->create();
 
-        $goalA = \App\Models\Goal::factory()->create([
+        $goalA = \Fynla\Core\Models\Goal::factory()->create([
             'user_id' => $user->id,
             'goal_name' => 'Emergency Fund',
             'status' => 'active',
         ]);
 
-        $goalB = \App\Models\Goal::factory()->create([
+        $goalB = \Fynla\Core\Models\Goal::factory()->create([
             'user_id' => $user->id,
             'goal_name' => 'House Deposit',
             'status' => 'active',

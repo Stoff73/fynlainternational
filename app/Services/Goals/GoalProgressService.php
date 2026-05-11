@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Services\Goals;
 
-use App\Models\Goal;
+use Fynla\Core\Models\Goal;
 use Fynla\Core\Models\GoalContribution;
 
 /**

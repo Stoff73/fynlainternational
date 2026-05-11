@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Fynla\Packs\Gb\Investment;
 
 use Fynla\Packs\Gb\Constants\TaxDefaults;
-use App\Models\Goal;
+use Fynla\Core\Models\Goal;
 use Fynla\Packs\Gb\Models\InvestmentActionDefinition;
 use Fynla\Packs\Gb\Plans\PlanConfigService;
 use App\Services\Investment\FeeAnalyzer;

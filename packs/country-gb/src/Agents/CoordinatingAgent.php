@@ -17,7 +17,7 @@ use Fynla\Packs\Gb\Models\Estate\Gift;
 use Fynla\Packs\Gb\Models\Estate\Liability;
 use Fynla\Packs\Gb\Models\Estate\Trust;
 use Fynla\Core\Models\FamilyMember;
-use App\Models\Goal;
+use Fynla\Core\Models\Goal;
 use Fynla\Packs\Gb\Models\IncomeProtectionPolicy;
 use Fynla\Packs\Gb\Models\Investment\InvestmentAccount;
 use Fynla\Core\Models\LifeEvent;
@@ -882,7 +882,7 @@ class CoordinatingAgent extends BaseAgent
 
     private function handleListGoals(User $user): array
     {
-        $goals = \App\Models\Goal::forUserOrJoint($user->id)
+        $goals = \Fynla\Core\Models\Goal::forUserOrJoint($user->id)
             ->orderByRaw("FIELD(status, 'active', 'paused', 'completed', 'abandoned')")
             ->orderBy('priority')
             ->get();

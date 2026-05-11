@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Fynla\Packs\Gb\Goals;
 
-use App\Models\Goal;
+use Fynla\Core\Models\Goal;
 use App\Models\User;
 use App\Services\Goals\GoalAssignmentService;
 use App\Services\Goals\GoalProgressService;
@@ -33,7 +33,12 @@ class GoalStrategyService
     {
         $user = User::findOrFail($userId);
 
-        $goals = Goal::with(['linkedSavingsAccount', 'linkedInvestmentAccount'])
+        // linkedSavingsAccount / linkedInvestmentAccount no longer Eloquent
+        // relations (R-14b-v) — they are accessor-resolved via
+        // PackAssetResolver per-access. The previous with() eager-load is a
+        // no-op now and would throw because the relation methods don't
+        // exist; rely on the accessor magic at line 210/220 below.
+        $goals = Goal::query()
             ->where(function ($q) use ($userId) {
                 $q->where('user_id', $userId)
                     ->orWhere('joint_owner_id', $userId);

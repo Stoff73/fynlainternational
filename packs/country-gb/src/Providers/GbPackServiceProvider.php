@@ -58,6 +58,16 @@ class GbPackServiceProvider extends ServiceProvider
         $this->app->bind('pack.gb.asset_repo', GbPackAssetRepository::class);
         $this->app->bind('pack.gb.estate_repo', GbPackEstateRepository::class);
         $this->app->bind('pack.gb.asset_resolver', GbPackAssetResolver::class);
+
+        // R-14b-v: bind the GoalCalculationEngine contract to the GB
+        // pack's concrete service. Core Goal's accessor methods
+        // (progress_percentage, days_remaining, milestones, etc.) resolve
+        // the contract from the container — keeps the jurisdiction-
+        // specific rules out of the core model.
+        $this->app->bind(
+            \Fynla\Core\Contracts\GoalCalculationEngine::class,
+            \Fynla\Packs\Gb\Goals\GoalCalculationService::class,
+        );
     }
 
     public function boot(PackRegistry $registry): void

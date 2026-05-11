@@ -6,7 +6,7 @@ namespace Fynla\Packs\Gb\Agents;
 
 use App\Agents\BaseAgent;
 
-use App\Models\Goal;
+use Fynla\Core\Models\Goal;
 use Fynla\Packs\Gb\Models\Investment\InvestmentAccount;
 use Fynla\Core\Models\LifeEvent;
 use Fynla\Packs\Gb\Models\SavingsAccount;

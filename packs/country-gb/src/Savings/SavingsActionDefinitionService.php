@@ -6,7 +6,7 @@ namespace Fynla\Packs\Gb\Savings;
 
 use Fynla\Packs\Gb\Constants\TaxDefaults;
 use Fynla\Core\Models\FamilyMember;
-use App\Models\Goal;
+use Fynla\Core\Models\Goal;
 use Fynla\Packs\Gb\Models\Mortgage;
 use Fynla\Packs\Gb\Models\SavingsActionDefinition;
 use App\Models\User;
@@ -2252,7 +2252,7 @@ class SavingsActionDefinitionService
         foreach ($goals as $goal) {
             // Check both the legacy FK and the new pivot table
             $hasLinkedAccount = $goal->linked_savings_account_id !== null
-                || $goal->savingsAccounts()->exists();
+                || $goal->savingsAccounts->isNotEmpty();
 
             if ($hasLinkedAccount) {
                 continue;
@@ -2307,10 +2307,12 @@ class SavingsActionDefinitionService
         int $userId,
         int $priority
     ): array {
+        // R-14b-v: savingsAccounts is now an accessor (PackAssetResolver-
+        // backed), not an Eloquent relation; with() would throw. The
+        // accessor lazy-resolves on access at line 2334 below.
         $goals = Goal::where('user_id', $userId)
             ->where('assigned_module', 'savings')
             ->where('status', 'active')
-            ->with('savingsAccounts')
             ->get();
 
         $results = [];

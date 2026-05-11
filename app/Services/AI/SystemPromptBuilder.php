@@ -321,7 +321,7 @@ class SystemPromptBuilder
             }
 
             // Goals
-            $activeGoals = \App\Models\Goal::forUserOrJoint($user->id)
+            $activeGoals = \Fynla\Core\Models\Goal::forUserOrJoint($user->id)
                 ->where('status', 'active')
                 ->orderBy('priority')
                 ->get();

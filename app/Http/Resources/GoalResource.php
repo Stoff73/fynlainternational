@@ -8,7 +8,7 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 /**
- * @mixin \App\Models\Goal
+ * @mixin \Fynla\Core\Models\Goal
  */
 class GoalResource extends JsonResource
 {
@@ -94,7 +94,13 @@ class GoalResource extends JsonResource
             'user' => $this->whenLoaded('user', fn () => new UserResource($this->user)),
             'joint_owner' => $this->whenLoaded('jointOwner', fn () => new UserResource($this->jointOwner)),
             'contributions' => GoalContributionResource::collection($this->whenLoaded('contributions')),
-            'linked_savings_account' => $this->whenLoaded('linkedSavingsAccount', fn () => new SavingsAccountResource($this->linkedSavingsAccount)),
+            // R-14b-v: linkedSavingsAccount is no longer an Eloquent
+            // relation — it resolves through PackAssetResolver on access.
+            // whenLoaded would always skip; emit the resource directly
+            // when the FK is set.
+            'linked_savings_account' => $this->linked_savings_account_id !== null
+                ? ($this->linkedSavingsAccount ? new SavingsAccountResource($this->linkedSavingsAccount) : null)
+                : null,
 
             // Links
             'links' => [

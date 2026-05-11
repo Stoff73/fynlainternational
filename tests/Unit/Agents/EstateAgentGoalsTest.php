@@ -3,7 +3,7 @@
 declare(strict_types=1);
 
 use Fynla\Packs\Gb\Agents\EstateAgent;
-use App\Models\Goal;
+use Fynla\Core\Models\Goal;
 use App\Models\User;
 use Fynla\Packs\Gb\Coordination\RecommendationPersonaliser;
 use Fynla\Packs\Gb\Estate\ComprehensiveEstatePlanService;
