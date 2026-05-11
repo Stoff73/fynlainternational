@@ -57,6 +57,11 @@ class LegacyApiRewrite
         'api/life-events',
         // R-9-final-iv: Household controller relocated to pack.
         'api/household',
+        // R-9-final-v: Property controller relocated to pack. (Mortgage
+        // controller is still in core, but its nested route lives under
+        // /api/properties/{id}/mortgages — that part of the path is served
+        // from core routes for now; R-9-final-vi closes the gap.)
+        'api/properties',
     ];
 
     /**

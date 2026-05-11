@@ -84,6 +84,8 @@ it('rewrites all known pack-relocated module prefixes', function () {
         'life-events',
         // R-9-final-iv: Household relocated.
         'household',
+        // R-9-final-v: Property relocated.
+        'properties',
     ];
 
     foreach ($prefixes as $prefix) {
@@ -105,7 +107,7 @@ it('does not rewrite UK module prefixes still resident in core routes', function
     $middleware = new LegacyApiRewrite();
 
     $coreResidentPrefixes = [
-        'property', 'properties', 'mortgages', 'dashboard',
+        'property', 'mortgages', 'dashboard',
         'net-worth', 'family-members', 'profile-completeness',
         'onboarding', 'journey', 'life-stage',
         'business-interests', 'chattels', 'cash-accounts', 'personal-accounts',

@@ -242,6 +242,18 @@ describe('Pack Isolation', function () {
             // across the boundary.
             'App\\Http\\Requests\\StoreLifeEventRequest',
             'App\\Http\\Requests\\UpdateLifeEventRequest',
+            // R-9-final-v: Property-shaped flat Requests. Property model
+            // already lives in the pack (Fynla\Packs\Gb\Models\Property),
+            // but the flat StorePropertyRequest / UpdatePropertyRequest
+            // (and the App\Services\Property\* services they collaborate
+            // with) reference App\Models\User. They stay in
+            // app/Http/Requests/ + app/Services/Property/ until the Property
+            // services relocation workstream (post-R-14b User relocation).
+            'App\\Http\\Requests\\StorePropertyRequest',
+            'App\\Http\\Requests\\UpdatePropertyRequest',
+            'App\\Services\\Property\\MortgageService',
+            'App\\Services\\Property\\PropertyService',
+            'App\\Services\\Property\\PropertyTaxService',
             // R-9d: pack controllers extend the Laravel base controller and
             // use the cross-cutting SanitizedErrorResponse trait. Both stay
             // in core as framework / shared infrastructure.

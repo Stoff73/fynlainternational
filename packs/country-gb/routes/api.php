@@ -51,6 +51,7 @@ use Fynla\Packs\Gb\Http\Controllers\LetterToSpouseController;
 use Fynla\Packs\Gb\Http\Controllers\LifeEventController;
 use Fynla\Packs\Gb\Http\Controllers\Plans\PlanController;
 use Fynla\Packs\Gb\Http\Controllers\PortfolioOptimizationController;
+use Fynla\Packs\Gb\Http\Controllers\PropertyController;
 use Fynla\Packs\Gb\Http\Controllers\ProtectionActionDefinitionController;
 use Fynla\Packs\Gb\Http\Controllers\ProtectionController;
 use Fynla\Packs\Gb\Http\Controllers\RecommendationsController;
@@ -717,6 +718,31 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/letter-to-spouse/exists', [LetterToSpouseController::class, 'exists']);
     Route::get('/letter-to-spouse/spouse', [LetterToSpouseController::class, 'showSpouse']);
     Route::put('/letter-to-spouse', [LetterToSpouseController::class, 'update'])->middleware('feature:standard');
+});
+
+// Property routes (Phase 4) — R-9-final-v
+Route::middleware(['auth:sanctum', 'feature:standard'])->prefix('properties')->group(function () {
+    // Property CRUD
+    Route::get('/', [PropertyController::class, 'index']);
+    Route::post('/', [PropertyController::class, 'store']);
+    Route::get('/{id}', [PropertyController::class, 'show']);
+    Route::put('/{id}', [PropertyController::class, 'update']);
+    Route::delete('/{id}', [PropertyController::class, 'destroy']);
+
+    // Tax calculations
+    Route::post('/calculate-sdlt', [PropertyController::class, 'calculateSDLT']);
+    Route::post('/{id}/calculate-cgt', [PropertyController::class, 'calculateCGT']);
+    Route::post('/{id}/rental-income-tax', [PropertyController::class, 'calculateRentalIncomeTax']);
+
+    // Mortgages for a property — MortgageController still resident in core
+    // until R-9-final-vi; FQN-referenced here so the nested route remains
+    // reachable under /api/gb/properties/{id}/mortgages.
+    Route::prefix('{propertyId}/mortgages')->group(function () {
+        Route::get('/', [\App\Http\Controllers\Api\MortgageController::class, 'index']);
+        Route::post('/', [\App\Http\Controllers\Api\MortgageController::class, 'store']);
+        Route::put('/{mortgageId}', [\App\Http\Controllers\Api\MortgageController::class, 'update']);
+        Route::delete('/{mortgageId}', [\App\Http\Controllers\Api\MortgageController::class, 'destroy']);
+    });
 });
 
 // Household coordination routes (spousal planning) — R-9-final-iv

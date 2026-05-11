@@ -23,7 +23,6 @@ use App\Http\Controllers\Api\PersonalAccountsController;
 use App\Http\Controllers\Api\PostcodeLookupController;
 use App\Http\Controllers\Api\PreviewController;
 use App\Http\Controllers\Api\ProfileCompletenessController;
-use App\Http\Controllers\Api\PropertyController;
 use App\Http\Controllers\Api\RiskPreferenceController;
 use App\Http\Controllers\Api\SessionController;
 use App\Http\Controllers\Api\Settings\AssumptionsController;
@@ -242,28 +241,9 @@ Route::middleware('auth:sanctum')->prefix('joint-account-logs')->group(function 
     Route::get('/', [\App\Http\Controllers\Api\JointAccountLogController::class, 'index']);
 });
 
-// Property routes (Phase 4)
-Route::middleware(['auth:sanctum', 'feature:standard'])->prefix('properties')->group(function () {
-    // Property CRUD
-    Route::get('/', [PropertyController::class, 'index']);
-    Route::post('/', [PropertyController::class, 'store']);
-    Route::get('/{id}', [PropertyController::class, 'show']);
-    Route::put('/{id}', [PropertyController::class, 'update']);
-    Route::delete('/{id}', [PropertyController::class, 'destroy']);
-
-    // Tax calculations
-    Route::post('/calculate-sdlt', [PropertyController::class, 'calculateSDLT']);
-    Route::post('/{id}/calculate-cgt', [PropertyController::class, 'calculateCGT']);
-    Route::post('/{id}/rental-income-tax', [PropertyController::class, 'calculateRentalIncomeTax']);
-
-    // Mortgages for a property
-    Route::prefix('{propertyId}/mortgages')->group(function () {
-        Route::get('/', [MortgageController::class, 'index']);
-        Route::post('/', [MortgageController::class, 'store']);
-        Route::put('/{mortgageId}', [MortgageController::class, 'update']);
-        Route::delete('/{mortgageId}', [MortgageController::class, 'destroy']);
-    });
-});
+// Property routes — relocated to packs/country-gb/routes/api.php in R-9-final-v.
+// Mortgages-under-property nested routes also relocated, referencing the
+// still-in-core MortgageController by FQN until R-9-final-vi relocates it.
 
 // Mortgage routes (Phase 4)
 Route::middleware(['auth:sanctum', 'feature:standard'])->prefix('mortgages')->group(function () {
