@@ -254,6 +254,13 @@ describe('Pack Isolation', function () {
             'App\\Services\\Property\\MortgageService',
             'App\\Services\\Property\\PropertyService',
             'App\\Services\\Property\\PropertyTaxService',
+            // R-9-final-vi: Mortgage-shaped flat Requests. Mortgage model
+            // already lives in the pack (Fynla\Packs\Gb\Models\Mortgage);
+            // the flat Store/Update requests sit in app/Http/Requests/ and
+            // reference App\Models\User. Relocates with the Property
+            // services workstream.
+            'App\\Http\\Requests\\StoreMortgageRequest',
+            'App\\Http\\Requests\\UpdateMortgageRequest',
             // R-9d: pack controllers extend the Laravel base controller and
             // use the cross-cutting SanitizedErrorResponse trait. Both stay
             // in core as framework / shared infrastructure.

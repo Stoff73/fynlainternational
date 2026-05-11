@@ -14,7 +14,6 @@ use App\Http\Controllers\Api\InfoGuideController;
 use App\Http\Controllers\Api\JourneyController;
 use App\Http\Controllers\Api\LifeStageController;
 use App\Http\Controllers\Api\MFAController;
-use App\Http\Controllers\Api\MortgageController;
 use App\Http\Controllers\Api\NetWorthController;
 use App\Http\Controllers\Api\OccupationController;
 use App\Http\Controllers\Api\OnboardingController;
@@ -245,14 +244,7 @@ Route::middleware('auth:sanctum')->prefix('joint-account-logs')->group(function 
 // Mortgages-under-property nested routes also relocated, referencing the
 // still-in-core MortgageController by FQN until R-9-final-vi relocates it.
 
-// Mortgage routes (Phase 4)
-Route::middleware(['auth:sanctum', 'feature:standard'])->prefix('mortgages')->group(function () {
-    Route::get('/{id}', [MortgageController::class, 'show']);
-    Route::put('/{id}', [MortgageController::class, 'update']);
-    Route::delete('/{id}', [MortgageController::class, 'destroy']);
-    Route::get('/{id}/amortization-schedule', [MortgageController::class, 'amortizationSchedule']);
-    Route::post('/calculate-payment', [MortgageController::class, 'calculatePayment']);
-});
+// Mortgage routes — relocated to packs/country-gb/routes/api.php in R-9-final-vi.
 
 // Business Interest routes
 Route::middleware(['auth:sanctum', 'feature:standard'])->prefix('business-interests')->group(function () {

@@ -49,6 +49,7 @@ use Fynla\Packs\Gb\Http\Controllers\Investment\TaxOptimizationController;
 use Fynla\Packs\Gb\Http\Controllers\InvestmentProjectionController;
 use Fynla\Packs\Gb\Http\Controllers\LetterToSpouseController;
 use Fynla\Packs\Gb\Http\Controllers\LifeEventController;
+use Fynla\Packs\Gb\Http\Controllers\MortgageController;
 use Fynla\Packs\Gb\Http\Controllers\Plans\PlanController;
 use Fynla\Packs\Gb\Http\Controllers\PortfolioOptimizationController;
 use Fynla\Packs\Gb\Http\Controllers\PropertyController;
@@ -734,15 +735,22 @@ Route::middleware(['auth:sanctum', 'feature:standard'])->prefix('properties')->g
     Route::post('/{id}/calculate-cgt', [PropertyController::class, 'calculateCGT']);
     Route::post('/{id}/rental-income-tax', [PropertyController::class, 'calculateRentalIncomeTax']);
 
-    // Mortgages for a property — MortgageController still resident in core
-    // until R-9-final-vi; FQN-referenced here so the nested route remains
-    // reachable under /api/gb/properties/{id}/mortgages.
+    // Mortgages for a property — R-9-final-vi
     Route::prefix('{propertyId}/mortgages')->group(function () {
-        Route::get('/', [\App\Http\Controllers\Api\MortgageController::class, 'index']);
-        Route::post('/', [\App\Http\Controllers\Api\MortgageController::class, 'store']);
-        Route::put('/{mortgageId}', [\App\Http\Controllers\Api\MortgageController::class, 'update']);
-        Route::delete('/{mortgageId}', [\App\Http\Controllers\Api\MortgageController::class, 'destroy']);
+        Route::get('/', [MortgageController::class, 'index']);
+        Route::post('/', [MortgageController::class, 'store']);
+        Route::put('/{mortgageId}', [MortgageController::class, 'update']);
+        Route::delete('/{mortgageId}', [MortgageController::class, 'destroy']);
     });
+});
+
+// Mortgage routes (Phase 4) — R-9-final-vi
+Route::middleware(['auth:sanctum', 'feature:standard'])->prefix('mortgages')->group(function () {
+    Route::get('/{id}', [MortgageController::class, 'show']);
+    Route::put('/{id}', [MortgageController::class, 'update']);
+    Route::delete('/{id}', [MortgageController::class, 'destroy']);
+    Route::get('/{id}/amortization-schedule', [MortgageController::class, 'amortizationSchedule']);
+    Route::post('/calculate-payment', [MortgageController::class, 'calculatePayment']);
 });
 
 // Household coordination routes (spousal planning) — R-9-final-iv
