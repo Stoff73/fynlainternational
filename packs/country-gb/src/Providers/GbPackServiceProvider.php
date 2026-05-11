@@ -8,6 +8,9 @@ use Fynla\Core\Registry\PackManifest as CorePackManifest;
 use Fynla\Core\Registry\PackRegistry;
 use Fynla\Packs\Gb\LifeTables\GbLifeTableProvider;
 use Fynla\Packs\Gb\Localisation\GbLocalisation;
+use Fynla\Packs\Gb\Query\GbPackAssetRepository;
+use Fynla\Packs\Gb\Query\GbPackAssetResolver;
+use Fynla\Packs\Gb\Query\GbPackEstateRepository;
 use Fynla\Packs\Gb\Validation\GbBankingValidator;
 use Fynla\Packs\Gb\Validation\NinoValidator;
 use Illuminate\Support\Facades\Route;
@@ -46,6 +49,15 @@ class GbPackServiceProvider extends ServiceProvider
         $this->app->bind('pack.gb.identity', NinoValidator::class);
         $this->app->bind('pack.gb.banking', GbBankingValidator::class);
         $this->app->bind('pack.gb.life_tables', GbLifeTableProvider::class);
+
+        // R-14b-ii: GB implementations of the three cross-pack query
+        // contracts (PackAssetRepository / PackEstateRepository /
+        // PackAssetResolver). Composite defaults in CoreServiceProvider
+        // iterate PackRegistry::codes() and resolve `pack.{code}.*`
+        // bindings to merge results across registered packs.
+        $this->app->bind('pack.gb.asset_repo', GbPackAssetRepository::class);
+        $this->app->bind('pack.gb.estate_repo', GbPackEstateRepository::class);
+        $this->app->bind('pack.gb.asset_resolver', GbPackAssetResolver::class);
     }
 
     public function boot(PackRegistry $registry): void
