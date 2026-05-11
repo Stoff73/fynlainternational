@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace App\Services\Business;
 
 use Fynla\Packs\Gb\Models\BusinessInterest;
-use App\Models\User;
+use Fynla\Core\Models\User;
 use Fynla\Packs\Gb\Tax\TaxConfigService;
 use Carbon\Carbon;
 

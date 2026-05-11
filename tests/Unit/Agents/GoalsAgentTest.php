@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 use Fynla\Packs\Gb\Agents\GoalsAgent;
 use Fynla\Core\Models\Goal;
-use App\Models\User;
+use Fynla\Core\Models\User;
 use Fynla\Packs\Gb\Goals\GoalAffordabilityService;
 use App\Services\Goals\GoalAssignmentService;
 use App\Services\Goals\GoalProgressService;

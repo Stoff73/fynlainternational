@@ -3,7 +3,7 @@
 declare(strict_types=1);
 
 use Fynla\Core\Models\Goal;
-use App\Models\User;
+use Fynla\Core\Models\User;
 
 beforeEach(function () {
     $this->user = User::factory()->create();

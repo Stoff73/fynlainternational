@@ -6,7 +6,7 @@ namespace Fynla\Packs\Gb\Retirement;
 
 use Fynla\Core\Models\ExpenditureProfile;
 use Fynla\Packs\Gb\Models\Investment\RiskProfile;
-use App\Models\User;
+use Fynla\Core\Models\User;
 
 /**
  * Retirement Data Readiness Service

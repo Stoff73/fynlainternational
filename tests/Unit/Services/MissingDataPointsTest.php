@@ -3,7 +3,7 @@
 declare(strict_types=1);
 
 use Fynla\Packs\Gb\Models\Estate\Will;
-use App\Models\User;
+use Fynla\Core\Models\User;
 use Fynla\Packs\Gb\Estate\FutureValueCalculator;
 use App\Services\Retirement\DecumulationPlanner;
 use Carbon\Carbon;

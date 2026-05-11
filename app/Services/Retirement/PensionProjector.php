@@ -7,7 +7,7 @@ namespace App\Services\Retirement;
 use Fynla\Packs\Gb\Models\DBPension;
 use Fynla\Packs\Gb\Models\DCPension;
 use Fynla\Packs\Gb\Models\StatePension;
-use App\Models\User;
+use Fynla\Core\Models\User;
 use App\Services\Risk\RiskPreferenceService;
 use Fynla\Packs\Gb\Tax\TaxConfigService;
 
@@ -244,7 +244,7 @@ class PensionProjector
             return $profile->current_age;
         }
 
-        $user = \App\Models\User::find($userId);
+        $user = \Fynla\Core\Models\User::find($userId);
         if ($user && $user->date_of_birth) {
             return (int) $user->date_of_birth->diffInYears(now());
         }

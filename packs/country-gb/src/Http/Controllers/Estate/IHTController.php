@@ -8,7 +8,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Traits\SanitizedErrorResponse;
 use Fynla\Packs\Gb\Models\Estate\Will;
 use Fynla\Packs\Gb\Models\LifeInsurancePolicy;
-use App\Models\User;
+use Fynla\Core\Models\User;
 use Fynla\Packs\Gb\Estate\EstateAssetAggregatorService;
 use Fynla\Packs\Gb\Estate\IHTCalculationService;
 use Fynla\Packs\Gb\Estate\IHTFormattingService;

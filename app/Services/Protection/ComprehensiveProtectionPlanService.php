@@ -8,7 +8,7 @@ use Fynla\Packs\Gb\Agents\ProtectionAgent;
 use Fynla\Packs\Gb\Models\ProtectionProfile;
 use Fynla\Packs\Gb\Protection\AdequacyScorer;
 use Fynla\Packs\Gb\Protection\RecommendationEngine;
-use App\Models\User;
+use Fynla\Core\Models\User;
 use Fynla\Packs\Gb\Traits\FormatsCurrency;
 
 /**

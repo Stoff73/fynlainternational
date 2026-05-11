@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-use App\Models\User;
+use Fynla\Core\Models\User;
 
 it('allows user to login with valid credentials', function () {
     $user = User::factory()->create([

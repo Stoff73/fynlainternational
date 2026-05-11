@@ -10,7 +10,7 @@ use Fynla\Packs\Gb\Constants\TaxDefaults;
 use Fynla\Packs\Gb\Models\DCPension;
 use Fynla\Core\Models\Goal;
 use Fynla\Packs\Gb\Models\RetirementProfile;
-use App\Models\User;
+use Fynla\Core\Models\User;
 use App\Services\Investment\FeeAnalyzer;
 use Fynla\Packs\Gb\Investment\MonteCarloSimulator;
 use App\Services\Investment\PortfolioAnalyzer;

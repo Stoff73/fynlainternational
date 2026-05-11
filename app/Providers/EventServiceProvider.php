@@ -20,7 +20,7 @@ use Fynla\Packs\Gb\Models\Mortgage;
 use Fynla\Packs\Gb\Models\Property;
 use Fynla\Packs\Gb\Models\SavingsAccount;
 use Fynla\Packs\Gb\Models\SicknessIllnessPolicy;
-use App\Models\User;
+use Fynla\Core\Models\User;
 use Fynla\Packs\Gb\Observers\DCPensionRiskObserver;
 use App\Observers\FamilyMemberRiskObserver;
 use Fynla\Packs\Gb\Observers\InvestmentAccountGoalObserver;

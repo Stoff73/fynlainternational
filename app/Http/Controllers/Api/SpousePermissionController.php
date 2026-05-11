@@ -126,7 +126,7 @@ class SpousePermissionController extends Controller
         ]);
 
         // Send notification/email to spouse
-        $spouse = \App\Models\User::find($user->spouse_id);
+        $spouse = \Fynla\Core\Models\User::find($user->spouse_id);
         if ($spouse) {
             $spouse->notify(new \App\Notifications\SpousePermissionRequest($user->name));
         }

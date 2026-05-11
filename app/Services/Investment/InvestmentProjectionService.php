@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace App\Services\Investment;
 
 use Fynla\Packs\Gb\Models\Investment\InvestmentAccount;
-use App\Models\User;
+use Fynla\Core\Models\User;
 use Fynla\Packs\Gb\Investment\ContributionEstimatorService;
 use Fynla\Packs\Gb\Investment\MonteCarloSimulator;
 use Fynla\Packs\Gb\Goals\LifeEventCashFlowService;

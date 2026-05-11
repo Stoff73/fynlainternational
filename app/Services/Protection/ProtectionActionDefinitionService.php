@@ -9,7 +9,7 @@ use Fynla\Packs\Gb\Models\IncomeProtectionPolicy;
 use Fynla\Packs\Gb\Models\LifeInsurancePolicy;
 use Fynla\Packs\Gb\Models\ProtectionActionDefinition;
 use Fynla\Packs\Gb\Models\ProtectionProfile;
-use App\Models\User;
+use Fynla\Core\Models\User;
 use Fynla\Packs\Gb\Tax\TaxConfigService;
 use Fynla\Packs\Gb\Traits\FormatsCurrency;
 use Carbon\Carbon;

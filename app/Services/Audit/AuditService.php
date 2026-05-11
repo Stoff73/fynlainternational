@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace App\Services\Audit;
 
 use Fynla\Core\Models\AuditLog;
-use App\Models\User;
+use Fynla\Core\Models\User;
 use Illuminate\Database\Eloquent\Model;
 
 class AuditService

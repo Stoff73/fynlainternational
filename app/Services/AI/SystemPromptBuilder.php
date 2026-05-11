@@ -6,7 +6,7 @@ namespace App\Services\AI;
 
 use Fynla\Packs\Gb\Constants\QuerySchemas;
 use Fynla\Packs\Gb\Constants\TaxDefaults;
-use App\Models\User;
+use Fynla\Core\Models\User;
 use App\Services\AI\Prompts\ComplianceRules;
 use App\Services\AI\Prompts\CoreIdentity;
 use App\Services\AI\Prompts\FcaProcessInstructions;

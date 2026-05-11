@@ -6,7 +6,7 @@ namespace App\Services\Auth;
 
 use Fynla\Core\Models\Permission;
 use Fynla\Core\Models\Role;
-use App\Models\User;
+use Fynla\Core\Models\User;
 
 class PermissionService
 {

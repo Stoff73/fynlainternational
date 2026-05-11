@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Services;
 
-use App\Models\User;
+use Fynla\Core\Models\User;
 use Fynla\Packs\Gb\Estate\EstateDataReadinessService;
 use Fynla\Packs\Gb\Investment\Recommendation\DataReadinessService as InvestmentDataReadinessService;
 use Fynla\Packs\Gb\Protection\ProtectionDataReadinessService;

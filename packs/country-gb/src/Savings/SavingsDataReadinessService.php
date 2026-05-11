@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Fynla\Packs\Gb\Savings;
 
 use Fynla\Packs\Gb\Models\Investment\RiskProfile;
-use App\Models\User;
+use Fynla\Core\Models\User;
 use Fynla\Packs\Gb\Tax\TaxConfigService;
 use Fynla\Packs\Gb\Traits\ResolvesExpenditure;
 use Fynla\Packs\Gb\Traits\ResolvesIncome;

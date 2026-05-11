@@ -22,7 +22,7 @@ function zaBucketCreateFundHolding(int $userId): int
 beforeEach(function () {
     $this->seed(ZaTaxConfigurationSeeder::class);
     $this->repo = app(ZaRetirementFundBucketRepository::class);
-    $userClass = '\\' . 'App' . '\\Models\\User';
+    $userClass = \Fynla\Core\Models\User::class;
     $this->user = $userClass::factory()->create();
     $this->fundHoldingId = zaBucketCreateFundHolding($this->user->id);
 });

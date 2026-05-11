@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace App\Services\Chattel;
 
 use Fynla\Packs\Gb\Models\Chattel;
-use App\Models\User;
+use Fynla\Core\Models\User;
 use Fynla\Packs\Gb\Tax\TaxConfigService;
 
 /**

@@ -3,7 +3,7 @@
 declare(strict_types=1);
 
 use Fynla\Core\Models\Role;
-use App\Models\User;
+use Fynla\Core\Models\User;
 use Database\Seeders\RolesPermissionsSeeder;
 use Fynla\Packs\Gb\Database\Seeders\TaxConfigurationSeeder;
 use Illuminate\Support\Facades\Storage;

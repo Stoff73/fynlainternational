@@ -16,7 +16,7 @@ beforeEach(function () {
     app(ZaTaxConfigService::class)->forget();
     $this->excon = app(ZaExchangeControl::class);
     $this->ledger = app(ZaExchangeControlLedger::class);
-    $userClass = '\\' . 'App' . '\\Models\\User';
+    $userClass = \Fynla\Core\Models\User::class;
     $this->user = $userClass::factory()->create();
 });
 

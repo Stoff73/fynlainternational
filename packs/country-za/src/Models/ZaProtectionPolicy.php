@@ -58,12 +58,12 @@ class ZaProtectionPolicy extends Model
 
     public function user(): BelongsTo
     {
-        return $this->belongsTo(self::resolveAppModel('User'), 'user_id');
+        return $this->belongsTo(\Fynla\Core\Models\User::class, 'user_id');
     }
 
     public function jointOwner(): BelongsTo
     {
-        return $this->belongsTo(self::resolveAppModel('User'), 'joint_owner_id');
+        return $this->belongsTo(\Fynla\Core\Models\User::class, 'joint_owner_id');
     }
 
     public function beneficiaries(): HasMany

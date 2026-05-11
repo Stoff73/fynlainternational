@@ -6,7 +6,7 @@ use Fynla\Core\Models\Household;
 use Fynla\Packs\Gb\Models\Investment\InvestmentAccount;
 use Fynla\Packs\Gb\Models\PersonalAccount;
 use Fynla\Packs\Gb\Models\Property;
-use App\Models\User;
+use Fynla\Core\Models\User;
 
 beforeEach(function () {
     // Ensure TaxConfiguration exists for the PersonalAccountsService tax calculations

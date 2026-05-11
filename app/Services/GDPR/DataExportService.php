@@ -6,7 +6,7 @@ namespace App\Services\GDPR;
 
 use Fynla\Core\Models\AuditLog;
 use Fynla\Core\Models\DataExport;
-use App\Models\User;
+use Fynla\Core\Models\User;
 use App\Services\Audit\AuditService;
 use Illuminate\Support\Facades\Storage;
 

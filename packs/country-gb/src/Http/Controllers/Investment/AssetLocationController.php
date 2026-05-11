@@ -236,7 +236,7 @@ class AssetLocationController extends Controller
     /**
      * Build default tax profile for user
      *
-     * @param  \App\Models\User  $user  User
+     * @param  \Fynla\Core\Models\User  $user  User
      * @return array Tax profile
      */
     private function buildDefaultTaxProfile($user): array

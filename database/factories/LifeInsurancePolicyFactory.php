@@ -17,7 +17,7 @@ class LifeInsurancePolicyFactory extends Factory
     public function definition(): array
     {
         return [
-            'user_id' => \App\Models\User::factory(),
+            'user_id' => \Fynla\Core\Models\User::factory(),
             'policy_type' => fake()->randomElement(['term', 'whole_of_life', 'decreasing_term', 'family_income_benefit', 'level_term']),
             'provider' => fake()->company(),
             'policy_number' => fake()->unique()->numerify('LI######'),

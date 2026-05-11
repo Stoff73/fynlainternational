@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-use App\Models\User;
+use Fynla\Core\Models\User;
 
 it('sets a valid life stage', function () {
     $user = User::factory()->create();

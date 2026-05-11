@@ -5,7 +5,7 @@ declare(strict_types=1);
 use Fynla\Packs\Gb\Models\ProtectionActionDefinition;
 use Fynla\Core\Models\Role;
 use Fynla\Packs\Gb\Models\TaxActionDefinition;
-use App\Models\User;
+use Fynla\Core\Models\User;
 use Fynla\Packs\Gb\Database\Seeders\EstateActionDefinitionSeeder;
 use Fynla\Packs\Gb\Database\Seeders\ProtectionActionDefinitionSeeder;
 use Database\Seeders\RolesPermissionsSeeder;

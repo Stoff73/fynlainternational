@@ -9,7 +9,7 @@ use Fynla\Core\Models\Document;
 use Fynla\Packs\Gb\Models\Estate\Will;
 use Fynla\Packs\Gb\Models\Estate\WillDocument;
 use Fynla\Core\Models\FamilyMember;
-use App\Models\User;
+use Fynla\Core\Models\User;
 
 class WillDocumentService
 {

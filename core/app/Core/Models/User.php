@@ -2,81 +2,11 @@
 
 declare(strict_types=1);
 
-namespace App\Models;
+namespace Fynla\Core\Models;
 
-use Fynla\Core\Models\Goal;
-use Fynla\Core\Models\Household;
-use Fynla\Packs\Gb\Models\StatePension;
-
-use Fynla\Packs\Gb\Models\SicknessIllnessPolicy;
-
-use Fynla\Packs\Gb\Models\SavingsAccount;
-
-use Fynla\Packs\Gb\Models\RetirementProfile;
-
-use Fynla\Packs\Gb\Models\ProtectionProfile;
-
-use Fynla\Packs\Gb\Models\Property;
-
-use Fynla\Packs\Gb\Models\PersonalAccount;
-
-use Fynla\Packs\Gb\Models\Mortgage;
-
-use Fynla\Packs\Gb\Models\LifeInsurancePolicy;
-
-use Fynla\Packs\Gb\Models\LetterToSpouse;
-
-use Fynla\Packs\Gb\Models\IncomeProtectionPolicy;
-
-use Fynla\Packs\Gb\Models\DisabilityPolicy;
-
-use Fynla\Packs\Gb\Models\DCPension;
-
-use Fynla\Packs\Gb\Models\DBPension;
-
-use Fynla\Packs\Gb\Models\CriticalIllnessPolicy;
-
-use Fynla\Packs\Gb\Models\Chattel;
-
-use Fynla\Packs\Gb\Models\CashAccount;
-
-use Fynla\Packs\Gb\Models\BusinessInterest;
-
-use Fynla\Core\Models\FamilyMember;
-
-use Fynla\Core\Models\UserSession;
-
-use Fynla\Core\Models\UserConsent;
-
-use Fynla\Core\Models\UserAssumption;
-
-use Fynla\Core\Models\Subscription;
-
-use Fynla\Core\Models\SpousePermission;
-
-use Fynla\Core\Models\Role;
-
-use Fynla\Core\Models\Referral;
-
-use Fynla\Core\Models\Permission;
-
-use Fynla\Core\Models\Payment;
-
-use Fynla\Core\Models\OnboardingProgress;
-
-use Fynla\Core\Models\ExpenditureProfile;
-
-use Fynla\Core\Models\ErasureRequest;
-
-use Fynla\Core\Models\DataExport;
-
-use Fynla\Core\Models\AiConversation;
-
-use Fynla\Core\Models\AdvisorClient;
-
-// use Illuminate\Contracts\Auth\MustVerifyEmail;
-use Fynla\Core\Models\Jurisdiction;
+use Fynla\Core\Contracts\PackUserRelationProvider;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -231,6 +161,25 @@ class User extends Authenticatable
     }
 
     /**
+     * Resolve the concrete pack Model class for a user-scoped relation type
+     * tag (e.g. `gb.dc_pension`). Drives every pack-mediated `hasMany` /
+     * `hasOne` on this model — keeps the pack namespace out of core while
+     * preserving Eloquent's relation semantics (eager loading, `()->where()`,
+     * `()->exists()`, lazy property access).
+     *
+     * @return class-string<Model>
+     */
+    protected function packModel(string $relationType): string
+    {
+        $class = app(PackUserRelationProvider::class)->modelClassFor($relationType);
+        if ($class === null) {
+            throw new \RuntimeException("PackUserRelationProvider has no class for '{$relationType}'");
+        }
+
+        return $class;
+    }
+
+    /**
      * Get the user's subscription.
      */
     public function subscription(): HasOne
@@ -329,7 +278,7 @@ class User extends Authenticatable
      */
     public function protectionProfile(): HasOne
     {
-        return $this->hasOne(ProtectionProfile::class);
+        return $this->hasOne($this->packModel('gb.protection_profile'));
     }
 
     /**
@@ -337,7 +286,7 @@ class User extends Authenticatable
      */
     public function lifeInsurancePolicies(): HasMany
     {
-        return $this->hasMany(LifeInsurancePolicy::class);
+        return $this->hasMany($this->packModel('gb.life_insurance_policy'));
     }
 
     /**
@@ -345,7 +294,7 @@ class User extends Authenticatable
      */
     public function criticalIllnessPolicies(): HasMany
     {
-        return $this->hasMany(CriticalIllnessPolicy::class);
+        return $this->hasMany($this->packModel('gb.critical_illness_policy'));
     }
 
     /**
@@ -353,7 +302,7 @@ class User extends Authenticatable
      */
     public function incomeProtectionPolicies(): HasMany
     {
-        return $this->hasMany(IncomeProtectionPolicy::class);
+        return $this->hasMany($this->packModel('gb.income_protection_policy'));
     }
 
     /**
@@ -361,7 +310,7 @@ class User extends Authenticatable
      */
     public function disabilityPolicies(): HasMany
     {
-        return $this->hasMany(DisabilityPolicy::class);
+        return $this->hasMany($this->packModel('gb.disability_policy'));
     }
 
     /**
@@ -369,7 +318,7 @@ class User extends Authenticatable
      */
     public function sicknessIllnessPolicies(): HasMany
     {
-        return $this->hasMany(SicknessIllnessPolicy::class);
+        return $this->hasMany($this->packModel('gb.sickness_illness_policy'));
     }
 
     /**
@@ -441,7 +390,7 @@ class User extends Authenticatable
      */
     public function letterToSpouse(): HasOne
     {
-        return $this->hasOne(LetterToSpouse::class);
+        return $this->hasOne($this->packModel('gb.letter_to_spouse'));
     }
 
     /**
@@ -449,7 +398,7 @@ class User extends Authenticatable
      */
     public function properties(): HasMany
     {
-        return $this->hasMany(Property::class);
+        return $this->hasMany($this->packModel('gb.property'));
     }
 
     /**
@@ -457,7 +406,7 @@ class User extends Authenticatable
      */
     public function mortgages(): HasMany
     {
-        return $this->hasMany(Mortgage::class);
+        return $this->hasMany($this->packModel('gb.mortgage'));
     }
 
     /**
@@ -465,7 +414,7 @@ class User extends Authenticatable
      */
     public function liabilities(): HasMany
     {
-        return $this->hasMany(\Fynla\Packs\Gb\Models\Estate\Liability::class);
+        return $this->hasMany($this->packModel('gb.estate_liability'));
     }
 
     /**
@@ -473,7 +422,7 @@ class User extends Authenticatable
      */
     public function trusts(): HasMany
     {
-        return $this->hasMany(\Fynla\Packs\Gb\Models\Estate\Trust::class);
+        return $this->hasMany($this->packModel('gb.estate_trust'));
     }
 
     /**
@@ -481,7 +430,7 @@ class User extends Authenticatable
      */
     public function ihtProfile(): HasOne
     {
-        return $this->hasOne(\Fynla\Packs\Gb\Models\Estate\IHTProfile::class);
+        return $this->hasOne($this->packModel('gb.estate_iht_profile'));
     }
 
     /**
@@ -489,7 +438,7 @@ class User extends Authenticatable
      */
     public function assets(): HasMany
     {
-        return $this->hasMany(\Fynla\Packs\Gb\Models\Estate\Asset::class);
+        return $this->hasMany($this->packModel('gb.estate_asset'));
     }
 
     /**
@@ -497,7 +446,7 @@ class User extends Authenticatable
      */
     public function gifts(): HasMany
     {
-        return $this->hasMany(\Fynla\Packs\Gb\Models\Estate\Gift::class);
+        return $this->hasMany($this->packModel('gb.estate_gift'));
     }
 
     /**
@@ -505,7 +454,7 @@ class User extends Authenticatable
      */
     public function lastingPowersOfAttorney(): HasMany
     {
-        return $this->hasMany(\Fynla\Packs\Gb\Models\Estate\LastingPowerOfAttorney::class);
+        return $this->hasMany($this->packModel('gb.estate_lpa'));
     }
 
     /**
@@ -513,7 +462,7 @@ class User extends Authenticatable
      */
     public function businessInterests(): HasMany
     {
-        return $this->hasMany(BusinessInterest::class);
+        return $this->hasMany($this->packModel('gb.business_interest'));
     }
 
     /**
@@ -521,7 +470,7 @@ class User extends Authenticatable
      */
     public function chattels(): HasMany
     {
-        return $this->hasMany(Chattel::class);
+        return $this->hasMany($this->packModel('gb.chattel'));
     }
 
     /**
@@ -529,7 +478,7 @@ class User extends Authenticatable
      */
     public function cashAccounts(): HasMany
     {
-        return $this->hasMany(CashAccount::class);
+        return $this->hasMany($this->packModel('gb.cash_account'));
     }
 
     /**
@@ -537,7 +486,7 @@ class User extends Authenticatable
      */
     public function personalAccounts(): HasMany
     {
-        return $this->hasMany(PersonalAccount::class);
+        return $this->hasMany($this->packModel('gb.personal_account'));
     }
 
     /**
@@ -545,7 +494,7 @@ class User extends Authenticatable
      */
     public function investmentAccounts(): HasMany
     {
-        return $this->hasMany(\Fynla\Packs\Gb\Models\Investment\InvestmentAccount::class);
+        return $this->hasMany($this->packModel('gb.investment_account'));
     }
 
     /**
@@ -553,7 +502,7 @@ class User extends Authenticatable
      */
     public function dcPensions(): HasMany
     {
-        return $this->hasMany(DCPension::class);
+        return $this->hasMany($this->packModel('gb.dc_pension'));
     }
 
     /**
@@ -561,7 +510,7 @@ class User extends Authenticatable
      */
     public function dbPensions(): HasMany
     {
-        return $this->hasMany(DBPension::class);
+        return $this->hasMany($this->packModel('gb.db_pension'));
     }
 
     /**
@@ -569,7 +518,7 @@ class User extends Authenticatable
      */
     public function statePension(): HasOne
     {
-        return $this->hasOne(StatePension::class);
+        return $this->hasOne($this->packModel('gb.state_pension'));
     }
 
     /**
@@ -577,7 +526,7 @@ class User extends Authenticatable
      */
     public function retirementProfile(): HasOne
     {
-        return $this->hasOne(RetirementProfile::class);
+        return $this->hasOne($this->packModel('gb.retirement_profile'));
     }
 
     /**
@@ -617,7 +566,7 @@ class User extends Authenticatable
      */
     public function savingsAccounts(): HasMany
     {
-        return $this->hasMany(SavingsAccount::class);
+        return $this->hasMany($this->packModel('gb.savings_account'));
     }
 
     /**

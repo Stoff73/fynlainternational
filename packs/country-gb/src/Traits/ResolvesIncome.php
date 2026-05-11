@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Fynla\Packs\Gb\Traits;
 
-use App\Models\User;
+use Fynla\Core\Models\User;
 use Fynla\Packs\Gb\Tax\UKTaxCalculator;
 
 trait ResolvesIncome

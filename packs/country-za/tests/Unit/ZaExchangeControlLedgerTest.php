@@ -11,7 +11,7 @@ uses(RefreshDatabase::class);
 beforeEach(function () {
     $this->seed(ZaTaxConfigurationSeeder::class);
     $this->ledger = app(ZaExchangeControlLedger::class);
-    $userClass = '\\' . 'App' . '\\Models\\User';
+    $userClass = \Fynla\Core\Models\User::class;
     $this->user = $userClass::factory()->create();
 });
 

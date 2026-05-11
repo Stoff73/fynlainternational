@@ -6,7 +6,7 @@ namespace App\Services\Investment\AssetLocation;
 
 use Fynla\Packs\Gb\Constants\TaxDefaults;
 use Fynla\Packs\Gb\Models\Investment\InvestmentAccount;
-use App\Models\User;
+use Fynla\Core\Models\User;
 use App\Services\Risk\RiskPreferenceService;
 use Fynla\Packs\Gb\Investment\AssetLocation\AccountTypeRecommender;
 use Fynla\Packs\Gb\Investment\AssetLocation\TaxDragCalculator;

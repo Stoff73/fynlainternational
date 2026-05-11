@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Database\Factories;
 
 use Fynla\Core\Models\Referral;
-use App\Models\User;
+use Fynla\Core\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**

@@ -3,7 +3,7 @@
 declare(strict_types=1);
 
 use Fynla\Packs\Gb\Agents\CoordinatingAgent;
-use App\Models\User;
+use Fynla\Core\Models\User;
 
 beforeEach(function () {
     $mock = Mockery::mock(CoordinatingAgent::class);

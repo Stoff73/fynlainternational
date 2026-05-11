@@ -7,7 +7,7 @@ namespace App\Console\Commands;
 use Fynla\Packs\Gb\Models\Estate\Gift;
 use Fynla\Packs\Gb\Models\Estate\Trust;
 use Fynla\Core\Models\NotificationPreference;
-use App\Models\User;
+use Fynla\Core\Models\User;
 use App\Notifications\GiftExemptionNotification;
 use App\Notifications\TrustAnniversaryNotification;
 use Carbon\Carbon;

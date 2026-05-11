@@ -26,7 +26,7 @@ use Fynla\Packs\Gb\Models\RetirementProfile;
 use Fynla\Core\Models\Role;
 use Fynla\Packs\Gb\Models\SavingsAccount;
 use Fynla\Core\Models\Subscription;
-use App\Models\User;
+use Fynla\Core\Models\User;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
 

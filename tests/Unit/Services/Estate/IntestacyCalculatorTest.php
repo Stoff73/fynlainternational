@@ -3,7 +3,7 @@
 declare(strict_types=1);
 
 use Fynla\Core\Models\FamilyMember;
-use App\Models\User;
+use Fynla\Core\Models\User;
 use Fynla\Packs\Gb\Estate\IntestacyCalculator;
 
 describe('IntestacyCalculator', function () {

@@ -3,7 +3,7 @@
 declare(strict_types=1);
 
 use Fynla\Packs\Gb\Constants\QuerySchemas;
-use App\Models\User;
+use Fynla\Core\Models\User;
 use App\Services\AI\KycGateChecker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 

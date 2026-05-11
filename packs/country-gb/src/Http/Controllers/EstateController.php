@@ -147,7 +147,7 @@ class EstateController extends Controller
 
             // Also load spouse relationships if spouse is involved
             $spouse = ($user->marital_status === 'married' && $user->spouse_id)
-                ? \App\Models\User::find($user->spouse_id)
+                ? \Fynla\Core\Models\User::find($user->spouse_id)
                 : null;
             if ($spouse) {
                 $spouse->load(['investmentAccounts', 'mortgages', 'properties', 'liabilities']);

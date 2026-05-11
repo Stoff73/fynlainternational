@@ -7,7 +7,7 @@ use Fynla\Packs\Gb\Models\DisabilityPolicy;
 use Fynla\Packs\Gb\Models\LifeInsurancePolicy;
 use Fynla\Packs\Gb\Models\ProtectionProfile;
 use Fynla\Packs\Gb\Models\SicknessIllnessPolicy;
-use App\Models\User;
+use Fynla\Core\Models\User;
 use Fynla\Packs\Gb\Database\Seeders\TaxConfigurationSeeder;
 
 beforeEach(function () {

@@ -17,7 +17,7 @@ use Anthropic\Messages\ToolUseBlock;
 use Fynla\Core\Models\AiConversation;
 // Anthropic SDK imports — only used when AI_PROVIDER=anthropic
 use Fynla\Core\Models\AiMessage;
-use App\Models\User;
+use Fynla\Core\Models\User;
 use App\Services\AI\KycGateChecker;
 use App\Services\AI\QueryClassifier;
 use App\Services\AI\SystemPromptBuilder;

@@ -6,7 +6,7 @@ namespace Database\Factories\Estate;
 
 use Fynla\Packs\Gb\Models\Estate\Bequest;
 use Fynla\Packs\Gb\Models\Estate\Will;
-use App\Models\User;
+use Fynla\Core\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**

@@ -6,7 +6,7 @@ namespace Tests\Unit\Services;
 
 use Fynla\Packs\Gb\Models\Mortgage;
 use Fynla\Packs\Gb\Models\Property;
-use App\Models\User;
+use Fynla\Core\Models\User;
 use App\Services\Property\PropertyService;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;

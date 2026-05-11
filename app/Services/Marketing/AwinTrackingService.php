@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace App\Services\Marketing;
 
 use Fynla\Core\Models\Payment;
-use App\Models\User;
+use Fynla\Core\Models\User;
 use Fynla\Core\Traits\StructuredLogging;
 use Illuminate\Support\Facades\Http;
 

@@ -9,7 +9,7 @@ use Fynla\Packs\Gb\Agents\ProtectionAgent;
 use Fynla\Packs\Gb\Agents\RetirementAgent;
 use Fynla\Packs\Gb\Agents\SavingsAgent;
 use App\Agents\TaxOptimisationAgent;
-use App\Models\User;
+use Fynla\Core\Models\User;
 
 beforeEach(function () {
     // Mock all agents to avoid complex dependency chains

@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 use Fynla\Packs\Gb\Models\SavingsAccount;
 use Fynla\Core\Models\Subscription;
-use App\Models\User;
+use Fynla\Core\Models\User;
 use App\Services\Admin\UserMetricsService;
 
 beforeEach(function () {

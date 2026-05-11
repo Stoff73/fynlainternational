@@ -6,7 +6,7 @@ namespace Database\Factories;
 
 use Fynla\Core\Models\Goal;
 use Fynla\Core\Models\GoalContribution;
-use App\Models\User;
+use Fynla\Core\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**

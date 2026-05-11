@@ -3,7 +3,7 @@
 declare(strict_types=1);
 
 use Fynla\Core\Models\NotificationPreference;
-use App\Models\User;
+use Fynla\Core\Models\User;
 
 describe('Notification Preferences API', function () {
     it('returns default preferences for new user', function () {

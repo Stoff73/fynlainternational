@@ -7,7 +7,7 @@ namespace Fynla\Packs\Gb\Coordination;
 use Fynla\Packs\Gb\Agents\ProtectionAgent;
 use Fynla\Packs\Gb\Agents\RetirementAgent;
 use Fynla\Packs\Gb\Agents\SavingsAgent;
-use App\Models\User;
+use Fynla\Core\Models\User;
 use Fynla\Packs\Gb\Estate\ComprehensiveEstatePlanService;
 use App\Services\Investment\PortfolioAnalyzer;
 use Illuminate\Support\Facades\Log;

@@ -9,7 +9,7 @@ use Fynla\Core\Models\FamilyMember;
 use Fynla\Core\Models\Goal;
 use Fynla\Packs\Gb\Models\Mortgage;
 use Fynla\Packs\Gb\Models\SavingsActionDefinition;
-use App\Models\User;
+use Fynla\Core\Models\User;
 use Fynla\Packs\Gb\Tax\TaxConfigService;
 use Fynla\Packs\Gb\Traits\FormatsCurrency;
 use Fynla\Packs\Gb\Traits\ResolvesExpenditure;

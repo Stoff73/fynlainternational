@@ -10,7 +10,7 @@ use App\Mail\DeletionVerificationCode;
 use Fynla\Core\Models\AuditLog;
 use Fynla\Core\Models\DataExport;
 use Fynla\Core\Models\ErasureRequest;
-use App\Models\User;
+use Fynla\Core\Models\User;
 use Fynla\Core\Models\UserConsent;
 use App\Services\Audit\AuditService;
 use App\Services\Auth\MFAService;

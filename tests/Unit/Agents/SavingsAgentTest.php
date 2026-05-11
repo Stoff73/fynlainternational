@@ -5,7 +5,7 @@ declare(strict_types=1);
 use Fynla\Packs\Gb\Agents\SavingsAgent;
 use Fynla\Packs\Gb\Models\SavingsAccount;
 use Fynla\Packs\Gb\Models\SavingsGoal;
-use App\Models\User;
+use Fynla\Core\Models\User;
 use Fynla\Packs\Gb\Savings\EmergencyFundCalculator;
 use Fynla\Packs\Gb\Savings\GoalProgressCalculator;
 use App\Services\Savings\ISATracker;

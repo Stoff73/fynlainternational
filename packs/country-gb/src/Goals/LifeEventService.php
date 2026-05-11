@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Fynla\Packs\Gb\Goals;
 
 use Fynla\Core\Models\LifeEvent;
-use App\Models\User;
+use Fynla\Core\Models\User;
 use Carbon\Carbon;
 use Illuminate\Support\Collection;
 

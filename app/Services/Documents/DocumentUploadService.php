@@ -6,7 +6,7 @@ namespace App\Services\Documents;
 
 use Fynla\Core\Models\Document;
 use Fynla\Core\Models\DocumentExtractionLog;
-use App\Models\User;
+use Fynla\Core\Models\User;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;

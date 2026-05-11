@@ -6,7 +6,7 @@ namespace Database\Seeders;
 
 use Fynla\Core\Models\Household;
 use Fynla\Core\Models\Subscription;
-use App\Models\User;
+use Fynla\Core\Models\User;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
 

@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Fynla\Packs\Gb\Estate;
 
-use App\Models\User;
+use Fynla\Core\Models\User;
 use Fynla\Packs\Gb\Goals\LifeEventService;
 use Fynla\Packs\Gb\Tax\TaxConfigService;
 use Fynla\Packs\Gb\Traits\ResolvesExpenditure;

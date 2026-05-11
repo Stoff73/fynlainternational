@@ -6,7 +6,7 @@ namespace Fynla\Packs\Gb\Models;
 
 use Fynla\Core\Models\Goal;
 
-use App\Models\User;
+use Fynla\Core\Models\User;
 
 use Fynla\Core\Models\FamilyMember;
 

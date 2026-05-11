@@ -8,7 +8,7 @@ use Fynla\Packs\Gb\Agents\EstateAgent;
 use Fynla\Packs\Gb\Constants\TaxDefaults;
 use Fynla\Packs\Gb\Models\Estate\Will;
 use Fynla\Packs\Gb\Models\LifeInsurancePolicy;
-use App\Models\User;
+use Fynla\Core\Models\User;
 use Fynla\Packs\Gb\Coordination\RecommendationPersonaliser;
 use App\Services\Plans\BasePlanService;
 use Fynla\Packs\Gb\Estate\EstateAssetAggregatorService;

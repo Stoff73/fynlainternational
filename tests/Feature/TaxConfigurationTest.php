@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Tests\Feature;
 
 use Fynla\Packs\Gb\Models\TaxConfiguration;
-use App\Models\User;
+use Fynla\Core\Models\User;
 use App\Services\Retirement\AnnualAllowanceChecker;
 use App\Services\Savings\ISATracker;
 use Fynla\Packs\Gb\Tax\TaxConfigService;

@@ -13,7 +13,7 @@ use Fynla\Packs\Gb\Models\Investment\InvestmentAccount;
 use Fynla\Packs\Gb\Models\Property;
 use Fynla\Packs\Gb\Models\SavingsAccount;
 use Fynla\Packs\Gb\Models\StatePension;
-use App\Models\User;
+use Fynla\Core\Models\User;
 use App\Services\Shared\CrossModuleAssetAggregator;
 use Fynla\Core\Traits\CalculatesOwnershipShare;
 use Carbon\Carbon;

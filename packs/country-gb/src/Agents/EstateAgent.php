@@ -10,7 +10,7 @@ use Fynla\Packs\Gb\Constants\TaxDefaults;
 use Fynla\Packs\Gb\Models\Estate\Will;
 use Fynla\Core\Models\Goal;
 use Fynla\Packs\Gb\Models\LifeInsurancePolicy;
-use App\Models\User;
+use Fynla\Core\Models\User;
 use Fynla\Packs\Gb\Coordination\RecommendationPersonaliser;
 use Fynla\Packs\Gb\Estate\ComprehensiveEstatePlanService;
 use Fynla\Packs\Gb\Estate\EstateAssetAggregatorService;

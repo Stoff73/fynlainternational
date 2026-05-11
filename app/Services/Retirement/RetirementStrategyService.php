@@ -6,7 +6,7 @@ namespace App\Services\Retirement;
 
 use Fynla\Packs\Gb\Models\Investment\InvestmentAccount;
 use Fynla\Packs\Gb\Models\SavingsAccount;
-use App\Models\User;
+use Fynla\Core\Models\User;
 use Fynla\Packs\Gb\Retirement\RequiredCapitalCalculator;
 use Fynla\Packs\Gb\Tax\TaxConfigService;
 use Fynla\Packs\Gb\Tax\UKTaxCalculator;

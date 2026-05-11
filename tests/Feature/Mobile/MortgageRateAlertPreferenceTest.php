@@ -3,7 +3,7 @@
 declare(strict_types=1);
 
 use Fynla\Core\Models\NotificationPreference;
-use App\Models\User;
+use Fynla\Core\Models\User;
 
 describe('Mortgage Rate Alert Preference', function () {
     it('returns mortgage_rate_alerts in preferences response', function () {

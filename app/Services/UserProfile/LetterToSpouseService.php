@@ -7,7 +7,7 @@ namespace App\Services\UserProfile;
 use Fynla\Packs\Gb\Models\LetterToSpouse;
 use Fynla\Packs\Gb\Models\Property;
 use Fynla\Packs\Gb\Models\SavingsAccount;
-use App\Models\User;
+use Fynla\Core\Models\User;
 
 class LetterToSpouseService
 {

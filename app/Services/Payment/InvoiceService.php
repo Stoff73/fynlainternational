@@ -8,7 +8,7 @@ use App\Mail\InvoiceEmail;
 use Fynla\Core\Models\DiscountCode;
 use Fynla\Core\Models\Invoice;
 use Fynla\Core\Models\Payment;
-use App\Models\User;
+use Fynla\Core\Models\User;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;

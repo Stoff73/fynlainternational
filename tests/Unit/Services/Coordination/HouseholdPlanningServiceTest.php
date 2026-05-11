@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 use Fynla\Packs\Gb\Models\Property;
 use Fynla\Packs\Gb\Models\SavingsAccount;
-use App\Models\User;
+use Fynla\Core\Models\User;
 use App\Services\Coordination\HouseholdPlanningService;
 use Fynla\Packs\Gb\Tax\TaxConfigService;
 

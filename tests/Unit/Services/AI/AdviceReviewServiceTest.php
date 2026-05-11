@@ -3,7 +3,7 @@
 declare(strict_types=1);
 
 use Fynla\Core\Models\AiAdviceLog;
-use App\Models\User;
+use Fynla\Core\Models\User;
 use App\Services\AI\AdviceReviewService;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 

@@ -9,7 +9,7 @@ use Fynla\Packs\Gb\Models\Investment\InvestmentAccount;
 use Fynla\Packs\Gb\Models\RetirementProfile;
 use Fynla\Packs\Gb\Models\SavingsAccount;
 use Fynla\Packs\Gb\Models\StatePension;
-use App\Models\User;
+use Fynla\Core\Models\User;
 use App\Services\Investment\InvestmentProjectionService;
 use Fynla\Packs\Gb\Tax\TaxBandTracker;
 use Fynla\Packs\Gb\Retirement\RequiredCapitalCalculator;

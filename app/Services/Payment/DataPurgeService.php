@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Services\Payment;
 
-use App\Models\User;
+use Fynla\Core\Models\User;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;

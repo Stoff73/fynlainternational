@@ -8,7 +8,7 @@ use App\Http\Controllers\Controller;
 use Fynla\Core\Models\AiAdviceLog;
 use Fynla\Core\Models\AiConversation;
 use Fynla\Core\Models\AiMessage;
-use App\Models\User;
+use Fynla\Core\Models\User;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 

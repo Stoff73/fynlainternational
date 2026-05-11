@@ -87,7 +87,7 @@ class PersonalAccountsController extends Controller
         // Check if user is married and has permission to view spouse data
         $spouseData = null;
         if ($user->spouse_id && $user->hasAcceptedSpousePermission()) {
-            $spouse = \App\Models\User::find($user->spouse_id);
+            $spouse = \Fynla\Core\Models\User::find($user->spouse_id);
             if ($spouse) {
                 $spouseData = [
                     'profit_and_loss' => $this->personalAccountsService->calculateProfitAndLoss(

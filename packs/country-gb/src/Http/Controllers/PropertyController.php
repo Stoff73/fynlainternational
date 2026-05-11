@@ -408,7 +408,7 @@ class PropertyController extends Controller
     /**
      * Log joint property update for audit trail
      */
-    private function logJointPropertyUpdate(\App\Models\User $user, Property $property, array $validated): void
+    private function logJointPropertyUpdate(\Fynla\Core\Models\User $user, Property $property, array $validated): void
     {
         if (! isset($validated['current_value'])) {
             return;
@@ -447,7 +447,7 @@ class PropertyController extends Controller
      * Single-record pattern: Apply ownership percentage when calculating
      * user's share of rental income.
      */
-    private function syncUserRentalIncome(\App\Models\User $user): void
+    private function syncUserRentalIncome(\Fynla\Core\Models\User $user): void
     {
         // Get properties where user is owner OR joint_owner
         $properties = Property::forUserOrJoint($user->id)

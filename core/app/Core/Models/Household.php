@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Fynla\Core\Models;
 
-use App\Models\User;
+use Fynla\Core\Models\User;
 use Fynla\Core\Contracts\PackAssetRepository;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;

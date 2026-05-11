@@ -15,7 +15,7 @@ beforeEach(function () {
     $this->seed(ZaTaxConfigurationSeeder::class);
     app(ZaTaxConfigService::class)->forget();
     $this->tracker = app(ZaTfsaContributionTracker::class);
-    $userClass = '\\' . 'App' . '\\Models\\User';
+    $userClass = \Fynla\Core\Models\User::class;
     $this->user = $userClass::factory()->create();
 });
 

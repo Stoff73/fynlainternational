@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Fynla\Packs\Gb\Goals;
 
-use App\Models\User;
+use Fynla\Core\Models\User;
 use Illuminate\Support\Collection;
 
 /**

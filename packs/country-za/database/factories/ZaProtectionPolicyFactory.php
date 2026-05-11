@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Fynla\Packs\Za\Database\Factories;
 
-use App\Models\User;
+use Fynla\Core\Models\User;
 use Fynla\Packs\Za\Models\ZaProtectionPolicy;
 use Illuminate\Database\Eloquent\Factories\Factory;
 

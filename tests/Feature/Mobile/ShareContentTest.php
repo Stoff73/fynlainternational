@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-use App\Models\User;
+use Fynla\Core\Models\User;
 
 describe('Share Content API', function () {
     it('returns share content for goal milestone', function () {

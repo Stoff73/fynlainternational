@@ -9,7 +9,7 @@ use Fynla\Packs\Gb\Models\Estate\Asset;
 use Fynla\Packs\Gb\Models\Estate\Liability;
 use Fynla\Packs\Gb\Models\Investment\InvestmentAccount;
 use Fynla\Packs\Gb\Models\SavingsAccount;
-use App\Models\User;
+use Fynla\Core\Models\User;
 use Fynla\Packs\Gb\Database\Seeders\TaxConfigurationSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;

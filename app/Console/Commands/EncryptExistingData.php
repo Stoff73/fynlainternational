@@ -30,7 +30,7 @@ class EncryptExistingData extends Command
      */
     private array $modelsToEncrypt = [
         'User' => [
-            'class' => \App\Models\User::class,
+            'class' => \Fynla\Core\Models\User::class,
             'fields' => [
                 'annual_employment_income',
                 'annual_self_employment_income',

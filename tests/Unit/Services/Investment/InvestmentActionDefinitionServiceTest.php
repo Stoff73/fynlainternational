@@ -3,7 +3,7 @@
 declare(strict_types=1);
 
 use Fynla\Packs\Gb\Models\InvestmentActionDefinition;
-use App\Models\User;
+use Fynla\Core\Models\User;
 use App\Services\Investment\FeeAnalyzer;
 use Fynla\Packs\Gb\Investment\InvestmentActionDefinitionService;
 use Fynla\Packs\Gb\Plans\PlanConfigService;

@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Services\Admin;
 
-use App\Models\User;
+use Fynla\Core\Models\User;
 
 /**
  * Aggregates module status per user across all models.

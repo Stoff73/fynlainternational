@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 use Fynla\Core\Models\Permission;
 use Fynla\Core\Models\Role;
-use App\Models\User;
+use Fynla\Core\Models\User;
 use App\Services\Auth\PermissionService;
 
 beforeEach(function () {

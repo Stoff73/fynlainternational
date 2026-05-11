@@ -17,7 +17,7 @@ class SavingsAccountFactory extends Factory
     public function definition(): array
     {
         return [
-            'user_id' => \App\Models\User::factory(),
+            'user_id' => \Fynla\Core\Models\User::factory(),
             'account_type' => fake()->randomElement(['easy_access', 'notice', 'fixed_rate']),
             'institution' => fake()->company(),
             'account_number' => fake()->numerify('########'),

@@ -5,7 +5,7 @@ declare(strict_types=1);
 use Fynla\Core\Models\FamilyMember;
 use Fynla\Packs\Gb\Models\Mortgage;
 use Fynla\Packs\Gb\Models\Property;
-use App\Models\User;
+use Fynla\Core\Models\User;
 use Database\Seeders\HouseholdSeeder;
 use Database\Seeders\JurisdictionSeeder;
 use Database\Seeders\RolesPermissionsSeeder;

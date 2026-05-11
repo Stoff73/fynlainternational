@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-use App\Models\User;
+use Fynla\Core\Models\User;
 use Fynla\Core\Models\UserConsent;
 use Illuminate\Support\Facades\Mail;
 

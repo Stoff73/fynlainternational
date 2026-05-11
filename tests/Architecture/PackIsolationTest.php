@@ -199,17 +199,16 @@ describe('Pack Isolation', function () {
         // and the deferred User/Household/Goal/LifeEvent relocation shrink
         // the allow-list; R-15 reduces it to empty.
         $allowed = [
-            // App\Models\* — these are deferred from R-4 because their
-            // relationships span every pack. They relocate in a follow-up
-            // workstream that introduces a container-resolved query layer
-            // for cross-pack reads. R-14b-iv closed GoalContribution +
-            // LifeEvent + LifeEventAllocation (3 clean models). R-14b-v
-            // closed Goal (FK relations are PackAssetResolver-backed
-            // accessors). R-14b-vi closed Household (6 unused pack
-            // hasMany relations dropped, householdAssets accessor routes
-            // through PackAssetRepository). User remains pinned until
-            // R-14b-vii.
-            'App\\Models\\User',
+            // App\Models\* — R-14b CLOSED for all 6 deferred core models.
+            // R-14b-iv closed GoalContribution + LifeEvent + LifeEventAllocation
+            // (3 clean models). R-14b-v closed Goal (FK relations are
+            // PackAssetResolver-backed accessors). R-14b-vi closed Household
+            // (6 unused pack hasMany relations dropped, householdAssets
+            // accessor routes through PackAssetRepository). R-14b-vii closed
+            // User (pack-asset hasMany / hasOne relations resolve their
+            // Eloquent target class via PackUserRelationProvider, keeping
+            // the relation API intact while removing pack literals from
+            // core). The R-14b-deferred section is now empty.
             // App\Agents\BaseAgent — abstract parent of all module agents.
             // Stays in app/Agents/ as a generic orchestrator base (no UK-only
             // logic except a TaxDefaults cache-TTL constant). The 7 relocated
@@ -222,11 +221,6 @@ describe('Pack Isolation', function () {
             // dependency now lives in pack (R-14a-Tax-iii). Pack CoordinatingAgent
             // injects it across the boundary.
             'App\\Agents\\TaxOptimisationAgent',
-            // App\Http\Resources\UserResource — wraps the deferred App\Models\User.
-            // Stays in app/Http/Resources/ until User relocation in R-14b.
-            // Pack resources for joint-ownable models reference UserResource
-            // for user / joint_owner relationships across the boundary.
-            'App\\Http\\Resources\\UserResource',
             // R-9-final-i: Goal-shaped Requests/Resources wrap the deferred
             // App\Models\Goal (one of the 6 R-14b core models). They stay in
             // app/Http/Requests/Goals and app/Http/Resources/ until the Goal

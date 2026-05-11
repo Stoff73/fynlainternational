@@ -8,7 +8,7 @@ use Fynla\Packs\Gb\Models\Chattel;
 use Fynla\Packs\Gb\Models\Estate\Will;
 use Fynla\Packs\Gb\Models\LifeInsurancePolicy;
 use Fynla\Packs\Gb\Models\Property;
-use App\Models\User;
+use Fynla\Core\Models\User;
 use Fynla\Core\Traits\StructuredLogging;
 
 class LetterEstateValidationService

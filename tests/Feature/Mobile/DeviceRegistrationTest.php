@@ -3,7 +3,7 @@
 declare(strict_types=1);
 
 use Fynla\Core\Models\DeviceToken;
-use App\Models\User;
+use Fynla\Core\Models\User;
 
 describe('Device Registration API', function () {
     it('registers a new device token', function () {

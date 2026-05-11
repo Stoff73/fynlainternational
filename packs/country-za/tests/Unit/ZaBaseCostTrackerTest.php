@@ -25,7 +25,7 @@ function zaLotsCreateHolding(int $userId): int
 beforeEach(function () {
     $this->seed(ZaTaxConfigurationSeeder::class);
     $this->tracker = app(ZaBaseCostTracker::class);
-    $userClass = '\\' . 'App' . '\\Models\\User';
+    $userClass = \Fynla\Core\Models\User::class;
     $this->user = $userClass::factory()->create();
     $this->holdingId = zaLotsCreateHolding($this->user->id);
 });

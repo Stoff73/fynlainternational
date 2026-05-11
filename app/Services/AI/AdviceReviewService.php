@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace App\Services\AI;
 
 use Fynla\Core\Models\AiAdviceLog;
-use App\Models\User;
+use Fynla\Core\Models\User;
 
 /**
  * Detects when user data has changed since the last advice was given,

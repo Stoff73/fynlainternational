@@ -5,7 +5,7 @@ declare(strict_types=1);
 use Fynla\Core\Models\ExpenditureProfile;
 use Fynla\Packs\Gb\Models\SavingsAccount;
 use Fynla\Packs\Gb\Models\SavingsGoal;
-use App\Models\User;
+use Fynla\Core\Models\User;
 use Fynla\Packs\Gb\Database\Seeders\TaxConfigurationSeeder;
 
 beforeEach(function () {

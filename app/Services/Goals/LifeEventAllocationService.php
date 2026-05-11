@@ -12,7 +12,7 @@ use Fynla\Core\Models\LifeEvent;
 use Fynla\Core\Models\LifeEventAllocation;
 use Fynla\Packs\Gb\Models\RetirementProfile;
 use Fynla\Packs\Gb\Models\SavingsAccount;
-use App\Models\User;
+use Fynla\Core\Models\User;
 use App\Services\Retirement\AnnualAllowanceChecker;
 use Fynla\Packs\Gb\Savings\EmergencyFundCalculator;
 use App\Services\Savings\ISATracker;

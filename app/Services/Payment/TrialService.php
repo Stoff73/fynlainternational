@@ -6,7 +6,7 @@ namespace App\Services\Payment;
 
 use Fynla\Core\Models\Subscription;
 use Fynla\Core\Models\SubscriptionPlan;
-use App\Models\User;
+use Fynla\Core\Models\User;
 use Carbon\Carbon;
 
 class TrialService

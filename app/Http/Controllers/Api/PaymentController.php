@@ -13,7 +13,7 @@ use App\Mail\SubscriptionCancellation;
 use Fynla\Core\Models\Invoice;
 use Fynla\Core\Models\Payment;
 use Fynla\Core\Models\SubscriptionPlan;
-use App\Models\User;
+use Fynla\Core\Models\User;
 use App\Services\Marketing\AwinTrackingService;
 use App\Services\Payment\DataPurgeService;
 use App\Services\Payment\DiscountCodeService;

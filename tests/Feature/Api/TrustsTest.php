@@ -7,7 +7,7 @@ use Fynla\Packs\Gb\Models\CashAccount;
 use Fynla\Packs\Gb\Models\Estate\Trust;
 use Fynla\Core\Models\Household;
 use Fynla\Packs\Gb\Models\Property;
-use App\Models\User;
+use Fynla\Core\Models\User;
 use Carbon\Carbon;
 use Fynla\Packs\Gb\Database\Seeders\TaxConfigurationSeeder;
 use Laravel\Sanctum\Sanctum;

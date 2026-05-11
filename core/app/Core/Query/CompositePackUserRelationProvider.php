@@ -30,6 +30,18 @@ final class CompositePackUserRelationProvider implements PackUserRelationProvide
     ) {
     }
 
+    public function modelClassFor(string $relationType): ?string
+    {
+        foreach ($this->eachPackProvider() as $provider) {
+            $class = $provider->modelClassFor($relationType);
+            if ($class !== null) {
+                return $class;
+            }
+        }
+
+        return null;
+    }
+
     public function userRelatedModels(int $userId, string $relationType): Collection
     {
         $merged = new Collection();

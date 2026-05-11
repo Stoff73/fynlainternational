@@ -133,7 +133,7 @@ class MortgageController extends Controller
         // Copy joint ownership from property if applicable
         if (in_array($property->ownership_type, ['joint', 'tenants_in_common']) && $property->joint_owner_id) {
             $validated['joint_owner_id'] = $property->joint_owner_id;
-            $jointOwner = \App\Models\User::find($property->joint_owner_id);
+            $jointOwner = \Fynla\Core\Models\User::find($property->joint_owner_id);
             $validated['joint_owner_name'] = $jointOwner ? $jointOwner->name : null;
         }
 
@@ -369,7 +369,7 @@ class MortgageController extends Controller
     /**
      * Log joint mortgage update for audit trail
      */
-    private function logJointMortgageUpdate(\App\Models\User $user, Mortgage $mortgage, array $validated): void
+    private function logJointMortgageUpdate(\Fynla\Core\Models\User $user, Mortgage $mortgage, array $validated): void
     {
         $beforeValues = [
             'outstanding_balance' => [

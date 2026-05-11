@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Fynla\Packs\Gb\Retirement;
 
-use App\Models\User;
+use Fynla\Core\Models\User;
 use App\Services\Retirement\DecumulationPlanner;
 use App\Services\Retirement\PensionContributionOptimizer;
 use App\Services\Retirement\SalarySacrificeAnalyzer;

@@ -103,7 +103,7 @@ class CoverageGapAnalyzer
         Collection $disabilityPolicies,
         Collection $sicknessIllnessPolicies,
         ?ProtectionProfile $profile = null,
-        ?\App\Models\User $user = null
+        ?\Fynla\Core\Models\User $user = null
     ): array {
         $lifeCoverage = $lifePolicies->sum('sum_assured');
         $criticalIllnessCoverage = $criticalIllnessPolicies->sum('sum_assured');

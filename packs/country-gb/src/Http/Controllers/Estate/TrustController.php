@@ -197,7 +197,7 @@ class TrustController extends Controller
         }
 
         // Use the simplified IHT calculation service
-        $spouse = ($user->marital_status === 'married' && $user->spouse_id) ? \App\Models\User::find($user->spouse_id) : null;
+        $spouse = ($user->marital_status === 'married' && $user->spouse_id) ? \Fynla\Core\Models\User::find($user->spouse_id) : null;
         $dataSharingEnabled = $spouse && $user->hasAcceptedSpousePermission();
 
         $ihtCalculation = $this->ihtCalculationService->calculate($user, $spouse, $dataSharingEnabled);

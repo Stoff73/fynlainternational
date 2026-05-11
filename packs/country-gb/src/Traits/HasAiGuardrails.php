@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Fynla\Packs\Gb\Traits;
 
 use Fynla\Core\Models\AiConversation;
-use App\Models\User;
+use Fynla\Core\Models\User;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 

@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace App\Services\UserProfile;
 
 use Fynla\Packs\Gb\Models\SavingsAccount;
-use App\Models\User;
+use Fynla\Core\Models\User;
 use Fynla\Packs\Gb\Tax\UKTaxCalculator;
 use Fynla\Core\Traits\CalculatesOwnershipShare;
 use Carbon\Carbon;

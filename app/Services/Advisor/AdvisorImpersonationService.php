@@ -6,7 +6,7 @@ namespace App\Services\Advisor;
 
 use Fynla\Core\Models\AdvisorClient;
 use Fynla\Core\Models\AuditLog;
-use App\Models\User;
+use Fynla\Core\Models\User;
 use Illuminate\Support\Facades\Cache;
 
 class AdvisorImpersonationService

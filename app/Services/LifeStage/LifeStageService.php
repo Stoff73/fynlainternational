@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Services\LifeStage;
 
-use App\Models\User;
+use Fynla\Core\Models\User;
 use Carbon\Carbon;
 
 class LifeStageService

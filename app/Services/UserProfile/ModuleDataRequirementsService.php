@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Services\UserProfile;
 
-use App\Models\User;
+use Fynla\Core\Models\User;
 
 /**
  * Service for determining what data each module needs.

@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Fynla\Core\Models;
 
-use App\Models\User;
+use Fynla\Core\Models\User;
 
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;

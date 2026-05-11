@@ -23,6 +23,11 @@ use Illuminate\Support\Collection;
  */
 final class ZaPackUserRelationProvider implements PackUserRelationProvider
 {
+    public function modelClassFor(string $relationType): ?string
+    {
+        return null;
+    }
+
     public function userRelatedModels(int $userId, string $relationType): Collection
     {
         return new Collection();

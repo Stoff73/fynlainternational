@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 use Fynla\Core\Models\FamilyMember;
 use Fynla\Core\Models\Household;
-use App\Models\User;
+use Fynla\Core\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
 uses(RefreshDatabase::class);

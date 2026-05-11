@@ -8,7 +8,7 @@ use Fynla\Packs\Gb\Constants\TaxDefaults;
 use Fynla\Packs\Gb\Models\Investment\InvestmentAccount;
 use Fynla\Packs\Gb\Models\SavingsAccount;
 use Fynla\Packs\Gb\Models\TaxActionDefinition;
-use App\Models\User;
+use Fynla\Core\Models\User;
 use App\Services\Retirement\AnnualAllowanceChecker;
 use Fynla\Packs\Gb\Traits\FormatsCurrency;
 use Fynla\Core\Traits\StructuredLogging;

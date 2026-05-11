@@ -11,7 +11,7 @@ use Fynla\Packs\Gb\Models\IncomeProtectionPolicy;
 use Fynla\Packs\Gb\Models\LifeInsurancePolicy;
 use Fynla\Packs\Gb\Models\SavingsAccount;
 use Fynla\Packs\Gb\Models\SicknessIllnessPolicy;
-use App\Models\User;
+use Fynla\Core\Models\User;
 use Fynla\Packs\Gb\Plans\DisposableIncomeAccessor;
 use Fynla\Packs\Gb\Traits\ResolvesExpenditure;
 

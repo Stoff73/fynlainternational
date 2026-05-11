@@ -7,7 +7,7 @@ namespace App\Services\Onboarding;
 use Fynla\Core\Models\Permission;
 
 use Fynla\Core\Models\OnboardingProgress;
-use App\Models\User;
+use Fynla\Core\Models\User;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 
@@ -680,7 +680,7 @@ class OnboardingService
                 if ($ownershipType === 'joint') {
                     $ownershipPercentage = 50.00;
                     $jointOwnerId = $investmentData['joint_owner_id']
-                        ?? \App\Models\User::find($userId)?->familyMembers()->where('relationship', 'spouse')->first()?->linked_user_id;
+                        ?? \Fynla\Core\Models\User::find($userId)?->familyMembers()->where('relationship', 'spouse')->first()?->linked_user_id;
                 }
 
                 \Fynla\Packs\Gb\Models\Investment\InvestmentAccount::create([
@@ -713,7 +713,7 @@ class OnboardingService
                 $jointOwnerId = null;
                 if ($ownershipType === 'joint') {
                     $jointOwnerId = $cashData['joint_owner_id']
-                        ?? \App\Models\User::find($userId)?->familyMembers()->where('relationship', 'spouse')->first()?->linked_user_id;
+                        ?? \Fynla\Core\Models\User::find($userId)?->familyMembers()->where('relationship', 'spouse')->first()?->linked_user_id;
                 }
 
                 \Fynla\Packs\Gb\Models\SavingsAccount::create([

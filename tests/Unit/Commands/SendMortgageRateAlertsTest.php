@@ -17,7 +17,7 @@ describe('SendMortgageRateAlerts', function () {
     });
 
     it('detects mortgages with fixed rate ending in 90 days', function () {
-        $user = \App\Models\User::factory()->create();
+        $user = \Fynla\Core\Models\User::factory()->create();
         \Fynla\Core\Models\NotificationPreference::getOrCreateForUser($user->id);
         $property = \Fynla\Packs\Gb\Models\Property::factory()->create(['user_id' => $user->id]);
         \Fynla\Packs\Gb\Models\Mortgage::factory()->create([
@@ -32,7 +32,7 @@ describe('SendMortgageRateAlerts', function () {
     });
 
     it('skips users with mortgage_rate_alerts disabled', function () {
-        $user = \App\Models\User::factory()->create();
+        $user = \Fynla\Core\Models\User::factory()->create();
         $prefs = \Fynla\Core\Models\NotificationPreference::getOrCreateForUser($user->id);
         $prefs->update(['mortgage_rate_alerts' => false]);
         $property = \Fynla\Packs\Gb\Models\Property::factory()->create(['user_id' => $user->id]);

@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 use Fynla\Core\Models\Household;
 use Fynla\Packs\Gb\Models\Investment\InvestmentAccount;
-use App\Models\User;
+use Fynla\Core\Models\User;
 use Fynla\Packs\Gb\Database\Seeders\TaxConfigurationSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 

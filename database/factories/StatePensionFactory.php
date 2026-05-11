@@ -36,7 +36,7 @@ class StatePensionFactory extends Factory
         }
 
         return [
-            'user_id' => \App\Models\User::factory(),
+            'user_id' => \Fynla\Core\Models\User::factory(),
             'ni_years_completed' => $niYearsCompleted,
             'ni_years_required' => $niYearsRequired,
             'state_pension_forecast_annual' => round($statePensionForecast, 2),

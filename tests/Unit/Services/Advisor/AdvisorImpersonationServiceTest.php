@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 use Fynla\Core\Models\AdvisorClient;
 use Fynla\Core\Models\AuditLog;
-use App\Models\User;
+use Fynla\Core\Models\User;
 use App\Services\Advisor\AdvisorImpersonationService;
 use Illuminate\Support\Facades\Cache;
 use Symfony\Component\HttpKernel\Exception\HttpException;

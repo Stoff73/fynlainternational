@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 use Fynla\Core\Models\DeviceToken;
 use Fynla\Core\Models\NotificationPreference;
-use App\Models\User;
+use Fynla\Core\Models\User;
 
 uses(Tests\TestCase::class, Illuminate\Foundation\Testing\RefreshDatabase::class);
 

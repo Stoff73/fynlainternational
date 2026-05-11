@@ -16,7 +16,7 @@ use Fynla\Packs\Gb\Models\Investment\InvestmentAccount;
 use Fynla\Packs\Gb\Models\Mortgage;
 use Fynla\Packs\Gb\Models\Property;
 use Fynla\Packs\Gb\Models\SavingsAccount;
-use App\Models\User;
+use Fynla\Core\Models\User;
 use App\Services\Dashboard\DashboardAggregator;
 use Fynla\Core\Traits\CalculatesOwnershipShare;
 use Fynla\Core\Traits\StructuredLogging;

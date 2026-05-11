@@ -9,7 +9,7 @@ use Fynla\Core\Models\FamilyMember;
 use Fynla\Packs\Gb\Models\Investment\InvestmentAccount;
 use Fynla\Packs\Gb\Models\Investment\RiskProfile;
 use Fynla\Packs\Gb\Models\SavingsAccount;
-use App\Models\User;
+use Fynla\Core\Models\User;
 use App\Services\NetWorth\NetWorthService;
 use Carbon\Carbon;
 

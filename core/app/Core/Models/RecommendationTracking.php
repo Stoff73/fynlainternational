@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Fynla\Core\Models;
 
-use App\Models\User;
+use Fynla\Core\Models\User;
 
 use Fynla\Core\Traits\Auditable;
 use Illuminate\Database\Eloquent\Builder;

@@ -25,7 +25,7 @@ use Fynla\Packs\Gb\Models\LifeInsurancePolicy;
 use Fynla\Packs\Gb\Models\Mortgage;
 use Fynla\Packs\Gb\Models\Property;
 use Fynla\Packs\Gb\Models\SavingsAccount;
-use App\Models\User;
+use Fynla\Core\Models\User;
 use App\Services\AI\AiToolDefinitions;
 use App\Services\Coordination\CashFlowCoordinator;
 use Fynla\Packs\Gb\Coordination\ConflictResolver;
@@ -143,7 +143,7 @@ class CoordinatingAgent extends BaseAgent
 
         // Generate cross-module strategies
         $crossModuleStrategies = [];
-        $user = \App\Models\User::find($userId);
+        $user = \Fynla\Core\Models\User::find($userId);
         if ($user) {
             $crossModuleStrategies = $this->crossModuleStrategyService->generateCrossModuleStrategies($allAnalysis, $user);
         }
@@ -365,7 +365,7 @@ class CoordinatingAgent extends BaseAgent
         ]);
 
         // User context
-        $user = \App\Models\User::find($userId);
+        $user = \Fynla\Core\Models\User::find($userId);
         $analysis['user'] = [
             'age' => $user && $user->date_of_birth ? $user->date_of_birth->age : 40,
         ];

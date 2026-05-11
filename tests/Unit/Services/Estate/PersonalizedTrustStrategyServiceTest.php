@@ -5,7 +5,7 @@ declare(strict_types=1);
 use Fynla\Packs\Gb\Models\Estate\Asset;
 use Fynla\Packs\Gb\Models\Estate\IHTProfile;
 use Fynla\Packs\Gb\Models\TaxConfiguration;
-use App\Models\User;
+use Fynla\Core\Models\User;
 use Fynla\Packs\Gb\Estate\AssetLiquidityAnalyzer;
 use Fynla\Packs\Gb\Estate\PersonalizedTrustStrategyService;
 use App\Services\Risk\RiskPreferenceService;

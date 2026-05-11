@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Fynla\Packs\Gb\Protection;
 
 use Fynla\Core\Models\LifeEvent;
-use App\Models\User;
+use Fynla\Core\Models\User;
 
 class ProtectionDataReadinessService
 {

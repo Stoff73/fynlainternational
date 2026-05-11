@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Fynla\Packs\Gb\Http\Resources;
 
-use App\Http\Resources\UserResource;
+use Fynla\Core\Http\Resources\UserResource;
 
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;

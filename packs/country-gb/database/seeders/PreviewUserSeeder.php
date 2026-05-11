@@ -36,7 +36,7 @@ use Fynla\Packs\Gb\Models\SavingsAccount;
 use Fynla\Packs\Gb\Models\SicknessIllnessPolicy;
 use Fynla\Core\Models\SpousePermission;
 use Fynla\Packs\Gb\Models\StatePension;
-use App\Models\User;
+use Fynla\Core\Models\User;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;

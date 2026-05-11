@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-use App\Models\User;
+use Fynla\Core\Models\User;
 use Fynla\Core\Jurisdiction\ActiveJurisdictions;
 use Fynla\Core\Jurisdiction\Jurisdiction;
 use Fynla\Core\Models\Jurisdiction as JurisdictionModel;

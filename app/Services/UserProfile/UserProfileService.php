@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace App\Services\UserProfile;
 
 use Fynla\Packs\Gb\Models\Property;
-use App\Models\User;
+use Fynla\Core\Models\User;
 use App\Services\Benefits\ChildBenefitService;
 use App\Services\Shared\CrossModuleAssetAggregator;
 use Fynla\Packs\Gb\Tax\UKTaxCalculator;

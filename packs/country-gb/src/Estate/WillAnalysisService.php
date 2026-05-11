@@ -6,7 +6,7 @@ namespace Fynla\Packs\Gb\Estate;
 
 use Fynla\Packs\Gb\Models\Estate\Bequest;
 use Fynla\Packs\Gb\Models\Estate\Will;
-use App\Models\User;
+use Fynla\Core\Models\User;
 use Fynla\Packs\Gb\Tax\TaxConfigService;
 
 /**

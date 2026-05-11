@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace App\Services\Benefits;
 
 use Fynla\Core\Models\FamilyMember;
-use App\Models\User;
+use Fynla\Core\Models\User;
 use Fynla\Packs\Gb\Tax\TaxConfigService;
 use Illuminate\Support\Collection;
 

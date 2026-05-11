@@ -13,7 +13,7 @@ use Fynla\Packs\Gb\Agents\RetirementAgent;
 use Fynla\Packs\Gb\Agents\SavingsAgent;
 use App\Agents\TaxOptimisationAgent;
 use App\Http\Controllers\Controller;
-use App\Models\User;
+use Fynla\Core\Models\User;
 use App\Services\PrerequisiteGateService;
 use Fynla\Packs\Gb\Tax\TaxConfigService;
 use Illuminate\Http\JsonResponse;

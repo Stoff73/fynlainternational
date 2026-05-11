@@ -5,7 +5,7 @@ declare(strict_types=1);
 use Fynla\Packs\Gb\Agents\ProtectionAgent;
 use Fynla\Packs\Gb\Agents\RetirementAgent;
 use Fynla\Packs\Gb\Agents\SavingsAgent;
-use App\Models\User;
+use Fynla\Core\Models\User;
 use Fynla\Packs\Gb\Coordination\RecommendationPersonaliser;
 use Fynla\Packs\Gb\Coordination\RecommendationsAggregatorService;
 use Fynla\Packs\Gb\Estate\ComprehensiveEstatePlanService;

@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 use Fynla\Core\Models\DiscountCode;
 use Fynla\Core\Models\DiscountCodeUsage;
-use App\Models\User;
+use Fynla\Core\Models\User;
 use App\Services\Payment\DiscountCodeService;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 

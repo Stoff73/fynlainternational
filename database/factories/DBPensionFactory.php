@@ -19,7 +19,7 @@ class DBPensionFactory extends Factory
     public function definition(): array
     {
         return [
-            'user_id' => \App\Models\User::factory(),
+            'user_id' => \Fynla\Core\Models\User::factory(),
             'scheme_name' => fake()->randomElement([
                 'NHS Pension Scheme',
                 'Teachers\' Pension',

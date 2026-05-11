@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-use App\Models\User;
+use Fynla\Core\Models\User;
 use Fynla\Packs\Za\Models\ZaProtectionBeneficiary;
 use Fynla\Packs\Za\Models\ZaProtectionPolicy;
 use Laravel\Sanctum\Sanctum;

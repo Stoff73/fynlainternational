@@ -7,7 +7,7 @@ namespace App\Services\Auth;
 use App\Mail\PasswordResetCode;
 use Fynla\Core\Models\AuditLog;
 use Fynla\Core\Models\PasswordResetSession;
-use App\Models\User;
+use Fynla\Core\Models\User;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
 

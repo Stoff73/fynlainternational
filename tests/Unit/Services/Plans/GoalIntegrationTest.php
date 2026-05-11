@@ -5,7 +5,7 @@ declare(strict_types=1);
 use Fynla\Core\Models\Goal;
 use Fynla\Packs\Gb\Models\Investment\InvestmentAccount;
 use Fynla\Packs\Gb\Models\SavingsAccount;
-use App\Models\User;
+use Fynla\Core\Models\User;
 use App\Services\Plans\BasePlanService;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 

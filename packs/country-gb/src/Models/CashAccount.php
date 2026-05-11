@@ -6,7 +6,7 @@ namespace Fynla\Packs\Gb\Models;
 
 use Fynla\Core\Models\Household;
 
-use App\Models\User;
+use Fynla\Core\Models\User;
 
 use Fynla\Core\Traits\Auditable;
 use Fynla\Core\Traits\HasJointOwnership;

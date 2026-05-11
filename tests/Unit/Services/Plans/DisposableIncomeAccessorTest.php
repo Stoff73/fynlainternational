@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-use App\Models\User;
+use Fynla\Core\Models\User;
 use Fynla\Packs\Gb\Plans\DisposableIncomeAccessor;
 use App\Services\UserProfile\UserProfileService;
 

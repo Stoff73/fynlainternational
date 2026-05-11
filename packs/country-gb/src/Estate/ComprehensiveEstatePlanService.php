@@ -11,7 +11,7 @@ use Fynla\Packs\Gb\Estate\PersonalizedGiftingStrategyService;
 use Fynla\Packs\Gb\Models\ActuarialLifeTable;
 use Fynla\Packs\Gb\Models\Estate\IHTProfile;
 use Fynla\Core\Models\FamilyMember;
-use App\Models\User;
+use Fynla\Core\Models\User;
 use Fynla\Packs\Gb\Goals\LifeEventIntegrationService;
 use Fynla\Packs\Gb\Tax\TaxConfigService;
 use App\Services\UserProfile\ProfileCompletenessChecker;

@@ -6,7 +6,7 @@ namespace Fynla\Packs\Gb\Goals;
 
 use Fynla\Core\Models\Goal;
 use Fynla\Packs\Gb\Models\Investment\RiskProfile;
-use App\Models\User;
+use Fynla\Core\Models\User;
 use App\Services\Shared\MonteCarloEngine;
 
 /**

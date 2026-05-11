@@ -6,7 +6,7 @@ namespace App\Services\Payment;
 
 use App\Mail\ReferralInvitationEmail;
 use Fynla\Core\Models\Referral;
-use App\Models\User;
+use Fynla\Core\Models\User;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Str;

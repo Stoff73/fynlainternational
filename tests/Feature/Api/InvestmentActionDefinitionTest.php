@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 use Fynla\Packs\Gb\Models\InvestmentActionDefinition;
 use Fynla\Core\Models\Role;
-use App\Models\User;
+use Fynla\Core\Models\User;
 use Fynla\Packs\Gb\Database\Seeders\InvestmentActionDefinitionSeeder;
 use Database\Seeders\RolesPermissionsSeeder;
 use Fynla\Packs\Gb\Database\Seeders\TaxConfigurationSeeder;

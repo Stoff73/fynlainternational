@@ -3,7 +3,7 @@
 declare(strict_types=1);
 
 use Fynla\Core\Models\Referral;
-use App\Models\User;
+use Fynla\Core\Models\User;
 use App\Services\Payment\ReferralService;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Mail;

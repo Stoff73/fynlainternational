@@ -41,12 +41,12 @@ class ZaTfsaContribution extends Model
 
     public function user(): BelongsTo
     {
-        return $this->belongsTo(self::resolveAppModel('User'), 'user_id');
+        return $this->belongsTo(\Fynla\Core\Models\User::class, 'user_id');
     }
 
     public function beneficiary(): BelongsTo
     {
-        return $this->belongsTo(self::resolveAppModel('FamilyMember'), 'beneficiary_id');
+        return $this->belongsTo(\Fynla\Core\Models\FamilyMember::class, 'beneficiary_id');
     }
 
     public function savingsAccount(): BelongsTo

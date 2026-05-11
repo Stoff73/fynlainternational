@@ -14,7 +14,7 @@ use App\Mail\SubscriptionCancellation;
 use App\Mail\SubscriptionRenewalReminder;
 use App\Mail\TrialExpirationReminder;
 use App\Mail\VerificationCode;
-use App\Models\User;
+use Fynla\Core\Models\User;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Mail;
 

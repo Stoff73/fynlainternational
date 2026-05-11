@@ -8,7 +8,7 @@ use Fynla\Packs\Gb\Agents\InvestmentAgent;
 use Fynla\Packs\Gb\Agents\SavingsAgent;
 use Fynla\Packs\Gb\Models\Investment\InvestmentAccount;
 use Fynla\Packs\Gb\Models\SavingsAccount;
-use App\Models\User;
+use Fynla\Core\Models\User;
 use App\Services\Plans\BasePlanService;
 use Fynla\Packs\Gb\Savings\SavingsActionDefinitionService;
 use Fynla\Packs\Gb\Tax\TaxConfigService;

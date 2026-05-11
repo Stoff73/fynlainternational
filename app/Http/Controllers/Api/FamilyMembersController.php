@@ -66,7 +66,7 @@ class FamilyMembersController extends Controller
 
             // If this is a spouse and user has a spouse_id, get the spouse's email
             if ($member->relationship === 'spouse' && $user->spouse_id) {
-                $spouse = \App\Models\User::find($user->spouse_id);
+                $spouse = \Fynla\Core\Models\User::find($user->spouse_id);
                 $memberArray['email'] = $spouse ? $spouse->email : null;
             }
 
@@ -192,7 +192,7 @@ class FamilyMembersController extends Controller
         ]);
 
         // Check if spouse already has an account
-        $spouseUser = \App\Models\User::where('email', $spouseEmail)->first();
+        $spouseUser = \Fynla\Core\Models\User::where('email', $spouseEmail)->first();
 
         Log::info('Spouse user lookup result', [
             'found' => $spouseUser ? 'yes' : 'no',
@@ -272,7 +272,7 @@ class FamilyMembersController extends Controller
             // Link both users inside a transaction with pessimistic locking
             $familyMember = DB::transaction(function () use ($currentUser, $spouseUser, $data) {
                 // Lock spouse row to prevent concurrent linking by another user
-                $spouseUser = \App\Models\User::lockForUpdate()->find($spouseUser->id);
+                $spouseUser = \Fynla\Core\Models\User::lockForUpdate()->find($spouseUser->id);
                 if ($spouseUser->spouse_id && $spouseUser->spouse_id !== $currentUser->id) {
                     return null;
                 }
@@ -400,7 +400,7 @@ class FamilyMembersController extends Controller
                 (isset($data['middle_name']) && $data['middle_name'] ? $data['middle_name'].' ' : '').
                 ($data['last_name'] ?? ''));
 
-            $spouseUser = \App\Models\User::create([
+            $spouseUser = \Fynla\Core\Models\User::create([
                 'first_name' => $data['first_name'] ?? '',
                 'surname' => $data['last_name'] ?? '',
                 'name' => $fullName,
@@ -534,7 +534,7 @@ class FamilyMembersController extends Controller
 
         // If this is a spouse and user has a spouse_id, get the spouse's email
         if ($familyMember->relationship === 'spouse' && $user->spouse_id) {
-            $spouse = \App\Models\User::find($user->spouse_id);
+            $spouse = \Fynla\Core\Models\User::find($user->spouse_id);
             $memberArray['email'] = $spouse ? $spouse->email : null;
         }
 
@@ -572,7 +572,7 @@ class FamilyMembersController extends Controller
 
         // If updating a spouse, sync relevant fields to the spouse user account
         if ($familyMember->relationship === 'spouse' && $user->spouse_id) {
-            $spouseUser = \App\Models\User::find($user->spouse_id);
+            $spouseUser = \Fynla\Core\Models\User::find($user->spouse_id);
             if ($spouseUser) {
                 $spouseUpdates = [];
 
@@ -632,7 +632,7 @@ class FamilyMembersController extends Controller
 
         // If deleting a spouse, clear the spouse linkage and delete reciprocal record
         if ($familyMember->relationship === 'spouse' && $user->spouse_id) {
-            $spouseUser = \App\Models\User::find($user->spouse_id);
+            $spouseUser = \Fynla\Core\Models\User::find($user->spouse_id);
 
             if ($spouseUser) {
                 // Delete the reciprocal family_member record on spouse's account

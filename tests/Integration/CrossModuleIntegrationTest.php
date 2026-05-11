@@ -90,7 +90,7 @@ describe('Cross-Module Integration', function () {
             TaxConfiguration::factory()->create(['is_active' => true]);
             app()->forgetInstance(\Fynla\Packs\Gb\Tax\TaxConfigService::class);
 
-            $user = \App\Models\User::factory()->create([
+            $user = \Fynla\Core\Models\User::factory()->create([
                 'date_of_birth' => now()->subYears(35),
             ]);
 
@@ -135,7 +135,7 @@ describe('Cross-Module Integration', function () {
             TaxConfiguration::factory()->create(['is_active' => true]);
             app()->forgetInstance(\Fynla\Packs\Gb\Tax\TaxConfigService::class);
 
-            $user = \App\Models\User::factory()->create([
+            $user = \Fynla\Core\Models\User::factory()->create([
                 'date_of_birth' => now()->subYears(40),
             ]);
 

@@ -11,7 +11,7 @@ use Fynla\Packs\Gb\Models\Investment\InvestmentAccount;
 use Fynla\Core\Models\LifeEvent;
 use Fynla\Packs\Gb\Models\SavingsAccount;
 use Fynla\Packs\Gb\Models\SavingsGoal;
-use App\Models\User;
+use Fynla\Core\Models\User;
 use App\Services\Goals\GoalProgressService;
 use Fynla\Packs\Gb\Plans\PlanConfigService;
 use Fynla\Packs\Gb\Savings\EmergencyFundCalculator;

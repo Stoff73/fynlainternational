@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Services\Retirement;
 
-use App\Models\User;
+use Fynla\Core\Models\User;
 use Fynla\Packs\Gb\Goals\LifeEventCashFlowService;
 use Fynla\Packs\Gb\Investment\MonteCarloSimulator;
 use App\Services\Risk\RiskPreferenceService;

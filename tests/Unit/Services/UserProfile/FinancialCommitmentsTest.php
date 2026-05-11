@@ -9,7 +9,7 @@ use Fynla\Packs\Gb\Models\IncomeProtectionPolicy;
 use Fynla\Packs\Gb\Models\LifeInsurancePolicy;
 use Fynla\Packs\Gb\Models\Property;
 use Fynla\Packs\Gb\Models\TaxConfiguration;
-use App\Models\User;
+use Fynla\Core\Models\User;
 use App\Services\Benefits\ChildBenefitService;
 use App\Services\Shared\CrossModuleAssetAggregator;
 use Fynla\Packs\Gb\Tax\TaxConfigService;

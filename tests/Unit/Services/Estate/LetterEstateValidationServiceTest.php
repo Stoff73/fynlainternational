@@ -7,7 +7,7 @@ use Fynla\Packs\Gb\Models\Estate\Will;
 use Fynla\Packs\Gb\Models\LetterToSpouse;
 use Fynla\Packs\Gb\Models\LifeInsurancePolicy;
 use Fynla\Packs\Gb\Models\Property;
-use App\Models\User;
+use Fynla\Core\Models\User;
 use Fynla\Packs\Gb\Estate\LetterEstateValidationService;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 

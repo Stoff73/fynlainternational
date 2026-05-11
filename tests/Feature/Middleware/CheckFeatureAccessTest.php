@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 use App\Http\Middleware\CheckFeatureAccess;
 use Fynla\Core\Models\Subscription;
-use App\Models\User;
+use Fynla\Core\Models\User;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 

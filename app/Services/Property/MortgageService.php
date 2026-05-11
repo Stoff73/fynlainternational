@@ -6,7 +6,7 @@ namespace App\Services\Property;
 
 use Fynla\Packs\Gb\Models\Mortgage;
 use Fynla\Packs\Gb\Models\Property;
-use App\Models\User;
+use Fynla\Core\Models\User;
 use Carbon\Carbon;
 
 class MortgageService

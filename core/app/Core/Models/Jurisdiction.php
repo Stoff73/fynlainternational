@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Fynla\Core\Models;
 
-use App\Models\User;
+use Fynla\Core\Models\User;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
@@ -46,7 +46,7 @@ class Jurisdiction extends Model
     public function users(): BelongsToMany
     {
         return $this->belongsToMany(
-            \App\Models\User::class,
+            \Fynla\Core\Models\User::class,
             'user_jurisdictions',
             'jurisdiction_id',
             'user_id'

@@ -8,7 +8,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\UpdateDomicileInfoRequest;
 use App\Http\Requests\UpdateIncomeOccupationRequest;
 use App\Http\Requests\UpdatePersonalInfoRequest;
-use App\Http\Resources\UserResource;
+use Fynla\Core\Http\Resources\UserResource;
 use App\Http\Traits\SanitizedErrorResponse;
 use App\Services\Cache\CacheInvalidationService;
 use App\Services\UserProfile\UserProfileService;
@@ -226,7 +226,7 @@ class UserProfileController extends Controller
             ], 403);
         }
 
-        $user = \App\Models\User::findOrFail($userId);
+        $user = \Fynla\Core\Models\User::findOrFail($userId);
 
         return response()->json([
             'success' => true,
@@ -335,7 +335,7 @@ class UserProfileController extends Controller
             ], 403);
         }
 
-        $spouse = \App\Models\User::findOrFail($userId);
+        $spouse = \Fynla\Core\Models\User::findOrFail($userId);
 
         $validated = $request->validate([
             'monthly_expenditure' => 'nullable|numeric|min:0',

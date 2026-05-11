@@ -7,7 +7,7 @@ namespace Fynla\Packs\Gb\Investment;
 use Fynla\Core\Constants\InvestmentDefaults;
 use Fynla\Packs\Gb\Constants\TaxDefaults;
 use Fynla\Packs\Gb\Models\Investment\InvestmentAccount;
-use App\Models\User;
+use Fynla\Core\Models\User;
 use App\Services\Investment\FeeAnalyzer;
 use Fynla\Packs\Gb\Investment\Rebalancing\DriftAnalyzer;
 use App\Services\Investment\Tax\TaxOptimizationAnalyzer;

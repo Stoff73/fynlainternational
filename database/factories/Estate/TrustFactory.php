@@ -6,7 +6,7 @@ namespace Database\Factories\Estate;
 
 use Fynla\Packs\Gb\Models\Estate\Trust;
 use Fynla\Core\Models\Household;
-use App\Models\User;
+use Fynla\Core\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 class TrustFactory extends Factory

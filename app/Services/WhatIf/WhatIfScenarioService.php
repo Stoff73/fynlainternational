@@ -9,7 +9,7 @@ use Fynla\Packs\Gb\Agents\InvestmentAgent;
 use Fynla\Packs\Gb\Agents\ProtectionAgent;
 use Fynla\Packs\Gb\Agents\RetirementAgent;
 use Fynla\Packs\Gb\Agents\SavingsAgent;
-use App\Models\User;
+use Fynla\Core\Models\User;
 use Fynla\Packs\Gb\Models\WhatIfScenario;
 
 class WhatIfScenarioService

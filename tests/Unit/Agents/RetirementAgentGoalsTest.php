@@ -5,7 +5,7 @@ declare(strict_types=1);
 use Fynla\Core\Models\Goal;
 use Fynla\Core\Models\Household;
 use Fynla\Packs\Gb\Models\RetirementProfile;
-use App\Models\User;
+use Fynla\Core\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
 uses(RefreshDatabase::class);

@@ -8,7 +8,7 @@ use Fynla\Packs\Gb\Models\DCPension;
 use Fynla\Core\Models\Document;
 use Fynla\Core\Models\DocumentExtractionLog;
 use Fynla\Packs\Gb\Models\Investment\InvestmentAccount;
-use App\Models\User;
+use Fynla\Core\Models\User;
 use App\Services\Documents\FieldMappers\DBPensionMapper;
 use App\Services\Documents\FieldMappers\DCPensionMapper;
 use App\Services\Documents\FieldMappers\FieldMapperInterface;

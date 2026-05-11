@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 use Fynla\Core\Models\Role;
 use Fynla\Core\Models\Subscription;
-use App\Models\User;
+use Fynla\Core\Models\User;
 use Database\Seeders\RolesPermissionsSeeder;
 use Fynla\Packs\Gb\Database\Seeders\TaxConfigurationSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;

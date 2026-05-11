@@ -6,7 +6,7 @@ use Fynla\Core\Models\Goal;
 use Fynla\Core\Models\Household;
 use Fynla\Core\Models\LifeEvent;
 use Fynla\Packs\Gb\Models\SavingsAccount;
-use App\Models\User;
+use Fynla\Core\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
 uses(RefreshDatabase::class);

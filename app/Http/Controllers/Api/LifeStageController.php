@@ -122,7 +122,7 @@ class LifeStageController extends Controller
      * Display level: does any data exist for this module? (enough to show a card)
      * Advice level: do all BLOCKING prerequisites pass? (enough for Agent analysis)
      */
-    private function buildModuleCompleteness(\App\Models\User $user): array
+    private function buildModuleCompleteness(\Fynla\Core\Models\User $user): array
     {
         // Full assessments from DataReadiness services (field-level detail)
         $assessments = $this->prerequisiteGate->assessAll($user);

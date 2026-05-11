@@ -6,7 +6,7 @@ namespace Fynla\Packs\Gb\Estate;
 
 use Fynla\Packs\Gb\Models\Estate\Gift;
 use Fynla\Packs\Gb\Models\Estate\IHTProfile;
-use App\Models\User;
+use Fynla\Core\Models\User;
 use Fynla\Packs\Gb\Tax\TaxConfigService;
 use Carbon\Carbon;
 

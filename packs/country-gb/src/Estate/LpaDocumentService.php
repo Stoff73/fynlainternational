@@ -6,7 +6,7 @@ namespace Fynla\Packs\Gb\Estate;
 
 use Fynla\Core\Models\Document;
 use Fynla\Packs\Gb\Models\Estate\LastingPowerOfAttorney;
-use App\Models\User;
+use Fynla\Core\Models\User;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;

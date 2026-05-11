@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace App\Services\AI;
 
 use Fynla\Packs\Gb\Constants\QuerySchemas;
-use App\Models\User;
+use Fynla\Core\Models\User;
 use App\Services\PrerequisiteGateService;
 
 /**

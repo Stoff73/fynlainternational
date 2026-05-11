@@ -6,7 +6,7 @@ namespace Database\Factories;
 
 use Fynla\Core\Models\AdvisorClient;
 use Fynla\Core\Models\ClientActivity;
-use App\Models\User;
+use Fynla\Core\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 class ClientActivityFactory extends Factory

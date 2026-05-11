@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-use App\Models\User;
+use Fynla\Core\Models\User;
 use App\Services\Coordination\CrossModuleStrategyService;
 use Fynla\Packs\Gb\Tax\TaxConfigService;
 

@@ -6,7 +6,7 @@ namespace Fynla\Packs\Gb\Plans;
 
 use Fynla\Packs\Gb\Agents\GoalsAgent;
 use Fynla\Core\Models\Goal;
-use App\Models\User;
+use Fynla\Core\Models\User;
 use App\Services\Plans\BasePlanService;
 use App\Services\Plans\DistributionAccount;
 use Fynla\Packs\Gb\Goals\GoalAffordabilityService;

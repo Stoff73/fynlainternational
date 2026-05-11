@@ -7,7 +7,7 @@ namespace Fynla\Packs\Gb\Tax;
 use Fynla\Packs\Gb\Constants\TaxDefaults;
 use Fynla\Packs\Gb\Models\Investment\InvestmentAccount;
 use Fynla\Packs\Gb\Models\SavingsAccount;
-use App\Models\User;
+use Fynla\Core\Models\User;
 use App\Services\Retirement\AnnualAllowanceChecker;
 use Fynla\Packs\Gb\Traits\ResolvesIncome;
 

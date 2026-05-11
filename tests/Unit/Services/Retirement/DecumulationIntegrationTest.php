@@ -6,7 +6,7 @@ use Fynla\Packs\Gb\Agents\RetirementAgent;
 use Fynla\Packs\Gb\Models\DCPension;
 use Fynla\Packs\Gb\Models\RetirementProfile;
 use Fynla\Packs\Gb\Models\StatePension;
-use App\Models\User;
+use Fynla\Core\Models\User;
 use Fynla\Packs\Gb\Database\Seeders\TaxConfigurationSeeder;
 
 beforeEach(function () {

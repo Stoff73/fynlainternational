@@ -6,7 +6,7 @@ use Fynla\Core\Models\FamilyMember;
 use Fynla\Core\Models\Household;
 use Fynla\Packs\Gb\Models\Investment\InvestmentAccount;
 use Fynla\Packs\Gb\Models\Property;
-use App\Models\User;
+use Fynla\Core\Models\User;
 use App\Services\Benefits\ChildBenefitService;
 use App\Services\Shared\CrossModuleAssetAggregator;
 use Fynla\Packs\Gb\Tax\TaxConfigService;

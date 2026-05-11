@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Fynla\Packs\Gb\Models;
 
-use App\Models\User;
+use Fynla\Core\Models\User;
 
 use Fynla\Packs\Gb\Models\Investment\Holding;
 use Fynla\Core\Traits\Auditable;

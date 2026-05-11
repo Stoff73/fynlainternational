@@ -5,7 +5,7 @@ declare(strict_types=1);
 use App\Http\Controllers\Api\PaymentController;
 use Fynla\Core\Models\Payment;
 use Fynla\Core\Models\Subscription;
-use App\Models\User;
+use Fynla\Core\Models\User;
 use App\Services\Payment\RevolutService;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Str;

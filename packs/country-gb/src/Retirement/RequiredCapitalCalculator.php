@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Fynla\Packs\Gb\Retirement;
 
-use App\Models\User;
+use Fynla\Core\Models\User;
 use App\Services\Settings\AssumptionsService;
 use Fynla\Packs\Gb\Tax\TaxConfigService;
 use App\Services\UserProfile\UserProfileService;

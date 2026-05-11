@@ -6,7 +6,7 @@ namespace Database\Seeders;
 
 use Fynla\Core\Models\AdvisorClient;
 use Fynla\Core\Models\ClientActivity;
-use App\Models\User;
+use Fynla\Core\Models\User;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;

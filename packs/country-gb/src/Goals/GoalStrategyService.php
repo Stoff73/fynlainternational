@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Fynla\Packs\Gb\Goals;
 
 use Fynla\Core\Models\Goal;
-use App\Models\User;
+use Fynla\Core\Models\User;
 use App\Services\Goals\GoalAssignmentService;
 use App\Services\Goals\GoalProgressService;
 

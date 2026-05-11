@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace App\Services\Auth;
 
 use Fynla\Core\Models\LoginAttempt;
-use App\Models\User;
+use Fynla\Core\Models\User;
 use Carbon\Carbon;
 
 class LoginLockoutService

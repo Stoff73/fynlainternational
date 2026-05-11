@@ -28,7 +28,7 @@ class RetirementProfileFactory extends Factory
         $targetRetirementIncome = $currentAnnualSalary * fake()->randomFloat(2, 0.5, 0.8); // 50-80% of current salary
 
         return [
-            'user_id' => \App\Models\User::factory(),
+            'user_id' => \Fynla\Core\Models\User::factory(),
             'current_age' => $currentAge,
             'target_retirement_age' => $targetRetirementAge,
             'current_annual_salary' => $currentAnnualSalary,

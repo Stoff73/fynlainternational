@@ -911,7 +911,7 @@ class InvestmentController extends Controller
     /**
      * Log joint investment account update for audit trail
      */
-    private function logJointAccountUpdate(\App\Models\User $user, InvestmentAccount $account, array $validated): void
+    private function logJointAccountUpdate(\Fynla\Core\Models\User $user, InvestmentAccount $account, array $validated): void
     {
         $beforeValues = [
             'current_value' => [

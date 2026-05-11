@@ -11,7 +11,7 @@ use Fynla\Packs\Gb\Models\Investment\InvestmentAccount;
 use Fynla\Packs\Gb\Models\Investment\InvestmentGoal;
 use Fynla\Packs\Gb\Models\Investment\RiskProfile;
 use Fynla\Packs\Gb\Models\SavingsAccount;
-use App\Models\User;
+use Fynla\Core\Models\User;
 use Fynla\Packs\Gb\Investment\DiversificationAnalyzer;
 use App\Services\Investment\FeeAnalyzer;
 use Fynla\Packs\Gb\Investment\InvestmentActionDefinitionService;

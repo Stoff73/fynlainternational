@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 use Fynla\Core\Models\FamilyMember;
 use Fynla\Packs\Gb\Models\Property;
-use App\Models\User;
+use Fynla\Core\Models\User;
 use Fynla\Packs\Gb\Coordination\RecommendationPersonaliser;
 use Fynla\Packs\Gb\Tax\TaxConfigService;
 

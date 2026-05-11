@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace App\Services\Property;
 
 use Fynla\Packs\Gb\Models\Property;
-use App\Models\User;
+use Fynla\Core\Models\User;
 use Fynla\Packs\Gb\Tax\TaxConfigService;
 
 class PropertyTaxService

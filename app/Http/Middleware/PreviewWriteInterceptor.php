@@ -145,7 +145,7 @@ class PreviewWriteInterceptor
      * Since this middleware runs before auth:sanctum, we need to manually
      * resolve the user from the Authorization header.
      */
-    private function resolveUserFromToken(Request $request): ?\App\Models\User
+    private function resolveUserFromToken(Request $request): ?\Fynla\Core\Models\User
     {
         $token = $request->bearerToken();
 

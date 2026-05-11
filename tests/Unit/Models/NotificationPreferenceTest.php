@@ -3,7 +3,7 @@
 declare(strict_types=1);
 
 use Fynla\Core\Models\NotificationPreference;
-use App\Models\User;
+use Fynla\Core\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
 uses(Tests\TestCase::class, RefreshDatabase::class);

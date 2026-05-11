@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 use Fynla\Core\Models\AdvisorClient;
 use Fynla\Core\Models\ClientActivity;
-use App\Models\User;
+use Fynla\Core\Models\User;
 
 beforeEach(function () {
     $this->advisor = User::factory()->create(['is_advisor' => true]);

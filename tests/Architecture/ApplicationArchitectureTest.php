@@ -29,13 +29,16 @@ arch('all GB pack agents extend BaseAgent')
     ->toExtend('App\Agents\BaseAgent');
 
 // Test: All models use proper traits
+// R-14b-vii: app/Models/ is empty post-User relocation; models live in
+// core/app/Core/Models/ under Fynla\Core\Models\. User extends
+// Authenticatable (Laravel auth user), not the bare Eloquent Model.
 arch('all models extend Eloquent Model')
-    ->expect('App\Models')
+    ->expect('Fynla\Core\Models')
     ->toExtend('Illuminate\Database\Eloquent\Model')
-    ->ignoring('App\Models\User'); // User extends Authenticatable
+    ->ignoring('Fynla\Core\Models\User');
 
 arch('models use HasFactory trait')
-    ->expect('App\Models')
+    ->expect('Fynla\Core\Models')
     ->toUse('Illuminate\Database\Eloquent\Factories\HasFactory');
 
 // Test: All form requests follow naming convention and extend FormRequest
@@ -91,7 +94,7 @@ arch('all services use strict types')
     ->toUseStrictTypes();
 
 arch('all models use strict types')
-    ->expect('App\Models')
+    ->expect('Fynla\Core\Models')
     ->toUseStrictTypes();
 
 arch('all controllers use strict types')
@@ -126,7 +129,7 @@ arch('code does not use dangerous functions')
 
 // Test: Models should not contain business logic
 arch('models do not use external services')
-    ->expect('App\Models')
+    ->expect('Fynla\Core\Models')
     ->not->toUse([
         'Illuminate\Support\Facades\Cache',
         'Illuminate\Support\Facades\Queue',

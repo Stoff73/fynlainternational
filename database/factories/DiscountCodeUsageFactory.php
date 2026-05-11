@@ -7,7 +7,7 @@ namespace Database\Factories;
 use Fynla\Core\Models\DiscountCode;
 use Fynla\Core\Models\DiscountCodeUsage;
 use Fynla\Core\Models\Payment;
-use App\Models\User;
+use Fynla\Core\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**

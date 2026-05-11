@@ -69,7 +69,7 @@ class LifePolicyController extends Controller
                 $currentAge = \Carbon\Carbon::parse($user->date_of_birth)->age;
 
                 // Get spouse data for joint policy calculation
-                $spouse = $user->spouse_id ? \App\Models\User::find($user->spouse_id) : null;
+                $spouse = $user->spouse_id ? \Fynla\Core\Models\User::find($user->spouse_id) : null;
                 $spouseAge = $spouse && $spouse->date_of_birth ? \Carbon\Carbon::parse($spouse->date_of_birth)->age : null;
                 $spouseGender = $spouse ? $spouse->gender : null;
 

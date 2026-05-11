@@ -11,7 +11,7 @@ use Fynla\Core\Models\DiscountCode;
 use Fynla\Core\Models\Payment;
 use Fynla\Core\Models\Role;
 use Fynla\Core\Models\Subscription;
-use App\Models\User;
+use Fynla\Core\Models\User;
 use App\Services\Admin\DatabaseMetricsService;
 use App\Services\Admin\UserModuleTrackingService;
 use Illuminate\Http\JsonResponse;

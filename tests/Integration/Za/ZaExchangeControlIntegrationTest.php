@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-use App\Models\User;
+use Fynla\Core\Models\User;
 use Fynla\Packs\Za\Database\Seeders\ZaTaxConfigurationSeeder;
 use Fynla\Packs\Za\ExchangeControl\ZaExchangeControl;
 use Fynla\Packs\Za\ExchangeControl\ZaExchangeControlLedger;

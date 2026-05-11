@@ -3,7 +3,7 @@
 declare(strict_types=1);
 
 use Fynla\Packs\Gb\Models\ProtectionProfile;
-use App\Models\User;
+use Fynla\Core\Models\User;
 use Fynla\Packs\Gb\Protection\ScenarioBuilder;
 use Fynla\Packs\Gb\Tax\TaxConfigService;
 

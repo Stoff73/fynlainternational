@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Fynla\Packs\Gb\Models\Estate;
 
-use App\Models\User;
+use Fynla\Core\Models\User;
 use Fynla\Core\Traits\Auditable;
 use Fynla\Core\Traits\HasJointOwnership;
 use Illuminate\Database\Eloquent\Factories\HasFactory;

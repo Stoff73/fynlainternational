@@ -5,7 +5,7 @@ declare(strict_types=1);
 use Fynla\Packs\Gb\Models\DCPension;
 use Fynla\Packs\Gb\Models\RetirementActionDefinition;
 use Fynla\Packs\Gb\Models\RetirementProfile;
-use App\Models\User;
+use Fynla\Core\Models\User;
 use Fynla\Packs\Gb\Retirement\RetirementActionDefinitionService;
 use Fynla\Packs\Gb\Database\Seeders\RetirementActionDefinitionSeeder;
 use Fynla\Packs\Gb\Database\Seeders\TaxConfigurationSeeder;

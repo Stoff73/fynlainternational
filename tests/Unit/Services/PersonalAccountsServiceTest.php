@@ -8,7 +8,7 @@ use Fynla\Packs\Gb\Models\Mortgage;
 use Fynla\Packs\Gb\Models\Property;
 use Fynla\Packs\Gb\Models\SavingsAccount;
 use Fynla\Packs\Gb\Models\TaxConfiguration;
-use App\Models\User;
+use Fynla\Core\Models\User;
 use App\Services\UserProfile\PersonalAccountsService;
 use Carbon\Carbon;
 use Illuminate\Foundation\Testing\RefreshDatabase;

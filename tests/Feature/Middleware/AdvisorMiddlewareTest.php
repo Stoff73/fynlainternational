@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-use App\Models\User;
+use Fynla\Core\Models\User;
 use Illuminate\Support\Facades\Cache;
 
 it('allows advisor to access advisor routes', function () {

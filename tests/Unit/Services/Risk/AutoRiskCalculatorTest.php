@@ -6,7 +6,7 @@ use Fynla\Packs\Gb\Models\DCPension;
 use Fynla\Core\Models\FamilyMember;
 use Fynla\Packs\Gb\Models\Investment\InvestmentAccount;
 use Fynla\Packs\Gb\Models\SavingsAccount;
-use App\Models\User;
+use Fynla\Core\Models\User;
 use App\Services\NetWorth\NetWorthService;
 use App\Services\Risk\AutoRiskCalculator;
 use Illuminate\Foundation\Testing\RefreshDatabase;

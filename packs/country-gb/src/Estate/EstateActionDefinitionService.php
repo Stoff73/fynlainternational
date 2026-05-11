@@ -11,7 +11,7 @@ use Fynla\Packs\Gb\Models\Estate\Trust;
 use Fynla\Packs\Gb\Models\Estate\Will;
 use Fynla\Packs\Gb\Models\EstateActionDefinition;
 use Fynla\Packs\Gb\Models\LifeInsurancePolicy;
-use App\Models\User;
+use Fynla\Core\Models\User;
 use Fynla\Packs\Gb\Tax\TaxConfigService;
 use Fynla\Packs\Gb\Traits\FormatsCurrency;
 use Fynla\Core\Traits\StructuredLogging;

@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 use Fynla\Packs\Gb\Models\Investment\Holding;
 use Fynla\Packs\Gb\Models\Investment\InvestmentAccount;
-use App\Models\User;
+use Fynla\Core\Models\User;
 use Fynla\Packs\Za\Database\Seeders\ZaTaxConfigurationSeeder;
 use Fynla\Packs\Za\Investment\ZaBaseCostTracker;
 use Fynla\Packs\Za\Investment\ZaInvestmentEngine;

@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Console\Commands;
 
-use App\Models\User;
+use Fynla\Core\Models\User;
 use App\Notifications\ProtectionAlertNotification;
 use Illuminate\Console\Command;
 use Illuminate\Support\Carbon;
@@ -221,7 +221,7 @@ class SendProtectionAlerts extends Command
             // Check if an annual review notification was already sent in the last 11 months
             $recentReview = DB::table('notifications')
                 ->where('notifiable_id', $userId)
-                ->where('notifiable_type', 'App\\Models\\User')
+                ->where('notifiable_type', 'Fynla\\Core\\Models\\User')
                 ->where('data->type', 'annual_protection_review')
                 ->where('created_at', '>=', now()->subMonths(11))
                 ->exists();

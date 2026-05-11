@@ -90,7 +90,7 @@ describe('check', function () {
 
 describe('snapshot', function () {
     it('persists a compliant snapshot', function () {
-        $userClass = '\\' . 'App' . '\\Models\\User';
+        $userClass = \Fynla\Core\Models\User::class;
         $user = $userClass::factory()->create();
 
         $snap = $this->monitor->snapshot(
@@ -109,7 +109,7 @@ describe('snapshot', function () {
     });
 
     it('persists a non-compliant snapshot with breach list', function () {
-        $userClass = '\\' . 'App' . '\\Models\\User';
+        $userClass = \Fynla\Core\Models\User::class;
         $user = $userClass::factory()->create();
 
         $snap = $this->monitor->snapshot(

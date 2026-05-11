@@ -7,7 +7,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreClientActivityRequest;
 use App\Http\Traits\SanitizedErrorResponse;
-use App\Models\User;
+use Fynla\Core\Models\User;
 use App\Services\Admin\UserModuleTrackingService;
 use App\Services\Advisor\AdvisorDashboardService;
 use App\Services\Advisor\AdvisorImpersonationService;

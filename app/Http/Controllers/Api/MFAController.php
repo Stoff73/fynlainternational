@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use App\Http\Resources\UserResource;
+use Fynla\Core\Http\Resources\UserResource;
 use App\Http\Traits\SanitizedErrorResponse;
 use Fynla\Core\Models\AuditLog;
 use Fynla\Core\Models\LoginAttempt;
@@ -163,7 +163,7 @@ class MFAController extends Controller
             return $genericError;
         }
 
-        $user = \App\Models\User::find($userId);
+        $user = \Fynla\Core\Models\User::find($userId);
 
         if (! $user) {
             return $genericError;
@@ -245,7 +245,7 @@ class MFAController extends Controller
             return $genericError;
         }
 
-        $user = \App\Models\User::find($userId);
+        $user = \Fynla\Core\Models\User::find($userId);
 
         if (! $user) {
             return $genericError;
