@@ -55,6 +55,8 @@ class LegacyApiRewrite
         'api/goals',
         // R-9-final-ii: LifeEvent controller relocated to pack.
         'api/life-events',
+        // R-9-final-iv: Household controller relocated to pack.
+        'api/household',
     ];
 
     /**

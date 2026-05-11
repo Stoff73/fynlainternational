@@ -29,6 +29,7 @@ use Fynla\Packs\Gb\Http\Controllers\Estate\WillDocumentController;
 use Fynla\Packs\Gb\Http\Controllers\EstateController;
 use Fynla\Packs\Gb\Http\Controllers\GoalsController;
 use Fynla\Packs\Gb\Http\Controllers\HolisticPlanningController;
+use Fynla\Packs\Gb\Http\Controllers\HouseholdController;
 use Fynla\Packs\Gb\Http\Controllers\IncomeDefinitionsController;
 use Fynla\Packs\Gb\Http\Controllers\InvestmentActionDefinitionController;
 use Fynla\Packs\Gb\Http\Controllers\InvestmentController;
@@ -716,6 +717,13 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/letter-to-spouse/exists', [LetterToSpouseController::class, 'exists']);
     Route::get('/letter-to-spouse/spouse', [LetterToSpouseController::class, 'showSpouse']);
     Route::put('/letter-to-spouse', [LetterToSpouseController::class, 'update'])->middleware('feature:standard');
+});
+
+// Household coordination routes (spousal planning) — R-9-final-iv
+Route::middleware('auth:sanctum')->prefix('household')->group(function () {
+    Route::get('/net-worth', [HouseholdController::class, 'getNetWorth']);
+    Route::get('/optimisations', [HouseholdController::class, 'getOptimisations']);
+    Route::get('/death-scenario', [HouseholdController::class, 'getDeathScenario']);
 });
 
 // Life Events routes (future occurrences impacting net worth) — R-9-final-ii

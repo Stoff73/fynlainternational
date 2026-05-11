@@ -10,7 +10,6 @@ use App\Http\Controllers\Api\DashboardController;
 use App\Http\Controllers\Api\DocumentController;
 use App\Http\Controllers\Api\FamilyMembersController;
 use App\Http\Controllers\Api\GDPRController;
-use App\Http\Controllers\Api\HouseholdController;
 use App\Http\Controllers\Api\InfoGuideController;
 use App\Http\Controllers\Api\JourneyController;
 use App\Http\Controllers\Api\LifeStageController;
@@ -320,12 +319,7 @@ Route::middleware('auth:sanctum')->prefix('dashboard')->group(function () {
 
 // Plans routes (comprehensive cross-module plans) — relocated to packs/country-gb/routes/api.php in R-9j.
 
-// Household coordination routes (spousal planning)
-Route::middleware('auth:sanctum')->prefix('household')->group(function () {
-    Route::get('/net-worth', [HouseholdController::class, 'getNetWorth']);
-    Route::get('/optimisations', [HouseholdController::class, 'getOptimisations']);
-    Route::get('/death-scenario', [HouseholdController::class, 'getDeathScenario']);
-});
+// Household coordination routes — relocated to packs/country-gb/routes/api.php in R-9-final-iv.
 
 // Holistic Planning routes (coordinating agent) — relocated to packs/country-gb/routes/api.php in R-9j.
 

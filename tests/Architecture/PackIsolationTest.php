@@ -273,6 +273,7 @@ describe('Pack Isolation', function () {
             // the boundary.
             'App\\Services\\Coordination\\CashFlowCoordinator', // R-14a
             'App\\Services\\Coordination\\CrossModuleStrategyService', // R-14a
+            'App\\Services\\Coordination\\HouseholdPlanningService', // R-14a
             // R-14a deferred Goals services — float-money signatures (ADR-005)
             // keep these in app/Services/Goals/ until the int-minor money
             // refactor lands. Pack GoalStrategyService imports
