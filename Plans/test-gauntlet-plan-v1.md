@@ -95,7 +95,11 @@ Expected baseline: ~2,669 `it()` blocks (2,428 in `tests/**/*.php` + 241 in `pac
 
 **One fix landed during G-1-a:** dev's `APP_URL=https://csjones.co/fynla_inter` (with subpath) was breaking Pest's TestCase URL resolution — `postJson('/api/auth/register')` was being prefixed to `/fynla_inter/api/auth/register` and falling through to the 404 handler / catch-all routes, causing 749 spurious failures. Fix: added `<env name="APP_URL" value="http://localhost"/>` to `phpunit.xml`, which overrides the test-env URL regardless of dev's runtime APP_URL. Single source of truth for any future subpath-deployed environment. **Uncommitted** as of 2026-05-12 13:30 UTC.
 
-### G-1-b: Observer-firing tests (~2 days) — replaces previous coverage gate
+### G-1-b: Observer-firing tests (~2 days) — replaces previous coverage gate — ✅ PASS (2026-05-12)
+
+**Actual result (2026-05-12):** 59/59 tests passing across 13 files in `tests/Feature/Observers/` — every observer's create/update/delete behaviour is now asserted via Bus::fake / Mockery::spy / DB-record assertions as appropriate. All 13 observers from the relocated namespaces fire correctly. Two test fixes during implementation: `LifeEvent.event_type` must use a valid enum value (e.g. `'gift_received'`, not `'birthday'`), and `Property` uses split address columns (`address_line_1`, not `address`). One scope correction: `Goal` isn't registered with `RecommendationCacheObserver` in `EventServiceProvider`, so the observer's `'Goal'` routing arm is exercised via `LifeEvent` (same routing target).
+
+
 
 Coverage percentage is a vanity metric for the campaign's risk profile (per audit concern 6). Instead, write explicit Feature tests for each of the 13 observers asserting they fire on the relocated namespaces:
 

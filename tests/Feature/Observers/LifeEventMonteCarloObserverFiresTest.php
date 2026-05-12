@@ -7,33 +7,30 @@ use Fynla\Core\Models\LifeEvent;
 use Fynla\Core\Models\User;
 use Fynla\Packs\Gb\Goals\GoalsProjectionService;
 use Fynla\Packs\Gb\Investment\MonteCarloSimulator;
-use Illuminate\Support\Facades\Cache;
 
 /**
- * G-1-b scaffold for LifeEventMonteCarloObserver firing tests.
+ * G-1-b firing tests for LifeEventMonteCarloObserver.
  *
  * Observer: app/Observers/LifeEventMonteCarloObserver.php
+ *
  * Fires on: LifeEvent::created / updated / deleted — unconditionally.
  *
- * Side effects:
+ * Side effects (per fire):
  *   - MonteCarloSimulator::clearUserCache($userId)
  *   - GoalsProjectionService::clearCache($userId)
  *   - CacheInvalidationService::invalidateForUser($userId)
  *
- * G-1-b implementer: mock the three collaborators (or use Mockery::spy),
- * trigger the LifeEvent lifecycle, and assert clear/invalidate calls
- * for the user_id. Don't actually run a Monte Carlo simulation.
+ * The three collaborators are spied so the real (expensive) Monte Carlo +
+ * goals projection aren't invoked. Assertions are method-call assertions.
  */
 
 beforeEach(function () {
-    Cache::flush();
     $this->user = User::factory()->create();
 
-    // Spy on the three collaborators so we can assert clear/invalidate calls
-    // without exercising the real (expensive) Monte Carlo + goals projection.
     $this->simulatorSpy = Mockery::spy(MonteCarloSimulator::class);
     $this->projectionSpy = Mockery::spy(GoalsProjectionService::class);
     $this->cacheInvalidationSpy = Mockery::spy(CacheInvalidationService::class);
+
     app()->instance(MonteCarloSimulator::class, $this->simulatorSpy);
     app()->instance(GoalsProjectionService::class, $this->projectionSpy);
     app()->instance(CacheInvalidationService::class, $this->cacheInvalidationSpy);
@@ -43,11 +40,39 @@ afterEach(function () {
     Mockery::close();
 });
 
-it('clears Monte Carlo + goals + cache invalidation caches on LifeEvent create')
-    ->todo('G-1-b: LifeEvent::factory()->create([user_id => $user->id]); assert all 3 spies received clear/invalidate with $user->id');
+it('clears Monte Carlo + goals + cache invalidation caches on LifeEvent create', function () {
+    LifeEvent::factory()->create([
+        'user_id' => $this->user->id,
+        'event_type' => 'inheritance',
+    ]);
 
-it('clears the three caches on LifeEvent update')
-    ->todo('G-1-b: existing $event->update([...]); assert 3 spies received clear/invalidate');
+    $this->simulatorSpy->shouldHaveReceived('clearUserCache')->with($this->user->id);
+    $this->projectionSpy->shouldHaveReceived('clearCache')->with($this->user->id);
+    $this->cacheInvalidationSpy->shouldHaveReceived('invalidateForUser')->with($this->user->id);
+});
 
-it('clears the three caches on LifeEvent delete')
-    ->todo('G-1-b: existing $event->delete(); assert 3 spies received clear/invalidate');
+it('clears the three caches on LifeEvent update', function () {
+    $event = LifeEvent::factory()->create([
+        'user_id' => $this->user->id,
+        'event_type' => 'inheritance',
+    ]);
+
+    $event->update(['description' => 'Updated description']);
+
+    $this->simulatorSpy->shouldHaveReceived('clearUserCache')->with($this->user->id)->twice();
+    $this->projectionSpy->shouldHaveReceived('clearCache')->with($this->user->id)->twice();
+    $this->cacheInvalidationSpy->shouldHaveReceived('invalidateForUser')->with($this->user->id)->twice();
+});
+
+it('clears the three caches on LifeEvent delete', function () {
+    $event = LifeEvent::factory()->create([
+        'user_id' => $this->user->id,
+        'event_type' => 'inheritance',
+    ]);
+
+    $event->delete();
+
+    $this->simulatorSpy->shouldHaveReceived('clearUserCache')->with($this->user->id)->twice();
+    $this->projectionSpy->shouldHaveReceived('clearCache')->with($this->user->id)->twice();
+    $this->cacheInvalidationSpy->shouldHaveReceived('invalidateForUser')->with($this->user->id)->twice();
+});

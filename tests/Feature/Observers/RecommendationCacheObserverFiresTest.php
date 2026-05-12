@@ -3,6 +3,7 @@
 declare(strict_types=1);
 
 use App\Agents\TaxOptimisationAgent;
+use Fynla\Core\Models\LifeEvent;
 use Fynla\Core\Models\User;
 use Fynla\Packs\Gb\Agents\CoordinatingAgent;
 use Fynla\Packs\Gb\Agents\EstateAgent;
@@ -10,41 +11,26 @@ use Fynla\Packs\Gb\Agents\InvestmentAgent;
 use Fynla\Packs\Gb\Agents\ProtectionAgent;
 use Fynla\Packs\Gb\Agents\RetirementAgent;
 use Fynla\Packs\Gb\Agents\SavingsAgent;
+use Fynla\Packs\Gb\Models\DCPension;
+use Fynla\Packs\Gb\Models\Investment\InvestmentAccount;
+use Fynla\Packs\Gb\Models\Property;
+use Fynla\Packs\Gb\Models\SavingsAccount;
 
 /**
- * G-1-b scaffold for RecommendationCacheObserver firing tests.
+ * G-1-b firing tests for RecommendationCacheObserver.
  *
  * Observer: app/Observers/RecommendationCacheObserver.php
+ *
  * Fires on: created / updated / deleted of every model with a user_id.
- *
- * Routing logic (per observer's match expression):
- *   - SavingsAccount      → SavingsAgent + TaxOptimisationAgent
- *   - InvestmentAccount,
- *     Holding             → InvestmentAgent + TaxOptimisationAgent
- *   - DCPension,
- *     DBPension,
- *     StatePension,
- *     RetirementProfile   → RetirementAgent + TaxOptimisationAgent
- *   - *Policy,
- *     ProtectionProfile   → ProtectionAgent
- *   - Gift, Trust,
- *     Liability, Chattel,
- *     BusinessInterest    → EstateAgent + TaxOptimisationAgent
- *   - Property, Mortgage  → EstateAgent + ProtectionAgent + TaxOptimisationAgent
- *   - FamilyMember        → ProtectionAgent + EstateAgent + TaxOptimisationAgent
- *   - Goal, LifeEvent     → SavingsAgent + InvestmentAgent
- *   - default             → all 5 main agents
- *
- * CoordinatingAgent is ALWAYS invalidated. Joint owner also invalidated.
- *
- * G-1-b implementer: spy on each agent's invalidateUserCache method, drive
- * one model per branch, assert correct routing.
+ * Routes to agent-specific invalidateUserCache() calls based on model class.
+ * CoordinatingAgent is ALWAYS invalidated. Joint owner is also invalidated.
  */
 
 beforeEach(function () {
     $this->user = User::factory()->create();
+    $this->jointOwner = User::factory()->create();
 
-    // Spy on the 6 agents that this observer dispatches to.
+    $this->spies = [];
     foreach ([
         SavingsAgent::class,
         InvestmentAgent::class,
@@ -64,23 +50,90 @@ afterEach(function () {
     Mockery::close();
 });
 
-it('routes SavingsAccount changes to SavingsAgent + TaxOptimisationAgent + CoordinatingAgent')
-    ->todo('G-1-b: SavingsAccount::factory()->create; assert only those 3 agents received invalidateUserCache');
+it('routes SavingsAccount changes to SavingsAgent + TaxOptimisationAgent + CoordinatingAgent', function () {
+    SavingsAccount::factory()->create(['user_id' => $this->user->id]);
 
-it('routes InvestmentAccount changes to InvestmentAgent + TaxOptimisationAgent + CoordinatingAgent')
-    ->todo('G-1-b: similar; assert routing for InvestmentAccount');
+    $this->spies[SavingsAgent::class]->shouldHaveReceived('invalidateUserCache')->with($this->user->id);
+    $this->spies[TaxOptimisationAgent::class]->shouldHaveReceived('invalidateUserCache')->with($this->user->id);
+    $this->spies[CoordinatingAgent::class]->shouldHaveReceived('invalidateUserCache')->with($this->user->id);
 
-it('routes DCPension changes to RetirementAgent + TaxOptimisationAgent + CoordinatingAgent')
-    ->todo('G-1-b: similar; assert routing for DCPension');
+    $this->spies[InvestmentAgent::class]->shouldNotHaveReceived('invalidateUserCache');
+    $this->spies[RetirementAgent::class]->shouldNotHaveReceived('invalidateUserCache');
+    $this->spies[ProtectionAgent::class]->shouldNotHaveReceived('invalidateUserCache');
+    $this->spies[EstateAgent::class]->shouldNotHaveReceived('invalidateUserCache');
+});
 
-it('routes Property changes to EstateAgent + ProtectionAgent + TaxOptimisationAgent + CoordinatingAgent')
-    ->todo('G-1-b: similar; assert routing for Property');
+it('routes InvestmentAccount changes to InvestmentAgent + TaxOptimisationAgent + CoordinatingAgent', function () {
+    InvestmentAccount::factory()->create(['user_id' => $this->user->id]);
 
-it('routes Goal changes to SavingsAgent + InvestmentAgent + CoordinatingAgent')
-    ->todo('G-1-b: similar; assert routing for Goal');
+    $this->spies[InvestmentAgent::class]->shouldHaveReceived('invalidateUserCache')->with($this->user->id);
+    $this->spies[TaxOptimisationAgent::class]->shouldHaveReceived('invalidateUserCache')->with($this->user->id);
+    $this->spies[CoordinatingAgent::class]->shouldHaveReceived('invalidateUserCache')->with($this->user->id);
 
-it('always invalidates CoordinatingAgent regardless of model type')
-    ->todo('G-1-b: trigger any model; CoordinatingAgent spy receives invalidateUserCache');
+    $this->spies[SavingsAgent::class]->shouldNotHaveReceived('invalidateUserCache');
+    $this->spies[RetirementAgent::class]->shouldNotHaveReceived('invalidateUserCache');
+});
 
-it('invalidates for joint_owner_id when present')
-    ->todo('G-1-b: joint account; each routed agent receives invalidateUserCache twice (once per owner)');
+it('routes DCPension changes to RetirementAgent + TaxOptimisationAgent + CoordinatingAgent', function () {
+    DCPension::factory()->create(['user_id' => $this->user->id]);
+
+    $this->spies[RetirementAgent::class]->shouldHaveReceived('invalidateUserCache')->with($this->user->id);
+    $this->spies[TaxOptimisationAgent::class]->shouldHaveReceived('invalidateUserCache')->with($this->user->id);
+    $this->spies[CoordinatingAgent::class]->shouldHaveReceived('invalidateUserCache')->with($this->user->id);
+
+    $this->spies[SavingsAgent::class]->shouldNotHaveReceived('invalidateUserCache');
+});
+
+it('routes Property changes to EstateAgent + ProtectionAgent + TaxOptimisationAgent + CoordinatingAgent', function () {
+    Property::factory()->create(['user_id' => $this->user->id]);
+
+    $this->spies[EstateAgent::class]->shouldHaveReceived('invalidateUserCache')->with($this->user->id);
+    $this->spies[ProtectionAgent::class]->shouldHaveReceived('invalidateUserCache')->with($this->user->id);
+    $this->spies[TaxOptimisationAgent::class]->shouldHaveReceived('invalidateUserCache')->with($this->user->id);
+    $this->spies[CoordinatingAgent::class]->shouldHaveReceived('invalidateUserCache')->with($this->user->id);
+
+    $this->spies[SavingsAgent::class]->shouldNotHaveReceived('invalidateUserCache');
+});
+
+it('routes LifeEvent changes to SavingsAgent + InvestmentAgent + CoordinatingAgent', function () {
+    // The observer's routing arm covers `str_contains($class, 'Goal') || 'LifeEvent'`
+    // → [SavingsAgent, InvestmentAgent]. Goal::class isn't registered in
+    // EventServiceProvider for this observer, so LifeEvent is the practical
+    // way to exercise this routing branch.
+    LifeEvent::factory()->create([
+        'user_id' => $this->user->id,
+        'event_type' => 'inheritance',
+    ]);
+
+    $this->spies[SavingsAgent::class]->shouldHaveReceived('invalidateUserCache')->with($this->user->id);
+    $this->spies[InvestmentAgent::class]->shouldHaveReceived('invalidateUserCache')->with($this->user->id);
+    $this->spies[CoordinatingAgent::class]->shouldHaveReceived('invalidateUserCache')->with($this->user->id);
+
+    $this->spies[RetirementAgent::class]->shouldNotHaveReceived('invalidateUserCache');
+    $this->spies[ProtectionAgent::class]->shouldNotHaveReceived('invalidateUserCache');
+});
+
+it('always invalidates CoordinatingAgent regardless of model type', function () {
+    SavingsAccount::factory()->create(['user_id' => $this->user->id]);
+    InvestmentAccount::factory()->create(['user_id' => $this->user->id]);
+    DCPension::factory()->create(['user_id' => $this->user->id]);
+    Property::factory()->create(['user_id' => $this->user->id]);
+
+    $this->spies[CoordinatingAgent::class]->shouldHaveReceived('invalidateUserCache')
+        ->with($this->user->id)
+        ->times(4);
+});
+
+it('invalidates for joint_owner_id when present', function () {
+    SavingsAccount::factory()->create([
+        'user_id' => $this->user->id,
+        'joint_owner_id' => $this->jointOwner->id,
+        'ownership_type' => 'joint',
+        'ownership_percentage' => 50.00,
+    ]);
+
+    $this->spies[SavingsAgent::class]->shouldHaveReceived('invalidateUserCache')->with($this->user->id);
+    $this->spies[SavingsAgent::class]->shouldHaveReceived('invalidateUserCache')->with($this->jointOwner->id);
+    $this->spies[CoordinatingAgent::class]->shouldHaveReceived('invalidateUserCache')->with($this->user->id);
+    $this->spies[CoordinatingAgent::class]->shouldHaveReceived('invalidateUserCache')->with($this->jointOwner->id);
+});

@@ -9,24 +9,15 @@ use Illuminate\Support\Facades\Bus;
 use Illuminate\Support\Facades\Cache;
 
 /**
- * G-1-b scaffold for LifeEventRiskObserver firing tests.
+ * G-1-b firing tests for LifeEventRiskObserver.
  *
  * Observer: app/Observers/LifeEventRiskObserver.php
- * Fires on: created / updated / deleted, gated by event_type ∈ RISK_RELEVANT_TYPES.
  *
- * Risk-relevant event types (per observer):
- *   - wedding
- *   - redundancy_payment
- *   - inheritance
- *   - business_sale
- *   - property_sale
- *   - pension_lump_sum
- *   - large_purchase
+ * Fires on: created / updated / deleted, gated by event_type ∈
+ *   {wedding, redundancy_payment, inheritance, business_sale,
+ *    property_sale, pension_lump_sum, large_purchase}.
  *
  * Dispatches: RecalculateRiskProfileJob via parent RiskRecalculationObserver.
- *
- * G-1-b implementer: drive each scenario via LifeEvent factory with
- * event_type values inside vs outside the relevant set.
  */
 
 beforeEach(function () {
@@ -35,14 +26,48 @@ beforeEach(function () {
     $this->user = User::factory()->create();
 });
 
-it('fires on create for a risk-relevant event_type')
-    ->todo('G-1-b: LifeEvent::factory()->create([event_type => "wedding"]); Bus::assertDispatched');
+it('fires on create for a risk-relevant event_type', function () {
+    LifeEvent::factory()->create([
+        'user_id' => $this->user->id,
+        'event_type' => 'wedding',
+    ]);
 
-it('does NOT fire on create for a non-risk-relevant event_type')
-    ->todo('G-1-b: LifeEvent::factory()->create([event_type => "birthday"]); Bus::assertNotDispatched');
+    Bus::assertDispatched(RecalculateRiskProfileJob::class);
+});
 
-it('fires on update of a risk-relevant event')
-    ->todo('G-1-b: existing risk-relevant $event->update([...]); Bus::assertDispatched');
+it('does NOT fire on create for a non-risk-relevant event_type', function () {
+    LifeEvent::factory()->create([
+        'user_id' => $this->user->id,
+        'event_type' => 'gift_received',
+    ]);
 
-it('fires on delete of a risk-relevant event')
-    ->todo('G-1-b: risk-relevant $event->delete(); Bus::assertDispatched');
+    Bus::assertNotDispatched(RecalculateRiskProfileJob::class);
+});
+
+it('fires on update of a risk-relevant event', function () {
+    $event = LifeEvent::factory()->create([
+        'user_id' => $this->user->id,
+        'event_type' => 'inheritance',
+    ]);
+
+    Bus::fake();
+    Cache::flush();
+
+    $event->update(['description' => 'Updated description']);
+
+    Bus::assertDispatched(RecalculateRiskProfileJob::class);
+});
+
+it('fires on delete of a risk-relevant event', function () {
+    $event = LifeEvent::factory()->create([
+        'user_id' => $this->user->id,
+        'event_type' => 'property_sale',
+    ]);
+
+    Bus::fake();
+    Cache::flush();
+
+    $event->delete();
+
+    Bus::assertDispatched(RecalculateRiskProfileJob::class);
+});
