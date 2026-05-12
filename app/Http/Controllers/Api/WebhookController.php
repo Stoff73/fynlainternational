@@ -149,10 +149,6 @@ class WebhookController extends Controller
                 $planSlug = $payment->plan_slug;
                 $billingCycle = $payment->billing_cycle;
 
-                $periodEnd = $billingCycle === 'monthly'
-                    ? now()->addMonth()
-                    : now()->addYear();
-
                 $subscriptionPlan = SubscriptionPlan::findBySlug($planSlug);
 
                 // Activate payment
@@ -161,8 +157,28 @@ class WebhookController extends Controller
                     'revolut_payment_data' => $revolutOrder,
                 ]);
 
-                // Update subscription from payment data
+                // Slice 2 M-4: detect renewal vs new activation. A renewal is
+                // an ORDER_COMPLETED for an already-active subscription whose
+                // current period hasn't ended — the new period should start
+                // from the old period_end, not "now". Initial activation,
+                // expiry recovery, and trial conversion all use "now".
                 $subscription = $payment->subscription;
+                $isRenewal = $subscription->status === 'active'
+                    && $subscription->current_period_end
+                    && $subscription->current_period_end->isFuture();
+
+                if ($isRenewal) {
+                    $periodStart = $subscription->current_period_end;
+                    $periodEnd = $billingCycle === 'monthly'
+                        ? $periodStart->copy()->addMonth()
+                        : $periodStart->copy()->addYear();
+                } else {
+                    $periodStart = now();
+                    $periodEnd = $billingCycle === 'monthly'
+                        ? now()->addMonth()
+                        : now()->addYear();
+                }
+
                 $subscription->update([
                     'status' => 'active',
                     'plan' => $planSlug,
@@ -170,7 +186,7 @@ class WebhookController extends Controller
                     'amount' => $subscriptionPlan ? $subscriptionPlan->getPriceForCycle($billingCycle) : $payment->amount,
                     'auto_renew' => true,
                     'payment_method_saved' => true,
-                    'current_period_start' => now(),
+                    'current_period_start' => $periodStart,
                     'current_period_end' => $periodEnd,
                     'revolut_order_id' => $orderId,
                     'cancelled_at' => null,

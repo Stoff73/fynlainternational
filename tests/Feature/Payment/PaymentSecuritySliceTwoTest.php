@@ -183,6 +183,133 @@ describe('G-4-b slice 2 — M-6: missing capture_mode is fail-loud', function ()
     });
 });
 
+describe('G-4-b slice 2 — M-2: concurrent upgrades are locked', function () {
+    it('returns 409 when a second upgrade request collides with an in-flight one', function () {
+        $user = User::factory()->create();
+        Subscription::factory()
+            ->plan('standard')
+            ->billingCycle('yearly')
+            ->create([
+                'user_id' => $user->id,
+                'status' => 'active',
+                'current_period_start' => now()->subMonths(2),
+                'current_period_end' => now()->addMonths(10),
+                'amount' => 10000,
+            ]);
+
+        \Illuminate\Support\Facades\Cache::lock("upgrade-subscription:user:{$user->id}", 30)->get();
+
+        $response = $this->actingAs($user)
+            ->postJson('/api/payment/upgrade', ['plan' => 'pro']);
+
+        $response->assertStatus(409);
+    });
+});
+
+describe('G-4-b slice 2 — M-4: webhook renewal preserves period chain', function () {
+    it('uses old period_end as new period_start when the subscription is mid-active', function () {
+        $user = User::factory()->create();
+        $periodStart = now()->subMonths(11);
+        $periodEnd = now()->addMonth(); // Still active, 1 month remaining
+        $subscription = Subscription::create([
+            'user_id' => $user->id,
+            'plan' => 'standard',
+            'billing_cycle' => 'yearly',
+            'status' => 'active',
+            'amount' => 10000,
+            'current_period_start' => $periodStart,
+            'current_period_end' => $periodEnd,
+        ]);
+
+        $orderId = (string) Str::uuid();
+        Payment::create([
+            'subscription_id' => $subscription->id,
+            'user_id' => $user->id,
+            'revolut_order_id' => $orderId,
+            'amount' => 10000,
+            'currency' => 'GBP',
+            'status' => 'pending',
+            'plan_slug' => 'standard',
+            'billing_cycle' => 'yearly',
+        ]);
+
+        // Use a real RevolutService mock to verify the webhook can dispatch
+        // the order verification call. The handler runs inside the webhook
+        // path; here we call it directly via the service.
+        $mockRevolut = Mockery::mock(RevolutService::class);
+        $mockRevolut->shouldReceive('verifyWebhookSignature')->andReturn(true);
+        $mockRevolut->shouldReceive('getOrder')->with($orderId)->andReturn([
+            'id' => $orderId,
+            'state' => 'completed',
+            'capture_mode' => 'automatic',
+        ]);
+        $this->app->instance(RevolutService::class, $mockRevolut);
+
+        $payload = json_encode(['event' => 'ORDER_COMPLETED', 'order_id' => $orderId]);
+        $response = $this->postJson('/api/webhooks/revolut', json_decode($payload, true), [
+            'Revolut-Signature' => 'v1=test',
+            'Revolut-Request-Timestamp' => (string) ((int) (microtime(true) * 1000)),
+        ]);
+
+        $response->assertOk();
+
+        $subscription->refresh();
+        // Renewal: new period_start should be the OLD period_end
+        expect($subscription->current_period_start->format('Y-m-d'))
+            ->toBe($periodEnd->format('Y-m-d'));
+        // New period_end should be old period_end + 1 year
+        expect($subscription->current_period_end->format('Y-m-d'))
+            ->toBe($periodEnd->copy()->addYear()->format('Y-m-d'));
+    });
+
+    it('uses now() as period_start when subscription is trialing (initial activation)', function () {
+        $user = User::factory()->create();
+        $subscription = Subscription::create([
+            'user_id' => $user->id,
+            'plan' => 'standard',
+            'billing_cycle' => 'monthly',
+            'status' => 'trialing',
+            'amount' => 0,
+            'current_period_start' => now()->subDays(3),
+            'current_period_end' => now()->subDays(3),
+        ]);
+
+        $orderId = (string) Str::uuid();
+        Payment::create([
+            'subscription_id' => $subscription->id,
+            'user_id' => $user->id,
+            'revolut_order_id' => $orderId,
+            'amount' => 1000,
+            'currency' => 'GBP',
+            'status' => 'pending',
+            'plan_slug' => 'standard',
+            'billing_cycle' => 'monthly',
+        ]);
+
+        $mockRevolut = Mockery::mock(RevolutService::class);
+        $mockRevolut->shouldReceive('verifyWebhookSignature')->andReturn(true);
+        $mockRevolut->shouldReceive('getOrder')->with($orderId)->andReturn([
+            'id' => $orderId,
+            'state' => 'completed',
+            'capture_mode' => 'automatic',
+        ]);
+        $this->app->instance(RevolutService::class, $mockRevolut);
+
+        $payload = json_encode(['event' => 'ORDER_COMPLETED', 'order_id' => $orderId]);
+        $response = $this->postJson('/api/webhooks/revolut', json_decode($payload, true), [
+            'Revolut-Signature' => 'v1=test',
+            'Revolut-Request-Timestamp' => (string) ((int) (microtime(true) * 1000)),
+        ]);
+
+        $response->assertOk();
+
+        $subscription->refresh();
+        // Initial activation: period_start is now
+        expect($subscription->current_period_start->isToday())->toBeTrue();
+        expect($subscription->current_period_end->between(now()->addMonth()->subMinute(), now()->addMonth()->addMinute()))->toBeTrue();
+    });
+});
+
 describe('G-4-b slice 2 — M-8: upgrade uses unique placeholder', function () {
     it('allows concurrent in-flight upgrades to coexist (unique placeholders)', function () {
         $user = User::factory()->create();

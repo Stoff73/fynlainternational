@@ -65,7 +65,7 @@ class RevolutService
             'Authorization' => "Bearer {$this->apiKey}",
             'Revolut-Api-Version' => '2025-12-04',
             'Content-Type' => 'application/json',
-        ])->post("{$this->apiUrl}/orders", $body);
+        ])->timeout(10)->connectTimeout(5)->post("{$this->apiUrl}/orders", $body);
 
         if ($response->failed()) {
             Log::error('Revolut createOrder failed', [
@@ -103,7 +103,7 @@ class RevolutService
         $response = Http::withHeaders([
             'Authorization' => "Bearer {$this->apiKey}",
             'Revolut-Api-Version' => '2025-12-04',
-        ])->get("{$this->apiUrl}/orders/{$orderId}");
+        ])->timeout(10)->connectTimeout(5)->get("{$this->apiUrl}/orders/{$orderId}");
 
         if ($response->failed()) {
             Log::error('Revolut getOrder failed', [
@@ -170,7 +170,7 @@ class RevolutService
             'Authorization' => "Bearer {$this->apiKey}",
             'Revolut-Api-Version' => '2025-12-04',
             'Content-Type' => 'application/json',
-        ])->post("{$this->apiUrl}/orders", $body);
+        ])->timeout(10)->connectTimeout(5)->post("{$this->apiUrl}/orders", $body);
 
         if ($response->failed()) {
             Log::error('Revolut createOrderWithCustomer failed', [

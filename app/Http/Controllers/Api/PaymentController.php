@@ -26,6 +26,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
@@ -557,6 +558,18 @@ class PaymentController extends Controller
 
         $description = 'Upgrade: '.ucfirst($currentPlanSlug)." \u{2192} ".ucfirst($newPlanSlug);
 
+        // Slice 2 M-2: per-user lock prevents concurrent upgrade requests
+        // (two browser tabs, accidental double-submit) from creating two
+        // Revolut orders + two Payment rows.
+        $lock = Cache::lock("upgrade-subscription:user:{$user->id}", 30);
+
+        if (! $lock->get()) {
+            return response()->json([
+                'success' => false,
+                'message' => 'An upgrade is already in progress. Please wait a moment and try again.',
+            ], 409);
+        }
+
         try {
             // Slice 2 M-8: use a row-unique placeholder so the unique index on
             // payments.revolut_order_id doesn't reject concurrent in-flight
@@ -611,6 +624,8 @@ class PaymentController extends Controller
             ]);
         } catch (\Throwable $e) {
             return $this->errorResponse($e, 'Creating upgrade order');
+        } finally {
+            $lock->release();
         }
     }
 

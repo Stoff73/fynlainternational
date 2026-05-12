@@ -39,7 +39,7 @@ class RevolutSubscriptionService
             return $this->getCustomer($user->revolut_customer_id);
         }
 
-        $response = Http::withHeaders($this->headers())
+        $response = $this->httpClient()
             ->post("{$this->apiUrl}/customers", [
                 'email' => $user->email,
                 'full_name' => trim("{$user->first_name} {$user->surname}"),
@@ -71,7 +71,7 @@ class RevolutSubscriptionService
      */
     public function getCustomer(string $customerId): array
     {
-        $response = Http::withHeaders($this->headers())
+        $response = $this->httpClient()
             ->get("{$this->apiUrl}/customers/{$customerId}");
 
         if ($response->failed()) {
@@ -129,7 +129,7 @@ class RevolutSubscriptionService
             ],
         ];
 
-        $response = Http::withHeaders($this->headers())
+        $response = $this->httpClient()
             ->post("{$this->apiUrl}/subscription-plans", $body);
 
         if ($response->failed()) {
@@ -157,7 +157,7 @@ class RevolutSubscriptionService
      */
     public function getSubscriptionPlan(string $planId): array
     {
-        $response = Http::withHeaders($this->headers())
+        $response = $this->httpClient()
             ->get("{$this->apiUrl}/subscription-plans/{$planId}");
 
         if ($response->failed()) {
@@ -184,7 +184,7 @@ class RevolutSubscriptionService
             $query['page_token'] = $pageToken;
         }
 
-        $response = Http::withHeaders($this->headers())
+        $response = $this->httpClient()
             ->get("{$this->apiUrl}/subscription-plans", $query);
 
         if ($response->failed()) {
@@ -228,7 +228,7 @@ class RevolutSubscriptionService
 
         $response = Http::withHeaders(array_merge($this->headers(), [
             'Idempotency-Key' => Str::uuid()->toString(),
-        ]))->post("{$this->apiUrl}/subscriptions", $body);
+        ]))->timeout(10)->connectTimeout(5)->post("{$this->apiUrl}/subscriptions", $body);
 
         if ($response->failed()) {
             Log::error('Revolut createSubscription failed', [
@@ -257,7 +257,7 @@ class RevolutSubscriptionService
      */
     public function getSubscription(string $subscriptionId): array
     {
-        $response = Http::withHeaders($this->headers())
+        $response = $this->httpClient()
             ->get("{$this->apiUrl}/subscriptions/{$subscriptionId}");
 
         if ($response->failed()) {
@@ -290,7 +290,7 @@ class RevolutSubscriptionService
             $query['page_token'] = $pageToken;
         }
 
-        $response = Http::withHeaders($this->headers())
+        $response = $this->httpClient()
             ->get("{$this->apiUrl}/subscriptions", $query);
 
         if ($response->failed()) {
@@ -311,7 +311,7 @@ class RevolutSubscriptionService
      */
     public function updateSubscription(string $subscriptionId, string $externalReference): array
     {
-        $response = Http::withHeaders($this->headers())
+        $response = $this->httpClient()
             ->patch("{$this->apiUrl}/subscriptions/{$subscriptionId}", [
                 'external_reference' => $externalReference,
             ]);
@@ -335,7 +335,7 @@ class RevolutSubscriptionService
      */
     public function cancelSubscription(string $subscriptionId): void
     {
-        $response = Http::withHeaders($this->headers())
+        $response = $this->httpClient()
             ->post("{$this->apiUrl}/subscriptions/{$subscriptionId}/cancel");
 
         if ($response->failed()) {
@@ -370,7 +370,7 @@ class RevolutSubscriptionService
             $query['page_token'] = $pageToken;
         }
 
-        $response = Http::withHeaders($this->headers())
+        $response = $this->httpClient()
             ->get("{$this->apiUrl}/subscriptions/{$subscriptionId}/cycles", $query);
 
         if ($response->failed()) {
@@ -389,7 +389,7 @@ class RevolutSubscriptionService
      */
     public function getSubscriptionCycle(string $subscriptionId, string $cycleId): array
     {
-        $response = Http::withHeaders($this->headers())
+        $response = $this->httpClient()
             ->get("{$this->apiUrl}/subscriptions/{$subscriptionId}/cycles/{$cycleId}");
 
         if ($response->failed()) {
@@ -441,5 +441,17 @@ class RevolutSubscriptionService
             'Content-Type' => 'application/json',
             'Accept' => 'application/json',
         ];
+    }
+
+    /**
+     * Build a pre-configured HTTP client with standard headers and timeouts.
+     *
+     * Slice 2 M-3: explicit 10s request / 5s connect timeouts prevent hung
+     * Revolut endpoints (TLS stall, network blackhole) from blocking PHP
+     * workers indefinitely.
+     */
+    private function httpClient(): \Illuminate\Http\Client\PendingRequest
+    {
+        return Http::withHeaders($this->headers())->timeout(10)->connectTimeout(5);
     }
 }
