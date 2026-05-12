@@ -11,6 +11,7 @@ use Fynla\Core\Models\Payment;
 use Fynla\Core\Models\SubscriptionPlan;
 use App\Services\Payment\RevolutService;
 use App\Services\Payment\SubscriptionRenewalService;
+use Illuminate\Database\QueryException;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -65,7 +66,7 @@ class WebhookController extends Controller
             'SUBSCRIPTION_OVERDUE' => $this->handleSubscriptionOverdue($payload),
             'SUBSCRIPTION_CANCELLED' => $this->handleSubscriptionCancelled($payload),
             'SUBSCRIPTION_FINISHED' => $this->handleSubscriptionFinished($payload),
-            default => Log::info('Revolut webhook: unhandled event', ['event' => $event]),
+            default => Log::warning('Revolut webhook: unhandled event', ['event' => $event]),
         };
 
         return response()->json(['success' => true, 'message' => 'Webhook processed']);
@@ -88,13 +89,24 @@ class WebhookController extends Controller
                     return;
                 }
 
-                // Cross-reference check
-                if ($merchantRef && $merchantRef !== "payment_{$payment->id}") {
-                    Log::warning('Revolut webhook: merchant_ref mismatch', [
+                // Cross-reference check — fail closed on mismatch.
+                // Slice 2 H-3: confused-deputy protection requires the webhook
+                // payload's merchant_ref (when present) to point at the same
+                // Payment row that matched revolut_order_id. Initial purchases
+                // send no merchant_ref (null is fine); upgrades send
+                // "upgrade_{$payment->id}".
+                $expectedRefs = [
+                    "payment_{$payment->id}",
+                    "upgrade_{$payment->id}",
+                ];
+                if ($merchantRef && ! in_array($merchantRef, $expectedRefs, true)) {
+                    Log::warning('Revolut webhook: merchant_ref mismatch — aborting', [
                         'order_id' => $orderId,
-                        'expected' => "payment_{$payment->id}",
+                        'expected' => $expectedRefs,
                         'received' => $merchantRef,
                     ]);
+
+                    return;
                 }
 
                 // Idempotent: skip if already completed
@@ -106,7 +118,19 @@ class WebhookController extends Controller
 
                 // Verify with Revolut API
                 $revolutOrder = $this->revolutService->getOrder($orderId);
-                $captureMode = $revolutOrder['capture_mode'] ?? 'automatic';
+                $captureMode = $revolutOrder['capture_mode'] ?? null;
+
+                // Slice 2 M-6: fail-loud on missing capture_mode rather than
+                // silently defaulting to 'automatic'.
+                if ($captureMode === null) {
+                    Log::warning('Revolut webhook: order missing capture_mode — aborting', [
+                        'order_id' => $orderId,
+                        'state' => $revolutOrder['state'] ?? null,
+                    ]);
+
+                    return;
+                }
+
                 $acceptableStates = $captureMode === 'manual'
                     ? ['completed', 'authorised']
                     : ['completed'];
@@ -178,12 +202,39 @@ class WebhookController extends Controller
                     FireAwinConversionJob::dispatch($payment->id);
                 }
             });
+        } catch (QueryException $e) {
+            // Slice 2 H-1: a duplicate-key violation on payments.revolut_order_id
+            // means a concurrent webhook already created/updated the row. Treat
+            // as idempotent rather than retrying.
+            if ($this->isDuplicateKeyError($e)) {
+                Log::info('Revolut webhook: duplicate processing detected — treating as idempotent', [
+                    'order_id' => $orderId,
+                ]);
+
+                return;
+            }
+
+            Log::error('Revolut webhook DB error', [
+                'order_id' => $orderId,
+                'error' => $e->getMessage(),
+            ]);
+
+            throw $e;
         } catch (\Throwable $e) {
+            // Slice 2 M-1: re-throw so Revolut sees non-2xx and retries.
+            // Default Revolut retry policy: 3× with 10-min delay.
             Log::error('Revolut webhook processing failed', [
                 'order_id' => $orderId,
                 'error' => $e->getMessage(),
             ]);
+
+            throw $e;
         }
+    }
+
+    private function isDuplicateKeyError(QueryException $e): bool
+    {
+        return $e->getCode() === '23000' || str_contains($e->getMessage(), 'Duplicate entry');
     }
 
     private function handleSubscriptionInitiated(array $payload): void
@@ -203,6 +254,8 @@ class WebhookController extends Controller
             Log::error('Failed to handle subscription overdue webhook', [
                 'error' => $e->getMessage(),
             ]);
+
+            throw $e;
         }
     }
 
@@ -214,6 +267,8 @@ class WebhookController extends Controller
             Log::error('Failed to handle subscription cancelled webhook', [
                 'error' => $e->getMessage(),
             ]);
+
+            throw $e;
         }
     }
 
@@ -225,6 +280,8 @@ class WebhookController extends Controller
             Log::error('Failed to handle subscription finished webhook', [
                 'error' => $e->getMessage(),
             ]);
+
+            throw $e;
         }
     }
 }

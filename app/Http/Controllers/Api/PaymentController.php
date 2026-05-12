@@ -28,6 +28,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 
 class PaymentController extends Controller
 {
@@ -289,11 +290,28 @@ class PaymentController extends Controller
             // Verify order state with Revolut: GET /api/orders/{order_id}
             $revolutOrder = $this->revolutService->getOrder($orderId);
             $state = $revolutOrder['state'];
-            $captureMode = $revolutOrder['capture_mode'] ?? 'automatic';
+            $captureMode = $revolutOrder['capture_mode'] ?? null;
 
+            // Slice 2 M-6: fail-loud on missing capture_mode rather than
+            // silently defaulting to the more permissive 'automatic' branch.
+            if ($captureMode === null) {
+                Log::warning('Revolut order missing capture_mode — refusing to activate', [
+                    'order_id' => $orderId,
+                    'state' => $state,
+                ]);
+
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Payment is in an unexpected state and cannot be confirmed',
+                ], 400);
+            }
+
+            // Slice 2 H-2: only accept captured / authorised states. Previously
+            // 'processing' and 'pending' were also accepted, allowing users to
+            // activate a subscription before money was captured.
             $acceptableStates = $captureMode === 'manual'
-                ? ['completed', 'authorised', 'processing', 'pending']
-                : ['completed', 'processing', 'pending'];
+                ? ['completed', 'authorised']
+                : ['completed'];
 
             if (! in_array($state, $acceptableStates)) {
                 Log::warning('Revolut order not in acceptable state for confirmation', [
@@ -540,10 +558,16 @@ class PaymentController extends Controller
         $description = 'Upgrade: '.ucfirst($currentPlanSlug)." \u{2192} ".ucfirst($newPlanSlug);
 
         try {
+            // Slice 2 M-8: use a row-unique placeholder so the unique index on
+            // payments.revolut_order_id doesn't reject concurrent in-flight
+            // upgrades. Replaced with the real Revolut order ID below once
+            // the order is created.
+            $placeholder = 'upgrade_pending_'.Str::uuid()->toString();
+
             $payment = Payment::create([
                 'subscription_id' => $subscription->id,
                 'user_id' => $user->id,
-                'revolut_order_id' => 'pending',
+                'revolut_order_id' => $placeholder,
                 'amount' => $upgradeAmount,
                 'currency' => 'GBP',
                 'status' => 'pending',

@@ -229,6 +229,7 @@ describe('confirmPayment keeps period dates for upgrades', function () {
             "*/api/orders/{$orderId}" => Http::response([
                 'id' => $orderId,
                 'state' => 'completed',
+                'capture_mode' => 'automatic',
             ], 200),
         ]);
 
@@ -271,6 +272,7 @@ describe('confirmPayment keeps period dates for upgrades', function () {
             "*/api/orders/{$orderId}" => Http::response([
                 'id' => $orderId,
                 'state' => 'completed',
+                'capture_mode' => 'automatic',
             ], 200),
         ]);
 

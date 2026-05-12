@@ -286,16 +286,23 @@ Route::prefix('payment')->group(function () {
 });
 
 // Payment routes (authenticated)
+// Slice 2 H-4: all write endpoints require MFA verification when MFA is
+// enabled on the account. Read endpoints (trial-status, billing-history,
+// invoice download) are deliberately excluded so a half-authenticated user
+// can still inspect their state. validate-discount is read-only.
 Route::middleware('auth:sanctum')->prefix('payment')->group(function () {
     Route::get('/trial-status', [\App\Http\Controllers\Api\PaymentController::class, 'trialStatus']);
     Route::get('/billing-history', [\App\Http\Controllers\Api\PaymentController::class, 'billingHistory']);
+    Route::post('/validate-discount', [\App\Http\Controllers\Api\PaymentController::class, 'validateDiscountCode'])->middleware('throttle:20,1');
+    Route::get('/invoices/{invoice}/download', [\App\Http\Controllers\Api\PaymentController::class, 'downloadInvoice'])->middleware('throttle:10,1');
+});
+
+Route::middleware(['auth:sanctum', 'mfa.verified'])->prefix('payment')->group(function () {
     Route::post('/create-order', [\App\Http\Controllers\Api\PaymentController::class, 'createOrder'])->middleware('throttle:10,1');
     Route::post('/confirm', [\App\Http\Controllers\Api\PaymentController::class, 'confirmPayment'])->middleware('throttle:10,1');
     Route::post('/upgrade', [\App\Http\Controllers\Api\PaymentController::class, 'upgradeSubscription'])->middleware('throttle:10,1');
     Route::post('/cancel-subscription', [\App\Http\Controllers\Api\PaymentController::class, 'cancelSubscription'])->middleware('throttle:1,1');
     Route::post('/delete-all-data', [\App\Http\Controllers\Api\PaymentController::class, 'deleteAllData'])->middleware('throttle:1,5');
-    Route::post('/validate-discount', [\App\Http\Controllers\Api\PaymentController::class, 'validateDiscountCode'])->middleware('throttle:20,1');
-    Route::get('/invoices/{invoice}/download', [\App\Http\Controllers\Api\PaymentController::class, 'downloadInvoice'])->middleware('throttle:10,1');
 });
 
 // Referral
