@@ -19,7 +19,9 @@ class PasswordResetService
 
     /**
      * Initiate password reset process
-     * Always returns success to prevent account enumeration
+     * Always returns the same response shape to prevent account enumeration.
+     * If no account exists, a non-resolvable dummy token is returned so that
+     * the response is indistinguishable from a successful initiation.
      */
     public function initiateReset(string $email): array
     {
@@ -28,20 +30,19 @@ class PasswordResetService
             ->first();
 
         if (! $user) {
-            // Return success to prevent account enumeration
             return [
                 'success' => true,
                 'message' => 'If an account exists with this email, you will receive a verification code.',
+                'data' => [
+                    'reset_token' => \Illuminate\Support\Str::random(64),
+                ],
             ];
         }
 
-        // Create session and send email
         $session = PasswordResetSession::generate($user);
 
-        // Send email with verification code
         Mail::to($user->email)->send(new PasswordResetCode($user, $session->email_code));
 
-        // Log the request
         AuditLog::logAuth(
             AuditLog::ACTION_PASSWORD_RESET_REQUESTED,
             $user->id,

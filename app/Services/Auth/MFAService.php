@@ -53,7 +53,8 @@ class MFAService
     }
 
     /**
-     * Verify a TOTP code
+     * Verify a TOTP code. Returns false (never throws) so callers can chain
+     * verifyCode || verifyRecoveryCode without try/catch.
      */
     public function verifyCode(User $user, string $code): bool
     {
@@ -61,10 +62,13 @@ class MFAService
             return false;
         }
 
-        // Decrypt the stored secret
-        $secret = Crypt::decryptString($user->mfa_secret);
+        try {
+            $secret = Crypt::decryptString($user->mfa_secret);
 
-        return $this->google2fa->verifyKey($secret, $code, 2); // Allow 2 windows of tolerance
+            return $this->google2fa->verifyKey($secret, $code, 2); // Allow 2 windows of tolerance
+        } catch (\Throwable $e) {
+            return false;
+        }
     }
 
     /**

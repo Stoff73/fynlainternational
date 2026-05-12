@@ -183,29 +183,45 @@
         <div class="modal-body">
           <p>
             This will remove the extra layer of security from your account.
-            Are you sure you want to continue?
+            Both your password and a current verification code are required.
           </p>
           <div class="form-group">
-            <label for="disable-password">Enter your password to confirm:</label>
+            <label for="disable-password">Password</label>
             <input
               id="disable-password"
               v-model="disablePassword"
               type="password"
               class="form-input"
               placeholder="Your password"
+              autocomplete="current-password"
             >
+          </div>
+          <div class="form-group">
+            <label for="disable-code">Verification code (or recovery code)</label>
+            <input
+              id="disable-code"
+              v-model="disableCode"
+              type="text"
+              inputmode="numeric"
+              class="form-input"
+              placeholder="6-digit code or recovery code"
+              autocomplete="one-time-code"
+            >
+            <p class="form-hint">
+              Enter the 6-digit code from your authenticator app, or one of your saved recovery codes.
+            </p>
           </div>
         </div>
         <div class="modal-footer">
           <button
             class="btn btn-outline"
-            @click="showDisableMFAModal = false"
+            @click="cancelDisableMFA"
           >
             Cancel
           </button>
           <button
             class="btn btn-danger"
-            :disabled="!disablePassword"
+            :disabled="!disablePassword || !disableCode"
             @click="disableMFA"
           >
             Disable MFA
@@ -296,6 +312,7 @@ export default {
       showDisableMFAModal: false,
       showChangePasswordModal: false,
       disablePassword: '',
+      disableCode: '',
       passwordForm: {
         current_password: '',
         new_password: '',
@@ -344,14 +361,21 @@ export default {
       // Update user in Vuex store so navbar/dashboard hide the 2FA prompts
       await this.$store.dispatch('auth/fetchUser');
     },
+    cancelDisableMFA() {
+      this.showDisableMFAModal = false;
+      this.disablePassword = '';
+      this.disableCode = '';
+    },
     async disableMFA() {
       try {
         await api.post('/auth/mfa/disable', {
           password: this.disablePassword,
+          code: this.disableCode.trim(),
         });
         this.mfaEnabled = false;
         this.showDisableMFAModal = false;
         this.disablePassword = '';
+        this.disableCode = '';
         // Update user in Vuex store so navbar/dashboard show the 2FA prompts again
         await this.$store.dispatch('auth/fetchUser');
         this.$toast?.success?.('Two-factor authentication has been disabled.');

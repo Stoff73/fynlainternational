@@ -282,12 +282,14 @@ class MFAController extends Controller
     }
 
     /**
-     * Disable MFA
+     * Disable MFA. Requires password AND a current TOTP code (or recovery code).
+     * Both factors must be presented so a stolen password alone cannot remove MFA.
      */
     public function disable(Request $request): JsonResponse
     {
         $request->validate([
             'password' => 'required|string',
+            'code' => 'required|string',
         ]);
 
         $user = $request->user();
@@ -295,13 +297,29 @@ class MFAController extends Controller
         if (! Hash::check($request->password, $user->password)) {
             return response()->json([
                 'success' => false,
-                'message' => 'Invalid password.',
+                'message' => 'Invalid password or verification code.',
+            ], 401);
+        }
+
+        if (! $this->mfaService->hasMFAEnabled($user)) {
+            return response()->json([
+                'success' => false,
+                'message' => 'MFA is not enabled on this account.',
+            ], 400);
+        }
+
+        $codeAccepted = $this->mfaService->verifyCode($user, $request->code)
+            || $this->mfaService->verifyRecoveryCode($user, $request->code);
+
+        if (! $codeAccepted) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Invalid password or verification code.',
             ], 401);
         }
 
         $this->mfaService->disableMFA($user);
 
-        // Audit log
         $this->auditService->logAuth(AuditLog::ACTION_MFA_DISABLED, $user);
 
         return response()->json([
@@ -311,12 +329,15 @@ class MFAController extends Controller
     }
 
     /**
-     * Regenerate recovery codes
+     * Regenerate recovery codes. Requires password AND a current TOTP code
+     * (or existing recovery code). A stolen password alone cannot rotate the
+     * recovery code set out from under the legitimate user.
      */
     public function regenerateRecoveryCodes(Request $request): JsonResponse
     {
         $request->validate([
             'password' => 'required|string',
+            'code' => 'required|string',
         ]);
 
         $user = $request->user();
@@ -324,7 +345,7 @@ class MFAController extends Controller
         if (! Hash::check($request->password, $user->password)) {
             return response()->json([
                 'success' => false,
-                'message' => 'Invalid password.',
+                'message' => 'Invalid password or verification code.',
             ], 401);
         }
 
@@ -333,6 +354,16 @@ class MFAController extends Controller
                 'success' => false,
                 'message' => 'MFA is not enabled on this account.',
             ], 400);
+        }
+
+        $codeAccepted = $this->mfaService->verifyCode($user, $request->code)
+            || $this->mfaService->verifyRecoveryCode($user, $request->code);
+
+        if (! $codeAccepted) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Invalid password or verification code.',
+            ], 401);
         }
 
         $recoveryCodes = $this->mfaService->regenerateRecoveryCodes($user);

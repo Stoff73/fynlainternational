@@ -3,6 +3,7 @@
 declare(strict_types=1);
 
 use Fynla\Core\Models\User;
+use Illuminate\Support\Facades\Hash;
 
 beforeEach(function () {
     $this->user = User::factory()->create([
@@ -77,10 +78,30 @@ describe('MFA Setup', function () {
 });
 
 describe('MFA Disable', function () {
-    it('disables MFA with valid password', function () {
+    it('disables MFA when valid password AND recovery code are provided', function () {
         $this->user->update([
             'mfa_enabled' => true,
             'mfa_secret' => encrypt('TESTSECRET123456'),
+            'mfa_recovery_codes' => [Hash::make('VALIDRECOVERY1')],
+        ]);
+
+        $response = $this->actingAs($this->user)
+            ->postJson('/api/auth/mfa/disable', [
+                'password' => 'password123',
+                'code' => 'VALIDRECOVERY1',
+            ]);
+
+        $response->assertStatus(200)->assertJson(['success' => true]);
+
+        $this->user->refresh();
+        expect($this->user->mfa_enabled)->toBeFalse();
+    });
+
+    it('rejects disable with password alone (G-4-b H-2: MFA challenge required)', function () {
+        $this->user->update([
+            'mfa_enabled' => true,
+            'mfa_secret' => encrypt('TESTSECRET123456'),
+            'mfa_recovery_codes' => [Hash::make('VALIDRECOVERY1')],
         ]);
 
         $response = $this->actingAs($this->user)
@@ -88,13 +109,29 @@ describe('MFA Disable', function () {
                 'password' => 'password123',
             ]);
 
-        $response->assertStatus(200)
-            ->assertJson([
-                'success' => true,
-            ]);
+        $response->assertStatus(422)->assertJsonValidationErrors(['code']);
 
         $this->user->refresh();
-        expect($this->user->mfa_enabled)->toBeFalse();
+        expect($this->user->mfa_enabled)->toBeTrue();
+    });
+
+    it('rejects disable with wrong code', function () {
+        $this->user->update([
+            'mfa_enabled' => true,
+            'mfa_secret' => encrypt('TESTSECRET123456'),
+            'mfa_recovery_codes' => [Hash::make('VALIDRECOVERY1')],
+        ]);
+
+        $response = $this->actingAs($this->user)
+            ->postJson('/api/auth/mfa/disable', [
+                'password' => 'password123',
+                'code' => 'WRONG-CODE',
+            ]);
+
+        $response->assertStatus(401);
+
+        $this->user->refresh();
+        expect($this->user->mfa_enabled)->toBeTrue();
     });
 
     it('requires password field', function () {
@@ -113,6 +150,7 @@ describe('MFA Disable', function () {
     it('requires authentication', function () {
         $response = $this->postJson('/api/auth/mfa/disable', [
             'password' => 'password123',
+            'code' => 'whatever',
         ]);
 
         $response->assertStatus(401);
@@ -120,19 +158,17 @@ describe('MFA Disable', function () {
 });
 
 describe('MFA Recovery Codes', function () {
-    it('regenerates recovery codes', function () {
+    it('regenerates recovery codes when valid password AND code are provided', function () {
         $this->user->update([
             'mfa_enabled' => true,
             'mfa_secret' => encrypt('TESTSECRET123456'),
-            'mfa_recovery_codes' => json_encode([
-                hash('sha256', 'old-code-1'),
-                hash('sha256', 'old-code-2'),
-            ]),
+            'mfa_recovery_codes' => [Hash::make('VALIDRECOVERY1')],
         ]);
 
         $response = $this->actingAs($this->user)
             ->postJson('/api/auth/mfa/recovery-codes', [
                 'password' => 'password123',
+                'code' => 'VALIDRECOVERY1',
             ]);
 
         $response->assertStatus(200)
@@ -144,6 +180,37 @@ describe('MFA Recovery Codes', function () {
             ]);
 
         expect($response->json('data.recovery_codes'))->toHaveCount(10);
+    });
+
+    it('rejects regenerate with password alone (G-4-b H-3: MFA challenge required)', function () {
+        $this->user->update([
+            'mfa_enabled' => true,
+            'mfa_secret' => encrypt('TESTSECRET123456'),
+            'mfa_recovery_codes' => [Hash::make('VALIDRECOVERY1')],
+        ]);
+
+        $response = $this->actingAs($this->user)
+            ->postJson('/api/auth/mfa/recovery-codes', [
+                'password' => 'password123',
+            ]);
+
+        $response->assertStatus(422)->assertJsonValidationErrors(['code']);
+    });
+
+    it('rejects regenerate with wrong code', function () {
+        $this->user->update([
+            'mfa_enabled' => true,
+            'mfa_secret' => encrypt('TESTSECRET123456'),
+            'mfa_recovery_codes' => [Hash::make('VALIDRECOVERY1')],
+        ]);
+
+        $response = $this->actingAs($this->user)
+            ->postJson('/api/auth/mfa/recovery-codes', [
+                'password' => 'password123',
+                'code' => 'WRONG-CODE',
+            ]);
+
+        $response->assertStatus(401);
     });
 
     it('requires authentication', function () {
