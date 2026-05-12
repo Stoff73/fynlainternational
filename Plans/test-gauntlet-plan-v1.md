@@ -69,8 +69,8 @@ Also during G-(-1), apply the audit's recommended pack-binding singleton fix: ch
 | G-0-i | SiteGround cron entry for `fynla_inter` (Site Tools → Devs → Cron Jobs) | CSJ | pending (task #17) |
 | G-0-ii | XAI/Grok dev API key in server `.env`; `php artisan config:clear` | CSJ paste, me apply | pending (task #12) |
 | G-0-iii | Revolut sandbox webhook registered at `https://csjones.co/fynla_inter/api/payment/webhook`; `wsk_…` into `.env` (per Q11: at G-0, not deferred to G-6) | CSJ register, me apply | pending |
-| G-0-iv | Lifecycle test recipient override verified — depends on G-(-1) lifecycle engine MVP completing first | me | blocked on G-(-1) |
-| G-0-v | Triage backlog created (GitHub issues, Linear, or a tracked markdown doc in `May/`) | CSJ + me | pending |
+| G-0-iv | Lifecycle test recipient override verified — depends on G-(-1) lifecycle engine MVP completing first | me | ✅ PASS (2026-05-12) — config returns `chris@fynla.org` on dev, `schedule:list` shows `lifecycle:run-daily` at `0 7 * * *`, 7/7 unit tests green |
+| G-0-v | Triage backlog created (GitHub issues, Linear, or a tracked markdown doc in `May/`) | CSJ + me | ✅ PASS (2026-05-12) — `May/May12Updates/triage-backlog.md` created. Scaffolded with bugs / enhancements / open questions sections; B-1 and G-0-iv already closed within it as the session's first uses. |
 
 **Exit gate:** all five items green. `php artisan tinker --execute="…"` returns the four guardrail values (env=staging, revolut=sandbox, ai_provider=xai, lifecycle_test=chris@fynla.org) and lifecycle scheduler shows the daily job.
 
@@ -82,7 +82,7 @@ Also during G-(-1), apply the audit's recommended pack-binding singleton fix: ch
 
 **Scope:** verify the ~2,669-test Pest baseline holds on dev DB; build observer-firing tests (replacing the coverage % gate per audit); build the logic-fixture golden files.
 
-### G-1-a: Baseline re-confirmation (~0.5 day)
+### G-1-a: Baseline re-confirmation (~0.5 day) — ✅ PASS (2026-05-12)
 
 ```bash
 # On csjones.co/fynla_inter:
@@ -90,6 +90,10 @@ cd ~/www/csjones.co/fynla_inter-app && ./vendor/bin/pest
 ```
 
 Expected baseline: ~2,669 `it()` blocks (2,428 in `tests/**/*.php` + 241 in `packs/**/*.php`). Conditional skips: `AdminBackupTest` (mysqldump availability), `PackIsolationTest` (pack classes not loaded). Anything else → triage and fix before proceeding.
+
+**Actual result (2026-05-12):** `2,836 passed / 1 skipped / 59 todos / 0 failed (11,018 assertions)` — exactly matches local baseline. Baseline confirmed on dev. The 59 todos are the G-1-b observer-firing test scaffolds (placeholders).
+
+**One fix landed during G-1-a:** dev's `APP_URL=https://csjones.co/fynla_inter` (with subpath) was breaking Pest's TestCase URL resolution — `postJson('/api/auth/register')` was being prefixed to `/fynla_inter/api/auth/register` and falling through to the 404 handler / catch-all routes, causing 749 spurious failures. Fix: added `<env name="APP_URL" value="http://localhost"/>` to `phpunit.xml`, which overrides the test-env URL regardless of dev's runtime APP_URL. Single source of truth for any future subpath-deployed environment. **Uncommitted** as of 2026-05-12 13:30 UTC.
 
 ### G-1-b: Observer-firing tests (~2 days) — replaces previous coverage gate
 
