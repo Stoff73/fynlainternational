@@ -322,10 +322,13 @@ Findings tracked; HIGH/CRITICAL fixed before exit; MEDIUM/LOW logged with risk a
 
 **Slice 1: auth flow + PreviewWriteInterceptor — ✅ PASS (2026-05-12, session 5)**
 
-Findings: 3 HIGH (H-1/H-2/H-3), 10 MEDIUM, 7 LOW. All HIGH + all 10 MEDIUM fixed in-session across commits `3a2070c` (HIGH), `e37acb7` (MEDIUM batch A), and the slice-3 batch (MEDIUM batch B). 21 invariants verified correct. Audit report at `May/May12Updates/g-4-b-slice-1-auth-audit.md`. Remaining slices:
+Findings: 3 HIGH (H-1/H-2/H-3), 10 MEDIUM, 7 LOW. All HIGH + all 10 MEDIUM fixed in-session across commits `3a2070c` (HIGH), `e37acb7` (MEDIUM batch A), and the slice-3 batch (MEDIUM batch B). 21 invariants verified correct. Audit report at `May/May12Updates/g-4-b-slice-1-auth-audit.md`.
 
-- **Slice 2 (next)**: Revolut webhook + payment endpoints
-- **Slice 3 (after)**: 89 API controllers + 83 form requests sweep
+**Slice 2: Revolut webhook + payment endpoints — ✅ PASS (2026-05-12, session 6)**
+
+Findings: 4 HIGH (H-1 unique-index race, H-2 confirmPayment loose state set, H-3 merchant_ref warning-not-abort, H-4 missing MFA on payment write routes), 8 MEDIUM, 5 LOW. All HIGH + all 8 MEDIUM fixed in-session across commits `6807346` (HIGH + supporting MEDIUMs) and `8281cbf` (remaining MEDIUMs M-2/M-3/M-4). 21 invariants verified correct. Audit report at `May/May12Updates/g-4-b-slice-2-payments-audit.md`. New tests: 14 (8 webhook signature unit, 6 slice 2 feature). 5 LOW logged as E-11..E-15 in triage backlog. Remaining slice:
+
+- **Slice 3 (next)**: 89 API controllers + 83 form requests sweep
 
 ### G-4-c: Horizontal-privilege morph escalation test (~0.5 day) — replaces previous class-injection variant
 
