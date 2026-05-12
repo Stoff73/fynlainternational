@@ -15,8 +15,8 @@ use OpenAI\Client;
  * All xAI models are OpenAI-compatible, so the SDK works directly.
  *
  * Guzzle is configured with a 120-second timeout to accommodate
- * reasoning models (grok-4-1-fast-reasoning) which may "think"
- * for 30-60+ seconds before streaming any response chunks.
+ * reasoning models (grok-4.3 with its baked-in reasoning_content output)
+ * which may "think" for 30-60+ seconds before streaming any response chunks.
  */
 class XaiClient
 {
