@@ -204,8 +204,12 @@ class AuthController extends Controller
             }
         }
 
-        // Skip verification for preview users - return token immediately
-        if ($user->is_preview_user) {
+        // Skip verification for preview users - return token immediately.
+        // GATED to non-production environments only (G-4-b M-10): if
+        // is_preview_user=true ever leaks onto a real account via a migration
+        // or seeder bug in production, the email-verification + MFA gates
+        // still apply. Preview personas only exist in local/staging.
+        if ($user->is_preview_user && ! app()->environment('production')) {
             // Record successful login
             $this->lockoutService->recordSuccessfulLogin($email);
 

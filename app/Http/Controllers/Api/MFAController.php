@@ -200,8 +200,12 @@ class MFAController extends Controller
             'method' => 'mfa',
         ]);
 
-        // Invalidate any existing tokens (pre-MFA tokens should not remain valid)
-        $user->tokens()->delete();
+        // Invalidate ONLY web auth tokens (pre-MFA tokens should not remain
+        // valid), but preserve mobile and preview tokens established
+        // independently (e.g., iOS biometric, persona switching). A successful
+        // web MFA verification should not silently sign the user out of their
+        // phone.
+        $user->tokens()->where('name', 'auth_token')->delete();
 
         // MFA verified - create token
         $token = $user->createToken('auth_token', ['mfa_verified'])->plainTextToken;
@@ -252,6 +256,13 @@ class MFAController extends Controller
         }
 
         if (! $this->mfaService->verifyRecoveryCode($user, $request->recovery_code)) {
+            // Record failure so brute-force on the recovery code surface is
+            // bounded by the same lockout threshold as TOTP failures.
+            $this->lockoutService->recordFailedAttempt(
+                $user->email,
+                LoginAttempt::REASON_RECOVERY_CODE_FAILED
+            );
+
             return response()->json([
                 'success' => false,
                 'message' => 'Invalid recovery code.',

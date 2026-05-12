@@ -40,6 +40,8 @@ class LoginAttempt extends Model
 
     public const REASON_MFA_FAILED = 'mfa_failed';
 
+    public const REASON_RECOVERY_CODE_FAILED = 'recovery_code_failed';
+
     public const REASON_EMAIL_NOT_VERIFIED = 'email_not_verified';
 
     /**

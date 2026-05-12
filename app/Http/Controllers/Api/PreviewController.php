@@ -629,15 +629,27 @@ class PreviewController extends Controller
 
     /**
      * Create spouse account from persona data
+     *
+     * Requires an explicit, real-looking email. Synthesised "@temp.fps.com"
+     * fallback was removed under G-4-b M-9 — fake emails created real User
+     * rows that could be claimed if the domain ever became routable, and
+     * accumulated as orphaned accounts. Callers without a real spouse email
+     * should leave create_spouse_account=false.
      */
     private function createSpouseAccount(User $primaryUser, array $spouseData): void
     {
-        // Generate a random password for the spouse
+        $email = $spouseData['email'] ?? null;
+        if (! $email || ! filter_var($email, FILTER_VALIDATE_EMAIL)) {
+            throw new \InvalidArgumentException(
+                'Spouse account creation requires a valid email address in persona data.'
+            );
+        }
+
         $temporaryPassword = Str::random(16);
 
         $spouse = User::create([
             'name' => $spouseData['name'],
-            'email' => $spouseData['email'] ?? Str::slug($spouseData['name']).'@temp.fps.com',
+            'email' => $email,
             'password' => Hash::make($temporaryPassword),
             'date_of_birth' => $spouseData['date_of_birth'] ?? null,
             'gender' => $spouseData['gender'] ?? null,

@@ -320,6 +320,13 @@ Invoke the `security-and-hardening` skill against:
 
 Findings tracked; HIGH/CRITICAL fixed before exit; MEDIUM/LOW logged with risk acceptance.
 
+**Slice 1: auth flow + PreviewWriteInterceptor — ✅ PASS (2026-05-12, session 5)**
+
+Findings: 3 HIGH (H-1/H-2/H-3), 10 MEDIUM, 7 LOW. All HIGH + all 10 MEDIUM fixed in-session across commits `3a2070c` (HIGH), `e37acb7` (MEDIUM batch A), and the slice-3 batch (MEDIUM batch B). 21 invariants verified correct. Audit report at `May/May12Updates/g-4-b-slice-1-auth-audit.md`. Remaining slices:
+
+- **Slice 2 (next)**: Revolut webhook + payment endpoints
+- **Slice 3 (after)**: 89 API controllers + 83 form requests sweep
+
 ### G-4-c: Horizontal-privilege morph escalation test (~0.5 day) — replaces previous class-injection variant
 
 The real morph threat is horizontal privilege escalation, not class injection (per audit concern 2). Test:
