@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "7e3342e723e6cb40050f8a97e3955358",
+    "content-hash": "551340ce23a8d51730523281a6ab7228",
     "packages": [
         {
             "name": "anthropic-ai/sdk",
@@ -960,6 +960,153 @@
                 }
             ],
             "time": "2025-12-03T09:33:47+00:00"
+        },
+        {
+            "name": "fynla/pack-country-gb",
+            "version": "dev-refactor/uk-pack-relocation",
+            "dist": {
+                "type": "path",
+                "url": "packs/country-gb",
+                "reference": "5df469e48ccea4ae42e138be8a977071f1e50e01"
+            },
+            "require": {
+                "illuminate/database": "^10.0",
+                "illuminate/support": "^10.0",
+                "php": "^8.2"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "Fynla\\Packs\\Gb\\Providers\\GbPackServiceProvider"
+                    ]
+                },
+                "fynla": {
+                    "pack": {
+                        "code": "gb",
+                        "currency": "GBP",
+                        "locale": "en_GB",
+                        "table_prefix": ""
+                    }
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Fynla\\Packs\\Gb\\": "src/",
+                    "Fynla\\Packs\\Gb\\Database\\Factories\\": "database/factories/",
+                    "Fynla\\Packs\\Gb\\Database\\Seeders\\": "database/seeders/"
+                }
+            },
+            "autoload-dev": {
+                "psr-4": {
+                    "Fynla\\Packs\\Gb\\Tests\\": "tests/"
+                }
+            },
+            "license": [
+                "proprietary"
+            ],
+            "description": "Fynla United Kingdom country pack — UK tax engine (HMRC), IHT/CGT/Income Tax/Pension calculators, ISA/SIPP product wrappers, and gb_* schema (after deferred prefix migration).",
+            "transport-options": {
+                "symlink": true,
+                "relative": true
+            }
+        },
+        {
+            "name": "fynla/pack-country-xx-smoke",
+            "version": "dev-refactor/uk-pack-relocation",
+            "dist": {
+                "type": "path",
+                "url": "packs/country-xx-smoke",
+                "reference": "20e0a0a2e36d30c5e2e4f36dddaedbf2d870d12a"
+            },
+            "require": {
+                "illuminate/support": "^10.0",
+                "php": "^8.2"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "Fynla\\Packs\\XXSmoke\\Providers\\CountryPackServiceProvider"
+                    ]
+                },
+                "fynla": {
+                    "pack": {
+                        "code": "xx",
+                        "currency": "XXX",
+                        "locale": "en-XX",
+                        "table_prefix": "xx_"
+                    }
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Fynla\\Packs\\XXSmoke\\": "src/"
+                }
+            },
+            "autoload-dev": {
+                "psr-4": {
+                    "Fynla\\Packs\\XXSmoke\\Tests\\": "tests/"
+                }
+            },
+            "license": [
+                "proprietary"
+            ],
+            "description": "Fynla synthetic smoke-test pack — verifies multi-pack loading",
+            "transport-options": {
+                "symlink": true,
+                "relative": true
+            }
+        },
+        {
+            "name": "fynla/pack-country-za",
+            "version": "dev-refactor/uk-pack-relocation",
+            "dist": {
+                "type": "path",
+                "url": "packs/country-za",
+                "reference": "43da30b8969fac9764536dc130381b1ad9f09d4c"
+            },
+            "require": {
+                "illuminate/database": "^10.0",
+                "illuminate/support": "^10.0",
+                "php": "^8.2"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "Fynla\\Packs\\Za\\Providers\\ZaPackServiceProvider"
+                    ]
+                },
+                "fynla": {
+                    "pack": {
+                        "code": "za",
+                        "currency": "ZAR",
+                        "locale": "en_ZA",
+                        "table_prefix": "za_"
+                    }
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Fynla\\Packs\\Za\\": "src/",
+                    "Fynla\\Packs\\Za\\Database\\Factories\\": "database/factories/",
+                    "Fynla\\Packs\\Za\\Database\\Seeders\\": "database/seeders/"
+                }
+            },
+            "autoload-dev": {
+                "psr-4": {
+                    "Fynla\\Packs\\Za\\Tests\\": "tests/"
+                }
+            },
+            "license": [
+                "proprietary"
+            ],
+            "description": "Fynla South Africa country pack — SARS 2026/27 tax engine, Section 11F / Section 10C trackers, and za_tax_configurations schema.",
+            "transport-options": {
+                "symlink": true,
+                "relative": true
+            }
         },
         {
             "name": "graham-campbell/result-type",
@@ -7414,153 +7561,6 @@
                 }
             ],
             "time": "2025-08-08T12:00:00+00:00"
-        },
-        {
-            "name": "fynla/pack-country-gb",
-            "version": "dev-refactor/uk-pack-relocation",
-            "dist": {
-                "type": "path",
-                "url": "packs/country-gb",
-                "reference": "5df469e48ccea4ae42e138be8a977071f1e50e01"
-            },
-            "require": {
-                "illuminate/database": "^10.0",
-                "illuminate/support": "^10.0",
-                "php": "^8.2"
-            },
-            "type": "library",
-            "extra": {
-                "laravel": {
-                    "providers": [
-                        "Fynla\\Packs\\Gb\\Providers\\GbPackServiceProvider"
-                    ]
-                },
-                "fynla": {
-                    "pack": {
-                        "code": "gb",
-                        "currency": "GBP",
-                        "locale": "en_GB",
-                        "table_prefix": ""
-                    }
-                }
-            },
-            "autoload": {
-                "psr-4": {
-                    "Fynla\\Packs\\Gb\\": "src/",
-                    "Fynla\\Packs\\Gb\\Database\\Factories\\": "database/factories/",
-                    "Fynla\\Packs\\Gb\\Database\\Seeders\\": "database/seeders/"
-                }
-            },
-            "autoload-dev": {
-                "psr-4": {
-                    "Fynla\\Packs\\Gb\\Tests\\": "tests/"
-                }
-            },
-            "license": [
-                "proprietary"
-            ],
-            "description": "Fynla United Kingdom country pack — UK tax engine (HMRC), IHT/CGT/Income Tax/Pension calculators, ISA/SIPP product wrappers, and gb_* schema (after deferred prefix migration).",
-            "transport-options": {
-                "symlink": true,
-                "relative": true
-            }
-        },
-        {
-            "name": "fynla/pack-country-xx-smoke",
-            "version": "dev-refactor/uk-pack-relocation",
-            "dist": {
-                "type": "path",
-                "url": "packs/country-xx-smoke",
-                "reference": "20e0a0a2e36d30c5e2e4f36dddaedbf2d870d12a"
-            },
-            "require": {
-                "illuminate/support": "^10.0",
-                "php": "^8.2"
-            },
-            "type": "library",
-            "extra": {
-                "laravel": {
-                    "providers": [
-                        "Fynla\\Packs\\XXSmoke\\Providers\\CountryPackServiceProvider"
-                    ]
-                },
-                "fynla": {
-                    "pack": {
-                        "code": "xx",
-                        "currency": "XXX",
-                        "locale": "en-XX",
-                        "table_prefix": "xx_"
-                    }
-                }
-            },
-            "autoload": {
-                "psr-4": {
-                    "Fynla\\Packs\\XXSmoke\\": "src/"
-                }
-            },
-            "autoload-dev": {
-                "psr-4": {
-                    "Fynla\\Packs\\XXSmoke\\Tests\\": "tests/"
-                }
-            },
-            "license": [
-                "proprietary"
-            ],
-            "description": "Fynla synthetic smoke-test pack — verifies multi-pack loading",
-            "transport-options": {
-                "symlink": true,
-                "relative": true
-            }
-        },
-        {
-            "name": "fynla/pack-country-za",
-            "version": "dev-refactor/uk-pack-relocation",
-            "dist": {
-                "type": "path",
-                "url": "packs/country-za",
-                "reference": "43da30b8969fac9764536dc130381b1ad9f09d4c"
-            },
-            "require": {
-                "illuminate/database": "^10.0",
-                "illuminate/support": "^10.0",
-                "php": "^8.2"
-            },
-            "type": "library",
-            "extra": {
-                "laravel": {
-                    "providers": [
-                        "Fynla\\Packs\\Za\\Providers\\ZaPackServiceProvider"
-                    ]
-                },
-                "fynla": {
-                    "pack": {
-                        "code": "za",
-                        "currency": "ZAR",
-                        "locale": "en_ZA",
-                        "table_prefix": "za_"
-                    }
-                }
-            },
-            "autoload": {
-                "psr-4": {
-                    "Fynla\\Packs\\Za\\": "src/",
-                    "Fynla\\Packs\\Za\\Database\\Factories\\": "database/factories/",
-                    "Fynla\\Packs\\Za\\Database\\Seeders\\": "database/seeders/"
-                }
-            },
-            "autoload-dev": {
-                "psr-4": {
-                    "Fynla\\Packs\\Za\\Tests\\": "tests/"
-                }
-            },
-            "license": [
-                "proprietary"
-            ],
-            "description": "Fynla South Africa country pack — SARS 2026/27 tax engine, Section 11F / Section 10C trackers, and za_tax_configurations schema.",
-            "transport-options": {
-                "symlink": true,
-                "relative": true
-            }
         },
         {
             "name": "hamcrest/hamcrest-php",
