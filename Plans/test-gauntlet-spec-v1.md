@@ -1,10 +1,10 @@
 ---
 type: spec
 date: 2026-05-12
-status: draft
+status: amended — 2026-05-12 — conflicts resolved against codebase audit
 supersedes: []
 companion_plan: Plans/test-gauntlet-plan-v1.md
-prd: (pending — to be generated via /prd-writer)
+prd: May/May12Updates/PRD-test-gauntlet-v1.md
 ---
 
 # Test Gauntlet Spec v1 — Pre-Production Validation for the UK Pack Architecture
@@ -37,9 +37,9 @@ The gauntlet has eight layers, ordered by scope (smallest first) so that bugs su
 ### 2.1 Unit (G-1)
 **What:** Pest unit tests on services, models, calculators, value objects, traits. Pure function correctness with mocked dependencies.
 
-**Why it exists:** Catch math errors, off-by-one bugs, wrong enum handling at the smallest possible scope. The 2,825-test Pest baseline is already green locally — this layer's job is to confirm coverage is *adequate*, not just present, and to top up gaps the campaign opened.
+**Why it exists:** Catch math errors, off-by-one bugs, wrong enum handling at the smallest possible scope. The ~2,669-test Pest baseline is already green locally — this layer's job is to confirm coverage is *adequate*, not just present, and to top up gaps the campaign opened.
 
-**Scope this gauntlet:** verify current 2,825 pass on dev; audit coverage of newly-relocated namespaces; add tests for any service that has zero unit coverage.
+**Scope this gauntlet:** verify the current baseline (~2,669 `it()` blocks across `tests/**/*.php` + `packs/**/*.php`) passes on dev; audit coverage of newly-relocated namespaces; add tests for any service that has zero unit coverage. Coverage-percentage is a leading indicator only — the *exit gate* (§ 4) requires observer-firing tests, not a coverage threshold.
 
 ### 2.2 Logic (G-1.5, inside G-1)
 **What:** Tax math, IHT/CGT/Income Tax/Pension calculator outputs against known-correct fixtures. Cross-border interaction logic. Money rounding (`int_minor` ledger arithmetic, no float drift).
@@ -53,49 +53,54 @@ The gauntlet has eight layers, ordered by scope (smallest first) so that bugs su
 
 **Why it exists:** Unit tests passing is necessary but insufficient — the wiring between layers (pack service providers, observer chains, polymorphic morph resolution, eager-load joins) is where the architecture campaign's risk lives. Systems tests assert "the wiring is correct" not just "each piece works in isolation".
 
-**Scope this gauntlet:** 100% of API controllers have at least one Feature test exercising the happy path; observer chains fire correctly post-relocation; pack service providers bind every contract.
+**Scope this gauntlet:** every API controller (~98 in `app/Http/Controllers/Api/` + `packs/*/src/Http/Controllers/`, including the 5 ZA controllers that import GB models cross-pack) has at least one Feature test exercising the happy path; the 13 observer chains (7 in `app/Observers/` + 6 in `packs/country-gb/src/Observers/`) fire correctly post-relocation; pack service providers bind every contract; **the morph backfill migration is replay-tested against a dirty-DB scenario** (not just an empty RefreshDatabase run).
 
 ### 2.4 E2E (G-3)
-**What:** Playwright browser tests on `csjones.co/fynla_inter` walking each of the 6 seeded preview personas through every module the persona owns. Real UI, real API, real DB, real auth.
+**What:** Playwright browser tests on `csjones.co/fynla_inter` walking each of the 6 seeded preview personas (`young_family`, `peak_earners`, `entrepreneur`, `young_saver`, `retired_couple`, `student`) through every module the persona owns. Real UI, real API, real DB, real auth.
 
 **Why it exists:** The frontend has 713 Vue components and 39 Vuex stores all referencing the relocated namespaces (through API endpoints). Unit and Systems tests don't exercise the browser-to-server contract. E2E catches the regressions that only manifest when a real user clicks.
 
 **Scope this gauntlet:** every persona → every module → CRUD round-trip; the 13 numbered rules in CLAUDE.md exercised (preview write-block, currency formatting, joint ownership, etc.); zero console errors during a clean run.
 
 ### 2.5 Security (G-4)
-**What:** OWASP Top 10 audit; auth-flow review (login, register, password reset, 2FA, biometric, preview-write-interceptor); input validation across all 83 form requests; SQL injection / XSS / CSRF posture; dependency CVE scan; secret management audit (.env files, key rotation procedure, log redaction); polymorphic morph aliases verified for known-good values only (Sanctum can't be tricked into authing against a non-User class).
+**What:** OWASP Top 10 audit; auth-flow review (login, register, password reset, 2FA, biometric, preview-write-interceptor); input validation across all ~104 form requests (24 in `app/Http/Requests/` + 80 in `packs/country-gb/src/Http/Requests/`); SQL injection / XSS / CSRF posture; dependency CVE scan; secret management audit (.env files, key rotation procedure, log redaction); **horizontal-privilege-escalation test for polymorphic morph aliases** (can a PAT for user A with `tokenable_type='Fynla\Core\Models\User'` pointing at user B's ID authenticate as B and bypass resource-ownership checks?).
 
 **Why it exists:** Financial data is regulated (UK GDPR, FCA marketing rules even in beta) and prod runs on shared hosting with 370 active sessions. A security review that uncovers a vuln before prod cutover is a saved breach.
 
-**Scope this gauntlet:** the `security-and-hardening` skill runs against every newly-relocated controller + every user-input boundary; findings tracked to closure; one external review pass (an LLM-driven audit qualifies if rigorous).
+**Scope this gauntlet:** the `security-and-hardening` skill runs against every newly-relocated controller + every user-input boundary; findings tracked to closure; **second-opinion LLM-driven audit only** (Grok / Gemini); no paid pen-test.
 
 ### 2.6 Hardening (G-5)
-**What:** Production-readiness configuration: tighten CSP (currently blocking Google Fonts + GA + FB Pixel — needs deliberate allow-list or self-host), rate limit auth endpoints, log redaction for PII, error boundary on every Vue route, retry/timeout on every external HTTP call, observability (Sentry or equivalent), structured logging compliance.
+**What:** Production-readiness configuration: reconcile the dual CSP definitions (the `app/Http/Middleware/SecurityHeaders.php` middleware allows Google Fonts/GA/FB Pixel; the `deploy/*/.htaccess` fallback blocks them — eliminate the conflict), self-host Google Fonts, allow GA + Awin via explicit CSP `script-src` entries, drop FB Pixel; rate limit auth endpoints; log redaction for PII; error boundary on every Vue route; retry/timeout on every external HTTP call (the Revolut services alone have 15+ untimed call sites); observability (Sentry or equivalent); structured logging compliance.
 
 **Why it exists:** The dev env runs on `APP_DEBUG=true` with permissive defaults. Prod needs `APP_DEBUG=false` with the same UX *and* the deliberate hardening layer that catches everything debug mode hides.
 
-**Scope this gauntlet:** every item in `app/Http/CLAUDE.md` and `core/CLAUDE.md` security checklists addressed; CSP allow-list explicit; rate-limit middleware on auth routes; .env.production templates contain only safe defaults.
+**Scope this gauntlet:** every item in `app/Http/CLAUDE.md` and `core/CLAUDE.md` security checklists addressed; CSP allow-list explicit (self-hosted fonts + GA + Awin only); rate-limit middleware on auth routes; `.env.production` templates contain only safe defaults. G-5 runs as a single "hardening checklist" gate rather than 7 sub-gates (audit recommendation).
 
 ### 2.7 User (G-6)
 **What:** CSJ + 1–2 trusted users (friends/family) work through the app daily for 1–2 weeks on `csjones.co/fynla_inter`. Real workflows, real data entry, real edge cases. Bugs filed to a triage backlog.
 
 **Why it exists:** Automated tests find regressions; humans find usability bugs, missing affordances, copy errors, calculator-output surprises, and "this number can't be right" reactions that test fixtures never hit because the tester wrote the fixture.
 
-**Scope this gauntlet:** every module gets one full user-driven walk-through per week for 2 weeks; bugs tracked; severity-1 (data wrong) issues block prod cutover; severity-2 (UX) issues don't block but get logged for v1.1.
+**Scope this gauntlet:** every module gets one full user-driven walk-through per week for 2 weeks; bugs tracked; severity-1 (numeric error ≥ £10, auth failure, data loss) issues block prod cutover; severity-2 (UX, copy, UI crashes that don't lose data) issues don't block but get logged for v1.1.
 
-### 2.8 Beta (G-7)
-**What:** 5–10 invited users (not Fynla insiders) given accounts on `csjones.co/fynla_inter` for 2 weeks. NDA + onboarding call + structured feedback survey. Same severity ladder as user testing.
+### 2.8 Prod readiness (G-7 — formerly G-8)
+**What:** Final review checklist; cutover plan rehearsal; rollback plan documented including the explicit `class_alias` re-add step on the `main` branch (otherwise a post-migration code rollback returns 401 for all 370 PATs); prod migration dry-run on a DB snapshot; CSJ signs off in writing (or chat).
 
-**Why it exists:** CSJ's mental model is the product designer's mental model. Beta users come without that calibration and surface the gaps. The architecture campaign is invisible to them — they'll find UX, copy, and "this doesn't do what I expected" bugs the build team can't see.
-
-**Scope this gauntlet:** structured invitation + onboarding; weekly survey; weekly bug triage; explicit "what would stop you using this" question; explicit consent to data being thrown away post-beta (dev DB).
-
-### 2.9 Prod readiness (G-8)
-**What:** Final review checklist; cutover plan rehearsal; rollback plan documented; prod migration dry-run on a DB snapshot; the 5 outstanding items from `feedback_prod_deploy_freeze.md` re-validated; CSJ signs off in writing (or chat).
-
-**Why it exists:** No gauntlet is perfect. G-8 is the deliberate pause where we ask "what would we wish we'd done?" and either do it or accept the risk consciously.
+**Why it exists:** No gauntlet is perfect. G-7 is the deliberate pause where we ask "what would we wish we'd done?" and either do it or accept the risk consciously.
 
 **Scope this gauntlet:** a single checklist doc, every item ticked or risk-accepted; a written go/no-go from CSJ; the deploy note at `May/May12Updates/deploy-2026-05-12.md` re-validated against current state.
+
+---
+
+## 2A. Pre-gauntlet workstream — G-(-1) Lifecycle engine (minimum viable)
+
+Surfaced during codebase audit 2026-05-12: `config/lifecycle.php` does not exist and the lifecycle email engine described in `docs/superpowers/specs/2026-04-14-lifecycle-email-engine-design.md` was never implemented. The `LIFECYCLE_TEST_RECIPIENT` env var that the dev `.env` template sets has nothing to read it. This is a pre-gauntlet workstream because G-0-iv depends on it.
+
+**What:** minimum-viable lifecycle engine — stub `config/lifecycle.php`, build a single `LifecycleEngine` service with `dispatch($user, $event)`, wire `LIFECYCLE_TEST_RECIPIENT` override, register a `schedule:run` entry. Zero email templates / no event content / no scheduling matrix.
+
+**Why it exists:** the dev env's lifecycle config returns `UNSET` during smoke testing; the test gauntlet can't validate "lifecycle emails route to override" if the plumbing doesn't exist.
+
+**Scope:** ~4 hr of work. The full lifecycle email engine (10+ event types, scheduling matrix, audit logging) is **logged as tech debt** and slated for post-cutover delivery as its own spec → plan → PRD cycle.
 
 ---
 
@@ -115,22 +120,22 @@ The temptation to "just slip in one more feature before launch" is the single bi
 
 | Layer | Exit gate |
 |-------|-----------|
-| **G-1 Unit/Logic** | All 2,825+ tests green on dev DB; coverage report shows ≥ 70% on `core/`, ≥ 80% on `packs/country-gb/src/`; logic fixtures for 6 personas signed off by CSJ. |
-| **G-2 Systems** | Every API controller has ≥ 1 Feature test green; observer-chain tests assert `RecommendationCacheObserver`, `RecalculateRiskProfileObserver`, `MonteCarloTriggerObserver` fire on the new namespaces; PackIsolationTest green. |
+| **G-(-1) Lifecycle engine** | `config/lifecycle.php` exists; `LifecycleEngine::dispatch()` route to override returns chris@fynla.org for all events; scheduler registers and `schedule:list` shows the daily entry; full implementation logged as tech debt. |
+| **G-1 Unit/Logic** | ~2,669-test Pest baseline green on dev DB; logic fixtures for 6 personas (sampled 2 reviewed in full + delta-scan on other 4); observer-firing tests in place for all 13 observers (replaces coverage % gate). |
+| **G-2 Systems** | Every of ~98 API controllers (incl. 5 ZA cross-pack) has ≥ 1 Feature test green; all 14 `pack.gb.*` bindings resolve via singleton-identity test; observer-chain tests assert `RiskRecalculationObserver`, `RecommendationCacheObserver`, `LifeEventMonteCarloObserver` + 6 GB pack observers fire on the new namespaces; **migration dirty-DB replay test green** (PAT with `App\Models\User` survives `up()` → canonicalised → re-run is no-op); **cache poisoning test green** (pre-relocation cache entries don't break post-deploy); `PackIsolationTest` `App\Models` sub-section empty + allow-list count ≤ baseline + 1 (counter ratchet). |
 | **G-3 E2E** | All 6 personas × all 7 modules = 42 journeys green in Playwright; zero browser console errors during clean run; the 13 numbered rules in CLAUDE.md verified by automated assertions where automatable, manually otherwise. |
-| **G-4 Security** | OWASP Top 10 checklist complete; zero high/critical CVEs in dependencies; auth flows reviewed by external (LLM-driven) audit; `security-and-hardening` skill green on every controller. |
-| **G-5 Hardening** | CSP allow-list explicit (no `unsafe-inline` where avoidable); auth endpoints rate-limited; log redaction in place for PII; Sentry or equivalent wired; `app/Http/CLAUDE.md` checklist green. |
-| **G-6 User** | 2 weeks of daily use by CSJ + 1–2 trusted users with no severity-1 bugs in week 2. |
-| **G-7 Beta** | 2 weeks of use by 5–10 external beta users with severity-1 bug rate < 1 per user-week in week 2. |
-| **G-8 Prod readiness** | Written go/no-go from CSJ; rollback plan signed off; cutover plan rehearsed against a DB snapshot. |
+| **G-4 Security** | OWASP Top 10 checklist complete; zero high/critical CVEs in dependencies; auth flows reviewed by LLM-driven audit (Grok / Gemini); `security-and-hardening` skill green on every controller; **horizontal-privilege morph escalation test green** (forged cross-user PAT can't bypass ownership). |
+| **G-5 Hardening** | Single checklist doc green — CSP middleware reconciled with `.htaccess` (self-host fonts + GA + Awin allow-list, FB Pixel dropped); auth endpoints rate-limited; log redaction for PII; ErrorBoundary on every Vue route; external-HTTP timeouts on all 15+ Revolut call sites + Awin + Postcode + Push; Sentry or equivalent wired; `php artisan env:validate` command exists; `app/Http/CLAUDE.md` checklist green. |
+| **G-6 User** | 2 weeks of daily use by CSJ + 1–2 trusted users with no severity-1 bugs in week 2. Severity-1 := user-visible numeric error ≥ £10, OR auth failure, OR data loss. Severity-2 := UI/copy/rendering bugs that don't lose data. |
+| **G-7 Prod readiness** | Written go/no-go from CSJ; rollback plan signed off (explicitly including the `class_alias` re-add step on `main` branch); cutover plan rehearsed against a DB snapshot; 2 R-14a residuals (`pack.gb.exchange_control`, `pack.gb.tax_optimisation`) tracked to resolution or risk-accepted. |
 
-The gauntlet exit is the *intersection* of all 8. A single layer red blocks prod.
+The gauntlet exit is the *intersection* of all 7 (G-7 was beta — deleted; numbering compressed). A single layer red blocks prod.
 
 ---
 
 ## 5. Constraints
 
-- **Timebox:** ~8 weeks from 2026-05-12, target prod cutover ~2026-07-07. Hard end: 12 weeks (2026-08-04). Beyond 12 weeks, re-baseline the plan rather than slip indefinitely.
+- **Timebox:** ~6 weeks from 2026-05-12 (G-7 beta layer deleted; G-(-1) lifecycle engine ~4 hr only), target prod cutover ~2026-06-23. Hard end: 12 weeks (2026-08-04). Beyond 12 weeks, re-baseline rather than slip indefinitely. Buffer ~5 weeks before hard stop — adequate per audit if no more than 2 severity-1 bugs surface in G-6.
 - **Team:** CSJ + me (Claude). Single-developer pace. No external QA, no QA engineer, no security consultant (LLM-driven audits substitute).
 - **Environment:** `csjones.co/fynla_inter` is the only deploy target. No prod access. Real Revolut sandbox. Real xAI/Grok dev key (when CSJ provides it). Real `noreply@fynla.org` SMTP (shared with prod — care with lifecycle test recipient override).
 - **Data:** seeded preview personas + any beta-user data. No real customer data. Beta data discarded post-gauntlet.
@@ -149,20 +154,35 @@ The gauntlet exit is the *intersection* of all 8. A single layer red blocks prod
 
 ---
 
-## 7. Open questions (to be resolved during PRD interview)
+## 7. Open questions — resolved 2026-05-12 (PRD interview)
 
-1. **Beta user pool** — does CSJ have 5–10 candidates in mind, or does recruiting belong inside G-7?
-2. **External security review** — LLM-driven audit only, or does CSJ want one paid pen-test? Cost / scope?
-3. **Definition of "logic test fixture sign-off"** — does CSJ review every persona's calculator outputs personally, or sample-and-trust?
-4. **Hardening rollback plan** — if CSP tightening breaks a third-party we care about (Awin attribution, Google Analytics), do we relax CSP or drop the third-party?
-5. **Beta-user account lifecycle** — accounts deleted post-gauntlet, or migrated to prod accounts at cutover? GDPR posture either way.
-6. **The Revolut sandbox webhook** — needs registering via SiteGround / Revolut sandbox dashboard manually; in scope for G-0 (setup) or G-7 (beta) when payment-touch finally matters?
-7. **What counts as "severity-1"** — concrete definition CSJ wants enforced (e.g. "calculator output wrong by ≥ £100" vs "any UI crash" vs both).
-8. **Lifecycle email engine on dev** — currently enabled with `chris@fynla.org` override. Stays so for the whole gauntlet, or do we let beta users get real-looking emails (still routed via override)?
-9. **`AGENT_INTERNAL_TOKEN`** — rotated on bootstrap; does CSJ need it stored anywhere outside the server `.env`?
-10. **R-16 cleanup** (remove the `class_alias` in `CoreServiceProvider::boot()`) — does it ship at cutover, or as a follow-up after prod runs the morph backfill migration?
+All 10 spec-time open questions resolved during the codebase-audit-driven interview:
 
-These flow into the PRD interview. CSJ decides; the PRD documents the decisions.
+| # | Question | Resolution |
+|---|----------|-----------|
+| 1 | Beta user pool | **G-7 (beta) deleted entirely.** G-6 internal user-testing (CSJ + 1–2 trusted friends) is the only human-validation layer. No external recruitment, no GDPR exposure, no `beta:purge` artisan command needed. |
+| 2 | External security review | **LLM-driven only** (Grok / Gemini via `security-and-hardening` skill). No paid pen-test. |
+| 3 | Logic-fixture sign-off depth | **Sample-and-trust.** CSJ reviews 2 personas in full (~4-6 hr); delta-scans the other 4. |
+| 4 | CSP rollback posture | **Self-host fonts + relax CSP for GA + Awin; drop FB Pixel.** Reconcile the dual definition (middleware vs `.htaccess`). |
+| 5 | Beta-user account lifecycle | Moot — G-7 deleted. |
+| 6 | Revolut sandbox webhook timing | **Register at G-0.** Internal users in G-6 may hit subscription flows; needs to work. |
+| 7 | Severity-1 threshold | **User-visible numeric error ≥ £10**, OR auth failure, OR data loss. UI/copy = severity-2. |
+| 8 | Lifecycle emails on dev | **Override to `chris@fynla.org` for the whole gauntlet** (no real users get them since G-7 is gone). |
+| 9 | `AGENT_INTERNAL_TOKEN` storage | **Server `.env` only.** Lost-token recovery is "regenerate + redistribute". |
+| 10 | R-16 cleanup timing | **Deferred to *post*-cutover** — once prod's backfill migration is verified clean, R-16 is a trivial follow-up commit. Not in gauntlet scope. |
+
+### Additional resolutions from codebase audit (architectural)
+
+- `widow` persona doesn't exist — replaced by `student` in seeder. CLAUDE.md amended, spec/plan amended, dead `widow` branches in `PreviewUserSeeder` to be removed.
+- **Singleton fix** for `pack.gb.user_relations`, `pack.gb.asset_repo`, `pack.gb.estate_repo`, `pack.gb.asset_resolver` — applied pre-G-2.
+- **G-3/G-5 resequence** — non-UI G-5 items (rate limit, log redaction, env-validate, external-HTTP timeouts) moved to weeks 2-3 in parallel with G-2; UI G-5 items (CSP, ErrorBoundary, Sentry browser-side) deferred until after G-3 is green.
+- **G-5 collapse** from 7 sub-gates to one "hardening checklist" gate.
+- **Pre-gauntlet G-(-1)** — minimum-viable lifecycle engine to unblock G-0-iv; full implementation = tech debt.
+- **Week-6 checkpoint gate** — defined trigger for soft re-baseline if G-1 through G-4 not all green by end of week 6.
+- **Migration dirty-DB replay** and **cache-poisoning** tests added to G-2.
+- **Horizontal-privilege morph escalation** test replaces the class-injection variant in G-4.
+- **PackIsolationTest counter enforcement** added to prevent silent allow-list growth.
+- **`CoreContracts::all()` helper** created via filesystem scan to make G-2 binding walk testable.
 
 ---
 
