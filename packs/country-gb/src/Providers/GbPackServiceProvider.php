@@ -56,16 +56,24 @@ class GbPackServiceProvider extends ServiceProvider
         // PackAssetResolver). Composite defaults in CoreServiceProvider
         // iterate PackRegistry::codes() and resolve `pack.{code}.*`
         // bindings to merge results across registered packs.
-        $this->app->bind('pack.gb.asset_repo', GbPackAssetRepository::class);
-        $this->app->bind('pack.gb.estate_repo', GbPackEstateRepository::class);
-        $this->app->bind('pack.gb.asset_resolver', GbPackAssetResolver::class);
+        //
+        // G-(-1) FR-M2: singleton(), not bind() — these resolvers are
+        // stateless and called per-request from CoreServiceProvider's
+        // composites, so a fresh instance per `app()->make()` is wasted
+        // allocation. Singleton-identity asserted in PackBindingSingletonTest.
+        $this->app->singleton('pack.gb.asset_repo', GbPackAssetRepository::class);
+        $this->app->singleton('pack.gb.estate_repo', GbPackEstateRepository::class);
+        $this->app->singleton('pack.gb.asset_resolver', GbPackAssetResolver::class);
 
         // R-14b-vii-prep: user-scoped relation provider. Returns full
         // Eloquent Models for User's per-module hasMany/hasOne relations
         // (Protection, Property, Investment, Savings, Pensions, etc.) so
         // core User can resolve them through the contract instead of
         // holding pack-namespaced `hasMany` literals.
-        $this->app->bind('pack.gb.user_relations', GbPackUserRelationProvider::class);
+        //
+        // G-(-1) FR-M2: singleton() — same rationale as the query-layer
+        // bindings above.
+        $this->app->singleton('pack.gb.user_relations', GbPackUserRelationProvider::class);
 
         // R-14b-v: bind the GoalCalculationEngine contract to the GB
         // pack's concrete service. Core Goal's accessor methods
