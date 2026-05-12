@@ -106,14 +106,25 @@ rsync -avz --delete \
   --exclude="storage/framework/sessions/*" \
   --exclude="storage/framework/views/*" \
   --exclude="bootstrap/cache/*.php" \
-  --exclude="tests/" \
-  --exclude="April/" \
-  --exclude=".claude/" \
+  --exclude="public/hot" \
+  --exclude="/tests/" \
+  --exclude="/April/" \
+  --exclude="/May/" \
+  --exclude="/Plans/" \
+  --exclude="/ios/" \
+  --exclude="/revolut/" \
+  --exclude="/.claude/" \
+  --exclude="/CSJTODO.md" \
+  --exclude="/tech-debt-report.md" \
   ./ \
   u163-ptanegf9edny@ssh.csjones.co:www/csjones.co/fynla_inter-app/
 ```
 
-**Important:** the `-p 18765` non-standard port is passed via the inner `-e "ssh -p 18765 ..."` string. Test with a small file first if you're nervous — `rsync` respects `--dry-run`.
+**Important — anchor your custom excludes with a leading `/`.** Without the leading slash, `--exclude="Plans/"` matches EVERY `Plans/` directory anywhere in the transfer — including `app/Services/Plans/`, `packs/country-gb/src/Plans/`, `packs/country-gb/src/Http/Controllers/Plans/`, `packs/country-gb/resources/js/components/Plans/`, and `resources/js/views/Plans/`. That breaks `/api/plans/*` endpoints and the dashboard's plan-service calls with `Class App\Services\Plans\BasePlanService not found`. Same risk for any other generic name (`tests/`, `images/`, etc). The leading slash anchors the pattern to the rsync source root, so only the top-level directory is excluded.
+
+**Don't drop `public/hot` to the server.** The local file points Laravel/Vite at `127.0.0.1:5173` for HMR; uploading it makes the app serve assets from your laptop's dev server, which breaks the live site silently with a 500 (no compiled assets resolve).
+
+The `-p 18765` non-standard port is passed via the inner `-e "ssh -p 18765 ..."` string. Test with a small file first if you're nervous — `rsync` respects `--dry-run`.
 
 Alternatively, zip the project locally and upload via SiteGround File Manager, then extract on the server.
 
@@ -191,7 +202,16 @@ php artisan storage:link
 # Build the autoloader and caches for speed
 php artisan optimize
 
-# Fix permissions so the web server can write to storage and caches
+# Fix permissions — REQUIRED because SiteGround's suexec rejects scripts
+# in group-writable directories. macOS's default umask gives rsync'd files
+# 664/775 perms, which produces a 500 from Apache (and NO entry in
+# laravel.log, because Apache rejects before PHP runs). Normalise the whole
+# tree to 644/755, then loosen storage and bootstrap/cache to 775 for the
+# web server, lock .env to 600, and keep artisan executable.
+find . -type d -exec chmod 755 {} +
+find . -type f -exec chmod 644 {} +
+chmod 600 .env
+chmod 755 artisan
 chmod -R 775 storage bootstrap/cache
 ```
 

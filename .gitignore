@@ -12,6 +12,9 @@
 .env
 .env.backup
 .env.production
+# Templates under deploy/ are checked in — they only contain YOUR_* placeholders,
+# never real secrets. Real .env files live on each server, not in the repo.
+!deploy/*/.env.production
 .phpunit.result.cache
 Homestead.json
 Homestead.yaml

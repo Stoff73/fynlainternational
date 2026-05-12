@@ -197,12 +197,14 @@ Never dispatch an agent with just "fix X" or "build Y". Always include:
 
 Fynla runs on two environments, isolated database, code, and credentials:
 
-| Env | URL | Purpose | Branch | Server path | SSH alias |
-|-----|-----|---------|--------|-------------|-----------|
-| **Production** | `https://fynla.org` | Live customers — real charges, real emails | `main` | `~/www/fynla.org/public_html/` | `ssh.fynla.org:18765` as `u2783-hrf1k8bpfg02` |
-| **Dev / staging** | `https://csjones.co/fynla` | Pre-production testing — Revolut sandbox, throwaway DB | `dev` | `~/www/csjones.co/public_html/fynla/` | `ssh.csjones.co:18765` as `u163-ptanegf9edny` |
+| Env | URL | Purpose | Branch | App dir | Public symlink | SSH alias |
+|-----|-----|---------|--------|---------|----------------|-----------|
+| **Production** | `https://fynla.org` | Live customers — real charges, real emails | `main` | `~/www/fynla.org/public_html/` | (root deploy — no symlink) | `ssh.fynla.org:18765` as `u2783-hrf1k8bpfg02` |
+| **Dev / staging** | `https://csjones.co/fynla_inter` | Pre-production testing — Revolut sandbox, throwaway DB | (any) | `~/www/csjones.co/fynla_inter-app/` | `~/www/csjones.co/public_html/fynla_inter → ../fynla_inter-app/public` | `ssh.csjones.co:18765` as `u163-ptanegf9edny` |
 
-**⚠️ Never** deploy `dev` to fynla.org or `main` to csjones.co — the build scripts target different `VITE_BASE_PATH` / `RewriteBase` paths and the wrong combination breaks routing silently.
+**⚠️ Never** deploy a `csjones-fynla` build to fynla.org or a `fynla-org` build to csjones.co — the build scripts hard-code different `VITE_BASE_PATH` / `VITE_ROUTER_BASE` values and the wrong combination breaks routing silently (Vue router can't find any route, blank page).
+
+**Note: the legacy UK-only Fynla still lives at `csjones.co/fynla`** (separate `fynla-app/` dir, separate DB). Fynla International deploys to `csjones.co/fynla_inter` so the two coexist. Do not conflate them.
 
 ### Build scripts (per environment)
 
@@ -210,18 +212,18 @@ Fynla runs on two environments, isolated database, code, and credentials:
 
 ```bash
 ./deploy/fynla-org/build.sh        # Build for fynla.org (root deployment)
-./deploy/csjones-fynla/build.sh    # Build for csjones.co/fynla (subdirectory)
+./deploy/csjones-fynla/build.sh    # Build for csjones.co/fynla_inter (subdirectory)
 ```
 
 The scripts set different Vite environment variables so the SPA routing and asset paths match the target:
 
-| Setting | fynla.org (main) | csjones.co/fynla (dev) |
-|---------|------------------|------------------------|
-| `VITE_BASE_PATH` | `/build/` | `/fynla/build/` |
-| `VITE_ROUTER_BASE` | `/` | `/fynla/` |
-| `VITE_API_BASE_URL` | `https://fynla.org` | `https://csjones.co/fynla` |
+| Setting | fynla.org (main) | csjones.co/fynla_inter (dev) |
+|---------|------------------|------------------------------|
+| `VITE_BASE_PATH` | `/build/` | `/fynla_inter/build/` |
+| `VITE_ROUTER_BASE` | `/` | `/fynla_inter/` |
+| `VITE_API_BASE_URL` | `https://fynla.org` | `https://csjones.co/fynla_inter` |
 | `VITE_REVOLUT_SANDBOX` | `false` | `true` |
-| `.htaccess` `RewriteBase` | `/` | `/fynla/` |
+| `.htaccess` `RewriteBase` | `/` | `/fynla_inter/` |
 | `APP_ENV` | `production` | `staging` |
 | `APP_DEBUG` | `false` | `true` |
 | `REVOLUT_SANDBOX` | `false` | `true` |
@@ -229,21 +231,24 @@ The scripts set different Vite environment variables so the SPA routing and asse
 
 **Never mix environments.** If you build with `csjones-fynla/build.sh` and upload to fynla.org, the Vue router base path will be wrong and the app won't load. There's no nice error — you'll just see a blank page or a 404 loop.
 
-### Deploying to dev (csjones.co/fynla)
+### Deploying to dev (csjones.co/fynla_inter)
 
 1. Build: `./deploy/csjones-fynla/build.sh`
-2. Upload `public/build/` + changed PHP files to `~/www/csjones.co/public_html/fynla/` via SiteGround File Manager or `rsync`
-3. Upload `deploy/csjones-fynla/.htaccess` to `~/www/csjones.co/public_html/fynla/public/.htaccess` (only if routing rules changed)
+2. Upload `public/build/` + changed PHP/Vue files to `~/www/csjones.co/fynla_inter-app/` (Laravel code lives OUTSIDE `public_html/` on this server — only `public/` is web-exposed via the `fynla_inter` symlink). Use SiteGround File Manager or anchored `rsync` (see BOOTSTRAP.md for the exclude list — leading-slash anchors are mandatory).
+3. Upload `deploy/csjones-fynla/.htaccess` to `~/www/csjones.co/fynla_inter-app/public/.htaccess` (only if routing rules changed)
 4. SSH in and finalise:
 
 ```bash
 ssh -p 18765 -i ~/.ssh/fynlaDev u163-ptanegf9edny@ssh.csjones.co
-cd ~/www/csjones.co/public_html/fynla
+cd ~/www/csjones.co/fynla_inter-app
 php artisan migrate --force
 php artisan cache:clear && php artisan config:clear && php artisan view:clear && php artisan route:clear && php artisan optimize
+# After ANY rsync from macOS, re-apply suexec-safe perms:
+find . -type d -exec chmod 755 {} + && find . -type f -exec chmod 644 {} +
+chmod 600 .env && chmod 755 artisan && chmod -R 775 storage bootstrap/cache
 ```
 
-5. Smoke test `https://csjones.co/fynla`
+5. Smoke test `https://csjones.co/fynla_inter`
 6. If a dev DB reset is needed: `php artisan db:seed --force` (NEVER `migrate:fresh` — see rule above)
 
 **First-time dev setup** (one-time only): see `deploy/csjones-fynla/BOOTSTRAP.md` for the full provision-and-deploy guide.
