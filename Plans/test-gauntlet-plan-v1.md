@@ -297,12 +297,17 @@ The remaining 6 rules need manual review.
 
 **Scope:** OWASP Top 10 walk-through, auth-flow review, dependency CVE scan, secret management, polymorphic-morph-aliases attack surface, log redaction posture.
 
-### G-4-a: Dependency CVE scan (~0.5 day)
+### G-4-a: Dependency CVE scan (~0.5 day) — ✅ PASS (2026-05-12, session 5)
+
 ```bash
 composer audit
 npm audit --production
 ```
-Triage findings; patch what's patchable; document risk-accepted CVEs (with reasoning).
+
+**Result:** composer clean; npm prod 2 moderate remaining, both semver-major fixes, both formally risk-accepted with planned upgrade workstreams. Findings + reasoning at `May/May12Updates/g-4-a-dependency-audit.md`.
+
+- Patched: `phpoffice/phpspreadsheet` 5.6.0 → 5.7.0 (4 advisories cleared, in-constraint), `postcss` 8.5.6 → 8.5.14 (1 advisory cleared, in-constraint).
+- Risk-accepted: `vite` 5.4.21 (build-time only, localhost dev server, semver-major fix tracked separately); `@capgo/capacitor-native-biometric` 6.0.4 (auth-critical — formal upgrade workstream needed; iOS regression risk).
 
 ### G-4-b: OWASP walk-through (~2 days)
 

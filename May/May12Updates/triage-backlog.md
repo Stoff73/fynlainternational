@@ -30,6 +30,7 @@ Triage cadence: weekly. Severity-1 fixed within 24h of triage.
 | # | Title | Workstream | Discovered | Owner | Status | Notes |
 |---|-------|------------|------------|-------|--------|-------|
 | B-2 | Cruft in dev app root — `.obsidian/`, `Articles/`, `Home.md`, `Marketplace.md`, `README.md`, `addepar.md`, `Fynla_International_Handover.docx`, `appMapping/` etc. mixed into `~/www/csjones.co/fynla_inter-app/` | G-0 | 2026-05-12 (session 4) | TBD | open | Earlier bootstrap rsync swept non-Laravel files into the app root. Doesn't break anything (Laravel ignores them), but pollutes `composer install` and future rsyncs. Cleanup task — not blocking. |
+| B-4 | `@capgo/capacitor-native-biometric` 6.0.4 — Authentication Bypass advisory GHSA-vx5f-vmr6-32wf (CWE-287). Fix 8.4.5 = semver-major. | G-4-a | 2026-05-12 (session 5) | TBD | open | Auth-critical but local-attacker scope only — bypass needs device code-execution or a malicious app exploiting the older binding. Bumping requires API drift review, iOS device regression test (Face ID flow in `app.js` / `BiometricPrompt.vue` / `SettingsList.vue`), and Keychain token format verification. ~0.5 day. Prod frozen anyway per `feedback_prod_deploy_freeze.md`. Picks up after G-1-c. |
 
 ---
 
@@ -41,6 +42,7 @@ Triage cadence: weekly. Severity-1 fixed within 24h of triage.
 | E-2 | R-16 cleanup — remove `class_alias` in `CoreServiceProvider::boot()` | TECH DEBT | 2026-05-11 (R-14b-viii) | TBD | Deferred until post-cutover, once prod morph backfill is verified clean. Tracked in `Plans/test-gauntlet-plan-v1.md` § 11. |
 | E-3 | R-14a residuals — `pack.gb.exchange_control` + `pack.gb.tax_optimisation` resolve to `App\…` classes | TECH DEBT | R-14a (pre-relocation) | TBD | Float-money signatures block relocation. Post-cutover R-17 batch. Tracked in `Plans/test-gauntlet-r14a-residuals.md` (G-2-g). |
 | E-4 | CSP dual-definition reconciliation — `SecurityHeaders.php` allows GA/FB/Fonts; `.htaccess` blocks them | HARDENING | Audit | Claude | Resolution in gauntlet H-5 (UI hardening, weeks 5–6). |
+| E-5 | Vite 5→8 multi-major upgrade — clears GHSA-4w7w-66w2-5vf9 path-traversal advisory | G-4-a | 2026-05-12 (session 5) | TBD | Build-time only, dev server runs on localhost — practical exposure is nil. Requires bumping `vite`, `@vitejs/plugin-vue`, `laravel-vite-plugin`, `vitest`; updating `vite.config.js` per CLAUDE.md mobile rules; full local + dev + mobile rebuild. ~0.5–1 day. Routine maintenance, not security blocker. |
 
 ---
 
