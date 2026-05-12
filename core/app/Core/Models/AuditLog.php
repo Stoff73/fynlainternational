@@ -72,6 +72,8 @@ class AuditLog extends Model
 
     public const ACTION_SESSION_REVOKED = 'session_revoked';
 
+    public const ACTION_ADMIN_PROMOTED = 'admin_promoted';
+
     /**
      * Data action constants
      */
@@ -200,6 +202,7 @@ class AuditLog extends Model
             self::ACTION_PASSWORD_RESET_REQUESTED => 'Password reset requested',
             self::ACTION_PASSWORD_RESET_COMPLETED => 'Password reset completed',
             self::ACTION_SESSION_REVOKED => 'Session revoked',
+            self::ACTION_ADMIN_PROMOTED => 'Admin role assigned',
             self::ACTION_CREATED => 'Created',
             self::ACTION_UPDATED => 'Updated',
             self::ACTION_DELETED => 'Deleted',

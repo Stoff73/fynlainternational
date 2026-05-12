@@ -77,7 +77,7 @@ class PasswordResetService
             ];
         }
 
-        if ($session->email_code !== $code) {
+        if (! hash_equals((string) $session->email_code, (string) $code)) {
             return [
                 'success' => false,
                 'message' => 'Invalid verification code.',

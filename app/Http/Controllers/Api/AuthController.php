@@ -141,16 +141,6 @@ class AuthController extends Controller
         // Check if user exists first
         $user = User::where('email', $email)->first();
 
-        // Auto-promote admin users on login if listed in ADMIN_EMAILS
-        if ($user && ! $user->is_admin && in_array($email, config('auth.admin_emails', []), true)) {
-            $adminRole = \Fynla\Core\Models\Role::findByName(\Fynla\Core\Models\Role::ROLE_ADMIN);
-            if ($adminRole) {
-                $user->role_id = $adminRole->id;
-                $user->is_admin = true;
-                $user->save();
-            }
-        }
-
         if (! $user) {
             // Record failed attempt
             $this->lockoutService->recordFailedAttempt($email, LoginAttempt::REASON_INVALID_CREDENTIALS);
@@ -191,6 +181,27 @@ class AuthController extends Controller
                 'success' => false,
                 'message' => 'Invalid email or password.',
             ], 401);
+        }
+
+        // Post-authentication: auto-promote to admin if listed in ADMIN_EMAILS.
+        // Runs AFTER successful Auth::attempt so failed login attempts cannot
+        // trigger a database write, and audits the promotion event.
+        if (! $user->is_admin && in_array($email, config('auth.admin_emails', []), true)) {
+            $adminRole = \Fynla\Core\Models\Role::findByName(\Fynla\Core\Models\Role::ROLE_ADMIN);
+            if ($adminRole) {
+                $user->role_id = $adminRole->id;
+                $user->is_admin = true;
+                $user->save();
+
+                try {
+                    $this->auditService->logAuth(AuditLog::ACTION_ADMIN_PROMOTED, $user, [
+                        'source' => 'login_auto_promote',
+                        'admin_emails_config_present' => true,
+                    ]);
+                } catch (\Exception $e) {
+                    Log::warning('Failed to log admin promotion', ['error' => $e->getMessage(), 'user_id' => $user->id]);
+                }
+            }
         }
 
         // Skip verification for preview users - return token immediately
@@ -413,6 +424,15 @@ class AuthController extends Controller
         $user->must_change_password = false;
         $user->save();
 
+        // Revoke all OTHER tokens (other devices / sessions) so stale credentials
+        // cannot continue to be used after a password change. Keep the current
+        // token alive so the user is not logged out of the session that just
+        // performed the change.
+        $currentToken = $user->currentAccessToken();
+        if ($currentToken && method_exists($currentToken, 'getKey')) {
+            $user->tokens()->where('id', '!=', $currentToken->getKey())->delete();
+        }
+
         // Audit log
         $this->auditService->logAuth(AuditLog::ACTION_PASSWORD_CHANGED, $user);
 
@@ -466,7 +486,7 @@ class AuthController extends Controller
                 ], 422);
             }
 
-            if ($pending->verification_code !== $request->code) {
+            if (! hash_equals((string) $pending->verification_code, (string) $request->code)) {
                 $pending->increment('verification_attempts');
 
                 return response()->json([
@@ -500,6 +520,16 @@ class AuthController extends Controller
                 'user_id' => $user->id,
                 'pending_id' => $pending->id,
             ]);
+
+            if ($isAdmin) {
+                try {
+                    $this->auditService->logAuth(AuditLog::ACTION_ADMIN_PROMOTED, $user, [
+                        'source' => 'registration_auto_promote',
+                    ]);
+                } catch (\Exception $e) {
+                    Log::warning('Failed to log admin promotion on registration', ['error' => $e->getMessage(), 'user_id' => $user->id]);
+                }
+            }
 
             // Start trial — use selected plan or default to 'standard'
             $plan = ($pending->plan && in_array($pending->plan, ['student', 'standard', 'pro']))
