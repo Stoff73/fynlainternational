@@ -12,6 +12,7 @@ use App\Http\Requests\UpdateFamilyMemberRequest;
 use App\Http\Traits\SanitizedErrorResponse;
 use App\Mail\SpouseAccountCreated;
 use App\Mail\SpouseAccountLinked;
+use App\Mail\SpouseDataSharingRequest;
 use Fynla\Core\Models\FamilyMember;
 use Fynla\Core\Models\SpousePermission;
 use App\Services\Cache\CacheInvalidationService;
@@ -269,61 +270,51 @@ class FamilyMembersController extends Controller
                 ], 201);
             }
 
-            // Link both users inside a transaction with pessimistic locking
-            $familyMember = DB::transaction(function () use ($currentUser, $spouseUser, $data) {
-                // Lock spouse row to prevent concurrent linking by another user
+            // G-4-b slice 3 H-3: existing-account spouse invitations no longer
+            // auto-link. The previous behaviour would silently:
+            //  - set spouse_id on BOTH users
+            //  - flip both users' marital_status to 'married'
+            //  - OVERWRITE the invitee's annual_employment_income and address
+            //  - auto-accept bidirectional SpousePermission rows
+            // …all without any consent from the invitee. Now we only create
+            // a pending invitation: a FamilyMember row on the inviter's side
+            // (so the invite shows up in their UI) and a single pending
+            // SpousePermission. The invitee must call
+            // SpousePermissionController::accept to finalise the link, which
+            // is the only place that sets spouse_id, marital_status, and the
+            // reciprocal FamilyMember record.
+
+            $result = DB::transaction(function () use ($currentUser, $spouseUser, $data) {
+                // Lock invitee row to prevent a concurrent invitation from
+                // someone else racing past our already-linked check.
                 $spouseUser = \Fynla\Core\Models\User::lockForUpdate()->find($spouseUser->id);
+
                 if ($spouseUser->spouse_id && $spouseUser->spouse_id !== $currentUser->id) {
-                    return null;
+                    return ['race_already_linked' => true];
                 }
 
-                $currentUser->spouse_id = $spouseUser->id;
-                $currentUser->marital_status = 'married';
-                $currentUser->save();
+                // If a pending invitation from the same inviter already
+                // exists, reuse it (idempotent — clicking "Add spouse" twice
+                // shouldn't spam a second pending row).
+                $existingPending = SpousePermission::where('user_id', $currentUser->id)
+                    ->where('spouse_id', $spouseUser->id)
+                    ->where('status', 'pending')
+                    ->first();
 
-                $spouseUser->spouse_id = $currentUser->id;
-                $spouseUser->marital_status = 'married';
-                // Update spouse user's income if provided in family member data
-                if (isset($data['annual_income']) && $data['annual_income'] > 0) {
-                    $spouseUser->annual_employment_income = $data['annual_income'];
-                }
-                // Copy address from current user if spouse doesn't have one
-                if (! $spouseUser->address_line_1 && $currentUser->address_line_1) {
-                    $spouseUser->address_line_1 = $currentUser->address_line_1;
-                    $spouseUser->address_line_2 = $currentUser->address_line_2;
-                    $spouseUser->city = $currentUser->city;
-                    $spouseUser->county = $currentUser->county;
-                    $spouseUser->postcode = $currentUser->postcode;
-                }
-                $spouseUser->save();
-
-                // Clear cached protection analysis for both users since spouse linkage affects completeness
-                $this->cacheInvalidation->invalidateForUserAndSpouse($currentUser->id, $spouseUser->id);
-
-                // Create bidirectional spouse data sharing permissions
-                SpousePermission::updateOrCreate(
-                    [
+                if (! $existingPending) {
+                    SpousePermission::create([
                         'user_id' => $currentUser->id,
                         'spouse_id' => $spouseUser->id,
-                    ],
-                    [
-                        'status' => 'accepted',
-                        'responded_at' => now(),
-                    ]
-                );
+                        'status' => 'pending',
+                        'requested_at' => now(),
+                    ]);
+                }
 
-                SpousePermission::updateOrCreate(
-                    [
-                        'user_id' => $spouseUser->id,
-                        'spouse_id' => $currentUser->id,
-                    ],
-                    [
-                        'status' => 'accepted',
-                        'responded_at' => now(),
-                    ]
-                );
-
-                // Create family member record for current user
+                // Create the FamilyMember record on the inviter's side so
+                // their UI reflects "spouse: <name> (pending)". `linked_user_id`
+                // points at the real invitee user; queries that depend on an
+                // accepted SpousePermission will still correctly hide their
+                // data until the invitee accepts.
                 $fullName = trim(($data['first_name'] ?? '').' '.(isset($data['middle_name']) && $data['middle_name'] ? $data['middle_name'].' ' : '').($data['last_name'] ?? ''));
                 $familyMember = FamilyMember::create([
                     'user_id' => $currentUser->id,
@@ -342,51 +333,35 @@ class FamilyMembersController extends Controller
                     'name' => $fullName,
                 ]);
 
-                // Create reciprocal family member record for spouse
-                $currentUserNameParts = explode(' ', $currentUser->name);
-                $currentUserFirstName = $currentUserNameParts[0] ?? '';
-                $currentUserLastName = implode(' ', array_slice($currentUserNameParts, 1)) ?: '';
-
-                FamilyMember::create([
-                    'user_id' => $spouseUser->id,
-                    'household_id' => $spouseUser->household_id,
-                    'linked_user_id' => $currentUser->id,
-                    'relationship' => 'spouse',
-                    'first_name' => $currentUserFirstName,
-                    'last_name' => $currentUserLastName,
-                    'date_of_birth' => $currentUser->date_of_birth,
-                    'gender' => $currentUser->gender,
-                    'national_insurance_number' => $currentUser->national_insurance_number,
-                    'annual_income' => $currentUser->employment_income ?? 0,
-                    'is_dependent' => false,
-                    'name' => $currentUser->name,
-                ]);
-
-                return $familyMember;
+                return ['family_member' => $familyMember];
             });
 
-            // Race condition: spouse was linked by another user during our transaction
-            if ($familyMember === null) {
+            if (! empty($result['race_already_linked'])) {
                 return response()->json([
                     'success' => false,
                     'message' => 'This user is already linked to another spouse',
                 ], 422);
             }
 
-            // Send email notification to spouse (outside transaction)
+            $familyMember = $result['family_member'];
+
+            // Send invitation email to the invitee. Failure to deliver does
+            // not roll back the invitation — the invitee can still discover
+            // and accept the request via the spouse-permission UI.
             try {
-                Mail::to($spouseUser->email)->send(new SpouseAccountLinked($spouseUser, $currentUser));
+                Mail::to($spouseUser->email)->send(new SpouseDataSharingRequest($spouseUser, $currentUser));
             } catch (\Exception $e) {
-                Log::error('Failed to send spouse account linked email: '.$e->getMessage());
+                Log::error('Failed to send spouse data-sharing request email: '.$e->getMessage());
             }
 
             return response()->json([
                 'success' => true,
-                'message' => 'Spouse account linked successfully',
+                'message' => 'Spouse invitation sent. They must accept the request in their own account before any data is shared.',
                 'data' => [
                     'family_member' => $familyMember,
                     'spouse_user' => $spouseUser,
-                    'linked' => true,
+                    'linked' => false,
+                    'invitation_pending' => true,
                 ],
             ], 201);
         }

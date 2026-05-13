@@ -326,9 +326,11 @@ Findings: 3 HIGH (H-1/H-2/H-3), 10 MEDIUM, 7 LOW. All HIGH + all 10 MEDIUM fixed
 
 **Slice 2: Revolut webhook + payment endpoints — ✅ PASS (2026-05-12, session 6)**
 
-Findings: 4 HIGH (H-1 unique-index race, H-2 confirmPayment loose state set, H-3 merchant_ref warning-not-abort, H-4 missing MFA on payment write routes), 8 MEDIUM, 5 LOW. All HIGH + all 8 MEDIUM fixed in-session across commits `6807346` (HIGH + supporting MEDIUMs) and `8281cbf` (remaining MEDIUMs M-2/M-3/M-4). 21 invariants verified correct. Audit report at `May/May12Updates/g-4-b-slice-2-payments-audit.md`. New tests: 14 (8 webhook signature unit, 6 slice 2 feature). 5 LOW logged as E-11..E-15 in triage backlog. Remaining slice:
+Findings: 4 HIGH (H-1 unique-index race, H-2 confirmPayment loose state set, H-3 merchant_ref warning-not-abort, H-4 missing MFA on payment write routes), 8 MEDIUM, 5 LOW. All HIGH + all 8 MEDIUM fixed in-session across commits `6807346` (HIGH + supporting MEDIUMs) and `8281cbf` (remaining MEDIUMs M-2/M-3/M-4). 21 invariants verified correct. Audit report at `May/May12Updates/g-4-b-slice-2-payments-audit.md`. New tests: 14 (8 webhook signature unit, 6 slice 2 feature). 5 LOW logged as E-11..E-15 in triage backlog.
 
-- **Slice 3 (next)**: 89 API controllers + 83 form requests sweep
+**Slice 3: 89 controllers + 83 form requests sweep — ✅ PASS (2026-05-13, session 3)**
+
+Findings: 3 HIGH (H-1 admin write endpoints lacked `mfa.verified`, H-2 legacy GDPR erasure single-step routes bypassed the new verify+execute flow, H-3 `FamilyMembersController::handleSpouseCreation` auto-linked existing accounts + overwrote invitee fields + auto-accepted bidirectional `SpousePermission` without invitee consent — the marquee privacy/consent CVE), 1 MEDIUM (M-1 Trust currency validation), 5 LOW (L-1..L-5). All 3 HIGH closed in-session. Audit report at `May/May13Updates/g-4-b-slice-3-controllers-audit.md`. New tests: 60 (39 admin MFA invariants, 8 legacy GDPR route-table pins, 13 spouse consent invariants). Pest serial baseline: 2975 passing (+60 new, no regressions). 1 MEDIUM + 5 LOW + 1 cosmetic logged as E-16..E-23 in triage backlog.
 
 ### G-4-c: Horizontal-privilege morph escalation test (~0.5 day) — replaces previous class-injection variant
 

@@ -64,6 +64,7 @@ arch('controllers do not use DB facade directly')
         'App\Http\Controllers\Api\WebhookController', // Uses DB for payment transaction handling
         'App\Http\Controllers\Api\FamilyMembersController', // Uses DB for relationship queries
         'App\Http\Controllers\Api\PaymentController', // Uses DB for payment processing
+        'App\Http\Controllers\Api\SpousePermissionController', // Uses DB::transaction for atomic spouse link finalisation (G-4-b slice 3 H-3)
         // InvestmentController relocated to packs/country-gb/src/Http/Controllers/ (R-9f),
         // outside the App\Http\Controllers namespace this rule scopes to.
         // RetirementController + Retirement\DCPensionHoldingsController relocated to

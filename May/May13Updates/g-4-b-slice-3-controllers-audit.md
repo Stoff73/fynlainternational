@@ -3,8 +3,10 @@ type: audit
 gate: G-4-b slice 3
 scope: controllers + form requests
 date: 2026-05-13
-session: 2026-05-14-session-1 (initial scan only — audit in progress)
-status: IN PROGRESS
+sessions:
+  - session 2026-05-13-1+2 (audit phase, 3 HIGH + 1 MED + 5 LOW identified)
+  - session 2026-05-13-3 (HIGH fixes applied + tests added + MED/LOW logged to triage)
+status: ✅ PASS — all 3 HIGH closed, MED/LOW logged as E-16..E-23
 prev_slices:
   - slice 1 (auth + interceptor) — closed 2026-05-12
   - slice 2 (Revolut webhook + payments) — closed 2026-05-13
@@ -287,7 +289,17 @@ The top-10 sensitivity sample is now complete. Remaining sweep (lower priority):
 - Pattern triage ✅
 - Top-10 ranking ✅
 - **10/10 top-sensitivity controllers audited** (Admin, Advisor, Document, GDPR, IHT, Gifting, Will, WillDocument, LPA, Trust, AiChat, SpousePermission, FamilyMembers, Referral) — **3 HIGH identified** (H-1 admin write, H-2 legacy GDPR erasure, H-3 spouse auto-link)
-- HIGH fixes: not yet applied in code (deferred until CSJ confirms which to fix in this slice vs defer to follow-up)
-- MEDIUM/LOW (M-1, M-2, L-1..L-5): logged here, ready to migrate to triage backlog as E-16..E-22
-- HIGH fixes: not yet applied in code (deferred until full top-10 read complete)
-- MEDIUM/LOW: not yet logged to triage backlog
+- **HIGH fixes — all closed (2026-05-13 session 3):**
+  - **H-1** ✅ — `routes/api.php` admin group split into read (no `mfa.verified`) + write (with `mfa.verified`). 17 admin write endpoints now MFA-gated. 39 new pinning tests in `tests/Feature/Admin/AdminWriteEndpointsRequireMfaTest.php`.
+  - **H-2** ✅ — 4 legacy GDPR erasure routes deleted (`/erasure`, `/erasure/status`, `/erasure/{id}/confirm`, `/erasure/{id}/cancel`). Controller methods retained with `@deprecated` docblocks for inert admin tooling use only. 8 new pinning tests in `tests/Feature/GDPR/LegacyGdprErasureRoutesAreUnroutableTest.php`.
+  - **H-3** ✅ — `FamilyMembersController::handleSpouseCreation` (existing-account branch) rewired: no longer auto-links `spouse_id`, no longer auto-sets `marital_status`, no longer overwrites `annual_employment_income` / address, no longer auto-accepts bidirectional `SpousePermission`. Now creates a pending `SpousePermission` row + sends a new `SpouseDataSharingRequest` email to the invitee. `SpousePermissionController::accept` extended to finalise the linkage atomically (sets spouse_id on both, creates reciprocal accepted permission + reciprocal `FamilyMember`). 13 new pinning tests in `tests/Feature/Api/FamilyMembersControllerSpouseConsentTest.php`. 2 new files: `app/Mail/SpouseDataSharingRequest.php` + `resources/views/emails/spouse-data-sharing-request.blade.php`.
+- **MEDIUM/LOW logged to triage backlog** (`May/May12Updates/triage-backlog.md`):
+  - E-16 (was M-1) — TrustController currency rules
+  - E-17 (L-1) — IHTController profile overflow
+  - E-18 (L-2) — Gifting/Trust DGT overflow
+  - E-19 (L-3) — Trust text fields no `max:`
+  - E-20 (L-4) — TrustController inline validate convention drift
+  - E-21 (L-5) — FamilyMembers PII in INFO logs
+  - E-22 (M-2 candidate) — Referral throttle 10/min spam vector
+  - E-23 (cosmetic) — SpouseAccountLinked subject copy review
+- Pest serial baseline post-fixes: **2975 passing** (+60 new tests for slice 3, 0 regressions, 1 skipped — pre-existing).
