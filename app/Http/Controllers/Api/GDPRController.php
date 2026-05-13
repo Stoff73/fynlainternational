@@ -179,7 +179,13 @@ class GDPRController extends Controller
     }
 
     /**
-     * Request account deletion (right to be forgotten)
+     * Request account deletion (right to be forgotten).
+     *
+     * @deprecated G-4-b slice 3 H-2 (2026-05-13). Route un-registered — this
+     * method must NEVER be re-exposed publicly. The hardened 3-step flow
+     * (initiateErasure → verifyErasure → executeErasure) is the only
+     * supported path for user-initiated erasure. Kept inert for potential
+     * admin/internal-tooling use only.
      */
     public function requestErasure(Request $request): JsonResponse
     {
@@ -213,7 +219,10 @@ class GDPRController extends Controller
     }
 
     /**
-     * Get erasure request status
+     * Get erasure request status.
+     *
+     * @deprecated G-4-b slice 3 H-2 (2026-05-13). Route un-registered — see
+     * requestErasure() docblock for rationale.
      */
     public function getErasureStatus(Request $request): JsonResponse
     {
@@ -244,7 +253,12 @@ class GDPRController extends Controller
     }
 
     /**
-     * Confirm erasure request
+     * Confirm erasure request.
+     *
+     * @deprecated G-4-b slice 3 H-2 (2026-05-13). Route un-registered — this
+     * single-call confirmation path bypassed the new 3-step verify+execute
+     * flow (no MFA, no email code, no confirmation phrase). Must NEVER be
+     * re-exposed publicly. Kept inert for potential admin tooling only.
      */
     public function confirmErasure(Request $request, int $id): JsonResponse
     {
@@ -278,7 +292,10 @@ class GDPRController extends Controller
     }
 
     /**
-     * Cancel erasure request
+     * Cancel erasure request.
+     *
+     * @deprecated G-4-b slice 3 H-2 (2026-05-13). Route un-registered — see
+     * requestErasure() docblock for rationale.
      */
     public function cancelErasure(Request $request, int $id): JsonResponse
     {

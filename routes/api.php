@@ -105,11 +105,12 @@ Route::prefix('auth')->group(function () {
             Route::post('/erasure/execute', [GDPRController::class, 'executeErasure'])->middleware('throttle:sensitive');
             Route::post('/erasure/resend-code', [GDPRController::class, 'resendDeletionCode'])->middleware('throttle:sensitive');
 
-            // Legacy erasure endpoints (deprecated, kept for backwards compatibility)
-            Route::post('/erasure', [GDPRController::class, 'requestErasure'])->middleware('throttle:sensitive');
-            Route::get('/erasure/status', [GDPRController::class, 'getErasureStatus']);
-            Route::post('/erasure/{id}/confirm', [GDPRController::class, 'confirmErasure'])->middleware('throttle:sensitive');
-            Route::post('/erasure/{id}/cancel', [GDPRController::class, 'cancelErasure']);
+            // G-4-b slice 3 H-2: legacy single-step erasure endpoints removed —
+            // they bypassed the new 3-step verify+execute flow (no MFA / no code /
+            // no confirmation phrase). Frontend never used them (privacyService.js
+            // only calls /initiate, /verify, /execute, /resend-code). Controller
+            // methods (requestErasure / confirmErasure / cancelErasure /
+            // getErasureStatus) remain inert in case admin tooling needs them.
         });
     });
 });
@@ -323,6 +324,9 @@ Route::middleware('auth:sanctum')->prefix('settings')->group(function () {
 });
 
 // Admin Panel routes (RBAC-protected)
+// G-4-b slice 3 H-1: read endpoints stay in this group; write endpoints moved
+// to the `mfa.verified` group below so a stolen admin session token can't be
+// used to mutate users, AI provider, backups, or discount codes without MFA.
 Route::middleware(['auth:sanctum', 'permission:admin.access'])->prefix('admin')->group(function () {
     // Dashboard
     Route::get('/dashboard', [\App\Http\Controllers\Api\AdminController::class, 'dashboard']);
@@ -333,27 +337,16 @@ Route::middleware(['auth:sanctum', 'permission:admin.access'])->prefix('admin')-
     // User management - view (support + admin via admin.access)
     Route::get('/users', [\App\Http\Controllers\Api\AdminController::class, 'getUsers']);
 
-    // User management - create/update (requires users.edit)
-    Route::middleware('permission:users.edit')->group(function () {
-        Route::post('/users', [\App\Http\Controllers\Api\AdminController::class, 'createUser']);
-        Route::put('/users/{id}', [\App\Http\Controllers\Api\AdminController::class, 'updateUser']);
-    });
-
-    // User management - delete (requires users.delete)
-    Route::delete('/users/{id}', [\App\Http\Controllers\Api\AdminController::class, 'deleteUser'])
-        ->middleware('permission:users.delete');
-
     // User module status tracking
     Route::get('users/{id}/module-status', [\App\Http\Controllers\Api\AdminController::class, 'moduleStatus']);
 
     // Subscription stats
     Route::get('/subscriptions/stats', [\App\Http\Controllers\Api\AdminController::class, 'getSubscriptionStats']);
 
-    // AI provider management
+    // AI provider management - read
     Route::get('/ai-provider', [\App\Http\Controllers\Api\AdminController::class, 'getAiProvider']);
-    Route::post('/ai-provider', [\App\Http\Controllers\Api\AdminController::class, 'setAiProvider']);
 
-    // AI Audit trail
+    // AI Audit trail (read-only)
     Route::prefix('ai-audit')->group(function () {
         Route::get('/users', [\App\Http\Controllers\Api\AiAuditController::class, 'users']);
         Route::get('/users/{userId}/conversations', [\App\Http\Controllers\Api\AiAuditController::class, 'conversations']);
@@ -365,6 +358,35 @@ Route::middleware(['auth:sanctum', 'permission:admin.access'])->prefix('admin')-
         Route::get('/backup/list', [\App\Http\Controllers\Api\AdminController::class, 'listBackups']);
     });
 
+    // User Metrics (read-only)
+    Route::get('/user-metrics/snapshot', [\App\Http\Controllers\Api\UserMetricsController::class, 'snapshot']);
+    Route::get('/user-metrics/trials', [\App\Http\Controllers\Api\UserMetricsController::class, 'trials']);
+    Route::get('/user-metrics/plans', [\App\Http\Controllers\Api\UserMetricsController::class, 'plans']);
+    Route::get('/user-metrics/activity', [\App\Http\Controllers\Api\UserMetricsController::class, 'activity']);
+    Route::get('/user-metrics/engagement', [\App\Http\Controllers\Api\UserMetricsController::class, 'engagement']);
+
+    // Discount Code Management - read
+    Route::get('/discount-codes', [\App\Http\Controllers\Api\AdminController::class, 'listDiscountCodes']);
+});
+
+// Admin Panel write routes (RBAC + MFA-verified)
+// G-4-b slice 3 H-1: any admin action that mutates user state, replaces the
+// DB, switches the AI provider, or issues discount codes must require a
+// MFA-claimed token (matches slice 2 H-4 payment-write shape).
+Route::middleware(['auth:sanctum', 'permission:admin.access', 'mfa.verified'])->prefix('admin')->group(function () {
+    // User management - create/update (requires users.edit)
+    Route::middleware('permission:users.edit')->group(function () {
+        Route::post('/users', [\App\Http\Controllers\Api\AdminController::class, 'createUser']);
+        Route::put('/users/{id}', [\App\Http\Controllers\Api\AdminController::class, 'updateUser']);
+    });
+
+    // User management - delete (requires users.delete)
+    Route::delete('/users/{id}', [\App\Http\Controllers\Api\AdminController::class, 'deleteUser'])
+        ->middleware('permission:users.delete');
+
+    // AI provider management - write (global switch — affects every prompt)
+    Route::post('/ai-provider', [\App\Http\Controllers\Api\AdminController::class, 'setAiProvider']);
+
     // Database backup - write operations (rate limited: 3 per minute)
     Route::middleware(['permission:admin.backup', 'throttle:3,1'])->group(function () {
         Route::post('/backup/create', [\App\Http\Controllers\Api\AdminController::class, 'createBackup']);
@@ -372,15 +394,7 @@ Route::middleware(['auth:sanctum', 'permission:admin.access'])->prefix('admin')-
         Route::delete('/backup/delete', [\App\Http\Controllers\Api\AdminController::class, 'deleteBackup']);
     });
 
-    // User Metrics
-    Route::get('/user-metrics/snapshot', [\App\Http\Controllers\Api\UserMetricsController::class, 'snapshot']);
-    Route::get('/user-metrics/trials', [\App\Http\Controllers\Api\UserMetricsController::class, 'trials']);
-    Route::get('/user-metrics/plans', [\App\Http\Controllers\Api\UserMetricsController::class, 'plans']);
-    Route::get('/user-metrics/activity', [\App\Http\Controllers\Api\UserMetricsController::class, 'activity']);
-    Route::get('/user-metrics/engagement', [\App\Http\Controllers\Api\UserMetricsController::class, 'engagement']);
-
-    // Discount Code Management
-    Route::get('/discount-codes', [\App\Http\Controllers\Api\AdminController::class, 'listDiscountCodes']);
+    // Discount Code Management - write
     Route::post('/discount-codes', [\App\Http\Controllers\Api\AdminController::class, 'createDiscountCode']);
     Route::put('/discount-codes/{id}', [\App\Http\Controllers\Api\AdminController::class, 'updateDiscountCode']);
     Route::delete('/discount-codes/{id}', [\App\Http\Controllers\Api\AdminController::class, 'deleteDiscountCode']);

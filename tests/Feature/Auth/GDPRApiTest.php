@@ -127,64 +127,29 @@ describe('Data Export', function () {
 });
 
 describe('Data Erasure', function () {
-    it('requests account erasure', function () {
-        $response = $this->actingAs($this->user)
-            ->postJson('/api/auth/gdpr/erasure', [
-                'confirm' => true,
-                'reason' => 'Testing erasure request',
-            ]);
+    // G-4-b slice 3 H-2 (2026-05-13): the legacy single-step erasure flow
+    // (POST /erasure, GET /erasure/status, POST /erasure/{id}/confirm) has
+    // been removed — it bypassed MFA / email-code / confirmation-phrase
+    // checks. See LegacyGdprErasureRoutesAreUnroutableTest for the pinning
+    // tests on the deleted routes. The active flow is now
+    // initiate → verify → execute and is covered by DataErasureServiceTest
+    // at the unit level + the H-2 feature test at the routing level.
+    //
+    // The only behaviour-level invariant worth re-pinning here is that
+    // preview users cannot initiate erasure (the same protection now lives
+    // at the start of the new flow).
 
-        $response->assertStatus(200)
-            ->assertJson([
-                'success' => true,
-            ]);
-
-        $this->assertDatabaseHas('erasure_requests', [
-            'user_id' => $this->user->id,
-            'status' => 'pending',
-        ]);
-    });
-
-    it('requires confirm field', function () {
-        $response = $this->actingAs($this->user)
-            ->postJson('/api/auth/gdpr/erasure', [
-                'reason' => 'Testing',
-            ]);
-
-        $response->assertStatus(422)
-            ->assertJsonValidationErrors(['confirm']);
-    });
-
-    it('prevents preview users from requesting erasure', function () {
+    it('prevents preview users from initiating erasure', function () {
         $previewUser = User::factory()->create([
             'is_preview_user' => true,
         ]);
 
         $response = $this->actingAs($previewUser)
-            ->postJson('/api/auth/gdpr/erasure', [
-                'confirm' => true,
+            ->postJson('/api/auth/gdpr/erasure/initiate', [
+                'type' => 'account',
             ]);
 
         $response->assertStatus(403);
-    });
-
-    it('returns erasure status', function () {
-        $response = $this->actingAs($this->user)
-            ->getJson('/api/auth/gdpr/erasure/status');
-
-        $response->assertStatus(200)
-            ->assertJsonStructure([
-                'success',
-                'data',
-            ]);
-    });
-
-    it('requires authentication', function () {
-        $response = $this->postJson('/api/auth/gdpr/erasure', [
-            'confirm' => true,
-        ]);
-
-        $response->assertStatus(401);
     });
 });
 
