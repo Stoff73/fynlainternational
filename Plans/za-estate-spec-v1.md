@@ -3,7 +3,7 @@ type: spec
 workstream: SA pack — Estate module completion
 version: v1
 date: 2026-07-06
-status: draft (autonomous loop)
+status: CLOSED 2026-07-06 — all 3 slices shipped (backend + UI)
 parent: Plans/SA_Research_and_Mapping.md §10 (v1-essential Estate scope)
 ---
 
