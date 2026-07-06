@@ -48,8 +48,8 @@ Every layer commit+pushed on green.
 | G-4-b sl.1-3 | Auth / payments / controllers audits | ✅ DONE (May) — fixes live on this branch, exercised by local suite |
 | G-4-b sl.4 | Form Requests sample-of-10 | ✅ **PASS 2026-07-06** — 1 HIGH found + FIXED in-session (S4-H1 cross-user savings-deposit leak via unscoped `linked_savings_account_id`; 3 regression tests), 8 MED + 9 LOW logged E-24..E-28. Report: `July/July6Updates/g-4-b-slice-4-requests-audit.md`. **G-4-b CLOSED.** |
 | G-4-c | Morph escalation test | ✅ **PASS 2026-07-06** — `tests/Feature/Security/MorphEscalationTest.php` proves the load-bearing invariant (steered token can't reach original owner's resources → 404) + legacy-alias resolution + fail-closed on nonsense morph. One LOW robustness nit logged G-4-c-i. |
-| G-4-d | Secret management audit | TODO — local subset (repo grep, log redaction — note H-2 processor not yet built); server perms 🚩 parked |
-| G-4-e | Auth-flow review | TODO — doc-driven review |
+| G-4-d | Secret management audit | ✅ **PASS 2026-07-06** — zero real secrets tracked in repo (both `.env.production` are `YOUR_*` placeholders); log redaction built (H-2, see below) and live-verified. Server-side `.env` 600 perms 🚩 parked (needs server). |
+| G-4-e | Auth-flow review | ✅ **PASS 2026-07-06** — verify-code `throttle:10,1`, resend `throttle:5,1`, login `throttle:5,1`; MFA verify/recovery in preview exclusions; `mobileLogout` present (biometric guard intact). All 3 documented risk points verified. |
 | G-4-f | External non-Claude LLM audit | 🚩 **FLAGGED — needs xAI/Gemini API key + spend approval (CSJ)** |
 | G-2-a | Controller coverage matrix (~103 controllers post-R-17) | TODO — matrix at `Plans/test-gauntlet-coverage-matrix.md` |
 | G-2-b | Observer chains, full-request | TODO |
@@ -63,7 +63,7 @@ Every layer commit+pushed on green.
 | G-3-c | 5 cross-module flows | TODO |
 | G-3-d | Numbered-rules compliance (7 automatable) | TODO |
 | G-5 H-1 | Rate limits on auth surfaces | TODO — verify (largely done in G-4-b sl.1; confirm + close) |
-| G-5 H-2 | Log redaction processor | TODO — build `RedactionProcessor` |
+| G-5 H-2 | Log redaction processor | ✅ **DONE 2026-07-06** — `App\Logging\RedactionProcessor` + `RedactSensitiveData` tap on single/daily channels; redacts sensitive context keys + secret-shaped tokens (sk_/pk_/wsk_/xai-/sk-ant-/Bearer/Sanctum). 5 unit tests + live-verified on disk. |
 | G-5 H-3 | External-HTTP timeouts | TODO — verify (M-3 fixed Revolut in May; sweep Awin/postcode/push) |
 | G-5 H-4 | `env:validate` command | TODO |
 | G-5 H-5 | CSP self-host fonts + reconcile | TODO — after G-3 green (UI-affecting) |
