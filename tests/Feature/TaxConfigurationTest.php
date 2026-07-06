@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace Tests\Feature;
 
-use App\Services\Savings\ISATracker;
 use Database\Seeders\RolesPermissionsSeeder;
 use Fynla\Core\Models\Role;
 use Fynla\Core\Models\User;
 use Fynla\Packs\Gb\Models\TaxConfiguration;
 use Fynla\Packs\Gb\Retirement\AnnualAllowanceChecker;
+use Fynla\Packs\Gb\Savings\ISATracker;
 use Fynla\Packs\Gb\Tax\TaxConfigService;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;

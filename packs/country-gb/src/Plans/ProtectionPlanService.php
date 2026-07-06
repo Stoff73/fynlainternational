@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace Fynla\Packs\Gb\Plans;
 
-use Fynla\Packs\Gb\Agents\ProtectionAgent;
-use Fynla\Core\Models\User;
 use App\Services\Plans\BasePlanService;
-use App\Services\Protection\ComprehensiveProtectionPlanService;
-use App\Services\Protection\ProtectionActionDefinitionService;
+use Fynla\Core\Models\User;
+use Fynla\Packs\Gb\Agents\ProtectionAgent;
+use Fynla\Packs\Gb\Protection\ComprehensiveProtectionPlanService;
+use Fynla\Packs\Gb\Protection\ProtectionActionDefinitionService;
 
 class ProtectionPlanService extends BasePlanService
 {

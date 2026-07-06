@@ -6,7 +6,6 @@ namespace Fynla\Packs\Gb\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use App\Http\Traits\SanitizedErrorResponse;
-use App\Services\Protection\ComprehensiveProtectionPlanService;
 use Fynla\Core\Services\CacheInvalidationService;
 use Fynla\Packs\Gb\Agents\ProtectionAgent;
 use Fynla\Packs\Gb\Goals\LifeEventIntegrationService;
@@ -34,6 +33,7 @@ use Fynla\Packs\Gb\Models\IncomeProtectionPolicy;
 use Fynla\Packs\Gb\Models\LifeInsurancePolicy;
 use Fynla\Packs\Gb\Models\ProtectionProfile;
 use Fynla\Packs\Gb\Models\SicknessIllnessPolicy;
+use Fynla\Packs\Gb\Protection\ComprehensiveProtectionPlanService;
 use Fynla\Packs\Gb\Traits\PolicyCRUDTrait;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;

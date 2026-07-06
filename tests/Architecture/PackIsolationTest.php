@@ -118,7 +118,7 @@ describe('Pack Isolation', function () {
             $packDir.DIRECTORY_SEPARATOR.'Protection'.DIRECTORY_SEPARATOR,
             // R-6d: Savings clean services moved into the GB pack. ISATracker
             // is the sole R-14a deferral (?float $amount signature). Pack
-            // RateComparator imports App\Services\Savings\ISATracker across
+            // RateComparator imports Fynla\Packs\Gb\Savings\ISATracker across
             // the boundary; pinned by allow-list below.
             $packDir.DIRECTORY_SEPARATOR.'Savings'.DIRECTORY_SEPARATOR,
             // R-7a: Goals clean services moved into the GB pack. The 3
@@ -341,9 +341,6 @@ describe('Pack Isolation', function () {
             // keep these in app/Services/Goals/ until the int-minor money
             // refactor lands. Pack GoalStrategyService imports
             // GoalAssignmentService + GoalProgressService across the boundary.
-            'App\\Services\\Goals\\GoalAssignmentService', // R-14a
-            'App\\Services\\Goals\\GoalProgressService', // R-14a
-            'App\\Services\\Goals\\LifeEventAllocationService', // R-14a
             // App\Services\NetWorth\NetWorthService — used by pack
             // GoalsProjectionService. Stays in app/Services/NetWorth/ until
             // a follow-up workstream relocates the NetWorth module.
@@ -375,9 +372,6 @@ describe('Pack Isolation', function () {
             // imports ComprehensiveProtectionPlanService and
             // ProtectionActionDefinitionService across the boundary; pack
             // ProtectionAgent (R-8) imports CoverageGapAnalyzer.
-            'App\\Services\\Protection\\ComprehensiveProtectionPlanService', // R-14a
-            'App\\Services\\Protection\\CoverageGapAnalyzer', // R-14a
-            'App\\Services\\Protection\\ProtectionActionDefinitionService', // R-14a
             'App\\Services\\Property\\PropertyCalculationService',
             // R-14a deferred Retirement services — float-money signatures
             // (ADR-005) keep these in app/Services/Retirement/ until the
@@ -388,7 +382,6 @@ describe('Pack Isolation', function () {
             // R-14a deferred Savings service — ISATracker has ?float $amount
             // signature on updateISAUsage. Pack RateComparator imports it
             // across the boundary; relocates with the int-minor money refactor.
-            'App\\Services\\Savings\\ISATracker', // R-14a
             // R-9j deferrals — WhatIfScenarioService and LetterToSpouseService
             // already collaborate with the GB pack (importing pack agents and
             // models respectively) but live in app/Services/ awaiting a

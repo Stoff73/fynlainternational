@@ -5,24 +5,25 @@ declare(strict_types=1);
 namespace Fynla\Packs\Gb\Agents;
 
 use App\Agents\BaseAgent;
-
+use Carbon\Carbon;
 use Fynla\Core\Models\Goal;
-use Fynla\Packs\Gb\Models\Investment\InvestmentAccount;
 use Fynla\Core\Models\LifeEvent;
+use Fynla\Core\Models\User;
+use Fynla\Packs\Gb\Goals\GoalProgressService;
+use Fynla\Packs\Gb\Models\Investment\InvestmentAccount;
 use Fynla\Packs\Gb\Models\SavingsAccount;
 use Fynla\Packs\Gb\Models\SavingsGoal;
-use Fynla\Core\Models\User;
-use App\Services\Goals\GoalProgressService;
 use Fynla\Packs\Gb\Plans\PlanConfigService;
 use Fynla\Packs\Gb\Savings\EmergencyFundCalculator;
 use Fynla\Packs\Gb\Savings\FSCSAssessor;
 use Fynla\Packs\Gb\Savings\GoalProgressCalculator;
-use App\Services\Savings\ISATracker;
+use Fynla\Packs\Gb\Savings\ISATracker;
 use Fynla\Packs\Gb\Savings\LiquidityAnalyzer;
 use Fynla\Packs\Gb\Savings\PSACalculator;
 use Fynla\Packs\Gb\Savings\RateComparator;
 use Fynla\Packs\Gb\Savings\SavingsActionDefinitionService;
 use Fynla\Packs\Gb\Savings\SavingsDataReadinessService;
+use Fynla\Packs\Gb\Tax\TaxConfigService;
 use Fynla\Packs\Gb\Traits\ResolvesExpenditure;
 
 class SavingsAgent extends BaseAgent
@@ -439,7 +440,7 @@ class SavingsAgent extends BaseAgent
 
         // Try to get from tax config
         try {
-            $isaAllowances = app(\Fynla\Packs\Gb\Tax\TaxConfigService::class)->getISAAllowances();
+            $isaAllowances = app(TaxConfigService::class)->getISAAllowances();
             $jisaAllowance = (float) ($isaAllowances['junior_isa']['annual_allowance'] ?? 9000);
         } catch (\Throwable $e) {
             // Use default
@@ -447,7 +448,7 @@ class SavingsAgent extends BaseAgent
 
         return $children->map(function ($child) use ($accounts, $jisaAllowance) {
             $dob = $child->date_of_birth;
-            $age = $dob ? (int) \Carbon\Carbon::parse($dob)->age : null;
+            $age = $dob ? (int) Carbon::parse($dob)->age : null;
             $isUnder18 = $age !== null && $age < 18;
 
             // Find JISA accounts for this child

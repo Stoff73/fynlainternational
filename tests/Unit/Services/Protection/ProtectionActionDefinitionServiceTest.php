@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-use Fynla\Packs\Gb\Models\ProtectionActionDefinition;
-use App\Services\Protection\ProtectionActionDefinitionService;
-use Fynla\Packs\Gb\Tax\TaxConfigService;
 use Fynla\Packs\Gb\Database\Seeders\ProtectionActionDefinitionSeeder;
 use Fynla\Packs\Gb\Database\Seeders\TaxConfigurationSeeder;
+use Fynla\Packs\Gb\Models\ProtectionActionDefinition;
+use Fynla\Packs\Gb\Protection\ProtectionActionDefinitionService;
+use Fynla\Packs\Gb\Tax\TaxConfigService;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
 uses(RefreshDatabase::class);

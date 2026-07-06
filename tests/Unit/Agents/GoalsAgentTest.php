@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-use Fynla\Packs\Gb\Agents\GoalsAgent;
 use Fynla\Core\Models\Goal;
 use Fynla\Core\Models\User;
+use Fynla\Packs\Gb\Agents\GoalsAgent;
 use Fynla\Packs\Gb\Goals\GoalAffordabilityService;
-use App\Services\Goals\GoalAssignmentService;
-use App\Services\Goals\GoalProgressService;
+use Fynla\Packs\Gb\Goals\GoalAssignmentService;
+use Fynla\Packs\Gb\Goals\GoalProgressService;
 use Fynla\Packs\Gb\Goals\GoalRiskService;
 use Illuminate\Support\Facades\Cache;
 

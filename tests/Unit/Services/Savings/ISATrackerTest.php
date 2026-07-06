@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-use App\Services\Savings\ISATracker;
 use Fynla\Core\Models\User;
 use Fynla\Packs\Gb\Models\ISAAllowanceTracking;
 use Fynla\Packs\Gb\Models\SavingsAccount;
+use Fynla\Packs\Gb\Savings\ISATracker;
 use Fynla\Packs\Gb\Tax\TaxConfigService;
 use Illuminate\Support\Carbon;
 

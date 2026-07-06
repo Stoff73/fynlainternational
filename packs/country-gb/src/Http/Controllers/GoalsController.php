@@ -4,21 +4,21 @@ declare(strict_types=1);
 
 namespace Fynla\Packs\Gb\Http\Controllers;
 
-use Fynla\Packs\Gb\Agents\GoalsAgent;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Goals\StoreGoalRequest;
 use App\Http\Requests\Goals\UpdateGoalRequest;
 use App\Http\Traits\SanitizedErrorResponse;
-use Fynla\Packs\Gb\Http\Resources\GoalContributionResource;
-use Fynla\Packs\Gb\Http\Resources\GoalResource;
 use Fynla\Core\Models\Goal;
+use Fynla\Packs\Gb\Agents\GoalsAgent;
 use Fynla\Packs\Gb\Goals\FinancialForecastService;
 use Fynla\Packs\Gb\Goals\GoalAffordabilityService;
-use App\Services\Goals\GoalAssignmentService;
-use App\Services\Goals\GoalProgressService;
+use Fynla\Packs\Gb\Goals\GoalAssignmentService;
+use Fynla\Packs\Gb\Goals\GoalProgressService;
 use Fynla\Packs\Gb\Goals\GoalRiskService;
 use Fynla\Packs\Gb\Goals\GoalsProjectionService;
 use Fynla\Packs\Gb\Goals\LifeEventService;
+use Fynla\Packs\Gb\Http\Resources\GoalContributionResource;
+use Fynla\Packs\Gb\Http\Resources\GoalResource;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 

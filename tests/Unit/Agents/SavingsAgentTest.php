@@ -2,16 +2,17 @@
 
 declare(strict_types=1);
 
+use Fynla\Core\Models\User;
 use Fynla\Packs\Gb\Agents\SavingsAgent;
 use Fynla\Packs\Gb\Models\SavingsAccount;
 use Fynla\Packs\Gb\Models\SavingsGoal;
-use Fynla\Core\Models\User;
 use Fynla\Packs\Gb\Savings\EmergencyFundCalculator;
 use Fynla\Packs\Gb\Savings\GoalProgressCalculator;
-use App\Services\Savings\ISATracker;
+use Fynla\Packs\Gb\Savings\ISATracker;
 use Fynla\Packs\Gb\Savings\LiquidityAnalyzer;
 use Fynla\Packs\Gb\Savings\RateComparator;
 use Fynla\Packs\Gb\Savings\SavingsDataReadinessService;
+use Illuminate\Database\Eloquent\Collection;
 
 beforeEach(function () {
     $this->emergencyFundCalculator = Mockery::mock(EmergencyFundCalculator::class);
@@ -152,7 +153,7 @@ describe('analyze', function () {
         $this->goalProgressCalculator
             ->shouldReceive('prioritizeGoals')
             ->once()
-            ->andReturn(new \Illuminate\Database\Eloquent\Collection([$goal]));
+            ->andReturn(new Collection([$goal]));
 
         $result = $this->agent->analyze($user->id);
 
@@ -252,7 +253,7 @@ describe('analyze', function () {
         $this->goalProgressCalculator
             ->shouldReceive('prioritizeGoals')
             ->once()
-            ->andReturn(new \Illuminate\Database\Eloquent\Collection);
+            ->andReturn(new Collection);
 
         $result = $this->agent->analyze($user->id);
 

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Services\Protection;
+namespace Fynla\Packs\Gb\Protection;
 
 use Fynla\Packs\Gb\Agents\ProtectionAgent;
 use Fynla\Packs\Gb\Models\ProtectionProfile;

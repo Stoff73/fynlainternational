@@ -4,14 +4,16 @@ declare(strict_types=1);
 
 namespace Fynla\Packs\Gb\Plans;
 
-use Fynla\Packs\Gb\Agents\GoalsAgent;
-use Fynla\Core\Models\Goal;
-use Fynla\Core\Models\User;
 use App\Services\Plans\BasePlanService;
 use App\Services\Plans\DistributionAccount;
+use Fynla\Core\Models\Goal;
+use Fynla\Core\Models\User;
+use Fynla\Packs\Gb\Agents\GoalsAgent;
 use Fynla\Packs\Gb\Goals\GoalAffordabilityService;
-use App\Services\Goals\GoalProgressService;
+use Fynla\Packs\Gb\Goals\GoalProgressService;
 use Fynla\Packs\Gb\Goals\GoalStrategyService;
+use Fynla\Packs\Gb\Models\Investment\InvestmentAccount;
+use Fynla\Packs\Gb\Models\SavingsAccount;
 
 class GoalPlanService extends BasePlanService
 {
@@ -201,13 +203,13 @@ class GoalPlanService extends BasePlanService
         // Linked accounts
         $linkedParts = [];
         if ($goal->linked_savings_account_id) {
-            $savingsAccount = \Fynla\Packs\Gb\Models\SavingsAccount::find($goal->linked_savings_account_id);
+            $savingsAccount = SavingsAccount::find($goal->linked_savings_account_id);
             if ($savingsAccount) {
                 $linkedParts[] = sprintf('your savings account at %s', $savingsAccount->institution ?: 'your bank');
             }
         }
         if ($goal->linked_investment_account_id) {
-            $investmentAccount = \Fynla\Packs\Gb\Models\Investment\InvestmentAccount::find($goal->linked_investment_account_id);
+            $investmentAccount = InvestmentAccount::find($goal->linked_investment_account_id);
             if ($investmentAccount) {
                 $linkedParts[] = sprintf('your %s investment account', $investmentAccount->provider ?: 'linked');
             }

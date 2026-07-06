@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Services\Goals;
+namespace Fynla\Packs\Gb\Goals;
 
 use Fynla\Core\Models\Goal;
 use Fynla\Packs\Gb\Tax\TaxConfigService;

@@ -6,8 +6,6 @@ namespace Fynla\Packs\Gb\Goals;
 
 use Fynla\Core\Models\Goal;
 use Fynla\Core\Models\User;
-use App\Services\Goals\GoalAssignmentService;
-use App\Services\Goals\GoalProgressService;
 
 /**
  * Goal Strategy Service

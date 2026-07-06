@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Services\Savings;
+namespace Fynla\Packs\Gb\Savings;
 
 use Fynla\Packs\Gb\Models\Investment\InvestmentAccount;
 use Fynla\Packs\Gb\Models\ISAAllowanceTracking;

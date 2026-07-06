@@ -71,6 +71,15 @@ describe('No Float Money', function () {
             'packs/country-gb/src/Retirement/RetirementProjectionService.php:*',
             'packs/country-gb/src/Retirement/RetirementStrategyService.php:*',
             'packs/country-gb/src/Retirement/SalarySacrificeAnalyzer.php:*',
+            // R-17 batch 5: Savings/Goals/Protection R-14a deferrals relocated
+            // wholesale. Same carried-debt file-level pins. Int-minor closes.
+            'packs/country-gb/src/Goals/GoalAssignmentService.php:*',
+            'packs/country-gb/src/Goals/GoalProgressService.php:*',
+            'packs/country-gb/src/Goals/LifeEventAllocationService.php:*',
+            'packs/country-gb/src/Protection/ComprehensiveProtectionPlanService.php:*',
+            'packs/country-gb/src/Protection/CoverageGapAnalyzer.php:*',
+            'packs/country-gb/src/Protection/ProtectionActionDefinitionService.php:*',
+            'packs/country-gb/src/Savings/ISATracker.php:*',
         ];
 
         $violations = [];

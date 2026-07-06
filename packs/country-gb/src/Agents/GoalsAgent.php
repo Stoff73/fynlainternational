@@ -5,12 +5,11 @@ declare(strict_types=1);
 namespace Fynla\Packs\Gb\Agents;
 
 use App\Agents\BaseAgent;
-
 use Fynla\Core\Models\Goal;
 use Fynla\Core\Models\User;
 use Fynla\Packs\Gb\Goals\GoalAffordabilityService;
-use App\Services\Goals\GoalAssignmentService;
-use App\Services\Goals\GoalProgressService;
+use Fynla\Packs\Gb\Goals\GoalAssignmentService;
+use Fynla\Packs\Gb\Goals\GoalProgressService;
 use Fynla\Packs\Gb\Goals\GoalRiskService;
 
 /**

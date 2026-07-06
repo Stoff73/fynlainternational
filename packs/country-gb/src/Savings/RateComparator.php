@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace Fynla\Packs\Gb\Savings;
 
-use App\Services\Savings\ISATracker;
 use Fynla\Packs\Gb\Models\SavingsAccount;
 use Fynla\Packs\Gb\Models\SavingsMarketRate;
+use Illuminate\Support\Collection;
 
 class RateComparator
 {
@@ -142,7 +142,7 @@ class RateComparator
      * Groups accounts by banking licence group and calculates per-institution totals.
      * Used by FSCSAssessor for FSCS protection analysis.
      */
-    public function getInstitutionExposure(\Illuminate\Support\Collection $accounts): array
+    public function getInstitutionExposure(Collection $accounts): array
     {
         $licenceGroups = config('banking_licence_groups', []);
 
