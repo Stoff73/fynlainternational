@@ -16,6 +16,7 @@ use Fynla\Packs\Gb\Database\Seeders\SavingsMarketRatesSeeder;
 use Fynla\Packs\Gb\Database\Seeders\TaxActionDefinitionSeeder;
 use Fynla\Packs\Gb\Database\Seeders\TaxConfigurationSeeder;
 use Fynla\Packs\Gb\Database\Seeders\TaxProductReferenceSeeder;
+use Fynla\Packs\Za\Database\Seeders\ZaPreviewUserSeeder;
 use Fynla\Packs\Za\Database\Seeders\ZaTaxConfigurationSeeder;
 use Illuminate\Database\Seeder;
 
@@ -66,6 +67,9 @@ class DatabaseSeeder extends Seeder
 
             // Preview personas (young_family, peak_earners, etc.)
             PreviewUserSeeder::class,
+
+            // SA preview persona (Thabo Nkosi) with cross-module ZA data.
+            ZaPreviewUserSeeder::class,
 
             // Savings market benchmark rates
             SavingsMarketRatesSeeder::class,
@@ -137,6 +141,7 @@ class DatabaseSeeder extends Seeder
             RolesPermissionsSeeder::class,
             AdminUserSeeder::class,
             PreviewUserSeeder::class,
+            ZaPreviewUserSeeder::class,
             SavingsMarketRatesSeeder::class,
             OccupationCodeSeeder::class,
             PlanConfigurationSeeder::class,

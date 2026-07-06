@@ -878,6 +878,7 @@ export const PERSONA_TO_STAGE = {
   young_saver: 'early_career',
   young_family: 'mid_career',
   entrepreneur: 'mid_career',
+  sa_professional: 'mid_career',
   peak_earners: 'peak',
   retired_couple: 'retirement',
 };

@@ -39,6 +39,7 @@ class PreviewController extends Controller
         'young_saver',
         'retired_couple',
         'student',
+        'sa_professional',
         // Spouse personas (for spouse view toggle)
         'young_family_spouse',
         'peak_earners_spouse',
@@ -84,6 +85,12 @@ class PreviewController extends Controller
             'name' => 'Janice Taylor',
             'tagline' => 'University student building early financial habits',
             'description' => 'A 21-year-old Economics student with a student loan, Cash ISA, and Lifetime ISA for a future first home.',
+        ],
+        'sa_professional' => [
+            'id' => 'sa_professional',
+            'name' => 'Thabo Nkosi',
+            'tagline' => 'South African professional planning across borders',
+            'description' => 'A 40-year-old software engineer in Cape Town with a retirement annuity, tax-free savings, offshore investments, and estate-duty planning under South African rules.',
         ],
         // Spouse personas (for spouse view toggle)
         'young_family_spouse' => [

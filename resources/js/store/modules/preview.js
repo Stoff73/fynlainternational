@@ -22,6 +22,7 @@ import entrepreneurData from '../../data/personas/entrepreneur.json';
 import youngSaverData from '../../data/personas/young_saver.json';
 import retiredCoupleData from '../../data/personas/retired_couple.json';
 import studentData from '../../data/personas/student.json';
+import saProfessionalData from '../../data/personas/sa_professional.json';
 
 // Full persona data for use in components that need detailed info
 // JSON files are the single source of truth for all persona data
@@ -32,6 +33,7 @@ const PERSONA_DATA = {
     young_saver: youngSaverData,
     retired_couple: retiredCoupleData,
     student: studentData,
+    sa_professional: saProfessionalData,
 };
 
 // Persona display order for the selector UI
@@ -43,6 +45,7 @@ const PERSONA_ORDER = [
     'young_saver',     // John Morgan
     'student',         // Janice Taylor
     'retired_couple',  // Patricia & Harold Bennett
+    'sa_professional', // Thabo Nkosi (South Africa)
 ];
 
 /**
