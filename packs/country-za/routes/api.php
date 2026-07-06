@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 use Fynla\Packs\Za\Http\Controllers\ZaEstateController;
 use Fynla\Packs\Za\Http\Controllers\ZaExchangeControlController;
+use Fynla\Packs\Za\Http\Controllers\ZaGoalsController;
 use Fynla\Packs\Za\Http\Controllers\ZaInvestmentController;
 use Fynla\Packs\Za\Http\Controllers\ZaProtectionController;
 use Fynla\Packs\Za\Http\Controllers\ZaRetirementController;
@@ -140,5 +141,11 @@ Route::middleware(['auth:sanctum', 'active.jurisdiction', 'pack.enabled:za'])
             Route::post('donations', [ZaEstateController::class, 'storeDonation'])->name('donations.store');
             Route::delete('donations/{id}', [ZaEstateController::class, 'deleteDonation'])->whereNumber('id')->name('donations.destroy');
             Route::get('donations-tax', [ZaEstateController::class, 'donationsTax'])->name('donations-tax');
+        });
+
+        // SA Goals v1 — SA-appropriate goal defaults + severance/retrenchment tax.
+        Route::prefix('goals')->as('goals.')->group(function () {
+            Route::get('defaults', [ZaGoalsController::class, 'defaults'])->name('defaults');
+            Route::post('severance-benefit', [ZaGoalsController::class, 'severanceBenefit'])->name('severance-benefit');
         });
     });
