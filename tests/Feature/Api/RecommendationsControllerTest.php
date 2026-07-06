@@ -4,49 +4,21 @@ declare(strict_types=1);
 
 use Fynla\Core\Models\RecommendationTracking;
 use Fynla\Core\Models\User;
-use App\Services\Estate\EstateAnalyzer;
-use App\Services\Investment\PortfolioAnalyzer;
-use App\Services\Protection\ProtectionAgent;
-use App\Services\Retirement\RetirementProjector;
-use App\Services\Savings\EmergencyFundAnalyzer;
 use Fynla\Packs\Gb\Database\Seeders\TaxConfigurationSeeder;
 use Laravel\Sanctum\Sanctum;
+
+// The old mock block here stubbed App\Services\{Estate\EstateAnalyzer,
+// Protection\ProtectionAgent, Retirement\RetirementProjector,
+// Savings\EmergencyFundAnalyzer} — classes that no longer exist after the
+// pack relocation. Mockery auto-defined the missing names and the container
+// bindings were never resolved, so nothing was actually stubbed. Removed
+// 2026-07-06: the endpoints run their real dependencies against a user with
+// no financial data, which yields the same empty-recommendation baseline.
 
 beforeEach(function () {
     $this->seed(TaxConfigurationSeeder::class);
     $this->user = User::factory()->create();
     Sanctum::actingAs($this->user);
-
-    // Mock the services to return empty recommendations
-    $this->protectionAgent = Mockery::mock(ProtectionAgent::class);
-    $this->protectionAgent->shouldReceive('analyze')->andReturn([]);
-    $this->protectionAgent->shouldReceive('generateRecommendations')->andReturn([]);
-
-    $this->savingsAnalyzer = Mockery::mock(EmergencyFundAnalyzer::class);
-    $this->savingsAnalyzer->shouldReceive('analyze')->andReturn(['recommendations' => []]);
-
-    $this->investmentAnalyzer = Mockery::mock(PortfolioAnalyzer::class);
-    $this->investmentAnalyzer->shouldReceive('analyze')->andReturn(['recommendations' => []]);
-
-    $this->retirementProjector = Mockery::mock(RetirementProjector::class);
-    $this->retirementProjector->shouldReceive('analyze')->andReturn(['recommendations' => []]);
-
-    $this->estateAnalyzer = Mockery::mock(EstateAnalyzer::class);
-    $this->estateAnalyzer->shouldReceive('analyze')->andReturn(['recommendations' => []]);
-
-    // Mock user's investmentAccounts relationship
-    $this->user->setRelation('investmentAccounts', collect([]));
-
-    // Bind the mocked services to the container
-    $this->app->instance(ProtectionAgent::class, $this->protectionAgent);
-    $this->app->instance(EmergencyFundAnalyzer::class, $this->savingsAnalyzer);
-    $this->app->instance(PortfolioAnalyzer::class, $this->investmentAnalyzer);
-    $this->app->instance(RetirementProjector::class, $this->retirementProjector);
-    $this->app->instance(EstateAnalyzer::class, $this->estateAnalyzer);
-});
-
-afterEach(function () {
-    Mockery::close();
 });
 
 it('GET /api/recommendations returns all recommendations', function () {
@@ -319,13 +291,12 @@ it('returns completed recommendations via GET /api/recommendations/completed', f
 });
 
 it('requires authentication for recommendations API', function () {
-    // Without auth middleware, the endpoint should work (200)
-    // In production with auth middleware, this would be 401
-    $this->withoutMiddleware()->get('/api/recommendations')
-        ->assertStatus(200);
+    // The old version of this test used withoutMiddleware(), which also
+    // disabled the LegacyApiRewrite shim — the request fell through to the
+    // SPA catch-all and the 200 it asserted was the SPA shell, not the API.
+    $this->app['auth']->forgetGuards();
 
-    Sanctum::actingAs($this->user);
-    $this->getJson('/api/recommendations')->assertStatus(200);
+    $this->getJson('/api/recommendations')->assertStatus(401);
 });
 
 it('restricts users to updating only their own recommendation notes', function () {

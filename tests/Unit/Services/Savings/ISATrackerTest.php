@@ -2,14 +2,20 @@
 
 declare(strict_types=1);
 
+use App\Services\Savings\ISATracker;
+use Fynla\Core\Models\User;
 use Fynla\Packs\Gb\Models\ISAAllowanceTracking;
 use Fynla\Packs\Gb\Models\SavingsAccount;
-use Fynla\Core\Models\User;
-use App\Services\Savings\ISATracker;
 use Fynla\Packs\Gb\Tax\TaxConfigService;
+use Illuminate\Support\Carbon;
 
 // Mock TaxConfigService before running tests
 beforeEach(function () {
+    // Fixtures below are pinned to the 2024/25 tax year; freeze the calendar
+    // inside it so ISATracker::getCalendarTaxYear() matches the fixtures and
+    // the ongoing-contribution (current-year) branch is actually exercised.
+    Carbon::setTestNow('2024-06-01');
+
     $mockTaxConfig = Mockery::mock(TaxConfigService::class);
     $mockTaxConfig->shouldReceive('getISAAllowances')
         ->andReturn([
@@ -26,6 +32,7 @@ beforeEach(function () {
 });
 
 afterEach(function () {
+    Carbon::setTestNow();
     Mockery::close();
 });
 
@@ -38,8 +45,7 @@ describe('ISATracker', function () {
         });
 
         it('returns correct tax year based on date', function () {
-            // This test assumes we're in 2024/25 tax year (after April 6, 2024)
-            // In production, this would be more dynamic
+            // Clock frozen to 2024-06-01 in beforeEach (2024/25 tax year)
             $tracker = app(ISATracker::class);
             $taxYear = $tracker->getCurrentTaxYear();
             expect($taxYear)->toBeString();

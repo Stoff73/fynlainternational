@@ -2,8 +2,8 @@
 
 declare(strict_types=1);
 
-use Fynla\Packs\Gb\Investment\MonteCarloSimulator;
 use App\Services\Shared\MonteCarloEngine;
+use Fynla\Packs\Gb\Investment\MonteCarloSimulator;
 
 beforeEach(function () {
     $this->simulator = new MonteCarloSimulator;
@@ -310,7 +310,10 @@ describe('performance and edge cases', function () {
 
         // Should complete in under 10 seconds
         expect($duration)->toBeLessThan(10);
-    });
+    })->skip(
+        fn (): bool => getenv('TEST_TOKEN') !== false,
+        'Wall-clock assertion — unreliable under parallel workers competing for CPU (known parallel-mode flake)'
+    );
 
     it('handles high volatility correctly', function () {
         $results = $this->simulator->simulate(

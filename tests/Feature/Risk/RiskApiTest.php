@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-use Fynla\Packs\Gb\Models\DCPension;
 use Fynla\Core\Models\Household;
+use Fynla\Core\Models\User;
+use Fynla\Packs\Gb\Database\Seeders\TaxConfigurationSeeder;
+use Fynla\Packs\Gb\Models\DCPension;
 use Fynla\Packs\Gb\Models\Investment\InvestmentAccount;
 use Fynla\Packs\Gb\Models\Investment\RiskProfile;
 use Fynla\Packs\Gb\Models\SavingsAccount;
-use Fynla\Core\Models\User;
-use Fynla\Packs\Gb\Database\Seeders\TaxConfigurationSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
 uses(RefreshDatabase::class);
@@ -84,11 +84,12 @@ describe('GET /api/investment/risk/profile', function () {
     });
 
     it('requires authentication', function () {
-        $response = $this->withoutMiddleware()
-            ->getJson('/api/investment/risk/profile');
+        // The old version used withoutMiddleware(), which also disabled the
+        // LegacyApiRewrite shim — the request fell through to the SPA
+        // catch-all and the 200 it asserted was the SPA shell, not the API.
+        $this->app['auth']->forgetGuards();
 
-        // Without authentication middleware, this tests the route exists
-        $response->assertStatus(200);
+        $this->getJson('/api/investment/risk/profile')->assertStatus(401);
     });
 });
 

@@ -77,6 +77,27 @@ arch('controllers do not use DB facade directly')
         // outside the App\Http\Controllers namespace this rule scopes to.
     ]);
 
+// Parallel rules for the relocated pack controllers — without these, every
+// controller that moves into a pack silently escapes the DB-facade rule.
+// The ignoring list pins the pre-existing DB::transaction users; do not add
+// to it without the same justification the core list demands.
+arch('GB pack controllers do not use DB facade directly')
+    ->expect('Fynla\Packs\Gb\Http\Controllers')
+    ->not->toUse('Illuminate\Support\Facades\DB')
+    ->ignoring([
+        'Fynla\Packs\Gb\Http\Controllers\InvestmentController',
+        'Fynla\Packs\Gb\Http\Controllers\RetirementController',
+        'Fynla\Packs\Gb\Http\Controllers\Retirement\DCPensionHoldingsController',
+        'Fynla\Packs\Gb\Http\Controllers\TaxSettingsController',
+    ]);
+
+arch('ZA pack controllers do not use DB facade directly')
+    ->expect('Fynla\Packs\Za\Http\Controllers')
+    ->not->toUse('Illuminate\Support\Facades\DB')
+    ->ignoring([
+        'Fynla\Packs\Za\Http\Controllers\ZaProtectionController',
+    ]);
+
 // Note: Controllers can use Eloquent models for simple CRUD operations
 // Complex queries should be delegated to services/agents
 // This test is informational and can be reviewed manually
@@ -100,6 +121,12 @@ arch('all models use strict types')
 
 arch('all controllers use strict types')
     ->expect('App\Http\Controllers')
+    ->toUseStrictTypes();
+
+// Pack code (services, controllers, models — everything) must use strict
+// types too; the per-namespace rules above stopped covering relocated code.
+arch('all pack code uses strict types')
+    ->expect('Fynla\Packs')
     ->toUseStrictTypes();
 
 // Test: No usage of deprecated functions
