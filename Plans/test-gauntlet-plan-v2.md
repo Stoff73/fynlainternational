@@ -46,8 +46,8 @@ Every layer commit+pushed on green.
 | G-1-d | Persona surgery | ✅ DONE (May) |
 | G-4-a | Dependency CVE scan | ✅ DONE (May) + refreshed 2026-07-06 (composer 15→3 advisories, npm 23→4; remainder = Laravel 12 / Vite 8 major-upgrade decisions — CSJ) |
 | G-4-b sl.1-3 | Auth / payments / controllers audits | ✅ DONE (May) — fixes live on this branch, exercised by local suite |
-| **G-4-b sl.4** | Form Requests sample-of-10 | **IN PROGRESS 2026-07-06** (agent running) |
-| G-4-c | Morph escalation test | TODO — next after slice 4 |
+| G-4-b sl.4 | Form Requests sample-of-10 | ✅ **PASS 2026-07-06** — 1 HIGH found + FIXED in-session (S4-H1 cross-user savings-deposit leak via unscoped `linked_savings_account_id`; 3 regression tests), 8 MED + 9 LOW logged E-24..E-28. Report: `July/July6Updates/g-4-b-slice-4-requests-audit.md`. **G-4-b CLOSED.** |
+| G-4-c | Morph escalation test | ✅ **PASS 2026-07-06** — `tests/Feature/Security/MorphEscalationTest.php` proves the load-bearing invariant (steered token can't reach original owner's resources → 404) + legacy-alias resolution + fail-closed on nonsense morph. One LOW robustness nit logged G-4-c-i. |
 | G-4-d | Secret management audit | TODO — local subset (repo grep, log redaction — note H-2 processor not yet built); server perms 🚩 parked |
 | G-4-e | Auth-flow review | TODO — doc-driven review |
 | G-4-f | External non-Claude LLM audit | 🚩 **FLAGGED — needs xAI/Gemini API key + spend approval (CSJ)** |

@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Fynla\Packs\Gb\Http\Requests\Goals;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class UpdateGoalRequest extends FormRequest
 {
@@ -32,7 +33,17 @@ class UpdateGoalRequest extends FormRequest
             'monthly_contribution' => 'nullable|numeric|min:0',
             'contribution_frequency' => 'sometimes|string|in:weekly,monthly,quarterly,annually',
             'linked_account_ids' => 'nullable|array',
-            'linked_savings_account_id' => 'nullable|integer|exists:savings_accounts,id',
+            'linked_savings_account_id' => [
+                'nullable', 'integer',
+                // S4-H1 (G-4-b slice 4): scope the FK to an account the caller
+                // owns or jointly owns — an unscoped exists rule let a goal
+                // link to another user's account and leak their deposits via
+                // the TracksGoalContributions observer.
+                Rule::exists('savings_accounts', 'id')->where(function ($query) {
+                    $userId = $this->user()?->id;
+                    $query->where(fn ($q) => $q->where('user_id', $userId)->orWhere('joint_owner_id', $userId));
+                }),
+            ],
             'risk_preference' => 'nullable|integer|min:1|max:5',
             'use_global_risk_profile' => 'sometimes|boolean',
             'ownership_type' => 'sometimes|string|in:individual,joint',
