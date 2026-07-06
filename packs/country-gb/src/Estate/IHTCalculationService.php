@@ -4,20 +4,18 @@ declare(strict_types=1);
 
 namespace Fynla\Packs\Gb\Estate;
 
-use Fynla\Packs\Gb\Estate\FutureValueCalculator;
-
+use App\Services\Investment\InvestmentProjectionService;
+use Carbon\Carbon;
+use Fynla\Core\Models\User;
+use Fynla\Packs\Gb\Goals\LifeEventService;
 use Fynla\Packs\Gb\Models\DCPension;
 use Fynla\Packs\Gb\Models\Estate\Gift;
 use Fynla\Packs\Gb\Models\Estate\IHTCalculation;
 use Fynla\Packs\Gb\Models\Estate\IHTProfile;
 use Fynla\Packs\Gb\Models\Investment\InvestmentAccount;
 use Fynla\Packs\Gb\Models\Property;
-use Fynla\Core\Models\User;
-use Fynla\Packs\Gb\Goals\LifeEventService;
-use App\Services\Investment\InvestmentProjectionService;
-use App\Services\Settings\AssumptionsService;
+use Fynla\Packs\Gb\Settings\AssumptionsService;
 use Fynla\Packs\Gb\Tax\TaxConfigService;
-use Carbon\Carbon;
 use Illuminate\Support\Collection;
 
 /**
@@ -1313,7 +1311,7 @@ class IHTCalculationService
      */
     private function hasMainResidence(User $user, ?User $spouse): bool
     {
-        $userHasMainRes = \Fynla\Packs\Gb\Models\Property::where('user_id', $user->id)
+        $userHasMainRes = Property::where('user_id', $user->id)
             ->where('property_type', 'main_residence')
             ->exists();
 
@@ -1322,7 +1320,7 @@ class IHTCalculationService
         }
 
         if ($spouse) {
-            return \Fynla\Packs\Gb\Models\Property::where('user_id', $spouse->id)
+            return Property::where('user_id', $spouse->id)
                 ->where('property_type', 'main_residence')
                 ->exists();
         }

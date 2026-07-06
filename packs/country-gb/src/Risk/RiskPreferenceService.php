@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Services\Risk;
+namespace Fynla\Packs\Gb\Risk;
 
 use Fynla\Packs\Gb\Models\Investment\RiskProfile;
 use Fynla\Core\Models\User;

@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace Fynla\Packs\Gb\Retirement;
 
-use Fynla\Core\Models\User;
-use App\Services\Settings\AssumptionsService;
-use Fynla\Packs\Gb\Tax\TaxConfigService;
 use App\Services\UserProfile\UserProfileService;
 use Carbon\Carbon;
+use Fynla\Core\Models\User;
+use Fynla\Packs\Gb\Settings\AssumptionsService;
+use Fynla\Packs\Gb\Tax\TaxConfigService;
 
 /**
  * Required Capital Calculator

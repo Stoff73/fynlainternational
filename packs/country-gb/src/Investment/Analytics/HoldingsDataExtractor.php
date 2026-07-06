@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace Fynla\Packs\Gb\Investment\Analytics;
 
-use Fynla\Packs\Gb\Models\Investment\InvestmentAccount;
 use Fynla\Packs\Gb\Investment\Utilities\StatisticalFunctions;
-use App\Services\Risk\RiskPreferenceService;
+use Fynla\Packs\Gb\Models\Investment\InvestmentAccount;
+use Fynla\Packs\Gb\Risk\RiskPreferenceService;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Log;
 

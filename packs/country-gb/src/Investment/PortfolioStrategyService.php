@@ -4,14 +4,14 @@ declare(strict_types=1);
 
 namespace Fynla\Packs\Gb\Investment;
 
-use Fynla\Core\Constants\InvestmentDefaults;
-use Fynla\Packs\Gb\Constants\TaxDefaults;
-use Fynla\Packs\Gb\Models\Investment\InvestmentAccount;
-use Fynla\Core\Models\User;
 use App\Services\Investment\FeeAnalyzer;
-use Fynla\Packs\Gb\Investment\Rebalancing\DriftAnalyzer;
 use App\Services\Investment\Tax\TaxOptimizationAnalyzer;
-use App\Services\Risk\RiskPreferenceService;
+use Fynla\Core\Constants\InvestmentDefaults;
+use Fynla\Core\Models\User;
+use Fynla\Packs\Gb\Constants\TaxDefaults;
+use Fynla\Packs\Gb\Investment\Rebalancing\DriftAnalyzer;
+use Fynla\Packs\Gb\Models\Investment\InvestmentAccount;
+use Fynla\Packs\Gb\Risk\RiskPreferenceService;
 use Fynla\Packs\Gb\Tax\TaxConfigService;
 use Fynla\Packs\Gb\Traits\FormatsCurrency;
 

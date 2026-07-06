@@ -4,12 +4,13 @@ declare(strict_types=1);
 
 namespace App\Services\Investment\AssetLocation;
 
-use Fynla\Packs\Gb\Constants\TaxDefaults;
-use Fynla\Packs\Gb\Models\Investment\InvestmentAccount;
+use Carbon\Carbon;
 use Fynla\Core\Models\User;
-use App\Services\Risk\RiskPreferenceService;
+use Fynla\Packs\Gb\Constants\TaxDefaults;
 use Fynla\Packs\Gb\Investment\AssetLocation\AccountTypeRecommender;
 use Fynla\Packs\Gb\Investment\AssetLocation\TaxDragCalculator;
+use Fynla\Packs\Gb\Models\Investment\InvestmentAccount;
+use Fynla\Packs\Gb\Risk\RiskPreferenceService;
 use Fynla\Packs\Gb\Tax\TaxConfigService;
 use Fynla\Packs\Gb\Traits\ResolvesIncome;
 
@@ -116,7 +117,7 @@ class AssetLocationOptimizer
 
         // Years to retirement (for pension tax drag calculation)
         $age = $user->date_of_birth
-            ? \Carbon\Carbon::parse($user->date_of_birth)->age
+            ? Carbon::parse($user->date_of_birth)->age
             : 45;
         $yearsToRetirement = max(0, 67 - $age);
 

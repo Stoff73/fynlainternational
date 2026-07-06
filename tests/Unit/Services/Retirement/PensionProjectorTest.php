@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
+use App\Services\Retirement\PensionProjector;
 use Fynla\Packs\Gb\Models\DBPension;
 use Fynla\Packs\Gb\Models\DCPension;
 use Fynla\Packs\Gb\Models\StatePension;
-use App\Services\Retirement\PensionProjector;
-use App\Services\Risk\RiskPreferenceService;
+use Fynla\Packs\Gb\Risk\RiskPreferenceService;
 use Fynla\Packs\Gb\Tax\TaxConfigService;
 
 beforeEach(function () {

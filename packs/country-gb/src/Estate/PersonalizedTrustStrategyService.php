@@ -5,10 +5,10 @@ declare(strict_types=1);
 namespace Fynla\Packs\Gb\Estate;
 
 use Fynla\Core\Models\User;
-use App\Services\Risk\RiskPreferenceService;
-use App\Services\Settings\AssumptionsService;
 use Fynla\Packs\Gb\Constants\TaxDefaults;
 use Fynla\Packs\Gb\Models\Estate\IHTProfile;
+use Fynla\Packs\Gb\Risk\RiskPreferenceService;
+use Fynla\Packs\Gb\Settings\AssumptionsService;
 use Fynla\Packs\Gb\Tax\TaxConfigService;
 use Illuminate\Support\Collection;
 

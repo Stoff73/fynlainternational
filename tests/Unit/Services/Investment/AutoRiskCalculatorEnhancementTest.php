@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-use Fynla\Packs\Gb\Models\Investment\RiskProfile;
-use Fynla\Core\Models\User;
 use App\Services\NetWorth\NetWorthService;
-use App\Services\Risk\AutoRiskCalculator;
+use Fynla\Core\Models\User;
+use Fynla\Packs\Gb\Models\Investment\RiskProfile;
+use Fynla\Packs\Gb\Risk\AutoRiskCalculator;
 
 beforeEach(function () {
     $this->netWorthService = Mockery::mock(NetWorthService::class);

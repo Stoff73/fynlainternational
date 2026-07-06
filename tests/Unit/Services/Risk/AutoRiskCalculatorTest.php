@@ -2,13 +2,14 @@
 
 declare(strict_types=1);
 
-use Fynla\Packs\Gb\Models\DCPension;
-use Fynla\Core\Models\FamilyMember;
-use Fynla\Packs\Gb\Models\Investment\InvestmentAccount;
-use Fynla\Packs\Gb\Models\SavingsAccount;
-use Fynla\Core\Models\User;
 use App\Services\NetWorth\NetWorthService;
-use App\Services\Risk\AutoRiskCalculator;
+use Fynla\Core\Models\FamilyMember;
+use Fynla\Core\Models\User;
+use Fynla\Packs\Gb\Models\DCPension;
+use Fynla\Packs\Gb\Models\Investment\InvestmentAccount;
+use Fynla\Packs\Gb\Models\Investment\RiskProfile;
+use Fynla\Packs\Gb\Models\SavingsAccount;
+use Fynla\Packs\Gb\Risk\AutoRiskCalculator;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
 uses(RefreshDatabase::class);
@@ -211,7 +212,7 @@ describe('AutoRiskCalculator', function () {
 
         it('returns MEDIUM for intermediate knowledge', function () {
             $user = User::factory()->create();
-            \Fynla\Packs\Gb\Models\Investment\RiskProfile::factory()->create([
+            RiskProfile::factory()->create([
                 'user_id' => $user->id,
                 'knowledge_level' => 'intermediate',
             ]);
@@ -227,7 +228,7 @@ describe('AutoRiskCalculator', function () {
 
         it('returns UPPER_MEDIUM for experienced', function () {
             $user = User::factory()->create();
-            \Fynla\Packs\Gb\Models\Investment\RiskProfile::factory()->create([
+            RiskProfile::factory()->create([
                 'user_id' => $user->id,
                 'knowledge_level' => 'experienced',
             ]);

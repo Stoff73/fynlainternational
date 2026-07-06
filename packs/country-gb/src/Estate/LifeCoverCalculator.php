@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace Fynla\Packs\Gb\Estate;
 
-use Fynla\Packs\Gb\Models\LifeInsurancePolicy;
-use Fynla\Core\Models\User;
-use App\Services\Settings\AssumptionsService;
 use Carbon\Carbon;
+use Fynla\Core\Models\User;
+use Fynla\Packs\Gb\Models\LifeInsurancePolicy;
+use Fynla\Packs\Gb\Settings\AssumptionsService;
 use Illuminate\Support\Collection;
 
 class LifeCoverCalculator

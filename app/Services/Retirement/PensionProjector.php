@@ -4,11 +4,12 @@ declare(strict_types=1);
 
 namespace App\Services\Retirement;
 
+use Fynla\Core\Models\User;
 use Fynla\Packs\Gb\Models\DBPension;
 use Fynla\Packs\Gb\Models\DCPension;
+use Fynla\Packs\Gb\Models\RetirementProfile;
 use Fynla\Packs\Gb\Models\StatePension;
-use Fynla\Core\Models\User;
-use App\Services\Risk\RiskPreferenceService;
+use Fynla\Packs\Gb\Risk\RiskPreferenceService;
 use Fynla\Packs\Gb\Tax\TaxConfigService;
 
 /**
@@ -238,13 +239,13 @@ class PensionProjector
      */
     private function getUserAge(int $userId): int
     {
-        $profile = \Fynla\Packs\Gb\Models\RetirementProfile::where('user_id', $userId)->first();
+        $profile = RetirementProfile::where('user_id', $userId)->first();
 
         if ($profile && $profile->current_age) {
             return $profile->current_age;
         }
 
-        $user = \Fynla\Core\Models\User::find($userId);
+        $user = User::find($userId);
         if ($user && $user->date_of_birth) {
             return (int) $user->date_of_birth->diffInYears(now());
         }

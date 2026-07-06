@@ -2,14 +2,15 @@
 
 declare(strict_types=1);
 
-use Fynla\Packs\Gb\Models\Estate\Asset;
-use Fynla\Packs\Gb\Models\Estate\IHTProfile;
-use Fynla\Packs\Gb\Models\TaxConfiguration;
 use Fynla\Core\Models\User;
 use Fynla\Packs\Gb\Estate\AssetLiquidityAnalyzer;
 use Fynla\Packs\Gb\Estate\PersonalizedTrustStrategyService;
-use App\Services\Risk\RiskPreferenceService;
-use App\Services\Settings\AssumptionsService;
+use Fynla\Packs\Gb\Models\Estate\Asset;
+use Fynla\Packs\Gb\Models\Estate\IHTProfile;
+use Fynla\Packs\Gb\Models\TaxConfiguration;
+use Fynla\Packs\Gb\Risk\RiskPreferenceService;
+use Fynla\Packs\Gb\Settings\AssumptionsService;
+use Fynla\Packs\Gb\Tax\TaxConfigService;
 
 beforeEach(function () {
     // Ensure active tax configuration exists
@@ -18,7 +19,7 @@ beforeEach(function () {
     }
 
     $this->liquidityAnalyzer = new AssetLiquidityAnalyzer;
-    $taxConfig = app(\Fynla\Packs\Gb\Tax\TaxConfigService::class);
+    $taxConfig = app(TaxConfigService::class);
     $assumptionsService = app(AssumptionsService::class);
     $riskPreferenceService = app(RiskPreferenceService::class);
     $this->service = new PersonalizedTrustStrategyService($this->liquidityAnalyzer, $taxConfig, $assumptionsService, $riskPreferenceService);

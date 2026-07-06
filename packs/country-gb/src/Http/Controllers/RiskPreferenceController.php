@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace App\Http\Controllers\Api;
+namespace Fynla\Packs\Gb\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use App\Http\Traits\SanitizedErrorResponse;
-use App\Services\Risk\RiskPreferenceService;
+use Fynla\Packs\Gb\Risk\RiskPreferenceService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 

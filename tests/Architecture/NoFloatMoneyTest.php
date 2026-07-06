@@ -32,6 +32,10 @@ describe('No Float Money', function () {
             // move — not new float-money code. Int-minor refactor pending.
             'core/app/Core/Services/MonteCarloEngine.php:applyScheduledInjection',
             'core/app/Core/Services/MonteCarloEngine.php:calculateGoalProbability',
+            // R-17 batch 2: AssumptionsService relocated from app/Services/Settings
+            // with its pre-existing float OCF helper. Carried ADR-005 debt, not
+            // new float-money code. Int-minor refactor pending.
+            'packs/country-gb/src/Settings/AssumptionsService.php:calculateHoldingsWeightedOcf',
         ];
 
         $violations = [];

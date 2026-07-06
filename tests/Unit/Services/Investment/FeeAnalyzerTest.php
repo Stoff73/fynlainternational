@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
+use App\Services\Investment\FeeAnalyzer;
 use Fynla\Packs\Gb\Models\Investment\Holding;
 use Fynla\Packs\Gb\Models\Investment\InvestmentAccount;
-use App\Services\Investment\FeeAnalyzer;
-use App\Services\Risk\RiskPreferenceService;
+use Fynla\Packs\Gb\Risk\RiskPreferenceService;
 use Fynla\Packs\Gb\Tax\TaxConfigService;
 
 beforeEach(function () {

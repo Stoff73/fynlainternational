@@ -2,8 +2,8 @@
 
 declare(strict_types=1);
 
-use App\Jobs\RecalculateRiskProfileJob;
 use Fynla\Core\Models\User;
+use Fynla\Packs\Gb\Jobs\RecalculateRiskProfileJob;
 use Fynla\Packs\Gb\Models\DCPension;
 use Illuminate\Support\Facades\Bus;
 use Illuminate\Support\Facades\Cache;
@@ -22,7 +22,6 @@ use Illuminate\Support\Facades\Cache;
  * Dispatches: RecalculateRiskProfileJob via parent RiskRecalculationObserver,
  * gated by a 5-second per-user debounce cache key.
  */
-
 beforeEach(function () {
     Bus::fake();
     Cache::flush();

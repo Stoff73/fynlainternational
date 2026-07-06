@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace App\Jobs;
+namespace Fynla\Packs\Gb\Jobs;
 
 use Fynla\Packs\Gb\Models\DCPension;
 use Fynla\Packs\Gb\Models\Investment\InvestmentAccount;
-use App\Services\Risk\RiskPreferenceService;
+use Fynla\Packs\Gb\Risk\RiskPreferenceService;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;

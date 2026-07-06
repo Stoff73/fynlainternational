@@ -4,19 +4,19 @@ declare(strict_types=1);
 
 namespace App\Services\Investment\Recommendation;
 
+use Carbon\Carbon;
+use Fynla\Core\Models\LifeEvent;
+use Fynla\Core\Models\User;
 use Fynla\Packs\Gb\Constants\TaxDefaults;
 use Fynla\Packs\Gb\Models\Estate\Liability;
 use Fynla\Packs\Gb\Models\Investment\InvestmentAccount;
 use Fynla\Packs\Gb\Models\Investment\RiskProfile;
-use Fynla\Core\Models\LifeEvent;
 use Fynla\Packs\Gb\Models\SavingsAccount;
-use Fynla\Core\Models\User;
-use App\Services\Risk\RiskPreferenceService;
+use Fynla\Packs\Gb\Risk\RiskPreferenceService;
 use Fynla\Packs\Gb\Tax\TaxConfigService;
 use Fynla\Packs\Gb\Tax\UKTaxCalculator;
 use Fynla\Packs\Gb\Traits\ResolvesExpenditure;
 use Fynla\Packs\Gb\Traits\ResolvesIncome;
-use Carbon\Carbon;
 use Illuminate\Support\Collection;
 
 /**

@@ -29,7 +29,6 @@ use App\Http\Controllers\Api\PreviewController;
 use App\Http\Controllers\Api\ProfileCompletenessController;
 use App\Http\Controllers\Api\ReferralController;
 use App\Http\Controllers\Api\SessionController;
-use App\Http\Controllers\Api\Settings\AssumptionsController;
 use App\Http\Controllers\Api\SpousePermissionController;
 use App\Http\Controllers\Api\UserMetricsController;
 use App\Http\Controllers\Api\UserProfileController;
@@ -325,12 +324,9 @@ Route::middleware('auth:sanctum')->prefix('referral')->group(function () {
 // Revolut webhook (no auth:sanctum — verified by HMAC signature)
 Route::post('/webhooks/revolut', [WebhookController::class, 'handleRevolut'])->middleware('throttle:60,1');
 
-// User Settings routes
-Route::middleware('auth:sanctum')->prefix('settings')->group(function () {
-    // Planning Assumptions
-    Route::get('/assumptions', [AssumptionsController::class, 'index']);
-    Route::put('/assumptions/{type}', [AssumptionsController::class, 'update']);
-});
+// Planning-assumptions routes relocated to the GB pack (R-17 batch 2):
+// GET/PUT /api/gb/settings/assumptions — legacy /api/settings/assumptions
+// rewritten by LegacyApiRewrite.
 
 // Admin Panel routes (RBAC-protected)
 // G-4-b slice 3 H-1: read endpoints stay in this group; write endpoints moved

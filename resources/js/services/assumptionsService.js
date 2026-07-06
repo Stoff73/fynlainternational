@@ -5,7 +5,7 @@ export default {
    * Get all assumptions (pensions and investments)
    */
   getAssumptions() {
-    return api.get('/settings/assumptions');
+    return api.get('/gb/settings/assumptions');
   },
 
   /**
@@ -14,7 +14,7 @@ export default {
    * @param {Object} data - { inflation_rate, return_rate, compound_periods }
    */
   updateAssumptions(type, data) {
-    return api.put(`/settings/assumptions/${type}`, data);
+    return api.put(`/gb/settings/assumptions/${type}`, data);
   },
 
   /**

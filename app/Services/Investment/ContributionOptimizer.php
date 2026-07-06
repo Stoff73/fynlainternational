@@ -4,12 +4,13 @@ declare(strict_types=1);
 
 namespace App\Services\Investment;
 
-use Fynla\Packs\Gb\Models\Investment\InvestmentAccount;
-use Fynla\Packs\Gb\Models\Investment\InvestmentGoal;
-use Fynla\Core\Models\User;
 use App\Services\Investment\Goals\GoalProbabilityCalculator;
 use App\Services\Investment\Tax\ISAAllowanceOptimizer;
-use App\Services\Risk\RiskPreferenceService;
+use Fynla\Core\Models\User;
+use Fynla\Packs\Gb\Models\Investment\InvestmentAccount;
+use Fynla\Packs\Gb\Models\Investment\InvestmentGoal;
+use Fynla\Packs\Gb\Risk\RiskPreferenceService;
+use Fynla\Packs\Gb\Tax\TaxConfigService;
 use Illuminate\Support\Collection;
 
 /**
@@ -30,7 +31,7 @@ class ContributionOptimizer
     public function __construct(
         private ISAAllowanceOptimizer $isaOptimizer,
         private GoalProbabilityCalculator $probabilityCalculator,
-        private \Fynla\Packs\Gb\Tax\TaxConfigService $taxConfig,
+        private TaxConfigService $taxConfig,
         private readonly RiskPreferenceService $riskPreferenceService
     ) {}
 

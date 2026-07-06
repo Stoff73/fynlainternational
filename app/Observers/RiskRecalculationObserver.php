@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Observers;
 
-use App\Jobs\RecalculateRiskProfileJob;
+use Fynla\Packs\Gb\Jobs\RecalculateRiskProfileJob;
 use Illuminate\Support\Facades\Cache;
 
 /**

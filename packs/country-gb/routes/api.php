@@ -2,8 +2,7 @@
 
 declare(strict_types=1);
 
-use Illuminate\Support\Facades\Route;
-
+use Fynla\Packs\Gb\Http\Controllers\BusinessInterestController;
 /*
 |--------------------------------------------------------------------------
 | GB Pack API Routes
@@ -17,8 +16,6 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-use App\Http\Controllers\Api\RiskPreferenceController;
-use Fynla\Packs\Gb\Http\Controllers\BusinessInterestController;
 use Fynla\Packs\Gb\Http\Controllers\ChattelController;
 use Fynla\Packs\Gb\Http\Controllers\Estate\GiftingController;
 use Fynla\Packs\Gb\Http\Controllers\Estate\IHTController;
@@ -33,8 +30,6 @@ use Fynla\Packs\Gb\Http\Controllers\GoalsController;
 use Fynla\Packs\Gb\Http\Controllers\HolisticPlanningController;
 use Fynla\Packs\Gb\Http\Controllers\HouseholdController;
 use Fynla\Packs\Gb\Http\Controllers\IncomeDefinitionsController;
-use Fynla\Packs\Gb\Http\Controllers\InvestmentActionDefinitionController;
-use Fynla\Packs\Gb\Http\Controllers\InvestmentController;
 use Fynla\Packs\Gb\Http\Controllers\Investment\AssetLocationController;
 use Fynla\Packs\Gb\Http\Controllers\Investment\ContributionOptimizerController;
 use Fynla\Packs\Gb\Http\Controllers\Investment\EfficientFrontierController;
@@ -48,6 +43,8 @@ use Fynla\Packs\Gb\Http\Controllers\Investment\RebalancingActionsController;
 use Fynla\Packs\Gb\Http\Controllers\Investment\RebalancingCalculationController;
 use Fynla\Packs\Gb\Http\Controllers\Investment\RebalancingStrategiesController;
 use Fynla\Packs\Gb\Http\Controllers\Investment\TaxOptimizationController;
+use Fynla\Packs\Gb\Http\Controllers\InvestmentActionDefinitionController;
+use Fynla\Packs\Gb\Http\Controllers\InvestmentController;
 use Fynla\Packs\Gb\Http\Controllers\InvestmentProjectionController;
 use Fynla\Packs\Gb\Http\Controllers\LetterToSpouseController;
 use Fynla\Packs\Gb\Http\Controllers\LifeEventController;
@@ -62,12 +59,15 @@ use Fynla\Packs\Gb\Http\Controllers\Retirement\DCPensionHoldingsController;
 use Fynla\Packs\Gb\Http\Controllers\Retirement\DecumulationController;
 use Fynla\Packs\Gb\Http\Controllers\RetirementActionDefinitionController;
 use Fynla\Packs\Gb\Http\Controllers\RetirementController;
+use Fynla\Packs\Gb\Http\Controllers\RiskPreferenceController;
 use Fynla\Packs\Gb\Http\Controllers\SavingsController;
+use Fynla\Packs\Gb\Http\Controllers\Settings\AssumptionsController;
 use Fynla\Packs\Gb\Http\Controllers\Tax\TaxOptimisationController;
 use Fynla\Packs\Gb\Http\Controllers\TaxProductInfoController;
 use Fynla\Packs\Gb\Http\Controllers\TaxSettingsController;
 use Fynla\Packs\Gb\Http\Controllers\TaxYearController;
 use Fynla\Packs\Gb\Http\Controllers\WhatIfScenarioController;
+use Illuminate\Support\Facades\Route;
 
 // Savings module routes
 Route::middleware('auth:sanctum')->prefix('savings')->group(function () {
@@ -443,7 +443,6 @@ Route::middleware('auth:sanctum')->prefix('investment')->group(function () {
     });
 });
 
-
 // Investment Action Definitions (admin-configurable plan actions)
 Route::middleware(['auth:sanctum', 'permission:admin.access', 'throttle:30,1'])->prefix('admin/investment-actions')->group(function () {
     Route::get('/', [InvestmentActionDefinitionController::class, 'index']);
@@ -453,7 +452,6 @@ Route::middleware(['auth:sanctum', 'permission:admin.access', 'throttle:30,1'])-
     Route::delete('/{id}', [InvestmentActionDefinitionController::class, 'destroy']);
     Route::patch('/{id}/toggle', [InvestmentActionDefinitionController::class, 'toggleEnabled']);
 });
-
 
 // Retirement module routes
 Route::middleware('auth:sanctum')->prefix('retirement')->group(function () {
@@ -511,7 +509,6 @@ Route::middleware('auth:sanctum')->prefix('retirement')->group(function () {
     Route::post('/state-pension', [RetirementController::class, 'updateStatePension']);
 });
 
-
 // Retirement Action Definitions (admin-configurable plan actions)
 Route::middleware(['auth:sanctum', 'permission:admin.access', 'throttle:30,1'])->prefix('admin/retirement-actions')->group(function () {
     Route::get('/', [RetirementActionDefinitionController::class, 'index']);
@@ -521,7 +518,6 @@ Route::middleware(['auth:sanctum', 'permission:admin.access', 'throttle:30,1'])-
     Route::delete('/{id}', [RetirementActionDefinitionController::class, 'destroy']);
     Route::patch('/{id}/toggle', [RetirementActionDefinitionController::class, 'toggleEnabled']);
 });
-
 
 // Estate Liabilities (standard tier — part of Finances/Net Worth, not estate-only)
 Route::middleware(['auth:sanctum', 'feature:standard'])->prefix('estate/liabilities')->group(function () {
@@ -621,7 +617,6 @@ Route::middleware(['auth:sanctum', 'feature:pro'])->prefix('estate')->group(func
     });
 });
 
-
 // Tax Product Information routes (Tax status for products)
 Route::middleware('auth:sanctum')->prefix('tax-info')->group(function () {
     Route::get('/investment/{accountType}', [TaxProductInfoController::class, 'getInvestmentTaxInfo']);
@@ -654,7 +649,6 @@ Route::middleware(['auth:sanctum', 'permission:admin.tax_config'])->prefix('tax-
     Route::delete('/{id}', [TaxSettingsController::class, 'delete']);
 });
 
-
 // Plans routes (comprehensive cross-module plans)
 Route::middleware('auth:sanctum')->prefix('plans')->group(function () {
     Route::get('/statuses', [PlanController::class, 'statuses']);
@@ -669,7 +663,6 @@ Route::middleware('auth:sanctum')->prefix('plans')->group(function () {
     Route::put('/{type}/funding-source', [PlanController::class, 'updateFundingSource'])
         ->where('type', 'investment|protection|retirement|estate');
 });
-
 
 // Holistic Planning routes (coordinating agent)
 Route::middleware(['auth:sanctum', 'feature:pro'])->prefix('holistic')->group(function () {
@@ -687,7 +680,6 @@ Route::middleware(['auth:sanctum', 'feature:pro'])->prefix('holistic')->group(fu
     Route::patch('/recommendations/{id}/notes', [HolisticPlanningController::class, 'updateRecommendationNotes']);
 });
 
-
 // Unified Recommendations routes (Phase 5)
 Route::middleware('auth:sanctum')->prefix('recommendations')->group(function () {
     // Main recommendations endpoints
@@ -703,7 +695,6 @@ Route::middleware('auth:sanctum')->prefix('recommendations')->group(function () 
     Route::patch('/{id}/notes', [RecommendationsController::class, 'updateNotes']);
 });
 
-
 // What-If Scenarios
 Route::middleware(['auth:sanctum', 'feature:standard'])->prefix('what-if-scenarios')->group(function () {
     Route::get('/', [WhatIfScenarioController::class, 'index']);
@@ -713,7 +704,6 @@ Route::middleware(['auth:sanctum', 'feature:standard'])->prefix('what-if-scenari
     Route::put('/{id}', [WhatIfScenarioController::class, 'update']);
     Route::delete('/{id}', [WhatIfScenarioController::class, 'destroy']);
 });
-
 
 // Letter to Spouse (lives under /api auth group, no shared prefix)
 Route::middleware('auth:sanctum')->group(function () {
@@ -830,4 +820,10 @@ Route::middleware('auth:sanctum')->prefix('goals')->group(function () {
     Route::get('/{id}/dependencies', [GoalsController::class, 'getDependencies']);
     Route::post('/{id}/dependencies', [GoalsController::class, 'addDependency']);
     Route::delete('/{id}/dependencies/{dependsOnId}', [GoalsController::class, 'removeDependency']);
+});
+
+// Planning assumptions (R-17 batch 2 — relocated from core /api/settings/assumptions)
+Route::middleware('auth:sanctum')->prefix('settings')->group(function () {
+    Route::get('/assumptions', [AssumptionsController::class, 'index']);
+    Route::put('/assumptions/{type}', [AssumptionsController::class, 'update']);
 });

@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-use App\Jobs\RecalculateRiskProfileJob;
 use Fynla\Core\Models\LifeEvent;
 use Fynla\Core\Models\User;
+use Fynla\Packs\Gb\Jobs\RecalculateRiskProfileJob;
 use Illuminate\Support\Facades\Bus;
 use Illuminate\Support\Facades\Cache;
 
@@ -19,7 +19,6 @@ use Illuminate\Support\Facades\Cache;
  *
  * Dispatches: RecalculateRiskProfileJob via parent RiskRecalculationObserver.
  */
-
 beforeEach(function () {
     Bus::fake();
     Cache::flush();

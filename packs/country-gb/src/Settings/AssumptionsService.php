@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace App\Services\Settings;
+namespace Fynla\Packs\Gb\Settings;
 
 use Fynla\Packs\Gb\Models\Investment\Holding;
 use Fynla\Core\Models\User;
 use Fynla\Core\Models\UserAssumption;
-use App\Services\Risk\RiskPreferenceService;
+use Fynla\Packs\Gb\Risk\RiskPreferenceService;
 use Fynla\Packs\Gb\Tax\TaxConfigService;
 use Illuminate\Support\Facades\Log;
 

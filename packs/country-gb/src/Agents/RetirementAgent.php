@@ -5,26 +5,25 @@ declare(strict_types=1);
 namespace Fynla\Packs\Gb\Agents;
 
 use App\Agents\BaseAgent;
-
-use Fynla\Packs\Gb\Constants\TaxDefaults;
-use Fynla\Packs\Gb\Models\DCPension;
-use Fynla\Core\Models\Goal;
-use Fynla\Packs\Gb\Models\RetirementProfile;
-use Fynla\Core\Models\User;
 use App\Services\Investment\FeeAnalyzer;
-use Fynla\Packs\Gb\Investment\MonteCarloSimulator;
 use App\Services\Investment\PortfolioAnalyzer;
-use Fynla\Packs\Gb\Investment\SimpleAssetAllocationOptimizer;
 use App\Services\Investment\TaxEfficiencyCalculator;
-use Fynla\Packs\Gb\Plans\PlanConfigService;
 use App\Services\Retirement\AnnualAllowanceChecker;
 use App\Services\Retirement\DecumulationPlanner;
 use App\Services\Retirement\PensionContributionOptimizer;
-use Fynla\Packs\Gb\Retirement\PensionPortfolioAnalyzer;
 use App\Services\Retirement\PensionProjector;
+use Fynla\Core\Models\Goal;
+use Fynla\Core\Models\User;
+use Fynla\Packs\Gb\Constants\TaxDefaults;
+use Fynla\Packs\Gb\Investment\MonteCarloSimulator;
+use Fynla\Packs\Gb\Investment\SimpleAssetAllocationOptimizer;
+use Fynla\Packs\Gb\Models\DCPension;
+use Fynla\Packs\Gb\Models\RetirementProfile;
+use Fynla\Packs\Gb\Plans\PlanConfigService;
+use Fynla\Packs\Gb\Retirement\PensionPortfolioAnalyzer;
 use Fynla\Packs\Gb\Retirement\RetirementActionDefinitionService;
 use Fynla\Packs\Gb\Retirement\RetirementDataReadinessService;
-use App\Services\Risk\RiskPreferenceService;
+use Fynla\Packs\Gb\Risk\RiskPreferenceService;
 use Fynla\Packs\Gb\Tax\TaxConfigService;
 use Illuminate\Support\Collection;
 

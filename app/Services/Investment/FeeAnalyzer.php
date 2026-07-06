@@ -6,7 +6,7 @@ namespace App\Services\Investment;
 
 use Fynla\Core\Constants\InvestmentDefaults;
 use Fynla\Packs\Gb\Models\Investment\InvestmentAccount;
-use App\Services\Risk\RiskPreferenceService;
+use Fynla\Packs\Gb\Risk\RiskPreferenceService;
 use Fynla\Packs\Gb\Tax\TaxConfigService;
 use Fynla\Packs\Gb\Traits\CalculatesOCF;
 use Illuminate\Support\Collection;

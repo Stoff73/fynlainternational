@@ -97,7 +97,7 @@ describe('Pack Isolation', function () {
             // R-6a: Retirement clean services moved into the GB pack still
             // collaborate with the 8 deferred App\Services\Retirement\* peers
             // (R-14a) and with App\Services\Investment\* peers (R-6b),
-            // App\Services\Settings\AssumptionsService (R-7), and
+            // Fynla\Packs\Gb\Settings\AssumptionsService (R-7), and
             // App\Services\UserProfile\UserProfileService (R-7). Pinned by
             // allow-list below.
             $packDir.DIRECTORY_SEPARATOR.'Retirement'.DIRECTORY_SEPARATOR,
@@ -141,6 +141,10 @@ describe('Pack Isolation', function () {
             // App\Services\Investment\PortfolioAnalyzer (R-14a) across the
             // boundary; pinned by allow-list below.
             $packDir.DIRECTORY_SEPARATOR.'Coordination'.DIRECTORY_SEPARATOR,
+            // R-17 batch 2: Risk services relocated into the pack.
+            // AutoRiskCalculator still imports App\Services\NetWorth\NetWorthService
+            // (relocates in R-17 batch 7); pinned by allow-list below.
+            $packDir.DIRECTORY_SEPARATOR.'Risk'.DIRECTORY_SEPARATOR,
             // R-8: 7 module agents (Coordinating + 6 module agents) moved
             // into the GB pack. They extend App\Agents\BaseAgent (still in
             // app/Agents pending follow-up) and import deferred R-14a peers
@@ -320,6 +324,10 @@ describe('Pack Isolation', function () {
             'App\\Services\\AI\\KycGateChecker',
             'App\\Services\\AI\\QueryClassifier',
             'App\\Services\\AI\\SystemPromptBuilder',
+            // R-17 batch 2: latent inline FQCN in HasAiChat surfaced as a use-
+            // import by pint (fully_qualified_strict_types). Relocates with the
+            // AI sweep in R-17 batch 9.
+            'App\\Services\\AI\\StructuredResponseValidator',
             'App\\Services\\PrerequisiteGateService',
             // App\Services\* — relocated in R-6/R-7.
             // R-14a deferred Coordination services — float-money signatures
@@ -413,8 +421,6 @@ describe('Pack Isolation', function () {
             // across the boundary; relocates with the int-minor money refactor.
             'App\\Services\\WhatIf\\WhatIfScenarioService', // R-14a
             'App\\Services\\UserProfile\\LetterToSpouseService', // R-14a
-            'App\\Services\\Risk\\RiskPreferenceService',
-            'App\\Services\\Settings\\AssumptionsService',
             'App\\Services\\Shared\\CrossModuleAssetAggregator',
             // Fynla\Core\Services\MonteCarloEngine — used by MonteCarloSimulator
             // (relocated in R-6b-i). Shared module relocates in R-7.

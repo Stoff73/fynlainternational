@@ -65,6 +65,8 @@ class LegacyApiRewrite
         'api/business-interests',
         // R-9-final-viii: Chattel controller relocated to pack. (closes R-9-final)
         'api/chattels',
+        // R-17 batch 2: AssumptionsController relocated to pack.
+        'api/settings/assumptions',
     ];
 
     /**
@@ -85,13 +87,13 @@ class LegacyApiRewrite
 
         foreach (self::REWRITABLE_PREFIXES as $prefix) {
             if (str_starts_with($path, $prefix)) {
-                $newPath = 'api/gb/' . substr($path, 4); // "api/" is 4 chars
+                $newPath = 'api/gb/'.substr($path, 4); // "api/" is 4 chars
 
                 try {
                     $logger = app('log');
                     $logger->channel('single')->info('LegacyApiRewrite: rewriting URL', [
-                        'from' => '/' . $path,
-                        'to' => '/' . $newPath,
+                        'from' => '/'.$path,
+                        'to' => '/'.$newPath,
                         'method' => $request->method(),
                         'user_agent' => $request->userAgent(),
                         'user_id' => $request->user()?->id,
@@ -101,7 +103,7 @@ class LegacyApiRewrite
                 }
 
                 // Duplicate the request with the new path
-                $request->server->set('REQUEST_URI', '/' . $newPath);
+                $request->server->set('REQUEST_URI', '/'.$newPath);
                 $request->initialize(
                     $request->query->all(),
                     $request->request->all(),

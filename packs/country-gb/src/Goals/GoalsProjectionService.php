@@ -4,13 +4,13 @@ declare(strict_types=1);
 
 namespace Fynla\Packs\Gb\Goals;
 
+use App\Services\NetWorth\NetWorthService;
+use Carbon\Carbon;
 use Fynla\Core\Models\Goal;
 use Fynla\Core\Models\User;
-use App\Services\NetWorth\NetWorthService;
-use App\Services\Settings\AssumptionsService;
+use Fynla\Packs\Gb\Settings\AssumptionsService;
 use Fynla\Packs\Gb\Tax\UKTaxCalculator;
 use Fynla\Packs\Gb\Traits\ResolvesIncome;
-use Carbon\Carbon;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Cache;
 

@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Fynla\Packs\Gb\Estate;
 
 use Fynla\Core\Models\User;
-use App\Services\Settings\AssumptionsService;
+use Fynla\Packs\Gb\Settings\AssumptionsService;
 use Fynla\Packs\Gb\Tax\TaxConfigService;
 
 /**
