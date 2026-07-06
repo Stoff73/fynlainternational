@@ -53,9 +53,9 @@ Every layer commit+pushed on green.
 | G-4-f | External non-Claude LLM audit | 🚩 **FLAGGED — needs xAI/Gemini API key + spend approval (CSJ)** |
 | G-2-a | Controller coverage matrix (~103 controllers post-R-17) | TODO — matrix at `Plans/test-gauntlet-coverage-matrix.md` |
 | G-2-b | Observer chains, full-request | TODO |
-| G-2-c | Binding walk (CoreContracts::all() + pack.gb.* identity) | TODO |
-| G-2-d | Morph resolution + dirty-DB migration replay | TODO |
-| G-2-e | Cache poisoning | TODO |
+| G-2-c | Binding walk | ✅ **PASS 2026-07-06** — `PackBindingWalkTest`: all 16 `pack.gb.*` keys resolve to their core contract (was 5/16 pre-R-17); 4 query-layer bindings verified as shared singletons. |
+| G-2-d | Morph resolution + dirty-DB replay | ✅ **PASS 2026-07-06** — `MorphMigrationReplayTest`: fresh tokens carry the core morph; a dirtied `App\Models\User` token canonicalises + stays idempotent + authenticates; the real backfill migration re-runs clean (exit 0). |
+| G-2-e | Cache poisoning | ✅ **PASS 2026-07-06** — `CachePoisoningTest`: a poisoned net-worth entry is invalidated on model mutation (never served stale); legacy `App\Models\User` resolves via class_alias; net worth rebuilds cleanly post-invalidation. |
 | G-2-f | Allow-list ratchet | ✅ **CLOSED BY R-17** (list = 0, exemptions retired, enforced) |
 | G-2-g | R-14a residuals doc | ✅ **CLOSED BY R-17** (both bindings pack-local; nothing to track) |
 | G-3-a | Playwright harness (persona login + zero-console-error helper) | TODO |
