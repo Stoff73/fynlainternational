@@ -1,0 +1,18 @@
+includes:
+    - vendor/larastan/larastan/extension.neon
+    # Pre-existing debt pinned at adoption time (2026-07-06) — do not add to
+    # the baseline; fix the code instead. Regenerate only with a documented
+    # reason: ./vendor/bin/phpstan analyse --generate-baseline
+    - phpstan-baseline.neon
+
+parameters:
+    # Level 0 = undefined classes/methods/functions only — exactly the class
+    # of bug the 2026-07-06 audit found (GoalResource referencing relocated
+    # classes, tests mocking deleted classes). Raise gradually once green.
+    level: 0
+
+    paths:
+        - app
+        - core/app
+        - packs/country-gb/src
+        - packs/country-za/src
