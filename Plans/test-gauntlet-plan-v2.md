@@ -61,11 +61,11 @@ Every layer commit+pushed on green.
 | G-3-a | Playwright harness | ✅ **DONE 2026-07-06** — `tests/e2e/helpers/persona.js` (demo-flow login for all 6 personas + `collectConsoleErrors` third-party-filtered helper); config baseURL env-driven (`E2E_BASE_URL`, default 8001), webServer auto-start removed (runs against dev.sh). Requires built assets (`VITE_BASE_PATH=/build/`) + `public/hot` removed. Node 20 (`~/.nvm/versions/node/v20.19.5`). |
 | G-3-b | Persona × module journeys | **PARTIAL 2026-07-06** — `00-persona-journeys.spec.js` walks 8 core modules per persona asserting URL + authenticated shell + ZERO console errors. **Found & fixed 2 real frontend bugs**: `plans/savings` 404 (route constraint excluded `savings` though the controller supports it) and a double-`/api/api/` prefix in `LetterEstateWarnings.vue`. 5/6 personas green; `retired_couple` passes in isolation but flakes under full sequential load against the single-threaded `artisan serve` (same class as the Pest parallel flakes). Per-record CRUD round-trips = follow-on. |
 | G-3-c | 5 cross-module flows | TODO |
-| G-3-d | Numbered-rules compliance (7 automatable) | TODO |
+| G-3-d | Numbered-rules compliance | ✅ **PARTIAL 2026-07-06** — `DesignGuideComplianceTest` statically locks Rule 6 (no local formatCurrency), Rule 9 (no amber/orange), Rule 13 (no user-facing scores). Fixed the live 'Drift Score'→'Total Drift' and deleted the 7 dead PlanSections components (score violations + audit dead-code). Rules 2/4/5 (preview-block, save-event, enums) already covered by existing Feature/arch tests. |
 | G-5 H-1 | Rate limits on auth surfaces | TODO — verify (largely done in G-4-b sl.1; confirm + close) |
 | G-5 H-2 | Log redaction processor | ✅ **DONE 2026-07-06** — `App\Logging\RedactionProcessor` + `RedactSensitiveData` tap on single/daily channels; redacts sensitive context keys + secret-shaped tokens (sk_/pk_/wsk_/xai-/sk-ant-/Bearer/Sanctum). 5 unit tests + live-verified on disk. |
 | G-5 H-3 | External-HTTP timeouts | TODO — verify (M-3 fixed Revolut in May; sweep Awin/postcode/push) |
-| G-5 H-4 | `env:validate` command | TODO |
+| G-5 H-4 | `env:validate` command | ✅ **DONE 2026-07-06** — `php artisan env:validate --target=production` asserts prod flags (APP_ENV/APP_DEBUG/REVOLUT_SANDBOX), absent test overrides, real APP_KEY, and all required credentials present (never prints secrets). 4 tests. Local passes, prod-target correctly blocks on the dev machine. |
 | G-5 H-5 | CSP self-host fonts + reconcile | TODO — after G-3 green (UI-affecting) |
 | G-5 H-6 | ErrorBoundary per route | TODO — after G-3 green |
 | G-5 H-7 | Sentry wiring | 🚩 partially — code wiring TODO after G-3; DSN/account = CSJ |
