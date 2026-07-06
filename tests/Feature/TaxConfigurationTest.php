@@ -4,10 +4,12 @@ declare(strict_types=1);
 
 namespace Tests\Feature;
 
-use Fynla\Packs\Gb\Models\TaxConfiguration;
-use Fynla\Core\Models\User;
-use App\Services\Retirement\AnnualAllowanceChecker;
 use App\Services\Savings\ISATracker;
+use Database\Seeders\RolesPermissionsSeeder;
+use Fynla\Core\Models\Role;
+use Fynla\Core\Models\User;
+use Fynla\Packs\Gb\Models\TaxConfiguration;
+use Fynla\Packs\Gb\Retirement\AnnualAllowanceChecker;
 use Fynla\Packs\Gb\Tax\TaxConfigService;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
@@ -47,10 +49,10 @@ class TaxConfigurationTest extends TestCase
         $this->nextTaxYear = ($startYear + 1).'/'.($startYear + 2 - 2000);
 
         // Seed roles and permissions (required for RBAC middleware)
-        $this->seed(\Database\Seeders\RolesPermissionsSeeder::class);
+        $this->seed(RolesPermissionsSeeder::class);
 
-        $adminRole = \Fynla\Core\Models\Role::findByName(\Fynla\Core\Models\Role::ROLE_ADMIN);
-        $userRole = \Fynla\Core\Models\Role::findByName(\Fynla\Core\Models\Role::ROLE_USER);
+        $adminRole = Role::findByName(Role::ROLE_ADMIN);
+        $userRole = Role::findByName(Role::ROLE_USER);
 
         // Create admin user with admin role
         $this->admin = User::factory()->create([

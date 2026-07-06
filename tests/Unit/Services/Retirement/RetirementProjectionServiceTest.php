@@ -2,7 +2,6 @@
 
 declare(strict_types=1);
 
-use App\Services\Retirement\RetirementProjectionService;
 use Carbon\Carbon;
 use Fynla\Core\Models\User;
 use Fynla\Core\Services\CacheInvalidationService;
@@ -12,6 +11,7 @@ use Fynla\Packs\Gb\Models\DBPension;
 use Fynla\Packs\Gb\Models\DCPension;
 use Fynla\Packs\Gb\Models\StatePension;
 use Fynla\Packs\Gb\Retirement\RequiredCapitalCalculator;
+use Fynla\Packs\Gb\Retirement\RetirementProjectionService;
 use Fynla\Packs\Gb\Risk\RiskPreferenceService;
 use Fynla\Packs\Gb\Tax\TaxConfigService;
 

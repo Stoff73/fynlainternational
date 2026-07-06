@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Services\Plans;
 
+use Fynla\Core\Models\User;
 use Fynla\Packs\Gb\Agents\RetirementAgent;
 use Fynla\Packs\Gb\Models\DBPension;
 use Fynla\Packs\Gb\Models\DCPension;
@@ -13,10 +14,9 @@ use Fynla\Packs\Gb\Models\PlanActionFundingSelection;
 use Fynla\Packs\Gb\Models\RetirementProfile;
 use Fynla\Packs\Gb\Models\SavingsAccount;
 use Fynla\Packs\Gb\Models\StatePension;
-use Fynla\Core\Models\User;
 use Fynla\Packs\Gb\Plans\DisposableIncomeAccessor;
 use Fynla\Packs\Gb\Plans\PlanConfigService;
-use App\Services\Retirement\PensionProjector;
+use Fynla\Packs\Gb\Retirement\PensionProjector;
 use Fynla\Packs\Gb\Retirement\RetirementActionDefinitionService;
 use Fynla\Packs\Gb\Tax\TaxConfigService;
 use Illuminate\Support\Collection;

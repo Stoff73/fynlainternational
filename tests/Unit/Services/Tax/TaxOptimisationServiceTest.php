@@ -2,18 +2,19 @@
 
 declare(strict_types=1);
 
+use Fynla\Core\Models\User;
+use Fynla\Packs\Gb\Database\Seeders\TaxConfigurationSeeder;
 use Fynla\Packs\Gb\Models\Investment\Holding;
 use Fynla\Packs\Gb\Models\Investment\InvestmentAccount;
-use Fynla\Core\Models\User;
-use App\Services\Retirement\AnnualAllowanceChecker;
-use Fynla\Packs\Gb\Tax\TaxOptimisationService;
+use Fynla\Packs\Gb\Retirement\AnnualAllowanceChecker;
 use Fynla\Packs\Gb\Tax\TaxConfigService;
+use Fynla\Packs\Gb\Tax\TaxOptimisationService;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
 uses(RefreshDatabase::class);
 
 beforeEach(function () {
-    $this->seed(\Fynla\Packs\Gb\Database\Seeders\TaxConfigurationSeeder::class);
+    $this->seed(TaxConfigurationSeeder::class);
     $this->taxConfig = app(TaxConfigService::class);
 
     $this->allowanceChecker = Mockery::mock(AnnualAllowanceChecker::class);

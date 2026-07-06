@@ -60,6 +60,17 @@ describe('No Float Money', function () {
             'packs/country-gb/src/Investment/Tax/ISAAllowanceOptimizer.php:*',
             'packs/country-gb/src/Investment/Tax/TaxOptimizationAnalyzer.php:*',
             'packs/country-gb/src/Investment/TaxEfficiencyCalculator.php:*',
+            // R-17 batch 4: the 8 Retirement services relocated wholesale from
+            // app/Services/Retirement — R-14a float-money deferral set. Same
+            // carried-debt file-level pins as batch 3. Int-minor refactor closes.
+            'packs/country-gb/src/Retirement/AnnualAllowanceChecker.php:*',
+            'packs/country-gb/src/Retirement/DecumulationPlanner.php:*',
+            'packs/country-gb/src/Retirement/PensionContributionOptimizer.php:*',
+            'packs/country-gb/src/Retirement/PensionProjector.php:*',
+            'packs/country-gb/src/Retirement/RetirementIncomeService.php:*',
+            'packs/country-gb/src/Retirement/RetirementProjectionService.php:*',
+            'packs/country-gb/src/Retirement/RetirementStrategyService.php:*',
+            'packs/country-gb/src/Retirement/SalarySacrificeAnalyzer.php:*',
         ];
 
         $violations = [];

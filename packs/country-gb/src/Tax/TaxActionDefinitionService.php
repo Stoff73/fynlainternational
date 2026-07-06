@@ -4,14 +4,14 @@ declare(strict_types=1);
 
 namespace Fynla\Packs\Gb\Tax;
 
+use Fynla\Core\Models\User;
+use Fynla\Core\Traits\StructuredLogging;
 use Fynla\Packs\Gb\Constants\TaxDefaults;
 use Fynla\Packs\Gb\Models\Investment\InvestmentAccount;
 use Fynla\Packs\Gb\Models\SavingsAccount;
 use Fynla\Packs\Gb\Models\TaxActionDefinition;
-use Fynla\Core\Models\User;
-use App\Services\Retirement\AnnualAllowanceChecker;
+use Fynla\Packs\Gb\Retirement\AnnualAllowanceChecker;
 use Fynla\Packs\Gb\Traits\FormatsCurrency;
-use Fynla\Core\Traits\StructuredLogging;
 
 /**
  * Evaluates tax action definitions against user data

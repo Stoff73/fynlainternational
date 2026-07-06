@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-use App\Services\Retirement\DecumulationPlanner;
+use Fynla\Packs\Gb\Retirement\DecumulationPlanner;
 use Fynla\Packs\Gb\Tax\TaxConfigService;
 
 beforeEach(function () {

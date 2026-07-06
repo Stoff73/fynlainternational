@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Services\Retirement;
+namespace Fynla\Packs\Gb\Retirement;
 
 use Fynla\Packs\Gb\Models\Investment\InvestmentAccount;
 use Fynla\Packs\Gb\Models\SavingsAccount;

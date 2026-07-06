@@ -8,7 +8,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Traits\SanitizedErrorResponse;
 use Fynla\Packs\Gb\Models\DCPension;
 use Fynla\Packs\Gb\Models\RetirementProfile;
-use App\Services\Retirement\DecumulationPlanner;
+use Fynla\Packs\Gb\Retirement\DecumulationPlanner;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 

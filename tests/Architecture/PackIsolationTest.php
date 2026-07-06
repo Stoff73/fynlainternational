@@ -95,7 +95,7 @@ describe('Pack Isolation', function () {
             $packDir.DIRECTORY_SEPARATOR.'Estate'.DIRECTORY_SEPARATOR,
             $packDir.DIRECTORY_SEPARATOR.'Tax'.DIRECTORY_SEPARATOR,
             // R-6a: Retirement clean services moved into the GB pack still
-            // collaborate with the 8 deferred App\Services\Retirement\* peers
+            // collaborate with the 8 deferred Fynla\Packs\Gb\Retirement\* peers
             // (R-14a) and with Fynla\Packs\Gb\Investment\* peers (R-6b),
             // Fynla\Packs\Gb\Settings\AssumptionsService (R-7), and
             // App\Services\UserProfile\UserProfileService (R-7). Pinned by
@@ -385,14 +385,6 @@ describe('Pack Isolation', function () {
             // imports DecumulationPlanner / PensionContributionOptimizer /
             // SalarySacrificeAnalyzer; AnnualAllowanceChecker collaborates
             // across pack boundaries as before.
-            'App\\Services\\Retirement\\AnnualAllowanceChecker', // R-14a
-            'App\\Services\\Retirement\\DecumulationPlanner', // R-14a
-            'App\\Services\\Retirement\\PensionContributionOptimizer', // R-14a
-            'App\\Services\\Retirement\\PensionProjector', // R-14a
-            'App\\Services\\Retirement\\RetirementIncomeService', // R-14a
-            'App\\Services\\Retirement\\RetirementProjectionService', // R-14a
-            'App\\Services\\Retirement\\RetirementStrategyService', // R-14a
-            'App\\Services\\Retirement\\SalarySacrificeAnalyzer', // R-14a
             // R-14a deferred Savings service — ISATracker has ?float $amount
             // signature on updateISAUsage. Pack RateComparator imports it
             // across the boundary; relocates with the int-minor money refactor.

@@ -4,22 +4,22 @@ declare(strict_types=1);
 
 namespace App\Services\Goals;
 
-use Fynla\Packs\Gb\Constants\TaxDefaults;
-use Fynla\Packs\Gb\Models\DCPension;
+use App\Services\Savings\ISATracker;
+use Carbon\Carbon;
 use Fynla\Core\Models\Goal;
-use Fynla\Packs\Gb\Models\Investment\InvestmentAccount;
 use Fynla\Core\Models\LifeEvent;
 use Fynla\Core\Models\LifeEventAllocation;
+use Fynla\Core\Models\User;
+use Fynla\Core\Traits\StructuredLogging;
+use Fynla\Packs\Gb\Constants\TaxDefaults;
+use Fynla\Packs\Gb\Models\DCPension;
+use Fynla\Packs\Gb\Models\Investment\InvestmentAccount;
 use Fynla\Packs\Gb\Models\RetirementProfile;
 use Fynla\Packs\Gb\Models\SavingsAccount;
-use Fynla\Core\Models\User;
-use App\Services\Retirement\AnnualAllowanceChecker;
+use Fynla\Packs\Gb\Retirement\AnnualAllowanceChecker;
 use Fynla\Packs\Gb\Savings\EmergencyFundCalculator;
-use App\Services\Savings\ISATracker;
 use Fynla\Packs\Gb\Tax\TaxConfigService;
 use Fynla\Packs\Gb\Traits\ResolvesExpenditure;
-use Fynla\Core\Traits\StructuredLogging;
-use Carbon\Carbon;
 use Illuminate\Support\Collection;
 
 class LifeEventAllocationService

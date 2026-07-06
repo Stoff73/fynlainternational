@@ -4,17 +4,16 @@ declare(strict_types=1);
 
 namespace Fynla\Packs\Gb\Retirement;
 
+use Carbon\Carbon;
 use Fynla\Core\Models\User;
-use App\Services\Retirement\DecumulationPlanner;
-use App\Services\Retirement\PensionContributionOptimizer;
-use App\Services\Retirement\SalarySacrificeAnalyzer;
-use Fynla\Packs\Gb\Traits\FormatsCurrency;
 use Fynla\Packs\Gb\Constants\TaxDefaults;
 use Fynla\Packs\Gb\Models\DCPension;
 use Fynla\Packs\Gb\Models\RetirementActionDefinition;
 use Fynla\Packs\Gb\Models\RetirementProfile;
 use Fynla\Packs\Gb\Models\StatePension;
 use Fynla\Packs\Gb\Tax\TaxConfigService;
+use Fynla\Packs\Gb\Traits\FormatsCurrency;
+use Illuminate\Support\Collection;
 
 /**
  * Evaluates retirement action definitions against user data
@@ -102,7 +101,7 @@ class RetirementActionDefinitionService
      * contributions, so without this the actions would incorrectly flag goals
      * as off-track when the user is making significant pension contributions).
      *
-     * @param  \Illuminate\Support\Collection|null  $dcPensions  User's DC pensions
+     * @param  Collection|null  $dcPensions  User's DC pensions
      * @return array Recommendations in the standard format consumed by structureActions()
      */
     public function evaluateGoalActions(array $linkedGoals, $dcPensions = null): array
@@ -213,8 +212,8 @@ class RetirementActionDefinitionService
         $firstPension = $dcPensions->first();
         $user = $firstPension ? User::find($firstPension->user_id) : null;
         $userName = $user ? ($user->first_name.' '.$user->surname) : 'Unknown';
-        $dob = $user?->date_of_birth ? \Carbon\Carbon::parse($user->date_of_birth)->format('d/m/Y') : 'Not set';
-        $age = $user?->date_of_birth ? (int) \Carbon\Carbon::parse($user->date_of_birth)->age : null;
+        $dob = $user?->date_of_birth ? Carbon::parse($user->date_of_birth)->format('d/m/Y') : 'Not set';
+        $age = $user?->date_of_birth ? (int) Carbon::parse($user->date_of_birth)->age : null;
         $employmentStatus = $user?->employment_status ?? 'Not set';
         $grossIncome = (float) ($user?->annual_employment_income ?? 0);
 
@@ -344,8 +343,8 @@ class RetirementActionDefinitionService
         $firstPension = $dcPensions->first();
         $user = $firstPension ? User::find($firstPension->user_id) : null;
         $userName = $user ? ($user->first_name.' '.$user->surname) : 'Unknown';
-        $dob = $user?->date_of_birth ? \Carbon\Carbon::parse($user->date_of_birth)->format('d/m/Y') : 'Not set';
-        $age = $user?->date_of_birth ? (int) \Carbon\Carbon::parse($user->date_of_birth)->age : null;
+        $dob = $user?->date_of_birth ? Carbon::parse($user->date_of_birth)->format('d/m/Y') : 'Not set';
+        $age = $user?->date_of_birth ? (int) Carbon::parse($user->date_of_birth)->age : null;
         $employmentStatus = $user?->employment_status ?? 'Not set';
         $grossIncome = (float) ($user?->annual_employment_income ?? 0);
 
@@ -468,8 +467,8 @@ class RetirementActionDefinitionService
 
         // Step 1: User profile data gathered
         $userName = $user ? ($user->first_name.' '.$user->surname) : 'Unknown';
-        $dob = $user?->date_of_birth ? \Carbon\Carbon::parse($user->date_of_birth)->format('d/m/Y') : 'Not set';
-        $age = $user?->date_of_birth ? (int) \Carbon\Carbon::parse($user->date_of_birth)->age : null;
+        $dob = $user?->date_of_birth ? Carbon::parse($user->date_of_birth)->format('d/m/Y') : 'Not set';
+        $age = $user?->date_of_birth ? (int) Carbon::parse($user->date_of_birth)->age : null;
         $employmentStatus = $user?->employment_status ?? 'Not set';
         $grossIncome = (float) ($user?->annual_employment_income ?? 0);
 
@@ -647,8 +646,8 @@ class RetirementActionDefinitionService
         $userId = $profile->user_id;
         $user = User::find($userId);
         $userName = $user ? ($user->first_name.' '.$user->surname) : 'Unknown';
-        $dob = $user?->date_of_birth ? \Carbon\Carbon::parse($user->date_of_birth)->format('d/m/Y') : 'Not set';
-        $age = $user?->date_of_birth ? (int) \Carbon\Carbon::parse($user->date_of_birth)->age : null;
+        $dob = $user?->date_of_birth ? Carbon::parse($user->date_of_birth)->format('d/m/Y') : 'Not set';
+        $age = $user?->date_of_birth ? (int) Carbon::parse($user->date_of_birth)->age : null;
         $employmentStatus = $user?->employment_status ?? 'Not set';
         $grossIncome = (float) ($user?->annual_employment_income ?? 0);
 
@@ -792,8 +791,8 @@ class RetirementActionDefinitionService
         $userId = $analysisData['profile']['user_id'] ?? null;
         $user = $userId ? User::find($userId) : null;
         $userName = $user ? ($user->first_name.' '.$user->surname) : 'Unknown';
-        $dob = $user?->date_of_birth ? \Carbon\Carbon::parse($user->date_of_birth)->format('d/m/Y') : 'Not set';
-        $age = $user?->date_of_birth ? (int) \Carbon\Carbon::parse($user->date_of_birth)->age : null;
+        $dob = $user?->date_of_birth ? Carbon::parse($user->date_of_birth)->format('d/m/Y') : 'Not set';
+        $age = $user?->date_of_birth ? (int) Carbon::parse($user->date_of_birth)->age : null;
         $employmentStatus = $user?->employment_status ?? 'Not set';
         $grossIncome = (float) ($user?->annual_employment_income ?? 0);
 
@@ -913,8 +912,8 @@ class RetirementActionDefinitionService
         }
 
         $userName = $user ? ($user->first_name.' '.$user->surname) : 'Unknown';
-        $dob = $user?->date_of_birth ? \Carbon\Carbon::parse($user->date_of_birth)->format('d/m/Y') : 'Not set';
-        $age = $user?->date_of_birth ? (int) \Carbon\Carbon::parse($user->date_of_birth)->age : null;
+        $dob = $user?->date_of_birth ? Carbon::parse($user->date_of_birth)->format('d/m/Y') : 'Not set';
+        $age = $user?->date_of_birth ? (int) Carbon::parse($user->date_of_birth)->age : null;
         $employmentStatus = $user?->employment_status ?? 'Not set';
         $grossIncome = (float) ($user?->annual_employment_income ?? 0);
 
@@ -1027,8 +1026,8 @@ class RetirementActionDefinitionService
         $userId = $analysisData['profile']['user_id'] ?? null;
         $user = $userId ? User::find($userId) : null;
         $userName = $user ? ($user->first_name.' '.$user->surname) : 'Unknown';
-        $dob = $user?->date_of_birth ? \Carbon\Carbon::parse($user->date_of_birth)->format('d/m/Y') : 'Not set';
-        $age = $user?->date_of_birth ? (int) \Carbon\Carbon::parse($user->date_of_birth)->age : null;
+        $dob = $user?->date_of_birth ? Carbon::parse($user->date_of_birth)->format('d/m/Y') : 'Not set';
+        $age = $user?->date_of_birth ? (int) Carbon::parse($user->date_of_birth)->age : null;
         $employmentStatus = $user?->employment_status ?? 'Not set';
         $grossIncome = (float) ($user?->annual_employment_income ?? 0);
 
@@ -1143,8 +1142,8 @@ class RetirementActionDefinitionService
         }
 
         $userName = $user->first_name.' '.$user->surname;
-        $dob = $user->date_of_birth ? \Carbon\Carbon::parse($user->date_of_birth)->format('d/m/Y') : 'Not set';
-        $age = $user->date_of_birth ? (int) \Carbon\Carbon::parse($user->date_of_birth)->age : null;
+        $dob = $user->date_of_birth ? Carbon::parse($user->date_of_birth)->format('d/m/Y') : 'Not set';
+        $age = $user->date_of_birth ? (int) Carbon::parse($user->date_of_birth)->age : null;
         $employmentStatus = $user->employment_status ?? 'Not set';
         $grossIncome = (float) ($user->annual_employment_income ?? 0);
 
@@ -1295,8 +1294,8 @@ class RetirementActionDefinitionService
         }
 
         $userName = $user->first_name.' '.$user->surname;
-        $dob = $user->date_of_birth ? \Carbon\Carbon::parse($user->date_of_birth)->format('d/m/Y') : 'Not set';
-        $age = $user->date_of_birth ? (int) \Carbon\Carbon::parse($user->date_of_birth)->age : null;
+        $dob = $user->date_of_birth ? Carbon::parse($user->date_of_birth)->format('d/m/Y') : 'Not set';
+        $age = $user->date_of_birth ? (int) Carbon::parse($user->date_of_birth)->age : null;
         $employmentStatus = $user->employment_status ?? 'Not set';
 
         $proxyFloor = (float) $this->taxConfig->get('pension.salary_sacrifice.conservative_proxy_floor', 10000);
@@ -1441,8 +1440,8 @@ class RetirementActionDefinitionService
         }
 
         $userName = $user->first_name.' '.$user->surname;
-        $dob = $user->date_of_birth ? \Carbon\Carbon::parse($user->date_of_birth)->format('d/m/Y') : 'Not set';
-        $age = $user->date_of_birth ? (int) \Carbon\Carbon::parse($user->date_of_birth)->age : null;
+        $dob = $user->date_of_birth ? Carbon::parse($user->date_of_birth)->format('d/m/Y') : 'Not set';
+        $age = $user->date_of_birth ? (int) Carbon::parse($user->date_of_birth)->age : null;
         $employmentStatus = $user->employment_status ?? 'Not set';
         $grossIncome = (float) ($user->annual_employment_income ?? 0);
 
@@ -1566,8 +1565,8 @@ class RetirementActionDefinitionService
         }
 
         $userName = $user->first_name.' '.$user->surname;
-        $dob = $user->date_of_birth ? \Carbon\Carbon::parse($user->date_of_birth)->format('d/m/Y') : 'Not set';
-        $age = $user->date_of_birth ? (int) \Carbon\Carbon::parse($user->date_of_birth)->age : null;
+        $dob = $user->date_of_birth ? Carbon::parse($user->date_of_birth)->format('d/m/Y') : 'Not set';
+        $age = $user->date_of_birth ? (int) Carbon::parse($user->date_of_birth)->age : null;
         $employmentStatus = $user->employment_status ?? 'Not set';
         $grossIncome = (float) ($user->annual_employment_income ?? 0);
 
@@ -1582,7 +1581,7 @@ class RetirementActionDefinitionService
         ];
 
         // Step 2: Pension positions (for annuity context)
-        $dcPensions = \Fynla\Packs\Gb\Models\DCPension::where('user_id', $userId)->get();
+        $dcPensions = DCPension::where('user_id', $userId)->get();
         $totalFundValue = 0;
         $pensionSummaries = [];
         foreach ($dcPensions as $pension) {
@@ -1687,8 +1686,8 @@ class RetirementActionDefinitionService
         $userId = $analysisData['profile']['user_id'] ?? $profile->user_id;
         $user = User::find($userId);
         $userName = $user ? ($user->first_name.' '.$user->surname) : 'Unknown';
-        $dob = $user?->date_of_birth ? \Carbon\Carbon::parse($user->date_of_birth)->format('d/m/Y') : 'Not set';
-        $age = $user?->date_of_birth ? (int) \Carbon\Carbon::parse($user->date_of_birth)->age : null;
+        $dob = $user?->date_of_birth ? Carbon::parse($user->date_of_birth)->format('d/m/Y') : 'Not set';
+        $age = $user?->date_of_birth ? (int) Carbon::parse($user->date_of_birth)->age : null;
         $employmentStatus = $user?->employment_status ?? 'Not set';
         $grossIncome = (float) ($user?->annual_employment_income ?? 0);
 
@@ -1788,8 +1787,8 @@ class RetirementActionDefinitionService
         $userId = $analysisData['profile']['user_id'];
         $user = User::find($userId);
         $userName = $user ? ($user->first_name.' '.$user->surname) : 'Unknown';
-        $dob = $user?->date_of_birth ? \Carbon\Carbon::parse($user->date_of_birth)->format('d/m/Y') : 'Not set';
-        $age = $user?->date_of_birth ? (int) \Carbon\Carbon::parse($user->date_of_birth)->age : null;
+        $dob = $user?->date_of_birth ? Carbon::parse($user->date_of_birth)->format('d/m/Y') : 'Not set';
+        $age = $user?->date_of_birth ? (int) Carbon::parse($user->date_of_birth)->age : null;
         $employmentStatus = $user?->employment_status ?? 'Not set';
         $grossIncome = (float) ($user?->annual_employment_income ?? 0);
 
@@ -1896,8 +1895,8 @@ class RetirementActionDefinitionService
         $userId = $analysisData['profile']['user_id'] ?? null;
         $user = $userId ? User::find($userId) : null;
         $userName = $user ? ($user->first_name.' '.$user->surname) : 'Unknown';
-        $dob = $user?->date_of_birth ? \Carbon\Carbon::parse($user->date_of_birth)->format('d/m/Y') : 'Not set';
-        $age = $user?->date_of_birth ? (int) \Carbon\Carbon::parse($user->date_of_birth)->age : null;
+        $dob = $user?->date_of_birth ? Carbon::parse($user->date_of_birth)->format('d/m/Y') : 'Not set';
+        $age = $user?->date_of_birth ? (int) Carbon::parse($user->date_of_birth)->age : null;
         $employmentStatus = $user?->employment_status ?? 'Not set';
         $grossIncome = (float) ($user?->annual_employment_income ?? 0);
 
@@ -1928,7 +1927,7 @@ class RetirementActionDefinitionService
         ];
 
         // Step 3: Pension details for decumulation context
-        $dcPensions = \Fynla\Packs\Gb\Models\DCPension::where('user_id', $userId)->get();
+        $dcPensions = DCPension::where('user_id', $userId)->get();
         $pensionSummaries = [];
         foreach ($dcPensions as $pension) {
             $name = $pension->provider.' '.($pension->scheme_name ?? $pension->pension_type ?? 'Pension');
@@ -2021,8 +2020,8 @@ class RetirementActionDefinitionService
         $firstPension = $dcPensions->first();
         $user = $firstPension ? User::find($firstPension->user_id) : null;
         $userName = $user ? ($user->first_name.' '.$user->surname) : 'Unknown';
-        $dob = $user?->date_of_birth ? \Carbon\Carbon::parse($user->date_of_birth)->format('d/m/Y') : 'Not set';
-        $age = $user?->date_of_birth ? (int) \Carbon\Carbon::parse($user->date_of_birth)->age : null;
+        $dob = $user?->date_of_birth ? Carbon::parse($user->date_of_birth)->format('d/m/Y') : 'Not set';
+        $age = $user?->date_of_birth ? (int) Carbon::parse($user->date_of_birth)->age : null;
         $employmentStatus = $user?->employment_status ?? 'Not set';
         $grossIncome = (float) ($user?->annual_employment_income ?? 0);
 

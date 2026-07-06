@@ -2,16 +2,16 @@
 
 declare(strict_types=1);
 
+use Fynla\Core\Models\User;
+use Fynla\Packs\Gb\Database\Seeders\TaxActionDefinitionSeeder;
+use Fynla\Packs\Gb\Database\Seeders\TaxConfigurationSeeder;
 use Fynla\Packs\Gb\Models\DCPension;
 use Fynla\Packs\Gb\Models\Investment\Holding;
 use Fynla\Packs\Gb\Models\Investment\InvestmentAccount;
 use Fynla\Packs\Gb\Models\SavingsAccount;
 use Fynla\Packs\Gb\Models\TaxActionDefinition;
-use Fynla\Core\Models\User;
-use App\Services\Retirement\AnnualAllowanceChecker;
+use Fynla\Packs\Gb\Retirement\AnnualAllowanceChecker;
 use Fynla\Packs\Gb\Tax\TaxActionDefinitionService;
-use Fynla\Packs\Gb\Database\Seeders\TaxActionDefinitionSeeder;
-use Fynla\Packs\Gb\Database\Seeders\TaxConfigurationSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
 uses(RefreshDatabase::class);

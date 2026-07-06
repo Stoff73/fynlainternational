@@ -2,18 +2,20 @@
 
 declare(strict_types=1);
 
-use Fynla\Packs\Gb\Models\Estate\Will;
-use Fynla\Core\Models\User;
-use Fynla\Packs\Gb\Estate\FutureValueCalculator;
-use App\Services\Retirement\DecumulationPlanner;
 use Carbon\Carbon;
+use Fynla\Core\Models\Goal;
+use Fynla\Core\Models\User;
+use Fynla\Packs\Gb\Database\Seeders\TaxConfigurationSeeder;
+use Fynla\Packs\Gb\Estate\FutureValueCalculator;
+use Fynla\Packs\Gb\Models\Estate\Will;
+use Fynla\Packs\Gb\Retirement\DecumulationPlanner;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
 uses(RefreshDatabase::class);
 
 beforeEach(function () {
     // Seed tax configuration
-    $this->artisan('db:seed', ['--class' => \Fynla\Packs\Gb\Database\Seeders\TaxConfigurationSeeder::class, '--force' => true]);
+    $this->artisan('db:seed', ['--class' => TaxConfigurationSeeder::class, '--force' => true]);
 });
 
 describe('Life Expectancy Override', function () {
@@ -52,13 +54,13 @@ describe('Goal Dependencies', function () {
     it('detects blocked goals', function () {
         $user = User::factory()->create();
 
-        $goalA = \Fynla\Core\Models\Goal::factory()->create([
+        $goalA = Goal::factory()->create([
             'user_id' => $user->id,
             'goal_name' => 'Emergency Fund',
             'status' => 'active',
         ]);
 
-        $goalB = \Fynla\Core\Models\Goal::factory()->create([
+        $goalB = Goal::factory()->create([
             'user_id' => $user->id,
             'goal_name' => 'House Deposit',
             'status' => 'active',

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-use App\Services\Retirement\AnnualAllowanceChecker;
+use Fynla\Packs\Gb\Retirement\AnnualAllowanceChecker;
 use Fynla\Packs\Gb\Tax\IncomeDefinitionsService;
 use Fynla\Packs\Gb\Tax\TaxConfigService;
 
