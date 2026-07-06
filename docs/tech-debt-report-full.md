@@ -235,22 +235,22 @@ Delivered as a real pack (contrary to the doc's fork assumption): Tax engine (11
 ### Immediate (this week — before/at freeze-lift decision)
 1. **Decide the dev-deploy path and ship G-4-b slices 1–3 to dev** (manifest ready: `May/May13Updates/deploy-2026-05-13.md`). 5-session blocker; everything queues behind it. *(CSJ decision)*
 2. **Re-baseline the gauntlet** — write `test-gauntlet-plan-v2` or formally extend the prod freeze (plan §10 mandates this; the week-6 trigger passed 22 June). *(30–60 min planning)*
-3. **Fix the `/api/goals` 500** — repair both dangling references in `app/Http/Resources/GoalResource.php` + add a Feature test for linked-savings-account and joint-owner goals. *(small)*
-4. **Give tests their own database** — `phpunit.xml` `DB_DATABASE=fynla_international_test`. *(trivial; prevents data loss)*
-5. **Exclude `api/` from the SPA catch-all** (`routes/web.php:17`). *(trivial)*
-6. **`composer update` + `npm audit fix`** for the 2 HIGH composer advisories (Laravel email CRLF, symfony/mime SMTP injection) and 2 critical npm vulns; re-run G-4-a triage. *(small)*
-7. Fix the stale mocks in `RecommendationsControllerTest` — currently testing nothing. *(small)*
+3. ~~Fix the `/api/goals` 500~~ **✅ DONE 2026-07-06** — resources relocated to pack + 2 regression tests (`e3a0146`).
+4. ~~Give tests their own database~~ **✅ DONE 2026-07-06** — `phpunit.xml` now pins `fynla_international_test`; dev DB verified surviving test runs.
+5. ~~Exclude `api/` from the SPA catch-all~~ **✅ DONE 2026-07-06** — unknown `/api/*` now 404s as JSON. Exposed two more tests that were asserting 200 against the SPA shell (`RecommendationsControllerTest`, `RiskApiTest`) — both rewritten to honest 401 assertions.
+6. ~~Dependency updates~~ **✅ DONE 2026-07-06** — composer: 15 advisories → 3 (all three remaining are laravel/framework issues fixed only in Laravel 12.60+; requires the framework-upgrade workstream — decision item). npm: 23 vulns → 4 (remaining need vite semver-major, triage E-5).
+7. ~~Fix the stale mocks in `RecommendationsControllerTest`~~ **✅ DONE 2026-07-06** — dead mock block removed; 16 tests pass against real dependencies.
 
 ### Short-term (rest of July)
 8. **Write the R-17 plan** (relocate the 41 stranded services + BaseAgent/TaxOptimisationAgent, break the 78↔76 cycle, drive the allow-list toward 0) — spec → plan → PRD per workflow.
-9. **Migrate the frontend to `/api/gb/*`** (174 call-sites, mechanical), update tests, then delete `LegacyApiRewrite`. Use the shim's logs to verify zero remaining callers first.
-10. **Install Larastan (level 0 → 2)** and add to CI; it enforces the relocation from now on.
-11. Move ZA routes into the pack (mirror GB's provider pattern); resolve GB agents in mobile controllers via bindings.
-12. Patch the arch-test blind spots: DB-facade + strict_types rules for pack namespaces; wire pack test dirs into `phpunit.xml` or delete the placeholders.
-13. Freeze time in the confirmed time-bomb tests (`ISATrackerTest`, `TaxYearResolverDbTest`) and triage the parallel-flake list with the time-freeze lens.
-14. Add `PreviewWriteInterceptor` exclusions (mfa/verify, mfa/recovery, webhooks/revolut).
+9. ~~Migrate the frontend to `/api/gb/*`~~ **✅ DONE 2026-07-06** — 278 call-sites across 43 files (script + 2 `API_BASE` constants + 1 template-literal edge). Browser-verified: zero `LegacyApiRewrite` hits across dashboard/retirement/protection/estate/goals. Shim retained as safety net for the mobile app — delete after a quiet period in the shim logs on dev.
+10. ~~Install Larastan~~ **✅ DONE 2026-07-06** — level 0, `composer analyse`, baseline pinned at 11 pre-existing errors. **Found 2 real bugs on first run:** `CashAccount::trust()` referenced a non-existent `Trust` class (fixed — was a runtime fatal on any trust-held cash account) and `ScenarioService:165` dispatches `RunMonteCarloSimulation` with an array against a positional-args constructor (**still broken — dormant**: API-reachable via `InvestmentScenarioController:170` but no UI caller and no tests; needs design decision on parameter mapping. Add to triage.)
+11. **PARTIAL 2026-07-06** — ZA routes moved into the pack (`packs/country-za/routes/api.php` + provider registration; route surface verified identical, 279 ZA tests green; core `routes/api.php` now has zero pack references). *Still open:* the two mobile controllers importing GB agents (`ModuleSummaryController`, `InsightsController`) — fold into R-17.
+12. ~~Arch-test blind spots~~ **✅ DONE 2026-07-06** — DB-facade rules added for GB+ZA pack controllers; `Fynla\Packs` strict_types rule added. *(Pack-local test dirs in `phpunit.xml` still pending — the `_template` placeholder question belongs to R-17.)*
+13. ~~Freeze time in the confirmed time-bomb tests~~ **✅ DONE 2026-07-06** — `ISATrackerTest` clock frozen to 2024-06-01 (matches fixtures); `TaxYearResolverDbTest` now derives the expected label from the run date (resolver uses raw `DateTimeImmutable`, unfreezable via Carbon). Monte Carlo wall-clock assertion now skips under parallel workers (was the recurring parallel flake). *Broad 354-site `now()` sweep still open.*
+14. ~~PreviewWriteInterceptor exclusions~~ **✅ DONE 2026-07-06** — mfa/verify, mfa/recovery, webhooks/revolut added.
 15. Add unit tests for the money paths: `UKTaxCalculator` boundaries, Payment renewal/trial/invoice services.
-16. Update the four stale docs (CLAUDE.md ×2, database/CLAUDE.md, seedMigration.md) + delete repo cruft (`Users/` tree, orphaned core migrations, dead `TaxYearSeeder`, empty dirs).
+16. ~~Stale docs + repo cruft~~ **✅ DONE 2026-07-06** — CLAUDE.md tinker snippet + test-user table corrected; `seedMigration.md` seeder commands now FQCN; `Users/` stray tree, 4 orphaned core migrations, dead `TaxYearSeeder`, empty `app/{Constants,Traits}` dirs deleted. *(`database/CLAUDE.md` + `app/Services/CLAUDE.md` refresh still open.)*
 
 ### Backlog
 17. Centralise `determineTaxBand`/marginal-rate on the pack tax engine (6 divergent copies); purge `?? literal` tax fallbacks (27 files); route frontend tax values through the store/API (39 components).

@@ -347,7 +347,7 @@ Test via landing page persona selector at http://localhost:8000, not direct URLs
 1. Enter credentials: `john@example.com` / `password` (or any seeded test user)
 2. When the verification code screen appears, fetch it from the database:
 ```bash
-php artisan tinker --execute="\$u = \App\Models\User::where('email','john@example.com')->first(); echo \App\Models\EmailVerificationCode::where('user_id', \$u->id)->latest()->first()->code ?? 'none';"
+php artisan tinker --execute="\$u = \App\Models\User::where('email','john@example.com')->first(); echo \Fynla\Core\Models\EmailVerificationCode::where('user_id', \$u->id)->latest()->first()->code ?? 'none';"
 ```
 3. Enter the code and continue — do NOT ask the user for local dev codes
 
@@ -355,10 +355,10 @@ php artisan tinker --execute="\$u = \App\Models\User::where('email','john@exampl
 
 | Email | Password | Notes |
 |-------|----------|-------|
-| `john@example.com` | `password` | Test user with full data |
-| `jane@example.com` | `password` | Spouse of John |
-| `sarah@example.com` | `password` | Additional test user |
-| `chris@fynla.org` | `Password1!` | Admin user |
+| `john@example.com` | `password` | Bare account — NO financial data (use preview personas or chris@fynla.org for data-rich views) |
+| `jane@example.com` | `password` | Spouse of John (bare account) |
+| `sarah@example.com` | `password` | Additional test user (bare account) |
+| `chris@fynla.org` | `Password1!` | Admin user, seeded with production-matching data |
 
 ## Troubleshooting
 

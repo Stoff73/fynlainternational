@@ -19,17 +19,17 @@ php artisan db:seed
 php artisan migrate
 
 # Re-seed required data (safe to run multiple times)
-php artisan db:seed --class=TaxConfigurationSeeder --force
-php artisan db:seed --class=TaxProductReferenceSeeder --force
-php artisan db:seed --class=ActuarialLifeTablesSeeder --force
+php artisan db:seed --class='Fynla\Packs\Gb\Database\Seeders\TaxConfigurationSeeder' --force
+php artisan db:seed --class='Fynla\Packs\Gb\Database\Seeders\TaxProductReferenceSeeder' --force
+php artisan db:seed --class='Fynla\Packs\Gb\Database\Seeders\ActuarialLifeTablesSeeder' --force
 php artisan db:seed --class=AdminUserSeeder --force
-php artisan db:seed --class=PreviewUserSeeder --force
+php artisan db:seed --class='Fynla\Packs\Gb\Database\Seeders\PreviewUserSeeder' --force
 ```
 
 ### Refresh Preview Personas Only
 
 ```bash
-php artisan db:seed --class=PreviewUserSeeder --force
+php artisan db:seed --class='Fynla\Packs\Gb\Database\Seeders\PreviewUserSeeder' --force
 ```
 
 ---
@@ -50,11 +50,11 @@ These seeders are **required for the application to function**. They must always
 
 **Run individually:**
 ```bash
-php artisan db:seed --class=TaxConfigurationSeeder --force
-php artisan db:seed --class=TaxProductReferenceSeeder --force
-php artisan db:seed --class=ActuarialLifeTablesSeeder --force
+php artisan db:seed --class='Fynla\Packs\Gb\Database\Seeders\TaxConfigurationSeeder' --force
+php artisan db:seed --class='Fynla\Packs\Gb\Database\Seeders\TaxProductReferenceSeeder' --force
+php artisan db:seed --class='Fynla\Packs\Gb\Database\Seeders\ActuarialLifeTablesSeeder' --force
 php artisan db:seed --class=AdminUserSeeder --force
-php artisan db:seed --class=PreviewUserSeeder --force
+php artisan db:seed --class='Fynla\Packs\Gb\Database\Seeders\PreviewUserSeeder' --force
 ```
 
 ### Phase 2: Optional Seeders (Development/Testing)
@@ -95,7 +95,7 @@ php artisan db:seed
 
 **Fix:**
 ```bash
-php artisan db:seed --class=TaxProductReferenceSeeder --force
+php artisan db:seed --class='Fynla\Packs\Gb\Database\Seeders\TaxProductReferenceSeeder' --force
 ```
 
 **Verify:**
@@ -112,7 +112,7 @@ php artisan tinker --execute="echo App\Models\TaxProductReference::count();"
 
 **Fix:**
 ```bash
-php artisan db:seed --class=TaxConfigurationSeeder --force
+php artisan db:seed --class='Fynla\Packs\Gb\Database\Seeders\TaxConfigurationSeeder' --force
 ```
 
 **Verify:**
@@ -128,7 +128,7 @@ php artisan tinker --execute="echo App\Models\TaxConfiguration::where('is_active
 **Fix:**
 ```bash
 # Delete existing preview users and re-seed
-php artisan db:seed --class=PreviewUserSeeder --force
+php artisan db:seed --class='Fynla\Packs\Gb\Database\Seeders\PreviewUserSeeder' --force
 ```
 
 **Verify:**
@@ -143,7 +143,7 @@ php artisan tinker --execute="echo App\Models\User::where('is_preview_user', tru
 
 **Fix:**
 ```bash
-php artisan db:seed --class=ActuarialLifeTablesSeeder --force
+php artisan db:seed --class='Fynla\Packs\Gb\Database\Seeders\ActuarialLifeTablesSeeder' --force
 ```
 
 ### Scenario 6: Admin/Demo Login Not Working
@@ -185,7 +185,7 @@ Located in: `resources/js/data/personas/`
 
 When updating persona data:
 1. Edit the JSON file
-2. Run `php artisan db:seed --class=PreviewUserSeeder --force`
+2. Run `php artisan db:seed --class='Fynla\Packs\Gb\Database\Seeders\PreviewUserSeeder' --force`
 
 ### Persona Data Structure
 
@@ -248,11 +248,11 @@ Each persona JSON file contains:
 php artisan migrate --force
 
 # Seed all required data
-php artisan db:seed --class=TaxConfigurationSeeder --force
-php artisan db:seed --class=TaxProductReferenceSeeder --force
-php artisan db:seed --class=ActuarialLifeTablesSeeder --force
+php artisan db:seed --class='Fynla\Packs\Gb\Database\Seeders\TaxConfigurationSeeder' --force
+php artisan db:seed --class='Fynla\Packs\Gb\Database\Seeders\TaxProductReferenceSeeder' --force
+php artisan db:seed --class='Fynla\Packs\Gb\Database\Seeders\ActuarialLifeTablesSeeder' --force
 php artisan db:seed --class=AdminUserSeeder --force
-php artisan db:seed --class=PreviewUserSeeder --force
+php artisan db:seed --class='Fynla\Packs\Gb\Database\Seeders\PreviewUserSeeder' --force
 ```
 
 ### Updating Tax Year
@@ -261,7 +261,7 @@ When updating to a new tax year:
 
 1. Update `TaxConfigurationSeeder` with new rates
 2. Set `is_active = true` for new year, `false` for old
-3. Run: `php artisan db:seed --class=TaxConfigurationSeeder --force`
+3. Run: `php artisan db:seed --class='Fynla\Packs\Gb\Database\Seeders\TaxConfigurationSeeder' --force`
 
 ---
 
@@ -297,7 +297,7 @@ This usually means a seeder is missing required fields. Check the model's `$fill
 php artisan tinker --execute="App\Models\User::where('email', 'preview_young_family@fynla.local')->first();"
 
 # Re-seed if needed
-php artisan db:seed --class=PreviewUserSeeder --force
+php artisan db:seed --class='Fynla\Packs\Gb\Database\Seeders\PreviewUserSeeder' --force
 ```
 
 ---
