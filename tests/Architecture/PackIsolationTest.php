@@ -221,15 +221,16 @@ describe('Pack Isolation', function () {
             // dependency now lives in pack (R-14a-Tax-iii). Pack CoordinatingAgent
             // injects it across the boundary.
             'App\\Agents\\TaxOptimisationAgent',
-            // R-9-final-i: Goal-shaped Requests/Resources wrap the deferred
+            // R-9-final-i: Goal-shaped Requests wrap the deferred
             // App\Models\Goal (one of the 6 R-14b core models). They stay in
-            // app/Http/Requests/Goals and app/Http/Resources/ until the Goal
-            // relocation in R-14b sub-batch vi; pack GoalsController imports
-            // them across the boundary.
+            // app/Http/Requests/Goals until the Goal relocation in R-14b
+            // sub-batch vi; pack GoalsController imports them across the
+            // boundary. (GoalResource + GoalContributionResource relocated
+            // into the pack 2026-07-06 — their pre-relocation copies had
+            // dangling SavingsAccountResource/UserResource references that
+            // 500'd /api/goals.)
             'App\\Http\\Requests\\Goals\\StoreGoalRequest',
             'App\\Http\\Requests\\Goals\\UpdateGoalRequest',
-            'App\\Http\\Resources\\GoalContributionResource',
-            'App\\Http\\Resources\\GoalResource',
             // R-9-final-ii: LifeEvent-shaped Requests wrap the deferred
             // App\Models\LifeEvent (one of the 6 R-14b core models). They
             // stay in app/Http/Requests/ until the LifeEvent relocation in
