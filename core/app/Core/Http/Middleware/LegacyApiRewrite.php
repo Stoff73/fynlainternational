@@ -67,6 +67,8 @@ class LegacyApiRewrite
         'api/chattels',
         // R-17 batch 2: AssumptionsController relocated to pack.
         'api/settings/assumptions',
+        // R-17 batch 7: NetWorthController relocated to pack.
+        'api/net-worth',
     ];
 
     /**

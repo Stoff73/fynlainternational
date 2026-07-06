@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-use App\Services\NetWorth\NetWorthService;
 use Fynla\Core\Models\FamilyMember;
 use Fynla\Core\Models\User;
 use Fynla\Packs\Gb\Models\DCPension;
 use Fynla\Packs\Gb\Models\Investment\InvestmentAccount;
 use Fynla\Packs\Gb\Models\Investment\RiskProfile;
 use Fynla\Packs\Gb\Models\SavingsAccount;
+use Fynla\Packs\Gb\NetWorth\NetWorthService;
 use Fynla\Packs\Gb\Risk\AutoRiskCalculator;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 

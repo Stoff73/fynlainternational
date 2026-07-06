@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-use App\Services\NetWorth\NetWorthService;
 use Fynla\Core\Models\User;
 use Fynla\Packs\Gb\Models\SavingsAccount;
+use Fynla\Packs\Gb\NetWorth\NetWorthService;
 
 /**
  * G-1-b firing tests for NetWorthCacheObserver.
@@ -20,7 +20,6 @@ use Fynla\Packs\Gb\Models\SavingsAccount;
  * so per-model variations are not in scope here. The 9 registered model
  * types are smoke-asserted via EventServiceProvider introspection.
  */
-
 beforeEach(function () {
     $this->user = User::factory()->create();
     $this->jointOwner = User::factory()->create();

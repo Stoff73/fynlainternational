@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Services\NetWorth;
+namespace Fynla\Packs\Gb\NetWorth;
 
 use Fynla\Packs\Gb\Models\BusinessInterest;
 use Fynla\Packs\Gb\Models\Chattel;
@@ -14,7 +14,7 @@ use Fynla\Packs\Gb\Models\Property;
 use Fynla\Packs\Gb\Models\SavingsAccount;
 use Fynla\Packs\Gb\Models\StatePension;
 use Fynla\Core\Models\User;
-use App\Services\Shared\CrossModuleAssetAggregator;
+use Fynla\Packs\Gb\Shared\CrossModuleAssetAggregator;
 use Fynla\Core\Traits\CalculatesOwnershipShare;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Cache;

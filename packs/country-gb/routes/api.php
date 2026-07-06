@@ -49,6 +49,7 @@ use Fynla\Packs\Gb\Http\Controllers\InvestmentProjectionController;
 use Fynla\Packs\Gb\Http\Controllers\LetterToSpouseController;
 use Fynla\Packs\Gb\Http\Controllers\LifeEventController;
 use Fynla\Packs\Gb\Http\Controllers\MortgageController;
+use Fynla\Packs\Gb\Http\Controllers\NetWorthController;
 use Fynla\Packs\Gb\Http\Controllers\Plans\PlanController;
 use Fynla\Packs\Gb\Http\Controllers\PortfolioOptimizationController;
 use Fynla\Packs\Gb\Http\Controllers\PropertyController;
@@ -826,4 +827,14 @@ Route::middleware('auth:sanctum')->prefix('goals')->group(function () {
 Route::middleware('auth:sanctum')->prefix('settings')->group(function () {
     Route::get('/assumptions', [AssumptionsController::class, 'index']);
     Route::put('/assumptions/{type}', [AssumptionsController::class, 'update']);
+});
+
+// Net Worth (R-17 batch 7 — relocated from core /api/net-worth)
+Route::middleware('auth:sanctum')->prefix('net-worth')->group(function () {
+    Route::get('/overview', [NetWorthController::class, 'getOverview']);
+    Route::get('/breakdown', [NetWorthController::class, 'getBreakdown']);
+    Route::get('/assets-summary', [NetWorthController::class, 'getAssetsSummary']);
+    Route::get('/assets-summary-detailed', [NetWorthController::class, 'getAssetsSummaryWithDetails']);
+    Route::get('/joint-assets', [NetWorthController::class, 'getJointAssets']);
+    Route::post('/refresh', [NetWorthController::class, 'refresh']);
 });

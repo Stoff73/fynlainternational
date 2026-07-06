@@ -5,13 +5,13 @@ declare(strict_types=1);
 namespace Fynla\Packs\Gb\Http\Controllers;
 
 use App\Http\Controllers\Controller;
+use App\Services\Business\BusinessInterestService;
+use Fynla\Core\Traits\CalculatesOwnershipShare;
 use Fynla\Packs\Gb\Http\Requests\BusinessInterest\StoreBusinessInterestRequest;
 use Fynla\Packs\Gb\Http\Requests\BusinessInterest\UpdateBusinessInterestRequest;
 use Fynla\Packs\Gb\Http\Resources\BusinessInterestResource;
 use Fynla\Packs\Gb\Models\BusinessInterest;
-use App\Services\Business\BusinessInterestService;
-use App\Services\NetWorth\NetWorthService;
-use Fynla\Core\Traits\CalculatesOwnershipShare;
+use Fynla\Packs\Gb\NetWorth\NetWorthService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 

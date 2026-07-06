@@ -2,19 +2,20 @@
 
 declare(strict_types=1);
 
+use App\Services\Benefits\ChildBenefitService;
+use App\Services\UserProfile\UserProfileService;
+use Fynla\Core\Models\User;
 use Fynla\Packs\Gb\Models\CriticalIllnessPolicy;
 use Fynla\Packs\Gb\Models\DCPension;
 use Fynla\Packs\Gb\Models\Estate\Liability;
 use Fynla\Packs\Gb\Models\IncomeProtectionPolicy;
 use Fynla\Packs\Gb\Models\LifeInsurancePolicy;
+use Fynla\Packs\Gb\Models\Mortgage;
 use Fynla\Packs\Gb\Models\Property;
 use Fynla\Packs\Gb\Models\TaxConfiguration;
-use Fynla\Core\Models\User;
-use App\Services\Benefits\ChildBenefitService;
-use App\Services\Shared\CrossModuleAssetAggregator;
+use Fynla\Packs\Gb\Shared\CrossModuleAssetAggregator;
 use Fynla\Packs\Gb\Tax\TaxConfigService;
 use Fynla\Packs\Gb\Tax\UKTaxCalculator;
-use App\Services\UserProfile\UserProfileService;
 
 beforeEach(function () {
     // Ensure active tax configuration exists
@@ -151,7 +152,7 @@ it('calculates individual property expenses correctly', function () {
     ]);
 
     // Create mortgage for the property
-    \Fynla\Packs\Gb\Models\Mortgage::factory()->create([
+    Mortgage::factory()->create([
         'property_id' => Property::first()->id,
         'user_id' => $this->user->id,
         'monthly_payment' => 450.00,
@@ -196,7 +197,7 @@ it('splits joint property expenses by ownership percentage', function () {
         'monthly_contents_insurance' => 0.00,
     ]);
 
-    \Fynla\Packs\Gb\Models\Mortgage::factory()->create([
+    Mortgage::factory()->create([
         'property_id' => Property::first()->id,
         'user_id' => $this->user->id,
         'monthly_payment' => 900.00, // Full amount; user gets 50% = 450
@@ -244,7 +245,7 @@ it('uses first mortgage on property (service takes first mortgage only)', functi
     ]);
 
     // Service only takes first mortgage
-    \Fynla\Packs\Gb\Models\Mortgage::factory()->create([
+    Mortgage::factory()->create([
         'property_id' => $property->id,
         'user_id' => $this->user->id,
         'monthly_payment' => 800.00,
@@ -453,7 +454,7 @@ it('calculates total commitments across all categories', function () {
         'ownership_type' => 'individual',
         'monthly_council_tax' => 200.00,
     ]);
-    \Fynla\Packs\Gb\Models\Mortgage::factory()->create([
+    Mortgage::factory()->create([
         'property_id' => $property->id,
         'user_id' => $this->user->id,
         'monthly_payment' => 800.00,
@@ -494,7 +495,7 @@ it('splits joint property values by ownership percentage', function () {
         'joint_owner_id' => $spouse->id,
         'monthly_council_tax' => 400.00, // Full amount; user gets 50% = 200
     ]);
-    \Fynla\Packs\Gb\Models\Mortgage::factory()->create([
+    Mortgage::factory()->create([
         'property_id' => $property->id,
         'user_id' => $this->user->id,
         'ownership_type' => 'joint',
@@ -529,7 +530,7 @@ it('handles mixed individual and joint commitments correctly', function () {
         'joint_owner_id' => $spouse->id,
         'monthly_council_tax' => 400.00, // Full amount; user gets 50% = 200
     ]);
-    \Fynla\Packs\Gb\Models\Mortgage::factory()->create([
+    Mortgage::factory()->create([
         'property_id' => $property->id,
         'user_id' => $this->user->id,
         'ownership_type' => 'joint',

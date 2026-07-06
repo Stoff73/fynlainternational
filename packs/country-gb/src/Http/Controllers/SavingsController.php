@@ -6,7 +6,6 @@ namespace Fynla\Packs\Gb\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use App\Http\Traits\SanitizedErrorResponse;
-use App\Services\NetWorth\NetWorthService;
 use Carbon\Carbon;
 use Fynla\Core\Services\CacheInvalidationService;
 use Fynla\Core\Traits\CalculatesOwnershipShare;
@@ -22,6 +21,7 @@ use Fynla\Packs\Gb\Http\Requests\Savings\UpdateSavingsGoalRequest;
 use Fynla\Packs\Gb\Http\Resources\SavingsAccountResource;
 use Fynla\Packs\Gb\Models\SavingsAccount;
 use Fynla\Packs\Gb\Models\SavingsGoal;
+use Fynla\Packs\Gb\NetWorth\NetWorthService;
 use Fynla\Packs\Gb\Plans\SavingsPlanService;
 use Fynla\Packs\Gb\Savings\FSCSAssessor;
 use Fynla\Packs\Gb\Savings\ISATracker;

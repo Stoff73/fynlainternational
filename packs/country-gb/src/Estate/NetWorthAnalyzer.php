@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace Fynla\Packs\Gb\Estate;
 
+use Carbon\Carbon;
 use Fynla\Packs\Gb\Models\Estate\Asset;
 use Fynla\Packs\Gb\Models\Estate\Liability;
-use App\Services\Shared\CrossModuleAssetAggregator;
-use Carbon\Carbon;
+use Fynla\Packs\Gb\Shared\CrossModuleAssetAggregator;
 use Illuminate\Support\Collection;
 
 class NetWorthAnalyzer

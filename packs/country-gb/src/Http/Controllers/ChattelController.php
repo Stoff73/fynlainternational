@@ -5,13 +5,13 @@ declare(strict_types=1);
 namespace Fynla\Packs\Gb\Http\Controllers;
 
 use App\Http\Controllers\Controller;
+use App\Http\Traits\SanitizedErrorResponse;
+use App\Services\Chattel\ChattelCGTService;
 use Fynla\Packs\Gb\Http\Requests\Chattel\StoreChattelRequest;
 use Fynla\Packs\Gb\Http\Requests\Chattel\UpdateChattelRequest;
 use Fynla\Packs\Gb\Http\Resources\ChattelResource;
-use App\Http\Traits\SanitizedErrorResponse;
 use Fynla\Packs\Gb\Models\Chattel;
-use App\Services\Chattel\ChattelCGTService;
-use App\Services\NetWorth\NetWorthService;
+use Fynla\Packs\Gb\NetWorth\NetWorthService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 

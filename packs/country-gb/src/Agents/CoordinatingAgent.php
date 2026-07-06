@@ -6,7 +6,6 @@ namespace Fynla\Packs\Gb\Agents;
 
 use App\Agents\BaseAgent;
 use App\Agents\TaxOptimisationAgent;
-use App\Services\NetWorth\NetWorthService;
 use App\Services\PrerequisiteGateService;
 use App\Services\WhatIf\WhatIfScenarioService;
 use Carbon\Carbon;
@@ -35,6 +34,7 @@ use Fynla\Packs\Gb\Models\LifeInsurancePolicy;
 use Fynla\Packs\Gb\Models\Mortgage;
 use Fynla\Packs\Gb\Models\Property;
 use Fynla\Packs\Gb\Models\SavingsAccount;
+use Fynla\Packs\Gb\NetWorth\NetWorthService;
 use Fynla\Packs\Gb\Tax\IncomeDefinitionsService;
 use Fynla\Packs\Gb\Tax\TaxConfigService;
 use Fynla\Packs\Gb\Traits\HasAiChat;

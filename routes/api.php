@@ -18,7 +18,6 @@ use App\Http\Controllers\Api\JointAccountLogController;
 use App\Http\Controllers\Api\JourneyController;
 use App\Http\Controllers\Api\LifeStageController;
 use App\Http\Controllers\Api\MFAController;
-use App\Http\Controllers\Api\NetWorthController;
 use App\Http\Controllers\Api\OccupationController;
 use App\Http\Controllers\Api\OnboardingController;
 use App\Http\Controllers\Api\PasswordResetController;
@@ -232,15 +231,8 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::put('/users/{userId}/expenditure', [UserProfileController::class, 'updateSpouseExpenditure']);
 });
 
-// Net Worth routes (Phase 3)
-Route::middleware('auth:sanctum')->prefix('net-worth')->group(function () {
-    Route::get('/overview', [NetWorthController::class, 'getOverview']);
-    Route::get('/breakdown', [NetWorthController::class, 'getBreakdown']);
-    Route::get('/assets-summary', [NetWorthController::class, 'getAssetsSummary']);
-    Route::get('/assets-summary-detailed', [NetWorthController::class, 'getAssetsSummaryWithDetails']);
-    Route::get('/joint-assets', [NetWorthController::class, 'getJointAssets']);
-    Route::post('/refresh', [NetWorthController::class, 'refresh']);
-});
+// Net Worth routes — relocated to packs/country-gb/routes/api.php in R-17
+// batch 7 (/api/gb/net-worth/*; legacy /api/net-worth/* shim-rewritten).
 
 // Joint Account Logs routes
 Route::middleware('auth:sanctum')->prefix('joint-account-logs')->group(function () {

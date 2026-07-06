@@ -4,14 +4,14 @@ declare(strict_types=1);
 
 namespace Fynla\Packs\Gb\Risk;
 
-use Fynla\Packs\Gb\Models\DCPension;
+use Carbon\Carbon;
 use Fynla\Core\Models\FamilyMember;
+use Fynla\Core\Models\User;
+use Fynla\Packs\Gb\Models\DCPension;
 use Fynla\Packs\Gb\Models\Investment\InvestmentAccount;
 use Fynla\Packs\Gb\Models\Investment\RiskProfile;
 use Fynla\Packs\Gb\Models\SavingsAccount;
-use Fynla\Core\Models\User;
-use App\Services\NetWorth\NetWorthService;
-use Carbon\Carbon;
+use Fynla\Packs\Gb\NetWorth\NetWorthService;
 
 /**
  * Automated Risk Profile Calculator

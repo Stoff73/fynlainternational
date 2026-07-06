@@ -2,14 +2,14 @@
 
 declare(strict_types=1);
 
+use Fynla\Core\Models\User;
 use Fynla\Packs\Gb\Models\BusinessInterest;
 use Fynla\Packs\Gb\Models\Chattel;
 use Fynla\Packs\Gb\Models\Investment\InvestmentAccount;
 use Fynla\Packs\Gb\Models\Mortgage;
 use Fynla\Packs\Gb\Models\Property;
 use Fynla\Packs\Gb\Models\SavingsAccount;
-use Fynla\Core\Models\User;
-use App\Services\NetWorth\NetWorthService;
+use Fynla\Packs\Gb\NetWorth\NetWorthService;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
 uses(RefreshDatabase::class);

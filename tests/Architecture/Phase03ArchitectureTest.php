@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-use App\Http\Controllers\Api\NetWorthController;
 use App\Http\Controllers\Controller;
-use App\Services\NetWorth\NetWorthService;
+use Fynla\Packs\Gb\Http\Controllers\NetWorthController;
+use Fynla\Packs\Gb\NetWorth\NetWorthService;
 
 /**
  * Phase 03 Architecture Tests

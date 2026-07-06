@@ -1,6 +1,6 @@
 import api from './api';
 
-const API_BASE = '/net-worth';
+const API_BASE = '/gb/net-worth';
 
 export default {
     /**

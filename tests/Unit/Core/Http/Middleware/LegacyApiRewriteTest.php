@@ -7,36 +7,36 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 
 it('rewrites legacy /api/protection to /api/gb/protection', function () {
-    $middleware = new LegacyApiRewrite();
+    $middleware = new LegacyApiRewrite;
 
     $request = Request::create('/api/protection/policies', 'GET');
 
     $response = $middleware->handle($request, function (Request $r) {
-        return new Response('ok: ' . $r->path());
+        return new Response('ok: '.$r->path());
     });
 
     expect($response->getContent())->toContain('api/gb/protection/policies');
 });
 
 it('rewrites legacy /api/savings to /api/gb/savings', function () {
-    $middleware = new LegacyApiRewrite();
+    $middleware = new LegacyApiRewrite;
 
     $request = Request::create('/api/savings/accounts', 'GET');
 
     $response = $middleware->handle($request, function (Request $r) {
-        return new Response('ok: ' . $r->path());
+        return new Response('ok: '.$r->path());
     });
 
     expect($response->getContent())->toContain('api/gb/savings/accounts');
 });
 
 it('does not rewrite already-scoped /api/gb/ requests', function () {
-    $middleware = new LegacyApiRewrite();
+    $middleware = new LegacyApiRewrite;
 
     $request = Request::create('/api/gb/protection/policies', 'GET');
 
     $response = $middleware->handle($request, function (Request $r) {
-        return new Response('ok: ' . $r->path());
+        return new Response('ok: '.$r->path());
     });
 
     expect($response->getContent())->toContain('api/gb/protection/policies');
@@ -45,31 +45,31 @@ it('does not rewrite already-scoped /api/gb/ requests', function () {
 });
 
 it('does not rewrite non-module API paths', function () {
-    $middleware = new LegacyApiRewrite();
+    $middleware = new LegacyApiRewrite;
 
     $request = Request::create('/api/auth/login', 'POST');
 
     $response = $middleware->handle($request, function (Request $r) {
-        return new Response('ok: ' . $r->path());
+        return new Response('ok: '.$r->path());
     });
 
     expect($response->getContent())->toBe('ok: api/auth/login');
 });
 
 it('preserves POST data through rewrite', function () {
-    $middleware = new LegacyApiRewrite();
+    $middleware = new LegacyApiRewrite;
 
     $request = Request::create('/api/protection/policies', 'POST', ['name' => 'test']);
 
     $response = $middleware->handle($request, function (Request $r) {
-        return new Response($r->input('name') . ':' . $r->path());
+        return new Response($r->input('name').':'.$r->path());
     });
 
     expect($response->getContent())->toBe('test:api/gb/protection/policies');
 });
 
 it('rewrites all known pack-relocated module prefixes', function () {
-    $middleware = new LegacyApiRewrite();
+    $middleware = new LegacyApiRewrite;
 
     // Mirrors LegacyApiRewrite::REWRITABLE_PREFIXES — modules whose
     // controllers have relocated into packs/country-gb/routes/api.php.
@@ -92,6 +92,10 @@ it('rewrites all known pack-relocated module prefixes', function () {
         'business-interests',
         // R-9-final-viii: Chattel relocated.
         'chattels',
+        // R-17 batch 2: Assumptions relocated.
+        'settings/assumptions',
+        // R-17 batch 7: NetWorth relocated.
+        'net-worth',
     ];
 
     foreach ($prefixes as $prefix) {
@@ -110,11 +114,13 @@ it('does not rewrite UK module prefixes still resident in core routes', function
     // These modules' controllers haven't relocated to packs/country-gb yet
     // (gated on R-14b). Their /api/{module}/* paths must stay as-is so
     // core's routes/api.php continues to serve them.
-    $middleware = new LegacyApiRewrite();
+    $middleware = new LegacyApiRewrite;
 
+    // R-17 batch 7 relocated net-worth to the pack — it now rewrites and
+    // moved to the rewritten-prefix expectations above.
     $coreResidentPrefixes = [
         'property', 'dashboard',
-        'net-worth', 'family-members', 'profile-completeness',
+        'family-members', 'profile-completeness',
         'onboarding', 'journey', 'life-stage',
         'cash-accounts', 'personal-accounts',
     ];

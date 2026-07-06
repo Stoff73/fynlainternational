@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace App\Observers;
+namespace Fynla\Packs\Gb\Observers;
 
-use App\Services\NetWorth\NetWorthService;
+use Fynla\Packs\Gb\NetWorth\NetWorthService;
 use Illuminate\Database\Eloquent\Model;
 
 /**

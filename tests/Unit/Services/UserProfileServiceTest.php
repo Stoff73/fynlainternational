@@ -2,16 +2,16 @@
 
 declare(strict_types=1);
 
+use App\Services\Benefits\ChildBenefitService;
+use App\Services\UserProfile\UserProfileService;
 use Fynla\Core\Models\FamilyMember;
 use Fynla\Core\Models\Household;
+use Fynla\Core\Models\User;
 use Fynla\Packs\Gb\Models\Investment\InvestmentAccount;
 use Fynla\Packs\Gb\Models\Property;
-use Fynla\Core\Models\User;
-use App\Services\Benefits\ChildBenefitService;
-use App\Services\Shared\CrossModuleAssetAggregator;
+use Fynla\Packs\Gb\Shared\CrossModuleAssetAggregator;
 use Fynla\Packs\Gb\Tax\TaxConfigService;
 use Fynla\Packs\Gb\Tax\UKTaxCalculator;
-use App\Services\UserProfile\UserProfileService;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
 uses(RefreshDatabase::class);

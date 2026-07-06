@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Services\Shared;
+namespace Fynla\Packs\Gb\Shared;
 
 use Fynla\Packs\Gb\Models\Investment\InvestmentAccount;
 use Fynla\Packs\Gb\Models\Mortgage;

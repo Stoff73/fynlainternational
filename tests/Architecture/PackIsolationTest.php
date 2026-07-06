@@ -142,7 +142,7 @@ describe('Pack Isolation', function () {
             // boundary; pinned by allow-list below.
             $packDir.DIRECTORY_SEPARATOR.'Coordination'.DIRECTORY_SEPARATOR,
             // R-17 batch 2: Risk services relocated into the pack.
-            // AutoRiskCalculator still imports App\Services\NetWorth\NetWorthService
+            // AutoRiskCalculator still imports Fynla\Packs\Gb\NetWorth\NetWorthService
             // (relocates in R-17 batch 7); pinned by allow-list below.
             $packDir.DIRECTORY_SEPARATOR.'Risk'.DIRECTORY_SEPARATOR,
             // R-8: 7 module agents (Coordinating + 6 module agents) moved
@@ -338,10 +338,9 @@ describe('Pack Isolation', function () {
             // keep these in app/Services/Goals/ until the int-minor money
             // refactor lands. Pack GoalStrategyService imports
             // GoalAssignmentService + GoalProgressService across the boundary.
-            // App\Services\NetWorth\NetWorthService — used by pack
+            // Fynla\Packs\Gb\NetWorth\NetWorthService — used by pack
             // GoalsProjectionService. Stays in app/Services/NetWorth/ until
             // a follow-up workstream relocates the NetWorth module.
-            'App\\Services\\NetWorth\\NetWorthService',
             // R-14a deferred Investment services — float-money signatures
             // (ADR-005) keep these in app/Services/Investment/ until the
             // int-minor money refactor. Pack code that collaborates with
@@ -383,7 +382,6 @@ describe('Pack Isolation', function () {
             // across the boundary; relocates with the int-minor money refactor.
             'App\\Services\\WhatIf\\WhatIfScenarioService', // R-14a
             'App\\Services\\UserProfile\\LetterToSpouseService', // R-14a
-            'App\\Services\\Shared\\CrossModuleAssetAggregator',
             // Fynla\Core\Services\MonteCarloEngine — used by MonteCarloSimulator
             // (relocated in R-6b-i). Shared module relocates in R-7.
             'App\\Services\\UserProfile\\ProfileCompletenessChecker',
