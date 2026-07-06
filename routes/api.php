@@ -78,13 +78,16 @@ Route::prefix('auth')->group(function () {
         Route::get('/user', [AuthController::class, 'user'])->middleware('throttle:60,1');
         Route::post('/change-password', [AuthController::class, 'changePassword'])->middleware('throttle:5,1');
 
-        // MFA management (requires full authentication)
+        // MFA management (requires full authentication). G-5 H-1: throttle the
+        // code-accepting/secret-mutating actions — verify-setup takes a TOTP
+        // code that could be brute-forced, and setup/disable/recovery-codes
+        // rotate the MFA secret.
         Route::prefix('mfa')->group(function () {
             Route::get('/status', [MFAController::class, 'status']);
-            Route::post('/setup', [MFAController::class, 'setup']);
-            Route::post('/verify-setup', [MFAController::class, 'verifySetup']);
-            Route::post('/disable', [MFAController::class, 'disable']);
-            Route::post('/recovery-codes', [MFAController::class, 'regenerateRecoveryCodes']);
+            Route::post('/setup', [MFAController::class, 'setup'])->middleware('throttle:10,1');
+            Route::post('/verify-setup', [MFAController::class, 'verifySetup'])->middleware('throttle:10,1');
+            Route::post('/disable', [MFAController::class, 'disable'])->middleware('throttle:10,1');
+            Route::post('/recovery-codes', [MFAController::class, 'regenerateRecoveryCodes'])->middleware('throttle:5,1');
         });
 
         // Session management

@@ -53,7 +53,7 @@ class PushNotificationService
             $response = Http::withHeaders([
                 'Authorization' => 'key='.$serverKey,
                 'Content-Type' => 'application/json',
-            ])->post('https://fcm.googleapis.com/fcm/send', [
+            ])->timeout(10)->connectTimeout(5)->post('https://fcm.googleapis.com/fcm/send', [
                 'to' => $deviceToken,
                 'notification' => [
                     'title' => $title,
