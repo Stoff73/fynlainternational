@@ -6,9 +6,9 @@ namespace Fynla\Packs\Gb\Http\Controllers\Retirement;
 
 use App\Http\Controllers\Controller;
 use App\Http\Traits\SanitizedErrorResponse;
+use Fynla\Core\Services\CacheInvalidationService;
 use Fynla\Packs\Gb\Models\DCPension;
 use Fynla\Packs\Gb\Models\Investment\Holding;
-use App\Services\Cache\CacheInvalidationService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;

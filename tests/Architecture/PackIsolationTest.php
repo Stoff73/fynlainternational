@@ -1,12 +1,40 @@
 <?php
 
 declare(strict_types=1);
+use App\Agents\TaxOptimisationAgent;
+use App\Services\ExchangeControl\UkExchangeControl;
+use Fynla\Core\Contracts\BankingValidator;
+use Fynla\Core\Contracts\EstateEngine;
+use Fynla\Core\Contracts\ExchangeControl;
+use Fynla\Core\Contracts\IdentityValidator;
+use Fynla\Core\Contracts\InvestmentEngine;
+use Fynla\Core\Contracts\Localisation;
+use Fynla\Core\Contracts\ProtectionEngine;
+use Fynla\Core\Contracts\RetirementEngine;
+use Fynla\Core\Contracts\SavingsEngine;
+use Fynla\Core\Contracts\TaxEngine;
+use Fynla\Core\Contracts\TaxOptimisationEngine;
+use Fynla\Packs\Gb\Estate\UkEstateEngine;
+use Fynla\Packs\Gb\Investment\UkInvestmentEngine;
+use Fynla\Packs\Gb\Protection\UkProtectionEngine;
+use Fynla\Packs\Gb\Retirement\UkRetirementEngine;
+use Fynla\Packs\Gb\Savings\UkSavingsEngine;
+use Fynla\Packs\Za\Banking\ZaBankingValidator;
+use Fynla\Packs\Za\Estate\ZaEstateEngine;
+use Fynla\Packs\Za\ExchangeControl\ZaExchangeControl;
+use Fynla\Packs\Za\Identity\ZaIdValidator;
+use Fynla\Packs\Za\Investment\ZaInvestmentEngine;
+use Fynla\Packs\Za\Localisation\ZaLocalisation;
+use Fynla\Packs\Za\Protection\ZaProtectionEngine;
+use Fynla\Packs\Za\Retirement\ZaRetirementEngine;
+use Fynla\Packs\Za\Savings\ZaSavingsEngine;
+use Fynla\Packs\Za\Tax\ZaTaxEngine;
 
 describe('Pack Isolation', function () {
     it('country-gb does not reference other pack namespaces', function () {
         $packDir = base_path('packs/country-gb/src');
 
-        if (!is_dir($packDir)) {
+        if (! is_dir($packDir)) {
             $this->markTestSkipped('packs/country-gb/src directory not found');
         }
 
@@ -21,23 +49,25 @@ describe('Pack Isolation', function () {
         );
 
         foreach ($iterator as $file) {
-            if ($file->getExtension() !== 'php') continue;
+            if ($file->getExtension() !== 'php') {
+                continue;
+            }
             $contents = file_get_contents($file->getPathname());
 
             if (preg_match($otherPackPattern, $contents)) {
-                $violations[] = str_replace(base_path() . '/', '', $file->getPathname());
+                $violations[] = str_replace(base_path().'/', '', $file->getPathname());
             }
         }
 
         expect($violations)->toBeEmpty(
-            'GB pack must not reference other pack namespaces. Violations: ' . implode(', ', $violations)
+            'GB pack must not reference other pack namespaces. Violations: '.implode(', ', $violations)
         );
     });
 
     it('country-gb does not import the App namespace (outside provider wiring)', function () {
         $packDir = base_path('packs/country-gb/src');
 
-        if (!is_dir($packDir)) {
+        if (! is_dir($packDir)) {
             $this->markTestSkipped('packs/country-gb/src directory not found');
         }
 
@@ -55,92 +85,92 @@ describe('Pack Isolation', function () {
         // Each import is allow-listed below. Subsequent workstreams shrink
         // the allow-list; R-15 closes the exemption.
         $exemptDirs = [
-            $packDir . DIRECTORY_SEPARATOR . 'Providers' . DIRECTORY_SEPARATOR,
-            $packDir . DIRECTORY_SEPARATOR . 'Constants' . DIRECTORY_SEPARATOR,
-            $packDir . DIRECTORY_SEPARATOR . 'Traits' . DIRECTORY_SEPARATOR,
-            $packDir . DIRECTORY_SEPARATOR . 'Models' . DIRECTORY_SEPARATOR,
+            $packDir.DIRECTORY_SEPARATOR.'Providers'.DIRECTORY_SEPARATOR,
+            $packDir.DIRECTORY_SEPARATOR.'Constants'.DIRECTORY_SEPARATOR,
+            $packDir.DIRECTORY_SEPARATOR.'Traits'.DIRECTORY_SEPARATOR,
+            $packDir.DIRECTORY_SEPARATOR.'Models'.DIRECTORY_SEPARATOR,
             // R-5: Estate/Tax services still import App\Services\* peers
             // (Investment, Retirement, Goals, Risk, Settings, Cache, Shared,
             // UserProfile) that relocate in R-6/R-7. Pinned by allow-list.
-            $packDir . DIRECTORY_SEPARATOR . 'Estate' . DIRECTORY_SEPARATOR,
-            $packDir . DIRECTORY_SEPARATOR . 'Tax' . DIRECTORY_SEPARATOR,
+            $packDir.DIRECTORY_SEPARATOR.'Estate'.DIRECTORY_SEPARATOR,
+            $packDir.DIRECTORY_SEPARATOR.'Tax'.DIRECTORY_SEPARATOR,
             // R-6a: Retirement clean services moved into the GB pack still
             // collaborate with the 8 deferred App\Services\Retirement\* peers
             // (R-14a) and with App\Services\Investment\* peers (R-6b),
             // App\Services\Settings\AssumptionsService (R-7), and
             // App\Services\UserProfile\UserProfileService (R-7). Pinned by
             // allow-list below.
-            $packDir . DIRECTORY_SEPARATOR . 'Retirement' . DIRECTORY_SEPARATOR,
+            $packDir.DIRECTORY_SEPARATOR.'Retirement'.DIRECTORY_SEPARATOR,
             // R-6b: Investment services move in 4 sub-commits. Top-level
             // (R-6b-i) imports the 19 deferred App\Services\Investment\*
             // R-14a peers, plus App\Services\Investment\Rebalancing\*
             // (R-6b-iii target), App\Services\Investment\Utilities\* (R-6b-iv
             // target), App\Jobs\RunMonteCarloSimulation,
             // Fynla\Packs\Gb\Plans\PlanConfigService, and
-            // App\Services\Shared\MonteCarloEngine. Pinned by allow-list.
-            $packDir . DIRECTORY_SEPARATOR . 'Investment' . DIRECTORY_SEPARATOR,
+            // Fynla\Core\Services\MonteCarloEngine. Pinned by allow-list.
+            $packDir.DIRECTORY_SEPARATOR.'Investment'.DIRECTORY_SEPARATOR,
             // R-6c: Protection clean services moved into the GB pack. The
             // 3 R-14a deferred peers (ComprehensiveProtectionPlanService,
             // CoverageGapAnalyzer, ProtectionActionDefinitionService) stay
             // in app/Services/Protection/ pending int-minor money refactor.
             // Pack code still imports them via cross-boundary use; pinned
             // by allow-list below.
-            $packDir . DIRECTORY_SEPARATOR . 'Protection' . DIRECTORY_SEPARATOR,
+            $packDir.DIRECTORY_SEPARATOR.'Protection'.DIRECTORY_SEPARATOR,
             // R-6d: Savings clean services moved into the GB pack. ISATracker
             // is the sole R-14a deferral (?float $amount signature). Pack
             // RateComparator imports App\Services\Savings\ISATracker across
             // the boundary; pinned by allow-list below.
-            $packDir . DIRECTORY_SEPARATOR . 'Savings' . DIRECTORY_SEPARATOR,
+            $packDir.DIRECTORY_SEPARATOR.'Savings'.DIRECTORY_SEPARATOR,
             // R-7a: Goals clean services moved into the GB pack. The 3
             // R-14a deferrals (GoalAssignmentService, GoalProgressService,
             // LifeEventAllocationService) stay in app/Services/Goals/.
             // Pack GoalStrategyService imports two of them across the
             // boundary; pinned by allow-list below.
-            $packDir . DIRECTORY_SEPARATOR . 'Goals' . DIRECTORY_SEPARATOR,
+            $packDir.DIRECTORY_SEPARATOR.'Goals'.DIRECTORY_SEPARATOR,
             // R-7b: Plans clean services moved into the GB pack. The 4
             // R-14a deferrals (BasePlanService, DistributionAccount,
             // InvestmentPlanService, RetirementPlanService) stay in
             // app/Services/Plans/. Pack Plans services extend BasePlanService
             // and reference App\Agents\* (R-8 deferral) across the boundary;
             // pinned by allow-list below.
-            $packDir . DIRECTORY_SEPARATOR . 'Plans' . DIRECTORY_SEPARATOR,
+            $packDir.DIRECTORY_SEPARATOR.'Plans'.DIRECTORY_SEPARATOR,
             // R-7c: Coordination clean services moved into the GB pack. The
             // 3 R-14a deferrals (CashFlowCoordinator, CrossModuleStrategyService,
             // HouseholdPlanningService) stay in app/Services/Coordination/.
             // Pack RecommendationsAggregatorService imports
             // App\Services\Investment\PortfolioAnalyzer (R-14a) across the
             // boundary; pinned by allow-list below.
-            $packDir . DIRECTORY_SEPARATOR . 'Coordination' . DIRECTORY_SEPARATOR,
+            $packDir.DIRECTORY_SEPARATOR.'Coordination'.DIRECTORY_SEPARATOR,
             // R-8: 7 module agents (Coordinating + 6 module agents) moved
             // into the GB pack. They extend App\Agents\BaseAgent (still in
             // app/Agents pending follow-up) and import deferred R-14a peers
             // (Coordination/Protection/AI services) across the boundary;
             // pinned by allow-list below.
-            $packDir . DIRECTORY_SEPARATOR . 'Agents' . DIRECTORY_SEPARATOR,
+            $packDir.DIRECTORY_SEPARATOR.'Agents'.DIRECTORY_SEPARATOR,
             // R-9a: 18 UK Resources moved into the GB pack. Pack resources
             // for UK joint-ownable models (Property, Mortgage, Investment,
             // Savings, Chattel, BusinessInterest) reference
             // App\Http\Resources\UserResource for the user / joint_owner
             // relationships; pinned by allow-list below.
-            $packDir . DIRECTORY_SEPARATOR . 'Http' . DIRECTORY_SEPARATOR . 'Resources' . DIRECTORY_SEPARATOR,
+            $packDir.DIRECTORY_SEPARATOR.'Http'.DIRECTORY_SEPARATOR.'Resources'.DIRECTORY_SEPARATOR,
             // R-9b: 6 UK module observers moved into the GB pack. Risk
             // observers extend App\Observers\RiskRecalculationObserver
             // (generic base, stays in app/Observers/); pinned by allow-list.
-            $packDir . DIRECTORY_SEPARATOR . 'Observers' . DIRECTORY_SEPARATOR,
+            $packDir.DIRECTORY_SEPARATOR.'Observers'.DIRECTORY_SEPARATOR,
             // R-9d: UK module controllers begin moving into the GB pack
             // (Savings first). Controllers extend App\Http\Controllers\Controller
             // (Laravel base controller, stays in core) and use
             // App\Http\Traits\SanitizedErrorResponse (cross-cutting trait,
             // stays in core); pinned by allow-list below.
-            $packDir . DIRECTORY_SEPARATOR . 'Http' . DIRECTORY_SEPARATOR . 'Controllers' . DIRECTORY_SEPARATOR,
+            $packDir.DIRECTORY_SEPARATOR.'Http'.DIRECTORY_SEPARATOR.'Controllers'.DIRECTORY_SEPARATOR,
             // R-9e: 50 module-folder Requests relocated in R-9c had no App\
             // imports, so the requests directory wasn't exempted at the time.
             // The flat StoreProtectionActionDefinitionRequest moved in R-9e
-            // imports App\Services\Auth\PermissionService for admin-permission
+            // imports Fynla\Core\Services\PermissionService for admin-permission
             // gating. Exempt the directory (and pin the import via allow-list
             // below) rather than refactor PermissionService into core for the
             // sake of one request.
-            $packDir . DIRECTORY_SEPARATOR . 'Http' . DIRECTORY_SEPARATOR . 'Requests' . DIRECTORY_SEPARATOR,
+            $packDir.DIRECTORY_SEPARATOR.'Http'.DIRECTORY_SEPARATOR.'Requests'.DIRECTORY_SEPARATOR,
         ];
 
         $violations = [];
@@ -149,7 +179,9 @@ describe('Pack Isolation', function () {
         );
 
         foreach ($iterator as $file) {
-            if ($file->getExtension() !== 'php') continue;
+            if ($file->getExtension() !== 'php') {
+                continue;
+            }
             $path = $file->getPathname();
             $isExempt = false;
             foreach ($exemptDirs as $prefix) {
@@ -158,39 +190,41 @@ describe('Pack Isolation', function () {
                     break;
                 }
             }
-            if ($isExempt) continue;
+            if ($isExempt) {
+                continue;
+            }
             $contents = file_get_contents($path);
 
             if (preg_match('/(?:^|[\s(;])(use\s+)?\\\\?App\\\\/m', $contents)) {
-                $violations[] = str_replace(base_path() . '/', '', $path);
+                $violations[] = str_replace(base_path().'/', '', $path);
             }
         }
 
         expect($violations)->toBeEmpty(
-            'GB pack must not import any App\\ namespace (outside src/Providers/). Violations: ' . implode(', ', $violations)
+            'GB pack must not import any App\\ namespace (outside src/Providers/). Violations: '.implode(', ', $violations)
         );
     });
 
     it('country-gb Constants/Traits/Models/Estate/Tax/Retirement/Investment/Protection/Savings/Goals/Plans/Coordination/Agents/Http/Observers only import allow-listed App\\ namespaces (R-6/R-7/R-8/R-9 ratchet)', function () {
         $packDir = base_path('packs/country-gb/src');
         $targetDirs = [
-            $packDir . DIRECTORY_SEPARATOR . 'Constants',
-            $packDir . DIRECTORY_SEPARATOR . 'Traits',
-            $packDir . DIRECTORY_SEPARATOR . 'Models',
-            $packDir . DIRECTORY_SEPARATOR . 'Estate',
-            $packDir . DIRECTORY_SEPARATOR . 'Tax',
-            $packDir . DIRECTORY_SEPARATOR . 'Retirement',
-            $packDir . DIRECTORY_SEPARATOR . 'Investment',
-            $packDir . DIRECTORY_SEPARATOR . 'Protection',
-            $packDir . DIRECTORY_SEPARATOR . 'Savings',
-            $packDir . DIRECTORY_SEPARATOR . 'Goals',
-            $packDir . DIRECTORY_SEPARATOR . 'Plans',
-            $packDir . DIRECTORY_SEPARATOR . 'Coordination',
-            $packDir . DIRECTORY_SEPARATOR . 'Agents',
-            $packDir . DIRECTORY_SEPARATOR . 'Http' . DIRECTORY_SEPARATOR . 'Resources',
-            $packDir . DIRECTORY_SEPARATOR . 'Http' . DIRECTORY_SEPARATOR . 'Controllers',
-            $packDir . DIRECTORY_SEPARATOR . 'Http' . DIRECTORY_SEPARATOR . 'Requests',
-            $packDir . DIRECTORY_SEPARATOR . 'Observers',
+            $packDir.DIRECTORY_SEPARATOR.'Constants',
+            $packDir.DIRECTORY_SEPARATOR.'Traits',
+            $packDir.DIRECTORY_SEPARATOR.'Models',
+            $packDir.DIRECTORY_SEPARATOR.'Estate',
+            $packDir.DIRECTORY_SEPARATOR.'Tax',
+            $packDir.DIRECTORY_SEPARATOR.'Retirement',
+            $packDir.DIRECTORY_SEPARATOR.'Investment',
+            $packDir.DIRECTORY_SEPARATOR.'Protection',
+            $packDir.DIRECTORY_SEPARATOR.'Savings',
+            $packDir.DIRECTORY_SEPARATOR.'Goals',
+            $packDir.DIRECTORY_SEPARATOR.'Plans',
+            $packDir.DIRECTORY_SEPARATOR.'Coordination',
+            $packDir.DIRECTORY_SEPARATOR.'Agents',
+            $packDir.DIRECTORY_SEPARATOR.'Http'.DIRECTORY_SEPARATOR.'Resources',
+            $packDir.DIRECTORY_SEPARATOR.'Http'.DIRECTORY_SEPARATOR.'Controllers',
+            $packDir.DIRECTORY_SEPARATOR.'Http'.DIRECTORY_SEPARATOR.'Requests',
+            $packDir.DIRECTORY_SEPARATOR.'Observers',
         ];
 
         // The R-3/R-4 relocations tolerate a narrow allow-list of App\
@@ -277,22 +311,17 @@ describe('Pack Isolation', function () {
             // creation of protection action definitions via the cross-cutting
             // PermissionService (used by every admin-permission check across
             // packs). Stays in core as shared auth infrastructure.
-            'App\\Services\\Auth\\PermissionService',
             // App\Observers\RiskRecalculationObserver — generic base class
             // (debounced job dispatch). Stays in app/Observers/ as a non-UK
             // helper; the 4 UK risk observers (DCPension, InvestmentAccount,
             // Property, SavingsAccount) extend it across the boundary.
             'App\\Observers\\RiskRecalculationObserver',
             // App\Services\* — relocated in R-5/R-6.
-            'App\\Services\\AI\\AiToolDefinitions', // R-8: CoordinatingAgent imports
             'App\\Services\\AI\\KycGateChecker',
             'App\\Services\\AI\\QueryClassifier',
             'App\\Services\\AI\\SystemPromptBuilder',
-            'App\\Services\\AI\\XaiClient',
-            'App\\Services\\AI\\XaiToolDefinitions',
             'App\\Services\\PrerequisiteGateService',
             // App\Services\* — relocated in R-6/R-7.
-            'App\\Services\\Cache\\CacheInvalidationService',
             // R-14a deferred Coordination services — float-money signatures
             // keep these in app/Services/Coordination/ until the int-minor
             // money refactor. Pack CoordinatingAgent imports both across
@@ -316,7 +345,6 @@ describe('Pack Isolation', function () {
             // int-minor money refactor. Pack code that collaborates with
             // them imports across the boundary.
             'App\\Services\\Investment\\ContributionOptimizer', // R-14a
-            'App\\Services\\Investment\\DividendTaxCalculator', // R-14a
             'App\\Services\\Investment\\FeeAnalyzer', // R-14a
             'App\\Services\\Investment\\InvestmentProjectionService', // R-14a
             'App\\Services\\Investment\\PortfolioAnalyzer', // R-14a
@@ -329,8 +357,6 @@ describe('Pack Isolation', function () {
             'App\\Services\\Investment\\Goals\\ShortfallAnalyzer', // R-14a
             'App\\Services\\Investment\\ModelPortfolio\\AssetAllocationOptimizer', // R-14a
             'App\\Services\\Investment\\Performance\\PerformanceAttributionAnalyzer', // R-14a
-            'App\\Services\\Investment\\Recommendation\\LifeEventAssessmentService', // R-14a
-            'App\\Services\\Investment\\Recommendation\\UserContextBuilder', // R-14a
             'App\\Services\\Investment\\Tax\\BedAndISACalculator', // R-14a
             'App\\Services\\Investment\\Tax\\ISAAllowanceOptimizer', // R-14a
             'App\\Services\\Investment\\Tax\\TaxOptimizationAnalyzer', // R-14a
@@ -390,9 +416,8 @@ describe('Pack Isolation', function () {
             'App\\Services\\Risk\\RiskPreferenceService',
             'App\\Services\\Settings\\AssumptionsService',
             'App\\Services\\Shared\\CrossModuleAssetAggregator',
-            // App\Services\Shared\MonteCarloEngine — used by MonteCarloSimulator
+            // Fynla\Core\Services\MonteCarloEngine — used by MonteCarloSimulator
             // (relocated in R-6b-i). Shared module relocates in R-7.
-            'App\\Services\\Shared\\MonteCarloEngine',
             'App\\Services\\UserProfile\\ProfileCompletenessChecker',
             // R-7 target — UserProfileService relocates with the
             // UserProfile module. RequiredCapitalCalculator imports it
@@ -418,34 +443,38 @@ describe('Pack Isolation', function () {
 
         $violations = [];
         foreach ($targetDirs as $dir) {
-            if (! is_dir($dir)) continue;
+            if (! is_dir($dir)) {
+                continue;
+            }
             $iterator = new RecursiveIteratorIterator(
                 new RecursiveDirectoryIterator($dir)
             );
 
             foreach ($iterator as $file) {
-                if ($file->getExtension() !== 'php') continue;
+                if ($file->getExtension() !== 'php') {
+                    continue;
+                }
                 $contents = file_get_contents($file->getPathname());
 
                 preg_match_all('/^use\s+(\\\\?App\\\\[A-Za-z0-9_\\\\]+);/m', $contents, $matches);
                 foreach ($matches[1] as $import) {
                     $normalised = ltrim($import, '\\');
                     if (! in_array($normalised, $allowed, true)) {
-                        $violations[] = str_replace(base_path() . '/', '', $file->getPathname()) . ' uses ' . $normalised;
+                        $violations[] = str_replace(base_path().'/', '', $file->getPathname()).' uses '.$normalised;
                     }
                 }
             }
         }
 
         expect($violations)->toBeEmpty(
-            'GB pack Constants/Traits may only import allow-listed App\\ classes. Violations: ' . implode(', ', $violations)
+            'GB pack Constants/Traits may only import allow-listed App\\ classes. Violations: '.implode(', ', $violations)
         );
     });
 
     it('country-xx-smoke does not reference other pack namespaces', function () {
         $packDir = base_path('packs/country-xx-smoke/src');
 
-        if (!is_dir($packDir)) {
+        if (! is_dir($packDir)) {
             $this->markTestSkipped('packs/country-xx-smoke/src directory not found');
         }
 
@@ -457,23 +486,25 @@ describe('Pack Isolation', function () {
         );
 
         foreach ($iterator as $file) {
-            if ($file->getExtension() !== 'php') continue;
+            if ($file->getExtension() !== 'php') {
+                continue;
+            }
             $contents = file_get_contents($file->getPathname());
 
             if (preg_match($otherPackPattern, $contents)) {
-                $violations[] = str_replace(base_path() . '/', '', $file->getPathname());
+                $violations[] = str_replace(base_path().'/', '', $file->getPathname());
             }
         }
 
         expect($violations)->toBeEmpty(
-            'Smoke pack must not reference other pack namespaces. Violations: ' . implode(', ', $violations)
+            'Smoke pack must not reference other pack namespaces. Violations: '.implode(', ', $violations)
         );
     });
 
     it('country-za does not import the App namespace (outside Http adapters)', function () {
         $packDir = base_path('packs/country-za/src');
 
-        if (!is_dir($packDir)) {
+        if (! is_dir($packDir)) {
             $this->markTestSkipped('packs/country-za/src directory not found');
         }
 
@@ -482,7 +513,7 @@ describe('Pack Isolation', function () {
         // mediated by direct App\Models\* imports. R-15 ratchets this — the
         // core query layer (or relocated cross-pack models) closes the gap
         // and this exemption is removed.
-        $exemptPrefix = $packDir . DIRECTORY_SEPARATOR . 'Http' . DIRECTORY_SEPARATOR;
+        $exemptPrefix = $packDir.DIRECTORY_SEPARATOR.'Http'.DIRECTORY_SEPARATOR;
 
         $violations = [];
         $iterator = new RecursiveIteratorIterator(
@@ -490,25 +521,29 @@ describe('Pack Isolation', function () {
         );
 
         foreach ($iterator as $file) {
-            if ($file->getExtension() !== 'php') continue;
-            if (str_starts_with($file->getPathname(), $exemptPrefix)) continue;
+            if ($file->getExtension() !== 'php') {
+                continue;
+            }
+            if (str_starts_with($file->getPathname(), $exemptPrefix)) {
+                continue;
+            }
             $contents = file_get_contents($file->getPathname());
 
             // Look for `use App\`, `App\\...::class`, or a leading backslash App\ reference.
             if (preg_match('/(?:^|[\s(;])(use\s+)?\\\\?App\\\\/m', $contents)) {
-                $violations[] = str_replace(base_path() . '/', '', $file->getPathname());
+                $violations[] = str_replace(base_path().'/', '', $file->getPathname());
             }
         }
 
         expect($violations)->toBeEmpty(
-            'ZA pack must not import any App\\ namespace (outside src/Http/). Violations: ' . implode(', ', $violations)
+            'ZA pack must not import any App\\ namespace (outside src/Http/). Violations: '.implode(', ', $violations)
         );
     });
 
     it('country-za HTTP adapters only import allow-listed App\\ namespaces (R-15 ratchet)', function () {
         $httpDir = base_path('packs/country-za/src/Http');
 
-        if (!is_dir($httpDir)) {
+        if (! is_dir($httpDir)) {
             $this->markTestSkipped('packs/country-za/src/Http directory not found');
         }
 
@@ -536,7 +571,9 @@ describe('Pack Isolation', function () {
         );
 
         foreach ($iterator as $file) {
-            if ($file->getExtension() !== 'php') continue;
+            if ($file->getExtension() !== 'php') {
+                continue;
+            }
             $contents = file_get_contents($file->getPathname());
 
             // Allow-list applies to App\ and Fynla\Packs\Gb\ — these are
@@ -547,20 +584,20 @@ describe('Pack Isolation', function () {
             foreach ($matches[1] as $import) {
                 $normalised = ltrim($import, '\\');
                 if (! in_array($normalised, $allowed, true)) {
-                    $violations[] = str_replace(base_path() . '/', '', $file->getPathname()) . ' uses ' . $normalised;
+                    $violations[] = str_replace(base_path().'/', '', $file->getPathname()).' uses '.$normalised;
                 }
             }
         }
 
         expect($violations)->toBeEmpty(
-            'ZA pack Http adapters may only import allow-listed cross-namespace classes. Violations: ' . implode(', ', $violations)
+            'ZA pack Http adapters may only import allow-listed cross-namespace classes. Violations: '.implode(', ', $violations)
         );
     });
 
     it('country-za does not reference other pack namespaces (outside Http adapters)', function () {
         $packDir = base_path('packs/country-za/src');
 
-        if (!is_dir($packDir)) {
+        if (! is_dir($packDir)) {
             $this->markTestSkipped('packs/country-za/src directory not found');
         }
 
@@ -570,7 +607,7 @@ describe('Pack Isolation', function () {
         // now cross-pack rather than App\. Same exemption shape as the
         // App\ ban — ratchets to empty in R-15 once the core-mediated
         // query layer abstracts asset lookup.
-        $exemptPrefix = $packDir . DIRECTORY_SEPARATOR . 'Http' . DIRECTORY_SEPARATOR;
+        $exemptPrefix = $packDir.DIRECTORY_SEPARATOR.'Http'.DIRECTORY_SEPARATOR;
 
         $violations = [];
         $iterator = new RecursiveIteratorIterator(
@@ -578,25 +615,29 @@ describe('Pack Isolation', function () {
         );
 
         foreach ($iterator as $file) {
-            if ($file->getExtension() !== 'php') continue;
-            if (str_starts_with($file->getPathname(), $exemptPrefix)) continue;
+            if ($file->getExtension() !== 'php') {
+                continue;
+            }
+            if (str_starts_with($file->getPathname(), $exemptPrefix)) {
+                continue;
+            }
             $contents = file_get_contents($file->getPathname());
 
             // Any Fynla\Packs\ reference that isn't the Za namespace is a leak.
             if (preg_match('/Fynla\\\\Packs\\\\(?!Za\\\\)/', $contents)) {
-                $violations[] = str_replace(base_path() . '/', '', $file->getPathname());
+                $violations[] = str_replace(base_path().'/', '', $file->getPathname());
             }
         }
 
         expect($violations)->toBeEmpty(
-            'ZA pack must not reference other pack namespaces (outside src/Http/). Violations: ' . implode(', ', $violations)
+            'ZA pack must not reference other pack namespaces (outside src/Http/). Violations: '.implode(', ', $violations)
         );
     });
 
     it('core/ does not contain SA-specific logic (outside docblocks)', function () {
         $coreDir = base_path('core/app/Core');
 
-        if (!is_dir($coreDir)) {
+        if (! is_dir($coreDir)) {
             $this->markTestSkipped('core/app/Core directory not found');
         }
 
@@ -612,7 +653,9 @@ describe('Pack Isolation', function () {
         );
 
         foreach ($iterator as $file) {
-            if ($file->getExtension() !== 'php') continue;
+            if ($file->getExtension() !== 'php') {
+                continue;
+            }
 
             // Strip PHPDoc blocks and // line comments before checking.
             $contents = file_get_contents($file->getPathname());
@@ -621,144 +664,144 @@ describe('Pack Isolation', function () {
 
             foreach ($forbiddenInCode as $literal) {
                 if (str_contains($codeOnly, $literal)) {
-                    $violations[] = str_replace(base_path() . '/', '', $file->getPathname()) . ' contains code literal "' . $literal . '"';
+                    $violations[] = str_replace(base_path().'/', '', $file->getPathname()).' contains code literal "'.$literal.'"';
                 }
             }
         }
 
         expect($violations)->toBeEmpty(
-            'core/ must not hardcode SA-specific values. Violations: ' . implode('; ', $violations)
+            'core/ must not hardcode SA-specific values. Violations: '.implode('; ', $violations)
         );
     });
 
     it('ZaTaxEngine implements the core TaxEngine contract', function () {
-        if (! class_exists(\Fynla\Packs\Za\Tax\ZaTaxEngine::class)) {
+        if (! class_exists(ZaTaxEngine::class)) {
             $this->markTestSkipped('ZaTaxEngine not loaded');
         }
 
-        expect(class_implements(\Fynla\Packs\Za\Tax\ZaTaxEngine::class))
-            ->toContain(\Fynla\Core\Contracts\TaxEngine::class);
+        expect(class_implements(ZaTaxEngine::class))
+            ->toContain(TaxEngine::class);
     });
 
     it('UkSavingsEngine implements the core SavingsEngine contract', function () {
-        expect(class_implements(\Fynla\Packs\Gb\Savings\UkSavingsEngine::class))
-            ->toContain(\Fynla\Core\Contracts\SavingsEngine::class);
+        expect(class_implements(UkSavingsEngine::class))
+            ->toContain(SavingsEngine::class);
     });
 
     it('ZaSavingsEngine implements the core SavingsEngine contract', function () {
-        if (! class_exists(\Fynla\Packs\Za\Savings\ZaSavingsEngine::class)) {
+        if (! class_exists(ZaSavingsEngine::class)) {
             $this->markTestSkipped('ZaSavingsEngine not yet loaded (WS 1.2a in progress)');
         }
 
-        expect(class_implements(\Fynla\Packs\Za\Savings\ZaSavingsEngine::class))
-            ->toContain(\Fynla\Core\Contracts\SavingsEngine::class);
+        expect(class_implements(ZaSavingsEngine::class))
+            ->toContain(SavingsEngine::class);
     });
 
     it('UkInvestmentEngine implements the core InvestmentEngine contract', function () {
-        expect(class_implements(\Fynla\Packs\Gb\Investment\UkInvestmentEngine::class))
-            ->toContain(\Fynla\Core\Contracts\InvestmentEngine::class);
+        expect(class_implements(UkInvestmentEngine::class))
+            ->toContain(InvestmentEngine::class);
     });
 
     it('ZaInvestmentEngine implements the core InvestmentEngine contract', function () {
-        if (! class_exists(\Fynla\Packs\Za\Investment\ZaInvestmentEngine::class)) {
+        if (! class_exists(ZaInvestmentEngine::class)) {
             $this->markTestSkipped('ZaInvestmentEngine not yet loaded (WS 1.3a in progress)');
         }
 
-        expect(class_implements(\Fynla\Packs\Za\Investment\ZaInvestmentEngine::class))
-            ->toContain(\Fynla\Core\Contracts\InvestmentEngine::class);
+        expect(class_implements(ZaInvestmentEngine::class))
+            ->toContain(InvestmentEngine::class);
     });
 
     it('UkExchangeControl implements the core ExchangeControl contract', function () {
-        expect(class_implements(\App\Services\ExchangeControl\UkExchangeControl::class))
-            ->toContain(\Fynla\Core\Contracts\ExchangeControl::class);
+        expect(class_implements(UkExchangeControl::class))
+            ->toContain(ExchangeControl::class);
     });
 
     it('TaxOptimisationAgent implements the core TaxOptimisationEngine contract', function () {
-        expect(class_implements(\App\Agents\TaxOptimisationAgent::class))
-            ->toContain(\Fynla\Core\Contracts\TaxOptimisationEngine::class);
+        expect(class_implements(TaxOptimisationAgent::class))
+            ->toContain(TaxOptimisationEngine::class);
     });
 
     it('pack.gb.tax_optimisation resolves to the UK tax-optimisation agent', function () {
         $resolved = app('pack.gb.tax_optimisation');
-        expect($resolved)->toBeInstanceOf(\App\Agents\TaxOptimisationAgent::class);
-        expect($resolved)->toBeInstanceOf(\Fynla\Core\Contracts\TaxOptimisationEngine::class);
+        expect($resolved)->toBeInstanceOf(TaxOptimisationAgent::class);
+        expect($resolved)->toBeInstanceOf(TaxOptimisationEngine::class);
     });
 
     it('ZaExchangeControl implements the core ExchangeControl contract', function () {
-        if (! class_exists(\Fynla\Packs\Za\ExchangeControl\ZaExchangeControl::class)) {
+        if (! class_exists(ZaExchangeControl::class)) {
             $this->markTestSkipped('ZaExchangeControl not yet loaded (WS 1.3b in progress)');
         }
 
-        expect(class_implements(\Fynla\Packs\Za\ExchangeControl\ZaExchangeControl::class))
-            ->toContain(\Fynla\Core\Contracts\ExchangeControl::class);
+        expect(class_implements(ZaExchangeControl::class))
+            ->toContain(ExchangeControl::class);
     });
 
     it('UkRetirementEngine implements the core RetirementEngine contract', function () {
-        expect(class_implements(\Fynla\Packs\Gb\Retirement\UkRetirementEngine::class))
-            ->toContain(\Fynla\Core\Contracts\RetirementEngine::class);
+        expect(class_implements(UkRetirementEngine::class))
+            ->toContain(RetirementEngine::class);
     });
 
     it('ZaRetirementEngine implements the core RetirementEngine contract', function () {
-        if (! class_exists(\Fynla\Packs\Za\Retirement\ZaRetirementEngine::class)) {
+        if (! class_exists(ZaRetirementEngine::class)) {
             $this->markTestSkipped('ZaRetirementEngine not yet loaded (WS 1.4a in progress)');
         }
 
-        expect(class_implements(\Fynla\Packs\Za\Retirement\ZaRetirementEngine::class))
-            ->toContain(\Fynla\Core\Contracts\RetirementEngine::class);
+        expect(class_implements(ZaRetirementEngine::class))
+            ->toContain(RetirementEngine::class);
     });
 
     it('UkProtectionEngine implements the core ProtectionEngine contract', function () {
-        expect(class_implements(\Fynla\Packs\Gb\Protection\UkProtectionEngine::class))
-            ->toContain(\Fynla\Core\Contracts\ProtectionEngine::class);
+        expect(class_implements(UkProtectionEngine::class))
+            ->toContain(ProtectionEngine::class);
     });
 
     it('ZaProtectionEngine implements the core ProtectionEngine contract', function () {
-        if (! class_exists(\Fynla\Packs\Za\Protection\ZaProtectionEngine::class)) {
+        if (! class_exists(ZaProtectionEngine::class)) {
             $this->markTestSkipped('ZaProtectionEngine not yet loaded (WS 1.5 in progress)');
         }
 
-        expect(class_implements(\Fynla\Packs\Za\Protection\ZaProtectionEngine::class))
-            ->toContain(\Fynla\Core\Contracts\ProtectionEngine::class);
+        expect(class_implements(ZaProtectionEngine::class))
+            ->toContain(ProtectionEngine::class);
     });
 
     it('UkEstateEngine implements the core EstateEngine contract', function () {
-        expect(class_implements(\Fynla\Packs\Gb\Estate\UkEstateEngine::class))
-            ->toContain(\Fynla\Core\Contracts\EstateEngine::class);
+        expect(class_implements(UkEstateEngine::class))
+            ->toContain(EstateEngine::class);
     });
 
     it('ZaEstateEngine implements the core EstateEngine contract', function () {
-        if (! class_exists(\Fynla\Packs\Za\Estate\ZaEstateEngine::class)) {
+        if (! class_exists(ZaEstateEngine::class)) {
             $this->markTestSkipped('ZaEstateEngine not yet loaded (WS 1.6 in progress)');
         }
 
-        expect(class_implements(\Fynla\Packs\Za\Estate\ZaEstateEngine::class))
-            ->toContain(\Fynla\Core\Contracts\EstateEngine::class);
+        expect(class_implements(ZaEstateEngine::class))
+            ->toContain(EstateEngine::class);
     });
 
     it('ZaLocalisation implements the core Localisation contract', function () {
-        if (! class_exists(\Fynla\Packs\Za\Localisation\ZaLocalisation::class)) {
+        if (! class_exists(ZaLocalisation::class)) {
             $this->markTestSkipped('ZaLocalisation not yet loaded (WS 1.8 in progress)');
         }
 
-        expect(class_implements(\Fynla\Packs\Za\Localisation\ZaLocalisation::class))
-            ->toContain(\Fynla\Core\Contracts\Localisation::class);
+        expect(class_implements(ZaLocalisation::class))
+            ->toContain(Localisation::class);
     });
 
     it('ZaIdValidator implements the core IdentityValidator contract', function () {
-        if (! class_exists(\Fynla\Packs\Za\Identity\ZaIdValidator::class)) {
+        if (! class_exists(ZaIdValidator::class)) {
             $this->markTestSkipped('ZaIdValidator not yet loaded (WS 1.8 in progress)');
         }
 
-        expect(class_implements(\Fynla\Packs\Za\Identity\ZaIdValidator::class))
-            ->toContain(\Fynla\Core\Contracts\IdentityValidator::class);
+        expect(class_implements(ZaIdValidator::class))
+            ->toContain(IdentityValidator::class);
     });
 
     it('ZaBankingValidator implements the core BankingValidator contract', function () {
-        if (! class_exists(\Fynla\Packs\Za\Banking\ZaBankingValidator::class)) {
+        if (! class_exists(ZaBankingValidator::class)) {
             $this->markTestSkipped('ZaBankingValidator not yet loaded (WS 1.8 in progress)');
         }
 
-        expect(class_implements(\Fynla\Packs\Za\Banking\ZaBankingValidator::class))
-            ->toContain(\Fynla\Core\Contracts\BankingValidator::class);
+        expect(class_implements(ZaBankingValidator::class))
+            ->toContain(BankingValidator::class);
     });
 });

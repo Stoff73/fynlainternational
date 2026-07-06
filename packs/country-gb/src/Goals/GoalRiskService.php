@@ -5,9 +5,9 @@ declare(strict_types=1);
 namespace Fynla\Packs\Gb\Goals;
 
 use Fynla\Core\Models\Goal;
-use Fynla\Packs\Gb\Models\Investment\RiskProfile;
 use Fynla\Core\Models\User;
-use App\Services\Shared\MonteCarloEngine;
+use Fynla\Core\Services\MonteCarloEngine;
+use Fynla\Packs\Gb\Models\Investment\RiskProfile;
 
 /**
  * Service for goal-based risk assessment and projections for investment goals.

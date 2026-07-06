@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Database\Seeders;
 
-use App\Services\Auth\PermissionService;
+use Fynla\Core\Services\PermissionService;
 use Illuminate\Database\Seeder;
 
 class RolesPermissionsSeeder extends Seeder

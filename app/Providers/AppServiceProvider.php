@@ -4,6 +4,15 @@ declare(strict_types=1);
 
 namespace App\Providers;
 
+use Anthropic\Client;
+use Fynla\Core\AI\XaiClient;
+use Fynla\Core\Observers\JurisdictionDetectionObserver;
+use Fynla\Packs\Gb\Models\DBPension;
+use Fynla\Packs\Gb\Models\DCPension;
+use Fynla\Packs\Gb\Models\Estate\Asset;
+use Fynla\Packs\Gb\Models\Investment\InvestmentAccount;
+use Fynla\Packs\Gb\Models\Property;
+use Fynla\Packs\Gb\Models\SavingsAccount;
 use Fynla\Packs\Gb\Plans\PlanConfigService;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Database\Eloquent\Model;
@@ -21,17 +30,17 @@ class AppServiceProvider extends ServiceProvider
 
         // Register both AI client singletons — runtime provider selection happens
         // in HasAiChat/HasAiGuardrails via cache check (admin toggle)
-        $this->app->singleton(\App\Services\AI\XaiClient::class);
+        $this->app->singleton(XaiClient::class);
 
-        if (class_exists(\Anthropic\Client::class)) {
-            $this->app->singleton(\Anthropic\Client::class, function () {
+        if (class_exists(Client::class)) {
+            $this->app->singleton(Client::class, function () {
                 $apiKey = config('services.anthropic.api_key');
 
                 if (empty($apiKey)) {
                     throw new \RuntimeException('ANTHROPIC_API_KEY is not configured.');
                 }
 
-                return new \Anthropic\Client(apiKey: $apiKey);
+                return new Client(apiKey: $apiKey);
             });
         }
     }
@@ -59,11 +68,12 @@ class AppServiceProvider extends ServiceProvider
             foreach (['Fynla\\Core\\Models\\', 'Fynla\\Packs\\Gb\\Models\\', 'App\\Models\\'] as $prefix) {
                 if (str_starts_with($modelName, $prefix)) {
                     $relative = substr($modelName, strlen($prefix));
-                    return 'Database\\Factories\\' . $relative . 'Factory';
+
+                    return 'Database\\Factories\\'.$relative.'Factory';
                 }
             }
 
-            return 'Database\\Factories\\' . $shortName . 'Factory';
+            return 'Database\\Factories\\'.$shortName.'Factory';
         });
 
         // Inverse: factory → model. Laravel's default looks under App\Models\
@@ -82,14 +92,14 @@ class AppServiceProvider extends ServiceProvider
                 'Fynla\\Packs\\Gb\\Models\\',
                 'App\\Models\\',
             ] as $prefix) {
-                $candidate = $prefix . $relative;
+                $candidate = $prefix.$relative;
                 if (class_exists($candidate)) {
                     return $candidate;
                 }
             }
 
             // Fallback to Laravel default behaviour.
-            return 'App\\' . class_basename($factoryClass);
+            return 'App\\'.class_basename($factoryClass);
         });
 
         // Workstream 0.6 — wire the jurisdiction-detection observer on every
@@ -97,15 +107,15 @@ class AppServiceProvider extends ServiceProvider
         // observer auto-activates a user's jurisdictions from asset
         // location; users never see the word "jurisdiction" in the UI.
         $assetModels = [
-            \Fynla\Packs\Gb\Models\Investment\InvestmentAccount::class,
-            \Fynla\Packs\Gb\Models\DCPension::class,
-            \Fynla\Packs\Gb\Models\DBPension::class,
-            \Fynla\Packs\Gb\Models\SavingsAccount::class,
-            \Fynla\Packs\Gb\Models\Property::class,
-            \Fynla\Packs\Gb\Models\Estate\Asset::class,
+            InvestmentAccount::class,
+            DCPension::class,
+            DBPension::class,
+            SavingsAccount::class,
+            Property::class,
+            Asset::class,
         ];
         foreach ($assetModels as $modelClass) {
-            $modelClass::observe(\Fynla\Core\Observers\JurisdictionDetectionObserver::class);
+            $modelClass::observe(JurisdictionDetectionObserver::class);
         }
     }
 }

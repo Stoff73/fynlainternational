@@ -4,8 +4,16 @@ declare(strict_types=1);
 
 namespace Fynla\Packs\Gb\Http\Controllers;
 
-use Fynla\Packs\Gb\Agents\SavingsAgent;
 use App\Http\Controllers\Controller;
+use App\Http\Traits\SanitizedErrorResponse;
+use App\Services\NetWorth\NetWorthService;
+use App\Services\Savings\ISATracker;
+use Carbon\Carbon;
+use Fynla\Core\Services\CacheInvalidationService;
+use Fynla\Core\Traits\CalculatesOwnershipShare;
+use Fynla\Packs\Gb\Agents\SavingsAgent;
+use Fynla\Packs\Gb\Goals\GoalStrategyService;
+use Fynla\Packs\Gb\Goals\LifeEventIntegrationService;
 use Fynla\Packs\Gb\Http\Requests\Savings\SavingsAnalysisRequest;
 use Fynla\Packs\Gb\Http\Requests\Savings\ScenarioRequest;
 use Fynla\Packs\Gb\Http\Requests\Savings\StoreSavingsAccountRequest;
@@ -13,18 +21,13 @@ use Fynla\Packs\Gb\Http\Requests\Savings\StoreSavingsGoalRequest;
 use Fynla\Packs\Gb\Http\Requests\Savings\UpdateSavingsAccountRequest;
 use Fynla\Packs\Gb\Http\Requests\Savings\UpdateSavingsGoalRequest;
 use Fynla\Packs\Gb\Http\Resources\SavingsAccountResource;
-use App\Http\Traits\SanitizedErrorResponse;
 use Fynla\Packs\Gb\Models\SavingsAccount;
 use Fynla\Packs\Gb\Models\SavingsGoal;
-use App\Services\Cache\CacheInvalidationService;
-use Fynla\Packs\Gb\Goals\GoalStrategyService;
-use Fynla\Packs\Gb\Goals\LifeEventIntegrationService;
-use App\Services\NetWorth\NetWorthService;
 use Fynla\Packs\Gb\Plans\SavingsPlanService;
 use Fynla\Packs\Gb\Savings\FSCSAssessor;
-use App\Services\Savings\ISATracker;
 use Fynla\Packs\Gb\Savings\PSACalculator;
-use Fynla\Core\Traits\CalculatesOwnershipShare;
+use Fynla\Packs\Gb\Tax\TaxConfigService;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
@@ -340,7 +343,7 @@ class SavingsController extends Controller
                 'success' => true,
                 'data' => $accountData,
             ]);
-        } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
+        } catch (ModelNotFoundException $e) {
             return response()->json([
                 'success' => false,
                 'message' => 'Account not found',
@@ -404,7 +407,7 @@ class SavingsController extends Controller
                 'message' => 'Savings account updated successfully',
                 'data' => $accountData,
             ]);
-        } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
+        } catch (ModelNotFoundException $e) {
             return response()->json([
                 'success' => false,
                 'message' => 'Account not found or unauthorized',
@@ -441,7 +444,7 @@ class SavingsController extends Controller
                 'success' => true,
                 'message' => 'Savings account deleted successfully',
             ]);
-        } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
+        } catch (ModelNotFoundException $e) {
             return response()->json([
                 'success' => false,
                 'message' => 'Account not found or unauthorized',
@@ -485,7 +488,7 @@ class SavingsController extends Controller
                     'include_in_retirement' => $account->include_in_retirement,
                 ],
             ]);
-        } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
+        } catch (ModelNotFoundException $e) {
             return response()->json([
                 'success' => false,
                 'message' => 'Account not found or unauthorized',
@@ -562,7 +565,7 @@ class SavingsController extends Controller
                 'message' => 'Savings goal updated successfully',
                 'data' => $goal->fresh()->load('linkedAccount'),
             ]);
-        } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
+        } catch (ModelNotFoundException $e) {
             return response()->json([
                 'success' => false,
                 'message' => 'Goal not found or unauthorized',
@@ -594,7 +597,7 @@ class SavingsController extends Controller
                 'success' => true,
                 'message' => 'Savings goal deleted successfully',
             ]);
-        } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
+        } catch (ModelNotFoundException $e) {
             return response()->json([
                 'success' => false,
                 'message' => 'Goal not found or unauthorized',
@@ -648,7 +651,7 @@ class SavingsController extends Controller
 
         $jisaAllowance = 9000.0;
         try {
-            $isaAllowances = app(\Fynla\Packs\Gb\Tax\TaxConfigService::class)->getISAAllowances();
+            $isaAllowances = app(TaxConfigService::class)->getISAAllowances();
             $jisaAllowance = (float) ($isaAllowances['junior_isa']['annual_allowance'] ?? 9000);
         } catch (\Throwable $e) {
             // Use default
@@ -656,7 +659,7 @@ class SavingsController extends Controller
 
         return $children->map(function ($child) use ($accounts, $jisaAllowance) {
             $dob = $child->date_of_birth;
-            $age = $dob ? (int) \Carbon\Carbon::parse($dob)->age : null;
+            $age = $dob ? (int) Carbon::parse($dob)->age : null;
             $isUnder18 = $age !== null && $age < 18;
 
             // Find JISA accounts for this child

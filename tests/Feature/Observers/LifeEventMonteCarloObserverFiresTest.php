@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-use App\Services\Cache\CacheInvalidationService;
 use Fynla\Core\Models\LifeEvent;
 use Fynla\Core\Models\User;
+use Fynla\Core\Services\CacheInvalidationService;
 use Fynla\Packs\Gb\Goals\GoalsProjectionService;
 use Fynla\Packs\Gb\Investment\MonteCarloSimulator;
 
@@ -23,7 +23,6 @@ use Fynla\Packs\Gb\Investment\MonteCarloSimulator;
  * The three collaborators are spied so the real (expensive) Monte Carlo +
  * goals projection aren't invoked. Assertions are method-call assertions.
  */
-
 beforeEach(function () {
     $this->user = User::factory()->create();
 

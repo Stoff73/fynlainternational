@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-use App\Services\Shared\MonteCarloEngine;
+use Fynla\Core\Services\MonteCarloEngine;
 use Fynla\Packs\Gb\Investment\MonteCarloSimulator;
 
 beforeEach(function () {

@@ -25,20 +25,31 @@ describe('No Float Money', function () {
             // a marginal rate for asset-location placement scoring. Int-minor
             // refactor in R-14a.
             'packs/country-gb/src/Http/Controllers/Investment/AssetLocationController.php:calculateIncomeTaxRate',
+            // R-17 batch 1: MonteCarloEngine lifted from app/Services/Shared
+            // into core (jurisdiction-neutral simulation base extended by the
+            // pack's MonteCarloSimulator). Its float signatures are simulation
+            // values, pre-existing ADR-005 int-minor debt carried with the
+            // move — not new float-money code. Int-minor refactor pending.
+            'core/app/Core/Services/MonteCarloEngine.php:applyScheduledInjection',
+            'core/app/Core/Services/MonteCarloEngine.php:calculateGoalProbability',
         ];
 
         $violations = [];
         $moneyPattern = '/(amount|balance|value|price|cost|salary|income|premium|fee|payment|contribution|benefit|liability|asset|total|net|gross|tax_amount)/i';
 
         foreach ($dirs as $dir) {
-            if (!is_dir($dir)) continue;
+            if (! is_dir($dir)) {
+                continue;
+            }
 
             $iterator = new RecursiveIteratorIterator(
                 new RecursiveDirectoryIterator($dir)
             );
 
             foreach ($iterator as $file) {
-                if ($file->getExtension() !== 'php') continue;
+                if ($file->getExtension() !== 'php') {
+                    continue;
+                }
                 $path = $file->getPathname();
                 $contents = file_get_contents($path);
                 $lines = explode("\n", $contents);
@@ -51,21 +62,21 @@ describe('No Float Money', function () {
                     }
 
                     // Check for float type hints on money-like parameters
-                    if (preg_match('/function\s+(\w+)\s*\([^)]*float\s+\$\w*(' . 'amount|balance|value|price|cost|salary|income|premium|fee|payment' . ')/i', $line, $m)) {
-                        $relPath = str_replace(base_path() . '/', '', $path);
+                    if (preg_match('/function\s+(\w+)\s*\([^)]*float\s+\$\w*('.'amount|balance|value|price|cost|salary|income|premium|fee|payment'.')/i', $line, $m)) {
+                        $relPath = str_replace(base_path().'/', '', $path);
                         $methodName = $m[1] ?? '';
                         $key = "{$relPath}:{$methodName}";
                         if (in_array($key, $allowed, true)) {
                             continue;
                         }
-                        $violations[] = "{$relPath}:" . ($lineNum + 1) . ": {$trimmed}";
+                        $violations[] = "{$relPath}:".($lineNum + 1).": {$trimmed}";
                     }
                 }
             }
         }
 
         expect($violations)->toBeEmpty(
-            "Float type hints found on money-named parameters in new code:\n" . implode("\n", $violations)
+            "Float type hints found on money-named parameters in new code:\n".implode("\n", $violations)
         );
     });
 });

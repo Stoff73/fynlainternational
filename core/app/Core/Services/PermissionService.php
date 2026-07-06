@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Services\Auth;
+namespace Fynla\Core\Services;
 
 use Fynla\Core\Models\Permission;
 use Fynla\Core\Models\Role;

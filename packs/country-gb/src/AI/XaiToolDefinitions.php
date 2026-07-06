@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Services\AI;
+namespace Fynla\Packs\Gb\AI;
 
 /**
  * xAI-optimised tool definitions with strict function calling.

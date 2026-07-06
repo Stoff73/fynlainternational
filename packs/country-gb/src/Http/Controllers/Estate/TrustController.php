@@ -5,6 +5,12 @@ declare(strict_types=1);
 namespace Fynla\Packs\Gb\Http\Controllers\Estate;
 
 use App\Http\Controllers\Controller;
+use App\Services\Trust\IHTPeriodicChargeCalculator;
+use App\Services\Trust\TrustAssetAggregatorService;
+use Fynla\Core\Models\User;
+use Fynla\Core\Services\CacheInvalidationService;
+use Fynla\Packs\Gb\Estate\IHTCalculationService;
+use Fynla\Packs\Gb\Estate\TrustService;
 use Fynla\Packs\Gb\Http\Resources\Estate\TrustResource;
 use Fynla\Packs\Gb\Models\Estate\Asset;
 use Fynla\Packs\Gb\Models\Estate\Gift;
@@ -12,12 +18,7 @@ use Fynla\Packs\Gb\Models\Estate\IHTProfile;
 use Fynla\Packs\Gb\Models\Estate\Liability;
 use Fynla\Packs\Gb\Models\Estate\Trust;
 use Fynla\Packs\Gb\Models\Estate\Will;
-use App\Services\Cache\CacheInvalidationService;
-use Fynla\Packs\Gb\Estate\IHTCalculationService;
-use Fynla\Packs\Gb\Estate\TrustService;
 use Fynla\Packs\Gb\Tax\TaxConfigService;
-use App\Services\Trust\IHTPeriodicChargeCalculator;
-use App\Services\Trust\TrustAssetAggregatorService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
@@ -197,7 +198,7 @@ class TrustController extends Controller
         }
 
         // Use the simplified IHT calculation service
-        $spouse = ($user->marital_status === 'married' && $user->spouse_id) ? \Fynla\Core\Models\User::find($user->spouse_id) : null;
+        $spouse = ($user->marital_status === 'married' && $user->spouse_id) ? User::find($user->spouse_id) : null;
         $dataSharingEnabled = $spouse && $user->hasAcceptedSpousePermission();
 
         $ihtCalculation = $this->ihtCalculationService->calculate($user, $spouse, $dataSharingEnabled);

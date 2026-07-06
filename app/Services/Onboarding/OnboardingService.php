@@ -4,19 +4,31 @@ declare(strict_types=1);
 
 namespace App\Services\Onboarding;
 
-use Fynla\Core\Models\Permission;
-
-use Fynla\Core\Models\OnboardingProgress;
-use Fynla\Core\Models\User;
 use Carbon\Carbon;
+use Fynla\Core\Models\FamilyMember;
+use Fynla\Core\Models\OnboardingProgress;
+use Fynla\Core\Models\SpousePermission;
+use Fynla\Core\Models\User;
+use Fynla\Core\Services\CacheInvalidationService;
+use Fynla\Packs\Gb\Models\CriticalIllnessPolicy;
+use Fynla\Packs\Gb\Models\Estate\Liability;
+use Fynla\Packs\Gb\Models\Estate\Will;
+use Fynla\Packs\Gb\Models\IncomeProtectionPolicy;
+use Fynla\Packs\Gb\Models\Investment\InvestmentAccount;
+use Fynla\Packs\Gb\Models\LifeInsurancePolicy;
+use Fynla\Packs\Gb\Models\Mortgage;
+use Fynla\Packs\Gb\Models\Property;
+use Fynla\Packs\Gb\Models\RetirementProfile;
+use Fynla\Packs\Gb\Models\SavingsAccount;
+use Fynla\Packs\Gb\Tax\TaxConfigService;
 use Illuminate\Support\Facades\DB;
 
 class OnboardingService
 {
     public function __construct(
         private EstateOnboardingFlow $estateFlow,
-        private \Fynla\Packs\Gb\Tax\TaxConfigService $taxConfig,
-        private readonly \App\Services\Cache\CacheInvalidationService $cacheInvalidation
+        private TaxConfigService $taxConfig,
+        private readonly CacheInvalidationService $cacheInvalidation
     ) {}
 
     /**
@@ -250,7 +262,7 @@ class OnboardingService
         }
 
         // Get existing family members added during onboarding
-        $existingMembers = \Fynla\Core\Models\FamilyMember::where('user_id', $userId)
+        $existingMembers = FamilyMember::where('user_id', $userId)
             ->whereNotNull('date_of_birth')
             ->get()
             ->keyBy('name');
@@ -275,7 +287,7 @@ class OnboardingService
                 ]);
             } else {
                 // Create new family member
-                \Fynla\Core\Models\FamilyMember::create([
+                FamilyMember::create([
                     'user_id' => $userId,
                     'name' => $memberData['name'],
                     'relationship' => $memberData['relationship'],
@@ -334,7 +346,7 @@ class OnboardingService
                 $this->cacheInvalidation->invalidateForUserAndSpouse($user->id, $spouseAccount->id);
 
                 // Create bidirectional spouse data sharing permissions
-                \Fynla\Core\Models\SpousePermission::updateOrCreate(
+                SpousePermission::updateOrCreate(
                     [
                         'user_id' => $user->id,
                         'spouse_id' => $spouseAccount->id,
@@ -345,7 +357,7 @@ class OnboardingService
                     ]
                 );
 
-                \Fynla\Core\Models\SpousePermission::updateOrCreate(
+                SpousePermission::updateOrCreate(
                     [
                         'user_id' => $spouseAccount->id,
                         'spouse_id' => $user->id,
@@ -357,7 +369,7 @@ class OnboardingService
                 );
 
                 // Create family member record for the current user
-                \Fynla\Core\Models\FamilyMember::updateOrCreate(
+                FamilyMember::updateOrCreate(
                     [
                         'user_id' => $user->id,
                         'relationship' => 'spouse',
@@ -371,7 +383,7 @@ class OnboardingService
                 );
 
                 // Create reciprocal family member record for spouse
-                \Fynla\Core\Models\FamilyMember::updateOrCreate(
+                FamilyMember::updateOrCreate(
                     [
                         'user_id' => $spouseAccount->id,
                         'relationship' => 'spouse',
@@ -386,7 +398,7 @@ class OnboardingService
             });
         } else {
             // Account doesn't exist yet - just create family member record
-            \Fynla\Core\Models\FamilyMember::updateOrCreate(
+            FamilyMember::updateOrCreate(
                 [
                     'user_id' => $user->id,
                     'relationship' => 'spouse',
@@ -427,7 +439,7 @@ class OnboardingService
         }
 
         // Use updateOrCreate to handle both new and existing records
-        \Fynla\Packs\Gb\Models\Estate\Will::updateOrCreate(
+        Will::updateOrCreate(
             ['user_id' => $userId],
             $willData
         );
@@ -458,9 +470,9 @@ class OnboardingService
 
         // Update or create retirement profile if retirement age is provided
         if (isset($data['target_retirement_age'])) {
-            $currentAge = $user->date_of_birth ? \Carbon\Carbon::parse($user->date_of_birth)->age : 30;
+            $currentAge = $user->date_of_birth ? Carbon::parse($user->date_of_birth)->age : 30;
 
-            \Fynla\Packs\Gb\Models\RetirementProfile::updateOrCreate(
+            RetirementProfile::updateOrCreate(
                 ['user_id' => $userId],
                 [
                     'current_age' => $currentAge,
@@ -471,12 +483,12 @@ class OnboardingService
 
         // If user is retired, calculate their retirement age from retirement date
         if ($data['employment_status'] === 'retired' && isset($data['retirement_date']) && $user->date_of_birth) {
-            $birthDate = \Carbon\Carbon::parse($user->date_of_birth);
-            $retirementDate = \Carbon\Carbon::parse($data['retirement_date']);
+            $birthDate = Carbon::parse($user->date_of_birth);
+            $retirementDate = Carbon::parse($data['retirement_date']);
             $retirementAge = $retirementDate->diffInYears($birthDate);
-            $currentAge = \Carbon\Carbon::now()->diffInYears($birthDate);
+            $currentAge = Carbon::now()->diffInYears($birthDate);
 
-            \Fynla\Packs\Gb\Models\RetirementProfile::updateOrCreate(
+            RetirementProfile::updateOrCreate(
                 ['user_id' => $userId],
                 [
                     'current_age' => $currentAge,
@@ -602,7 +614,7 @@ class OnboardingService
                 $monthlyRental = $propertyData['monthly_rental_income'] ?? 0;
 
                 // Create property record
-                $property = \Fynla\Packs\Gb\Models\Property::create([
+                $property = Property::create([
                     'user_id' => $userId,
                     'property_type' => $propertyData['property_type'],
                     'ownership_type' => $propertyData['ownership_type'] ?? 'individual',
@@ -624,7 +636,7 @@ class OnboardingService
 
                 // If property has a mortgage, create a mortgage record linked to this property
                 if (isset($propertyData['outstanding_mortgage']) && $propertyData['outstanding_mortgage'] > 0) {
-                    \Fynla\Packs\Gb\Models\Mortgage::create([
+                    Mortgage::create([
                         'property_id' => $property->id,
                         'user_id' => $userId,
                         'lender_name' => 'Mortgage Provider', // Default name from onboarding
@@ -680,10 +692,10 @@ class OnboardingService
                 if ($ownershipType === 'joint') {
                     $ownershipPercentage = 50.00;
                     $jointOwnerId = $investmentData['joint_owner_id']
-                        ?? \Fynla\Core\Models\User::find($userId)?->familyMembers()->where('relationship', 'spouse')->first()?->linked_user_id;
+                        ?? User::find($userId)?->familyMembers()->where('relationship', 'spouse')->first()?->linked_user_id;
                 }
 
-                \Fynla\Packs\Gb\Models\Investment\InvestmentAccount::create([
+                InvestmentAccount::create([
                     'user_id' => $userId,
                     'provider' => $investmentData['institution'],
                     'account_type' => $accountType,
@@ -713,10 +725,10 @@ class OnboardingService
                 $jointOwnerId = null;
                 if ($ownershipType === 'joint') {
                     $jointOwnerId = $cashData['joint_owner_id']
-                        ?? \Fynla\Core\Models\User::find($userId)?->familyMembers()->where('relationship', 'spouse')->first()?->linked_user_id;
+                        ?? User::find($userId)?->familyMembers()->where('relationship', 'spouse')->first()?->linked_user_id;
                 }
 
-                \Fynla\Packs\Gb\Models\SavingsAccount::create([
+                SavingsAccount::create([
                     'user_id' => $userId,
                     'institution' => $cashData['institution'],
                     'account_type' => $cashData['account_type'],
@@ -797,7 +809,7 @@ class OnboardingService
                 : null;
 
             // Create liability record
-            \Fynla\Packs\Gb\Models\Estate\Liability::create([
+            Liability::create([
                 'user_id' => $userId,
                 'liability_type' => $liabilityData['type'],
                 'liability_name' => $liabilityData['lender'],
@@ -852,8 +864,8 @@ class OnboardingService
         // Calculate term years if end date provided or use provided term_years
         $termYears = $data['term_years'] ?? 25; // Default
         if ($endDate) {
-            $start = \Carbon\Carbon::parse($startDate);
-            $end = \Carbon\Carbon::parse($endDate);
+            $start = Carbon::parse($startDate);
+            $end = Carbon::parse($endDate);
             $termYears = $start->diffInYears($end);
         }
 
@@ -881,7 +893,7 @@ class OnboardingService
             $policyData['decreasing_rate'] = $data['decreasing_rate'] ?? null;
         }
 
-        \Fynla\Packs\Gb\Models\LifeInsurancePolicy::create($policyData);
+        LifeInsurancePolicy::create($policyData);
     }
 
     /**
@@ -895,12 +907,12 @@ class OnboardingService
         // Calculate term years if end date provided
         $termYears = 25; // Default
         if ($endDate) {
-            $start = \Carbon\Carbon::parse($startDate);
-            $end = \Carbon\Carbon::parse($endDate);
+            $start = Carbon::parse($startDate);
+            $end = Carbon::parse($endDate);
             $termYears = $start->diffInYears($end);
         }
 
-        \Fynla\Packs\Gb\Models\CriticalIllnessPolicy::create([
+        CriticalIllnessPolicy::create([
             'user_id' => $userId,
             'policy_type' => 'standalone', // Default
             'provider' => $data['provider'],
@@ -920,7 +932,7 @@ class OnboardingService
     {
         $startDate = ! empty($data['start_date']) ? $data['start_date'] : now()->toDateString();
 
-        \Fynla\Packs\Gb\Models\IncomeProtectionPolicy::create([
+        IncomeProtectionPolicy::create([
             'user_id' => $userId,
             'provider' => $data['provider'],
             'policy_number' => $data['policy_number'] ?? null,

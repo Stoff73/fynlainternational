@@ -2,8 +2,8 @@
 
 declare(strict_types=1);
 
-use App\Services\AI\AiToolDefinitions;
-use App\Services\AI\XaiToolDefinitions;
+use Fynla\Packs\Gb\AI\AiToolDefinitions;
+use Fynla\Packs\Gb\AI\XaiToolDefinitions;
 
 /**
  * G-4-b M-7 — Verifies that AI tool definitions exclude write-class tools
@@ -17,7 +17,6 @@ use App\Services\AI\XaiToolDefinitions;
  * so as long as the boolean flag reaches the tool list and the list correctly
  * filters writes, the invariant holds end-to-end. This test pins the tool list.
  */
-
 describe('AiToolDefinitions preview blocking (G-4-b M-7)', function () {
     it('excludes write tools when isPreviewMode is true (Anthropic)', function () {
         $defs = new AiToolDefinitions;

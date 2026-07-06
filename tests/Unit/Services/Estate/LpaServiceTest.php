@@ -2,18 +2,19 @@
 
 declare(strict_types=1);
 
+use Fynla\Core\Models\User;
+use Fynla\Core\Services\CacheInvalidationService;
+use Fynla\Packs\Gb\Estate\LpaService;
 use Fynla\Packs\Gb\Models\Estate\LastingPowerOfAttorney;
 use Fynla\Packs\Gb\Models\Estate\LpaAttorney;
 use Fynla\Packs\Gb\Models\TaxConfiguration;
-use Fynla\Core\Models\User;
-use Fynla\Packs\Gb\Estate\LpaService;
 
 beforeEach(function () {
     if (! TaxConfiguration::where('is_active', true)->exists()) {
         TaxConfiguration::factory()->create(['is_active' => true]);
     }
 
-    $this->service = new LpaService(app(\App\Services\Cache\CacheInvalidationService::class));
+    $this->service = new LpaService(app(CacheInvalidationService::class));
     $this->user = User::factory()->create();
 });
 

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Services\AI;
+namespace Fynla\Core\AI;
 
 use GuzzleHttp\Client as GuzzleClient;
 use OpenAI;

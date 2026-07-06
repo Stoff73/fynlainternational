@@ -4,10 +4,11 @@ declare(strict_types=1);
 
 namespace App\Services\Retirement;
 
+use App\Services\Risk\RiskPreferenceService;
 use Fynla\Core\Models\User;
+use Fynla\Core\Services\CacheInvalidationService;
 use Fynla\Packs\Gb\Goals\LifeEventCashFlowService;
 use Fynla\Packs\Gb\Investment\MonteCarloSimulator;
-use App\Services\Risk\RiskPreferenceService;
 use Fynla\Packs\Gb\Retirement\RequiredCapitalCalculator;
 use Fynla\Packs\Gb\Tax\TaxConfigService;
 
@@ -26,7 +27,7 @@ class RetirementProjectionService
         private readonly RiskPreferenceService $riskService,
         private readonly TaxConfigService $taxConfig,
         private readonly LifeEventCashFlowService $lifeEventCashFlowService,
-        private readonly \App\Services\Cache\CacheInvalidationService $cacheInvalidation,
+        private readonly CacheInvalidationService $cacheInvalidation,
         private readonly RequiredCapitalCalculator $requiredCapitalCalculator
     ) {}
 

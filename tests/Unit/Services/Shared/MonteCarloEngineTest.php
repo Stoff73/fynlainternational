@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-use App\Services\Shared\MonteCarloEngine;
+use Fynla\Core\Services\MonteCarloEngine;
 
 beforeEach(function () {
     $this->engine = new MonteCarloEngine;

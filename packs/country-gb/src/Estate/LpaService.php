@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace Fynla\Packs\Gb\Estate;
 
+use Fynla\Core\Models\User;
+use Fynla\Core\Services\CacheInvalidationService;
 use Fynla\Packs\Gb\Models\Estate\LastingPowerOfAttorney;
 use Fynla\Packs\Gb\Models\Estate\LpaAttorney;
 use Fynla\Packs\Gb\Models\Estate\LpaNotificationPerson;
-use Fynla\Core\Models\User;
-use App\Services\Cache\CacheInvalidationService;
 use Illuminate\Support\Facades\DB;
 
 class LpaService

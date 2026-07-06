@@ -4,13 +4,14 @@ declare(strict_types=1);
 
 namespace Fynla\Packs\Gb\Http\Controllers;
 
-use Fynla\Packs\Gb\Agents\CoordinatingAgent;
-use Fynla\Packs\Gb\Constants\TaxDefaults;
 use App\Http\Controllers\Controller;
 use App\Http\Traits\SanitizedErrorResponse;
-use Fynla\Core\Models\RecommendationTracking;
-use App\Services\Cache\CacheInvalidationService;
 use App\Services\Coordination\CashFlowCoordinator;
+use Fynla\Core\Models\RecommendationTracking;
+use Fynla\Core\Services\CacheInvalidationService;
+use Fynla\Packs\Gb\Agents\CoordinatingAgent;
+use Fynla\Packs\Gb\Constants\TaxDefaults;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
@@ -296,7 +297,7 @@ class HolisticPlanningController extends Controller
     /**
      * Extract demands from recommendation tracking records
      *
-     * @param  \Illuminate\Database\Eloquent\Collection  $recommendations
+     * @param  Collection  $recommendations
      */
     private function extractDemandsFromTracking($recommendations): array
     {

@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Fynla\Packs\Gb\Http\Requests\Protection;
 
-use App\Services\Auth\PermissionService;
 use Fynla\Core\Models\Permission;
+use Fynla\Core\Services\PermissionService;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 

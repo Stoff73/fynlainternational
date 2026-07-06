@@ -2,10 +2,11 @@
 
 declare(strict_types=1);
 
-use Fynla\Packs\Gb\Agents\ProtectionAgent;
-use Fynla\Packs\Gb\Models\ProtectionProfile;
 use Fynla\Core\Models\User;
+use Fynla\Core\Services\CacheInvalidationService;
+use Fynla\Packs\Gb\Agents\ProtectionAgent;
 use Fynla\Packs\Gb\Database\Seeders\TaxConfigurationSeeder;
+use Fynla\Packs\Gb\Models\ProtectionProfile;
 use Illuminate\Support\Facades\Cache;
 
 beforeEach(function () {
@@ -109,7 +110,7 @@ describe('Protection Cache Invalidation', function () {
         expect($cachedBefore)->not->toBeNull();
 
         // Invalidate using the centralised service
-        $service = app(\App\Services\Cache\CacheInvalidationService::class);
+        $service = app(CacheInvalidationService::class);
         $service->invalidateForUser($user->id);
 
         // Verify cache was cleared

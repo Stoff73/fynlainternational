@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Fynla\Packs\Gb\Traits;
 
+use Anthropic\Client;
 use Anthropic\Client as AnthropicClient;
 use Anthropic\Messages\InputJSONDelta;
 use Anthropic\Messages\RawContentBlockDeltaEvent;
@@ -14,16 +15,19 @@ use Anthropic\Messages\RawMessageStartEvent;
 use Anthropic\Messages\TextBlock;
 use Anthropic\Messages\TextDelta;
 use Anthropic\Messages\ToolUseBlock;
-use Fynla\Core\Models\AiConversation;
 // Anthropic SDK imports — only used when AI_PROVIDER=anthropic
-use Fynla\Core\Models\AiMessage;
-use Fynla\Core\Models\User;
 use App\Services\AI\KycGateChecker;
 use App\Services\AI\QueryClassifier;
+use App\Services\AI\StructuredResponseValidator;
 use App\Services\AI\SystemPromptBuilder;
-use App\Services\AI\XaiClient;
-use App\Services\AI\XaiToolDefinitions;
 use App\Services\PrerequisiteGateService;
+use Fynla\Core\AI\XaiClient;
+use Fynla\Core\Models\AiAdviceLog;
+use Fynla\Core\Models\AiConversation;
+use Fynla\Core\Models\AiMessage;
+use Fynla\Core\Models\User;
+use Fynla\Packs\Gb\AI\XaiToolDefinitions;
+use Fynla\Packs\Gb\Constants\QuerySchemas;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Log;
 
@@ -77,8 +81,8 @@ trait HasAiChat
         $classification = $classifier->classify($message, $currentRoute);
 
         $kycResult = null;
-        if (! \Fynla\Packs\Gb\Constants\QuerySchemas::isBypassType($classification['primary'])
-            && $classification['primary'] !== \Fynla\Packs\Gb\Constants\QuerySchemas::GENERAL) {
+        if (! QuerySchemas::isBypassType($classification['primary'])
+            && $classification['primary'] !== QuerySchemas::GENERAL) {
             $kycChecker = app(KycGateChecker::class);
             $kycResult = $kycChecker->check($user, $classification);
         }
@@ -235,7 +239,7 @@ trait HasAiChat
                     $currentToolUseBlock = null;
                     $accumulatedToolJson = '';
 
-                    $anthropicClient = app(\Anthropic\Client::class);
+                    $anthropicClient = app(Client::class);
                     $stream = $anthropicClient->messages->createStream(
                         maxTokens: $maxTokens,
                         messages: $messages,
@@ -442,6 +446,7 @@ trait HasAiChat
             if ($hasToolCalls && $stopReason === 'tool_use' && $toolCallCount >= self::MAX_TOOL_CALLS_PER_TURN && $fullResponse === '') {
                 $xaiTools = [];
                 $tools = [];
+
                 continue;
             }
 
@@ -449,7 +454,7 @@ trait HasAiChat
         }
 
         // Validate and sanitise AI response
-        $validator = app(\App\Services\AI\StructuredResponseValidator::class);
+        $validator = app(StructuredResponseValidator::class);
         $fullResponse = $validator->sanitise($fullResponse);
         $violations = $validator->validateAndLog($fullResponse, $classification, $user->id);
 
@@ -486,9 +491,9 @@ trait HasAiChat
 
         // Log advice for review system (only for advice query types)
         if ($classification !== null
-            && \Fynla\Packs\Gb\Constants\QuerySchemas::isAdviceType($classification['primary'])) {
+            && QuerySchemas::isAdviceType($classification['primary'])) {
             try {
-                \Fynla\Core\Models\AiAdviceLog::create([
+                AiAdviceLog::create([
                     'user_id' => $user->id,
                     'conversation_id' => $conversation->id,
                     'message_id' => $assistantMessage->id,

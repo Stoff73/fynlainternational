@@ -2,17 +2,18 @@
 
 declare(strict_types=1);
 
+use App\Services\Retirement\RetirementProjectionService;
+use App\Services\Risk\RiskPreferenceService;
+use Carbon\Carbon;
+use Fynla\Core\Models\User;
+use Fynla\Core\Services\CacheInvalidationService;
+use Fynla\Packs\Gb\Goals\LifeEventCashFlowService;
+use Fynla\Packs\Gb\Investment\MonteCarloSimulator;
 use Fynla\Packs\Gb\Models\DBPension;
 use Fynla\Packs\Gb\Models\DCPension;
 use Fynla\Packs\Gb\Models\StatePension;
-use Fynla\Core\Models\User;
-use Fynla\Packs\Gb\Goals\LifeEventCashFlowService;
-use Fynla\Packs\Gb\Investment\MonteCarloSimulator;
 use Fynla\Packs\Gb\Retirement\RequiredCapitalCalculator;
-use App\Services\Retirement\RetirementProjectionService;
-use App\Services\Risk\RiskPreferenceService;
 use Fynla\Packs\Gb\Tax\TaxConfigService;
-use Carbon\Carbon;
 
 beforeEach(function () {
     // Create test user
@@ -89,7 +90,7 @@ beforeEach(function () {
         $this->mockRiskService,
         $this->mockTaxConfig,
         $this->mockLifeEventCashFlowService,
-        app(\App\Services\Cache\CacheInvalidationService::class),
+        app(CacheInvalidationService::class),
         $this->mockRequiredCapitalCalculator
     );
 });

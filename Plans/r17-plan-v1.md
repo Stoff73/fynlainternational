@@ -35,7 +35,7 @@ impact (verified). No class-name collisions in any target namespace.
 
 | # | Scope | Files | Risk | Status |
 |---|-------|-------|------|--------|
-| 1 | Neutral lift to `Fynla\Core` + delete 3 stale allow-list entries | ~6 | LOW | **DONE 2026-07-06** (commit `pending`) |
+| 1 | Neutral lift to `Fynla\Core` + delete 3 stale allow-list entries | 6 | LOW | **DONE 2026-07-06** — 9 allow-list entries removed (81→72). Course-correction: AiToolDefinitions + XaiToolDefinitions contain UK product copy (ISA/SIPP — caught by NoHardcodedLegalCopyTest core ratchet) and their only consumers are pack files → landed in `Fynla\Packs\Gb\AI\` instead of core. XaiClient → core as planned. MonteCarloEngine float signatures pinned in NoFloatMoneyTest ADR-005 list. Suite 2,979 green; Larastan baseline regenerated (path-only changes, still 11). |
 | 2 | Risk/Settings foundation → pack | ~4 | **HIGH** (RiskPreferenceService fan-in 16 app + 6 pack) | TODO |
 | 3 | Investment module → `Gb\Investment` | 19 | MED (FeeAnalyzer 5 pack consumers) | TODO |
 | 4 | Retirement module → `Gb\Retirement` (depends on 3) | 8 | MED (2×2,000+-line files) | TODO |

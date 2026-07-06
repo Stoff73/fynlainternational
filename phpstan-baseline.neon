@@ -1,14 +1,14 @@
 parameters:
 	ignoreErrors:
 		-
-			message: "#^Called 'pluck' on Laravel collection, but could have been retrieved as a query\\.$#"
-			count: 1
-			path: app/Services/Auth/PermissionService.php
-
-		-
 			message: "#^Access to an undefined property App\\\\Services\\\\Investment\\\\AssetLocation\\\\AssetLocationOptimizer\\:\\:\\$taxCalculator\\.$#"
 			count: 1
 			path: app/Services/Investment/AssetLocation/AssetLocationOptimizer.php
+
+		-
+			message: "#^Called 'pluck' on Laravel collection, but could have been retrieved as a query\\.$#"
+			count: 1
+			path: core/app/Core/Services/PermissionService.php
 
 		-
 			message: "#^Access to an undefined property Fynla\\\\Packs\\\\Gb\\\\Estate\\\\GiftingStrategyOptimizer\\:\\:\\$taxCalculator\\.$#"

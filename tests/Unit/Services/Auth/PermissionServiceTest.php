@@ -5,7 +5,7 @@ declare(strict_types=1);
 use Fynla\Core\Models\Permission;
 use Fynla\Core\Models\Role;
 use Fynla\Core\Models\User;
-use App\Services\Auth\PermissionService;
+use Fynla\Core\Services\PermissionService;
 
 beforeEach(function () {
     $this->permissionService = new PermissionService;

@@ -4,8 +4,12 @@ declare(strict_types=1);
 
 namespace Fynla\Packs\Gb\Http\Controllers;
 
-use Fynla\Packs\Gb\Agents\ProtectionAgent;
 use App\Http\Controllers\Controller;
+use App\Http\Traits\SanitizedErrorResponse;
+use App\Services\Protection\ComprehensiveProtectionPlanService;
+use Fynla\Core\Services\CacheInvalidationService;
+use Fynla\Packs\Gb\Agents\ProtectionAgent;
+use Fynla\Packs\Gb\Goals\LifeEventIntegrationService;
 use Fynla\Packs\Gb\Http\Requests\Protection\ScenarioRequest;
 use Fynla\Packs\Gb\Http\Requests\Protection\StoreCriticalIllnessPolicyRequest;
 use Fynla\Packs\Gb\Http\Requests\Protection\StoreDisabilityPolicyRequest;
@@ -24,14 +28,12 @@ use Fynla\Packs\Gb\Http\Resources\Protection\IncomeProtectionPolicyResource;
 use Fynla\Packs\Gb\Http\Resources\Protection\LifeInsurancePolicyResource;
 use Fynla\Packs\Gb\Http\Resources\Protection\ProtectionProfileResource;
 use Fynla\Packs\Gb\Http\Resources\Protection\SicknessIllnessPolicyResource;
-use App\Http\Traits\SanitizedErrorResponse;
 use Fynla\Packs\Gb\Models\CriticalIllnessPolicy;
 use Fynla\Packs\Gb\Models\DisabilityPolicy;
 use Fynla\Packs\Gb\Models\IncomeProtectionPolicy;
 use Fynla\Packs\Gb\Models\LifeInsurancePolicy;
 use Fynla\Packs\Gb\Models\ProtectionProfile;
 use Fynla\Packs\Gb\Models\SicknessIllnessPolicy;
-use Fynla\Packs\Gb\Goals\LifeEventIntegrationService;
 use Fynla\Packs\Gb\Traits\PolicyCRUDTrait;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -46,9 +48,9 @@ class ProtectionController extends Controller
      */
     public function __construct(
         private readonly ProtectionAgent $protectionAgent,
-        private readonly \App\Services\Protection\ComprehensiveProtectionPlanService $comprehensiveProtectionPlan,
+        private readonly ComprehensiveProtectionPlanService $comprehensiveProtectionPlan,
         private readonly LifeEventIntegrationService $lifeEventIntegration,
-        private readonly \App\Services\Cache\CacheInvalidationService $cacheInvalidation
+        private readonly CacheInvalidationService $cacheInvalidation
     ) {}
 
     /**

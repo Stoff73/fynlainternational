@@ -4,13 +4,14 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers\Api;
 
-use Fynla\Core\Models\Permission;
-
 use App\Http\Controllers\Controller;
 use App\Http\Traits\SanitizedErrorResponse;
-use App\Services\Cache\CacheInvalidationService;
+use App\Notifications\SpousePermissionRequest;
 use Fynla\Core\Models\FamilyMember;
+use Fynla\Core\Models\Permission;
 use Fynla\Core\Models\SpousePermission;
+use Fynla\Core\Models\User;
+use Fynla\Core\Services\CacheInvalidationService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -36,7 +37,7 @@ class SpousePermissionController extends Controller
         $hasLinkedSpouse = (bool) $user->spouse_id;
 
         // Also check if user has a spouse in family_members table (may not have linked account)
-        $spouseFamilyMember = \Fynla\Core\Models\FamilyMember::where('user_id', $user->id)
+        $spouseFamilyMember = FamilyMember::where('user_id', $user->id)
             ->where('relationship', 'spouse')
             ->first();
 
@@ -133,9 +134,9 @@ class SpousePermissionController extends Controller
         ]);
 
         // Send notification/email to spouse
-        $spouse = \Fynla\Core\Models\User::find($user->spouse_id);
+        $spouse = User::find($user->spouse_id);
         if ($spouse) {
-            $spouse->notify(new \App\Notifications\SpousePermissionRequest($user->name));
+            $spouse->notify(new SpousePermissionRequest($user->name));
         }
 
         return response()->json([
@@ -186,7 +187,7 @@ class SpousePermissionController extends Controller
             ], 422);
         }
 
-        $inviter = \Fynla\Core\Models\User::find($permission->user_id);
+        $inviter = User::find($permission->user_id);
         if (! $inviter) {
             return response()->json([
                 'success' => false,
@@ -216,7 +217,7 @@ class SpousePermissionController extends Controller
             if (! $user->spouse_id) {
                 // Lock the inviter row to avoid racing a parallel accept
                 // from a different invitee invited by the same user.
-                $inviter = \Fynla\Core\Models\User::lockForUpdate()->find($inviter->id);
+                $inviter = User::lockForUpdate()->find($inviter->id);
 
                 if ($inviter->spouse_id && $inviter->spouse_id !== $user->id) {
                     // Race: inviter has already linked elsewhere. Mark the
