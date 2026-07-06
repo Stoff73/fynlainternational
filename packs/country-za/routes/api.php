@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+use Fynla\Packs\Za\Http\Controllers\ZaCoordinationController;
 use Fynla\Packs\Za\Http\Controllers\ZaEstateController;
 use Fynla\Packs\Za\Http\Controllers\ZaExchangeControlController;
 use Fynla\Packs\Za\Http\Controllers\ZaGoalsController;
@@ -147,5 +148,10 @@ Route::middleware(['auth:sanctum', 'active.jurisdiction', 'pack.enabled:za'])
         Route::prefix('goals')->as('goals.')->group(function () {
             Route::get('defaults', [ZaGoalsController::class, 'defaults'])->name('defaults');
             Route::post('severance-benefit', [ZaGoalsController::class, 'severanceBenefit'])->name('severance-benefit');
+        });
+
+        // SA Coordination v1 — cross-module position summary.
+        Route::prefix('coordination')->as('coordination.')->group(function () {
+            Route::get('summary', [ZaCoordinationController::class, 'summary'])->name('summary');
         });
     });
