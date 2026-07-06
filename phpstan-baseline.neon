@@ -21,7 +21,7 @@ parameters:
 			path: packs/country-gb/src/Investment/AssetLocation/AssetLocationOptimizer.php
 
 		-
-			message: "#^Job class App\\\\Jobs\\\\RunMonteCarloSimulation constructor invoked with 2 parameters in App\\\\Jobs\\\\RunMonteCarloSimulation\\:\\:dispatch\\(\\), 6\\-8 required\\.$#"
+			message: "#^Job class Fynla\\\\Packs\\\\Gb\\\\Jobs\\\\RunMonteCarloSimulation constructor invoked with 2 parameters in Fynla\\\\Packs\\\\Gb\\\\Jobs\\\\RunMonteCarloSimulation\\:\\:dispatch\\(\\), 6\\-8 required\\.$#"
 			count: 1
 			path: packs/country-gb/src/Investment/ScenarioService.php
 

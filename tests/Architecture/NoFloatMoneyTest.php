@@ -92,6 +92,13 @@ describe('No Float Money', function () {
             // R-17 batch 8: BaseAgent lifted to core with its pre-existing
             // roundToPenny display helper. Carried ADR-005 debt.
             'core/app/Core/Agents/BaseAgent.php:roundToPenny',
+            // R-17 batch 9: long-tail UK services relocated wholesale with
+            // their pre-existing float signatures. Carried ADR-005 debt.
+            'packs/country-gb/src/AI/SystemPromptBuilder.php:*',
+            'packs/country-gb/src/Benefits/ChildBenefitService.php:*',
+            'packs/country-gb/src/Chattel/ChattelCGTService.php:*',
+            'packs/country-gb/src/Property/PropertyTaxService.php:*',
+            'packs/country-gb/src/Trust/IHTPeriodicChargeCalculator.php:*',
         ];
 
         $violations = [];

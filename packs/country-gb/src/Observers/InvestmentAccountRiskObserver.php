@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace Fynla\Packs\Gb\Observers;
 
-use App\Observers\RiskRecalculationObserver;
-
 use Fynla\Packs\Gb\Models\Investment\InvestmentAccount;
 
 /**

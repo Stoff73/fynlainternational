@@ -2,12 +2,13 @@
 
 declare(strict_types=1);
 
-use Fynla\Packs\Gb\Models\Estate\Trust;
-use Fynla\Core\Models\Household;
-use Fynla\Packs\Gb\Models\TaxConfiguration;
-use Fynla\Core\Models\User;
-use App\Services\Trust\IHTPeriodicChargeCalculator;
 use Carbon\Carbon;
+use Fynla\Core\Models\Household;
+use Fynla\Core\Models\User;
+use Fynla\Packs\Gb\Models\Estate\Trust;
+use Fynla\Packs\Gb\Models\TaxConfiguration;
+use Fynla\Packs\Gb\Tax\TaxConfigService;
+use Fynla\Packs\Gb\Trust\IHTPeriodicChargeCalculator;
 
 beforeEach(function () {
     // Ensure active tax configuration exists
@@ -15,7 +16,7 @@ beforeEach(function () {
         TaxConfiguration::factory()->create(['is_active' => true]);
     }
 
-    $taxConfig = app(\Fynla\Packs\Gb\Tax\TaxConfigService::class);
+    $taxConfig = app(TaxConfigService::class);
     $this->calculator = new IHTPeriodicChargeCalculator($taxConfig);
     $this->user = User::factory()->create();
     $this->household = Household::factory()->create();

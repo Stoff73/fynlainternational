@@ -2,15 +2,15 @@
 
 declare(strict_types=1);
 
+use Carbon\Carbon;
 use Fynla\Core\Models\Household;
+use Fynla\Core\Models\User;
 use Fynla\Packs\Gb\Models\Investment\InvestmentAccount;
 use Fynla\Packs\Gb\Models\Mortgage;
 use Fynla\Packs\Gb\Models\Property;
 use Fynla\Packs\Gb\Models\SavingsAccount;
 use Fynla\Packs\Gb\Models\TaxConfiguration;
-use Fynla\Core\Models\User;
-use App\Services\UserProfile\PersonalAccountsService;
-use Carbon\Carbon;
+use Fynla\Packs\Gb\UserProfile\PersonalAccountsService;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
 uses(RefreshDatabase::class);

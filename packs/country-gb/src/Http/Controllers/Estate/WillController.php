@@ -6,7 +6,6 @@ namespace Fynla\Packs\Gb\Http\Controllers\Estate;
 
 use App\Http\Controllers\Controller;
 use App\Http\Traits\SanitizedErrorResponse;
-use App\Services\Trust\IHTPeriodicChargeCalculator;
 use Fynla\Core\Services\CacheInvalidationService;
 use Fynla\Packs\Gb\Estate\IntestacyCalculator;
 use Fynla\Packs\Gb\Http\Requests\Estate\CalculateIntestacyRequest;
@@ -16,6 +15,7 @@ use Fynla\Packs\Gb\Http\Requests\Estate\UpdateBequestRequest;
 use Fynla\Packs\Gb\Models\Estate\Bequest;
 use Fynla\Packs\Gb\Models\Estate\Trust;
 use Fynla\Packs\Gb\Models\Estate\Will;
+use Fynla\Packs\Gb\Trust\IHTPeriodicChargeCalculator;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 

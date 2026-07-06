@@ -6,8 +6,8 @@ use App\Http\Controllers\Api\FamilyMembersController;
 use App\Http\Controllers\Api\PersonalAccountsController;
 use App\Http\Controllers\Api\UserProfileController;
 use App\Http\Controllers\Controller;
-use App\Services\UserProfile\PersonalAccountsService;
-use App\Services\UserProfile\UserProfileService;
+use Fynla\Packs\Gb\UserProfile\PersonalAccountsService;
+use Fynla\Packs\Gb\UserProfile\UserProfileService;
 
 /**
  * Phase 02 Architecture Tests

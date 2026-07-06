@@ -16,18 +16,18 @@ use Anthropic\Messages\TextBlock;
 use Anthropic\Messages\TextDelta;
 use Anthropic\Messages\ToolUseBlock;
 // Anthropic SDK imports — only used when AI_PROVIDER=anthropic
-use App\Services\AI\KycGateChecker;
-use App\Services\AI\QueryClassifier;
-use App\Services\AI\StructuredResponseValidator;
-use App\Services\AI\SystemPromptBuilder;
-use App\Services\PrerequisiteGateService;
 use Fynla\Core\AI\XaiClient;
 use Fynla\Core\Models\AiAdviceLog;
 use Fynla\Core\Models\AiConversation;
 use Fynla\Core\Models\AiMessage;
 use Fynla\Core\Models\User;
+use Fynla\Packs\Gb\AI\KycGateChecker;
+use Fynla\Packs\Gb\AI\QueryClassifier;
+use Fynla\Packs\Gb\AI\StructuredResponseValidator;
+use Fynla\Packs\Gb\AI\SystemPromptBuilder;
 use Fynla\Packs\Gb\AI\XaiToolDefinitions;
 use Fynla\Packs\Gb\Constants\QuerySchemas;
+use Fynla\Packs\Gb\Support\PrerequisiteGateService;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Log;
 

@@ -4,9 +4,10 @@ declare(strict_types=1);
 
 namespace Tests\Unit\Services;
 
-use Fynla\Packs\Gb\Models\Property;
 use Fynla\Core\Models\User;
-use App\Services\Property\PropertyTaxService;
+use Fynla\Packs\Gb\Models\Mortgage;
+use Fynla\Packs\Gb\Models\Property;
+use Fynla\Packs\Gb\Property\PropertyTaxService;
 use Fynla\Packs\Gb\Tax\TaxConfigService;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Mockery;
@@ -312,7 +313,7 @@ class PropertyTaxServiceTest extends TestCase
         ]);
 
         // Create mortgage with interest
-        \Fynla\Packs\Gb\Models\Mortgage::factory()->create([
+        Mortgage::factory()->create([
             'property_id' => $property->id,
             'user_id' => $this->user->id,
             'outstanding_balance' => 150000,

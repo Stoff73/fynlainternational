@@ -2,9 +2,8 @@
 
 declare(strict_types=1);
 
-use App\Services\Benefits\ChildBenefitService;
-use App\Services\UserProfile\UserProfileService;
 use Fynla\Core\Models\User;
+use Fynla\Packs\Gb\Benefits\ChildBenefitService;
 use Fynla\Packs\Gb\Models\CriticalIllnessPolicy;
 use Fynla\Packs\Gb\Models\DCPension;
 use Fynla\Packs\Gb\Models\Estate\Liability;
@@ -16,6 +15,7 @@ use Fynla\Packs\Gb\Models\TaxConfiguration;
 use Fynla\Packs\Gb\Shared\CrossModuleAssetAggregator;
 use Fynla\Packs\Gb\Tax\TaxConfigService;
 use Fynla\Packs\Gb\Tax\UKTaxCalculator;
+use Fynla\Packs\Gb\UserProfile\UserProfileService;
 
 beforeEach(function () {
     // Ensure active tax configuration exists

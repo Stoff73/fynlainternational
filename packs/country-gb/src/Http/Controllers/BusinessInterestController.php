@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace Fynla\Packs\Gb\Http\Controllers;
 
 use App\Http\Controllers\Controller;
-use App\Services\Business\BusinessInterestService;
 use Fynla\Core\Traits\CalculatesOwnershipShare;
+use Fynla\Packs\Gb\Business\BusinessInterestService;
 use Fynla\Packs\Gb\Http\Requests\BusinessInterest\StoreBusinessInterestRequest;
 use Fynla\Packs\Gb\Http\Requests\BusinessInterest\UpdateBusinessInterestRequest;
 use Fynla\Packs\Gb\Http\Resources\BusinessInterestResource;

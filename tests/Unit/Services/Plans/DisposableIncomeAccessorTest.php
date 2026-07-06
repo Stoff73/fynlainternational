@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 use Fynla\Core\Models\User;
 use Fynla\Packs\Gb\Plans\DisposableIncomeAccessor;
-use App\Services\UserProfile\UserProfileService;
+use Fynla\Packs\Gb\UserProfile\UserProfileService;
 
 describe('DisposableIncomeAccessor', function () {
     it('returns disposable income from user profile service', function () {

@@ -6,7 +6,6 @@ namespace Fynla\Packs\Gb\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use App\Http\Traits\SanitizedErrorResponse;
-use App\Jobs\RunMonteCarloSimulation;
 use Carbon\Carbon;
 use Fynla\Core\Models\User;
 use Fynla\Core\Traits\CalculatesOwnershipShare;
@@ -28,6 +27,7 @@ use Fynla\Packs\Gb\Http\Resources\InvestmentAccountResource;
 use Fynla\Packs\Gb\Investment\DiversificationAnalyzer;
 use Fynla\Packs\Gb\Investment\InvestmentProjectionService;
 use Fynla\Packs\Gb\Investment\ReturnCalculationService;
+use Fynla\Packs\Gb\Jobs\RunMonteCarloSimulation;
 use Fynla\Packs\Gb\Models\Investment\Holding;
 use Fynla\Packs\Gb\Models\Investment\InvestmentAccount;
 use Fynla\Packs\Gb\Models\Investment\InvestmentGoal;

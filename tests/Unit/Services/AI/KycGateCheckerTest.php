@@ -2,15 +2,16 @@
 
 declare(strict_types=1);
 
-use Fynla\Packs\Gb\Constants\QuerySchemas;
 use Fynla\Core\Models\User;
-use App\Services\AI\KycGateChecker;
+use Fynla\Packs\Gb\AI\KycGateChecker;
+use Fynla\Packs\Gb\Constants\QuerySchemas;
+use Fynla\Packs\Gb\Database\Seeders\TaxConfigurationSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
 uses(RefreshDatabase::class);
 
 beforeEach(function () {
-    $this->seed(\Fynla\Packs\Gb\Database\Seeders\TaxConfigurationSeeder::class);
+    $this->seed(TaxConfigurationSeeder::class);
     $this->checker = app(KycGateChecker::class);
 });
 

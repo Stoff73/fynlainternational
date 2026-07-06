@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace Tests\Unit\Services;
 
+use Fynla\Core\Models\User;
 use Fynla\Packs\Gb\Models\Mortgage;
 use Fynla\Packs\Gb\Models\Property;
-use Fynla\Core\Models\User;
-use App\Services\Property\MortgageService;
+use Fynla\Packs\Gb\Property\MortgageService;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 

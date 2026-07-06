@@ -2,11 +2,12 @@
 
 declare(strict_types=1);
 
-use Fynla\Packs\Gb\Models\Estate\Asset;
 use Fynla\Core\Models\FamilyMember;
-use Fynla\Packs\Gb\Models\ProtectionProfile;
 use Fynla\Core\Models\User;
-use App\Services\UserProfile\ProfileCompletenessChecker;
+use Fynla\Packs\Gb\Models\Estate\Asset;
+use Fynla\Packs\Gb\Models\LifeInsurancePolicy;
+use Fynla\Packs\Gb\Models\ProtectionProfile;
+use Fynla\Packs\Gb\UserProfile\ProfileCompletenessChecker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
 uses(RefreshDatabase::class);
@@ -61,7 +62,7 @@ describe('ProfileCompletenessChecker - Married Users', function () {
         ]);
 
         // Add at least one policy for protection_plans check
-        \Fynla\Packs\Gb\Models\LifeInsurancePolicy::create([
+        LifeInsurancePolicy::create([
             'user_id' => $user->id,
             'provider' => 'Test Provider',
             'policy_number' => 'TEST123',
@@ -217,7 +218,7 @@ describe('ProfileCompletenessChecker - Single Users', function () {
         ]);
 
         // Add at least one policy for protection_plans check
-        \Fynla\Packs\Gb\Models\LifeInsurancePolicy::create([
+        LifeInsurancePolicy::create([
             'user_id' => $user->id,
             'provider' => 'Test Provider',
             'policy_number' => 'TEST123',

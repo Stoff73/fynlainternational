@@ -2,8 +2,8 @@
 
 declare(strict_types=1);
 
+use Fynla\Packs\Gb\AI\StructuredResponseValidator;
 use Fynla\Packs\Gb\Constants\QuerySchemas;
-use App\Services\AI\StructuredResponseValidator;
 
 beforeEach(function () {
     $this->validator = new StructuredResponseValidator;

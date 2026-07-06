@@ -2,8 +2,8 @@
 
 declare(strict_types=1);
 
+use Fynla\Packs\Gb\AI\QueryClassifier;
 use Fynla\Packs\Gb\Constants\QuerySchemas;
-use App\Services\AI\QueryClassifier;
 
 beforeEach(function () {
     $this->classifier = new QueryClassifier;

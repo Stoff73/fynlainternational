@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Observers;
 
 use Fynla\Core\Models\LifeEvent;
+use Fynla\Packs\Gb\Observers\RiskRecalculationObserver;
 
 /**
  * Observer that triggers risk recalculation when significant life events change.

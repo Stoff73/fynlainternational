@@ -5,11 +5,12 @@ declare(strict_types=1);
 namespace Fynla\Packs\Gb\Http\Controllers;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\StoreLifeEventRequest;
-use App\Http\Requests\UpdateLifeEventRequest;
 use App\Http\Traits\SanitizedErrorResponse;
+use Carbon\Carbon;
 use Fynla\Core\Models\LifeEvent;
 use Fynla\Packs\Gb\Goals\LifeEventService;
+use Fynla\Packs\Gb\Http\Requests\StoreLifeEventRequest;
+use Fynla\Packs\Gb\Http\Requests\UpdateLifeEventRequest;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
@@ -198,7 +199,7 @@ class LifeEventController extends Controller
 
         try {
             $occurredAt = $request->input('occurred_at')
-                ? \Carbon\Carbon::parse($request->input('occurred_at'))
+                ? Carbon::parse($request->input('occurred_at'))
                 : null;
 
             $event = $this->lifeEventService->markCompleted($event, $occurredAt);

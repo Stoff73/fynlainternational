@@ -4,14 +4,13 @@ declare(strict_types=1);
 
 namespace Fynla\Packs\Gb\Retirement;
 
+use Fynla\Core\Models\User;
 use Fynla\Packs\Gb\Models\Investment\InvestmentAccount;
 use Fynla\Packs\Gb\Models\SavingsAccount;
-use Fynla\Core\Models\User;
-use Fynla\Packs\Gb\Retirement\RequiredCapitalCalculator;
 use Fynla\Packs\Gb\Tax\TaxConfigService;
 use Fynla\Packs\Gb\Tax\UKTaxCalculator;
-use App\Services\UserProfile\UserProfileService;
 use Fynla\Packs\Gb\Traits\FormatsCurrency;
+use Fynla\Packs\Gb\UserProfile\UserProfileService;
 
 /**
  * Retirement Strategy Service

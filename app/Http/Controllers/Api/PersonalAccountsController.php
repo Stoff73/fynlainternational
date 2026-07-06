@@ -8,9 +8,10 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\StorePersonalAccountLineItemRequest;
 use App\Http\Requests\UpdatePersonalAccountLineItemRequest;
 use App\Http\Traits\SanitizedErrorResponse;
-use Fynla\Packs\Gb\Models\PersonalAccount;
-use App\Services\UserProfile\PersonalAccountsService;
 use Carbon\Carbon;
+use Fynla\Core\Models\User;
+use Fynla\Packs\Gb\Models\PersonalAccount;
+use Fynla\Packs\Gb\UserProfile\PersonalAccountsService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
@@ -87,7 +88,7 @@ class PersonalAccountsController extends Controller
         // Check if user is married and has permission to view spouse data
         $spouseData = null;
         if ($user->spouse_id && $user->hasAcceptedSpousePermission()) {
-            $spouse = \Fynla\Core\Models\User::find($user->spouse_id);
+            $spouse = User::find($user->spouse_id);
             if ($spouse) {
                 $spouseData = [
                     'profit_and_loss' => $this->personalAccountsService->calculateProfitAndLoss(

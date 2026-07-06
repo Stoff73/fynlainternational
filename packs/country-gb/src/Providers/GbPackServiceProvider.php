@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace Fynla\Packs\Gb\Providers;
 
-use App\Services\ExchangeControl\UkExchangeControl;
 use Fynla\Core\Contracts\GoalCalculationEngine;
 use Fynla\Core\Registry\PackManifest as CorePackManifest;
 use Fynla\Core\Registry\PackRegistry;
 use Fynla\Packs\Gb\Agents\TaxOptimisationAgent;
 use Fynla\Packs\Gb\Estate\UkEstateEngine;
+use Fynla\Packs\Gb\ExchangeControl\UkExchangeControl;
 use Fynla\Packs\Gb\Goals\GoalCalculationService;
 use Fynla\Packs\Gb\Investment\UkInvestmentEngine;
 use Fynla\Packs\Gb\LifeTables\GbLifeTableProvider;

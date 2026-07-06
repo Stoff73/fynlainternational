@@ -5,15 +5,17 @@ declare(strict_types=1);
 namespace Fynla\Packs\Gb\Http\Controllers;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\StorePropertyRequest;
-use App\Http\Requests\UpdatePropertyRequest;
-use Fynla\Packs\Gb\Http\Resources\PropertyResource;
 use App\Http\Traits\SanitizedErrorResponse;
-use Fynla\Packs\Gb\Models\Property;
-use App\Services\Property\MortgageService;
-use App\Services\Property\PropertyService;
-use App\Services\Property\PropertyTaxService;
+use Fynla\Core\Models\User;
 use Fynla\Core\Traits\CalculatesOwnershipShare;
+use Fynla\Packs\Gb\Http\Requests\StorePropertyRequest;
+use Fynla\Packs\Gb\Http\Requests\UpdatePropertyRequest;
+use Fynla\Packs\Gb\Http\Resources\PropertyResource;
+use Fynla\Packs\Gb\Models\JointAccountLog;
+use Fynla\Packs\Gb\Models\Property;
+use Fynla\Packs\Gb\Property\MortgageService;
+use Fynla\Packs\Gb\Property\PropertyService;
+use Fynla\Packs\Gb\Property\PropertyTaxService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
@@ -408,7 +410,7 @@ class PropertyController extends Controller
     /**
      * Log joint property update for audit trail
      */
-    private function logJointPropertyUpdate(\Fynla\Core\Models\User $user, Property $property, array $validated): void
+    private function logJointPropertyUpdate(User $user, Property $property, array $validated): void
     {
         if (! isset($validated['current_value'])) {
             return;
@@ -428,7 +430,7 @@ class PropertyController extends Controller
             ],
         ];
 
-        \Fynla\Packs\Gb\Models\JointAccountLog::logEdit(
+        JointAccountLog::logEdit(
             $user->id,
             $property->joint_owner_id,
             $property,
@@ -447,7 +449,7 @@ class PropertyController extends Controller
      * Single-record pattern: Apply ownership percentage when calculating
      * user's share of rental income.
      */
-    private function syncUserRentalIncome(\Fynla\Core\Models\User $user): void
+    private function syncUserRentalIncome(User $user): void
     {
         // Get properties where user is owner OR joint_owner
         $properties = Property::forUserOrJoint($user->id)

@@ -6,7 +6,7 @@ namespace Fynla\Packs\Gb\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use App\Http\Traits\SanitizedErrorResponse;
-use App\Services\Chattel\ChattelCGTService;
+use Fynla\Packs\Gb\Chattel\ChattelCGTService;
 use Fynla\Packs\Gb\Http\Requests\Chattel\StoreChattelRequest;
 use Fynla\Packs\Gb\Http\Requests\Chattel\UpdateChattelRequest;
 use Fynla\Packs\Gb\Http\Resources\ChattelResource;

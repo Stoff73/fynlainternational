@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace Fynla\Packs\Gb\Agents;
 
-use App\Services\PrerequisiteGateService;
-use App\Services\WhatIf\WhatIfScenarioService;
 use Carbon\Carbon;
 use Fynla\Core\Agents\BaseAgent;
 use Fynla\Core\Models\FamilyMember;
@@ -34,10 +32,12 @@ use Fynla\Packs\Gb\Models\Mortgage;
 use Fynla\Packs\Gb\Models\Property;
 use Fynla\Packs\Gb\Models\SavingsAccount;
 use Fynla\Packs\Gb\NetWorth\NetWorthService;
+use Fynla\Packs\Gb\Support\PrerequisiteGateService;
 use Fynla\Packs\Gb\Tax\IncomeDefinitionsService;
 use Fynla\Packs\Gb\Tax\TaxConfigService;
 use Fynla\Packs\Gb\Traits\HasAiChat;
 use Fynla\Packs\Gb\Traits\HasAiGuardrails;
+use Fynla\Packs\Gb\WhatIf\WhatIfScenarioService;
 use Illuminate\Database\QueryException;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Log;

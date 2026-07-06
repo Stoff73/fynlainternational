@@ -4,18 +4,18 @@ declare(strict_types=1);
 
 namespace Fynla\Packs\Gb\Estate;
 
-use Fynla\Packs\Gb\Estate\PersonalizedTrustStrategyService;
-
-use Fynla\Packs\Gb\Estate\PersonalizedGiftingStrategyService;
-
-use Fynla\Packs\Gb\Models\ActuarialLifeTable;
-use Fynla\Packs\Gb\Models\Estate\IHTProfile;
+use Carbon\Carbon;
 use Fynla\Core\Models\FamilyMember;
 use Fynla\Core\Models\User;
-use Fynla\Packs\Gb\Goals\LifeEventIntegrationService;
-use Fynla\Packs\Gb\Tax\TaxConfigService;
-use App\Services\UserProfile\ProfileCompletenessChecker;
 use Fynla\Core\Traits\CalculatesOwnershipShare;
+use Fynla\Packs\Gb\Goals\LifeEventIntegrationService;
+use Fynla\Packs\Gb\Models\ActuarialLifeTable;
+use Fynla\Packs\Gb\Models\Estate\Asset;
+use Fynla\Packs\Gb\Models\Estate\IHTProfile;
+use Fynla\Packs\Gb\Models\Estate\Liability;
+use Fynla\Packs\Gb\Models\Mortgage;
+use Fynla\Packs\Gb\Tax\TaxConfigService;
+use Fynla\Packs\Gb\UserProfile\ProfileCompletenessChecker;
 use Illuminate\Support\Collection;
 
 /**
@@ -173,7 +173,7 @@ class ComprehensiveEstatePlanService
     private function convertToAssetModels(Collection $aggregatedAssets, User $user): Collection
     {
         return $aggregatedAssets->map(function ($asset) use ($user) {
-            return new \Fynla\Packs\Gb\Models\Estate\Asset([
+            return new Asset([
                 'user_id' => $user->id,
                 'asset_type' => $asset->asset_type,
                 'asset_name' => $asset->asset_name,
@@ -192,7 +192,7 @@ class ComprehensiveEstatePlanService
             return 20;
         }
 
-        $age = $user->age ?? \Carbon\Carbon::parse($user->date_of_birth)->age;
+        $age = $user->age ?? Carbon::parse($user->date_of_birth)->age;
         $gender = $user->gender ?? 'male';
 
         // Query actuarial life tables (same approach as IHTCalculationService)
@@ -254,7 +254,7 @@ class ComprehensiveEstatePlanService
         // Calculate age from date of birth
         $age = 'Not provided';
         if ($user->date_of_birth) {
-            $age = \Carbon\Carbon::parse($user->date_of_birth)->age;
+            $age = Carbon::parse($user->date_of_birth)->age;
         }
 
         // Get children and step-children from user's family members
@@ -314,7 +314,7 @@ class ComprehensiveEstatePlanService
         return [
             'name' => $user->name,
             'email' => $user->email,
-            'date_of_birth' => $user->date_of_birth ? \Carbon\Carbon::parse($user->date_of_birth)->format('d/m/Y') : 'Not provided',
+            'date_of_birth' => $user->date_of_birth ? Carbon::parse($user->date_of_birth)->format('d/m/Y') : 'Not provided',
             'age' => $age,
             'gender' => ucfirst($user->gender ?? 'Not specified'),
             'marital_status' => ucfirst(str_replace('_', ' ', $user->marital_status ?? 'single')),
@@ -529,7 +529,7 @@ class ComprehensiveEstatePlanService
         $liabilities = [];
 
         // Get mortgages where user is owner OR joint_owner, with property addresses
-        $mortgages = \Fynla\Packs\Gb\Models\Mortgage::forUserOrJoint($userId)
+        $mortgages = Mortgage::forUserOrJoint($userId)
             ->with('property:id,address_line_1')
             ->get();
 
@@ -550,7 +550,7 @@ class ComprehensiveEstatePlanService
         }
 
         // Get other liabilities where user is owner OR joint_owner
-        $otherLiabilities = \Fynla\Packs\Gb\Models\Estate\Liability::forUserOrJoint($userId)
+        $otherLiabilities = Liability::forUserOrJoint($userId)
             ->get();
 
         foreach ($otherLiabilities as $liability) {

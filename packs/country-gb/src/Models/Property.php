@@ -5,13 +5,11 @@ declare(strict_types=1);
 namespace Fynla\Packs\Gb\Models;
 
 use Fynla\Core\Models\Household;
-
 use Fynla\Core\Models\User;
-
-use Fynla\Packs\Gb\Models\Estate\Trust;
-use App\Services\Property\PropertyCalculationService;
 use Fynla\Core\Traits\Auditable;
 use Fynla\Core\Traits\HasJointOwnership;
+use Fynla\Packs\Gb\Models\Estate\Trust;
+use Fynla\Packs\Gb\Property\PropertyCalculationService;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;

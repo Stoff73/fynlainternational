@@ -1,7 +1,6 @@
 <?php
 
 declare(strict_types=1);
-use App\Services\ExchangeControl\UkExchangeControl;
 use Fynla\Core\Contracts\BankingValidator;
 use Fynla\Core\Contracts\EstateEngine;
 use Fynla\Core\Contracts\ExchangeControl;
@@ -15,6 +14,7 @@ use Fynla\Core\Contracts\TaxEngine;
 use Fynla\Core\Contracts\TaxOptimisationEngine;
 use Fynla\Packs\Gb\Agents\TaxOptimisationAgent;
 use Fynla\Packs\Gb\Estate\UkEstateEngine;
+use Fynla\Packs\Gb\ExchangeControl\UkExchangeControl;
 use Fynla\Packs\Gb\Investment\UkInvestmentEngine;
 use Fynla\Packs\Gb\Protection\UkProtectionEngine;
 use Fynla\Packs\Gb\Retirement\UkRetirementEngine;
@@ -98,14 +98,14 @@ describe('Pack Isolation', function () {
             // collaborate with the 8 deferred Fynla\Packs\Gb\Retirement\* peers
             // (R-14a) and with Fynla\Packs\Gb\Investment\* peers (R-6b),
             // Fynla\Packs\Gb\Settings\AssumptionsService (R-7), and
-            // App\Services\UserProfile\UserProfileService (R-7). Pinned by
+            // Fynla\Packs\Gb\UserProfile\UserProfileService (R-7). Pinned by
             // allow-list below.
             $packDir.DIRECTORY_SEPARATOR.'Retirement'.DIRECTORY_SEPARATOR,
             // R-6b: Investment services move in 4 sub-commits. Top-level
             // (R-6b-i) imports the 19 deferred Fynla\Packs\Gb\Investment\*
             // R-14a peers, plus Fynla\Packs\Gb\Investment\Rebalancing\*
             // (R-6b-iii target), Fynla\Packs\Gb\Investment\Utilities\* (R-6b-iv
-            // target), App\Jobs\RunMonteCarloSimulation,
+            // target), Fynla\Packs\Gb\Jobs\RunMonteCarloSimulation,
             // Fynla\Packs\Gb\Plans\PlanConfigService, and
             // Fynla\Core\Services\MonteCarloEngine. Pinned by allow-list.
             $packDir.DIRECTORY_SEPARATOR.'Investment'.DIRECTORY_SEPARATOR,
@@ -158,7 +158,7 @@ describe('Pack Isolation', function () {
             // relationships; pinned by allow-list below.
             $packDir.DIRECTORY_SEPARATOR.'Http'.DIRECTORY_SEPARATOR.'Resources'.DIRECTORY_SEPARATOR,
             // R-9b: 6 UK module observers moved into the GB pack. Risk
-            // observers extend App\Observers\RiskRecalculationObserver
+            // observers extend Fynla\Packs\Gb\Observers\RiskRecalculationObserver
             // (generic base, stays in app/Observers/); pinned by allow-list.
             $packDir.DIRECTORY_SEPARATOR.'Observers'.DIRECTORY_SEPARATOR,
             // R-9d: UK module controllers begin moving into the GB pack
@@ -265,45 +265,32 @@ describe('Pack Isolation', function () {
             // into the pack 2026-07-06 — their pre-relocation copies had
             // dangling SavingsAccountResource/UserResource references that
             // 500'd /api/goals.)
-            'App\\Http\\Requests\\Goals\\StoreGoalRequest',
-            'App\\Http\\Requests\\Goals\\UpdateGoalRequest',
             // R-9-final-ii: LifeEvent-shaped Requests wrap the deferred
             // App\Models\LifeEvent (one of the 6 R-14b core models). They
             // stay in app/Http/Requests/ until the LifeEvent relocation in
             // R-14b sub-batch vi; pack LifeEventController imports them
             // across the boundary.
-            'App\\Http\\Requests\\StoreLifeEventRequest',
-            'App\\Http\\Requests\\UpdateLifeEventRequest',
             // R-9-final-v: Property-shaped flat Requests. Property model
             // already lives in the pack (Fynla\Packs\Gb\Models\Property),
             // but the flat StorePropertyRequest / UpdatePropertyRequest
-            // (and the App\Services\Property\* services they collaborate
+            // (and the Fynla\Packs\Gb\Property\* services they collaborate
             // with) reference App\Models\User. They stay in
             // app/Http/Requests/ + app/Services/Property/ until the Property
             // services relocation workstream (post-R-14b User relocation).
-            'App\\Http\\Requests\\StorePropertyRequest',
-            'App\\Http\\Requests\\UpdatePropertyRequest',
-            'App\\Services\\Property\\MortgageService',
-            'App\\Services\\Property\\PropertyService',
-            'App\\Services\\Property\\PropertyTaxService',
             // R-9-final-vi: Mortgage-shaped flat Requests. Mortgage model
             // already lives in the pack (Fynla\Packs\Gb\Models\Mortgage);
             // the flat Store/Update requests sit in app/Http/Requests/ and
             // reference App\Models\User. Relocates with the Property
             // services workstream.
-            'App\\Http\\Requests\\StoreMortgageRequest',
-            'App\\Http\\Requests\\UpdateMortgageRequest',
             // R-9-final-vii: BusinessInterestService straddles the boundary
             // (BusinessInterest model already in pack, service references
             // App\Models\User). Relocates with a future Business services
             // workstream.
-            'App\\Services\\Business\\BusinessInterestService',
             // R-9-final-viii: ChattelCGTService straddles the boundary
             // (Chattel model already in pack, service references the still-
             // in-core TaxConfigService consumption pattern via
             // App\Services\Tax helpers). Relocates with a future Chattel
             // services workstream.
-            'App\\Services\\Chattel\\ChattelCGTService',
             // R-9d: pack controllers extend the Laravel base controller and
             // use the cross-cutting SanitizedErrorResponse trait. Both stay
             // in core as framework / shared infrastructure.
@@ -313,20 +300,14 @@ describe('Pack Isolation', function () {
             // creation of protection action definitions via the cross-cutting
             // PermissionService (used by every admin-permission check across
             // packs). Stays in core as shared auth infrastructure.
-            // App\Observers\RiskRecalculationObserver — generic base class
+            // Fynla\Packs\Gb\Observers\RiskRecalculationObserver — generic base class
             // (debounced job dispatch). Stays in app/Observers/ as a non-UK
             // helper; the 4 UK risk observers (DCPension, InvestmentAccount,
             // Property, SavingsAccount) extend it across the boundary.
-            'App\\Observers\\RiskRecalculationObserver',
             // App\Services\* — relocated in R-5/R-6.
-            'App\\Services\\AI\\KycGateChecker',
-            'App\\Services\\AI\\QueryClassifier',
-            'App\\Services\\AI\\SystemPromptBuilder',
             // R-17 batch 2: latent inline FQCN in HasAiChat surfaced as a use-
             // import by pint (fully_qualified_strict_types). Relocates with the
             // AI sweep in R-17 batch 9.
-            'App\\Services\\AI\\StructuredResponseValidator',
-            'App\\Services\\PrerequisiteGateService',
             // App\Services\* — relocated in R-6/R-7.
             // R-14a deferred Coordination services — float-money signatures
             // keep these in app/Services/Coordination/ until the int-minor
@@ -351,7 +332,6 @@ describe('Pack Isolation', function () {
             // pinned by the int-minor money refactor.
             // App\Jobs\* — Job dispatched by ScenarioService when running
             // Monte Carlo simulations. Stays in app/Jobs after R-6b.
-            'App\\Jobs\\RunMonteCarloSimulation',
             // R-14a deferred Plans services — BasePlanService and concrete
             // plan-money services keep float-money signatures (ADR-005). Pack
             // EstatePlanService / GoalPlanService / ProtectionPlanService /
@@ -362,7 +342,6 @@ describe('Pack Isolation', function () {
             // imports ComprehensiveProtectionPlanService and
             // ProtectionActionDefinitionService across the boundary; pack
             // ProtectionAgent (R-8) imports CoverageGapAnalyzer.
-            'App\\Services\\Property\\PropertyCalculationService',
             // R-14a deferred Retirement services — float-money signatures
             // (ADR-005) keep these in app/Services/Retirement/ until the
             // int-minor money refactor lands. RetirementActionDefinitionService
@@ -378,15 +357,11 @@ describe('Pack Isolation', function () {
             // dedicated WhatIf / UserProfile relocation workstream. Pack
             // WhatIfScenarioController + LetterToSpouseController import them
             // across the boundary; relocates with the int-minor money refactor.
-            'App\\Services\\WhatIf\\WhatIfScenarioService', // R-14a
-            'App\\Services\\UserProfile\\LetterToSpouseService', // R-14a
             // Fynla\Core\Services\MonteCarloEngine — used by MonteCarloSimulator
             // (relocated in R-6b-i). Shared module relocates in R-7.
-            'App\\Services\\UserProfile\\ProfileCompletenessChecker',
             // R-7 target — UserProfileService relocates with the
             // UserProfile module. RequiredCapitalCalculator imports it
             // for income-source resolution.
-            'App\\Services\\UserProfile\\UserProfileService',
             // R-14a-Traits CLOSED: FormatsCurrency + CalculatesOCF both
             // relocated to Fynla\Packs\Gb\Traits in R-14a-Traits-i and -ii.
             // The v3-plan-original 14-target list is now empty.
@@ -394,14 +369,12 @@ describe('Pack Isolation', function () {
             // pending the int-minor money refactor (ADR-005). Pack code that
             // collaborates with them imports across the boundary until
             // they relocate.
-            // R-9h surfaced two App\Services\Trust\* peers used by pack
+            // R-9h surfaced two Fynla\Packs\Gb\Trust\* peers used by pack
             // TrustController + WillController. IHTPeriodicChargeCalculator
             // has float-money signatures (calculateExitCharge / calculateEntryCharge)
             // — R-14a deferral. TrustAssetAggregatorService is clean but the
             // Trust sub-module hasn't had a relocation workstream yet; relocates
             // alongside the Estate float-money services in R-14a.
-            'App\\Services\\Trust\\IHTPeriodicChargeCalculator', // R-14a
-            'App\\Services\\Trust\\TrustAssetAggregatorService', // R-14a (sub-module, relocates with Estate)
             // Same deferral for Tax-side float-money services.
         ];
 

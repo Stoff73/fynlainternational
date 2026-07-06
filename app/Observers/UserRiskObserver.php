@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Observers;
 
 use Fynla\Core\Models\User;
+use Fynla\Packs\Gb\Observers\RiskRecalculationObserver;
 
 /**
  * Observer that triggers risk recalculation when User profile changes.

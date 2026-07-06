@@ -5,8 +5,6 @@ declare(strict_types=1);
 namespace Fynla\Packs\Gb\Http\Controllers\Estate;
 
 use App\Http\Controllers\Controller;
-use App\Services\Trust\IHTPeriodicChargeCalculator;
-use App\Services\Trust\TrustAssetAggregatorService;
 use Fynla\Core\Models\User;
 use Fynla\Core\Services\CacheInvalidationService;
 use Fynla\Packs\Gb\Estate\IHTCalculationService;
@@ -19,6 +17,8 @@ use Fynla\Packs\Gb\Models\Estate\Liability;
 use Fynla\Packs\Gb\Models\Estate\Trust;
 use Fynla\Packs\Gb\Models\Estate\Will;
 use Fynla\Packs\Gb\Tax\TaxConfigService;
+use Fynla\Packs\Gb\Trust\IHTPeriodicChargeCalculator;
+use Fynla\Packs\Gb\Trust\TrustAssetAggregatorService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 

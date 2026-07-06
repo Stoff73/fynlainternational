@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
+use Fynla\Core\Models\Household;
+use Fynla\Core\Models\User;
 use Fynla\Packs\Gb\Models\BusinessInterest;
 use Fynla\Packs\Gb\Models\CashAccount;
 use Fynla\Packs\Gb\Models\Estate\Trust;
-use Fynla\Core\Models\Household;
 use Fynla\Packs\Gb\Models\Property;
-use Fynla\Core\Models\User;
-use App\Services\Trust\TrustAssetAggregatorService;
+use Fynla\Packs\Gb\Trust\TrustAssetAggregatorService;
 
 beforeEach(function () {
     $this->service = new TrustAssetAggregatorService;

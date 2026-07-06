@@ -2,8 +2,8 @@
 
 declare(strict_types=1);
 
-use App\Services\ExchangeControl\UkExchangeControl;
 use Fynla\Core\Contracts\ExchangeControl;
+use Fynla\Packs\Gb\ExchangeControl\UkExchangeControl;
 
 beforeEach(function () {
     $this->excon = app(UkExchangeControl::class);

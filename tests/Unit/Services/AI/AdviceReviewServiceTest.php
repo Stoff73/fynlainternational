@@ -4,13 +4,15 @@ declare(strict_types=1);
 
 use Fynla\Core\Models\AiAdviceLog;
 use Fynla\Core\Models\User;
-use App\Services\AI\AdviceReviewService;
+use Fynla\Packs\Gb\AI\AdviceReviewService;
+use Fynla\Packs\Gb\Database\Seeders\TaxConfigurationSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Facades\DB;
 
 uses(RefreshDatabase::class);
 
 beforeEach(function () {
-    $this->seed(\Fynla\Packs\Gb\Database\Seeders\TaxConfigurationSeeder::class);
+    $this->seed(TaxConfigurationSeeder::class);
     $this->service = app(AdviceReviewService::class);
 });
 
@@ -116,7 +118,7 @@ describe('AdviceReviewService', function () {
                 'user_data_snapshot' => ['income' => 50000],
             ]);
             // Force old timestamp via DB query (Eloquent update won't change created_at)
-            \Illuminate\Support\Facades\DB::table('ai_advice_logs')
+            DB::table('ai_advice_logs')
                 ->where('id', $log->id)
                 ->update(['created_at' => now()->subMonths(14)]);
 

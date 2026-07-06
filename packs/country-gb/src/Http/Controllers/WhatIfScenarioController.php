@@ -6,10 +6,10 @@ namespace Fynla\Packs\Gb\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use App\Http\Traits\SanitizedErrorResponse;
-use App\Services\WhatIf\WhatIfScenarioService;
 use Fynla\Packs\Gb\Http\Requests\StoreWhatIfScenarioRequest;
 use Fynla\Packs\Gb\Http\Resources\WhatIfScenarioResource;
 use Fynla\Packs\Gb\Models\WhatIfScenario;
+use Fynla\Packs\Gb\WhatIf\WhatIfScenarioService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 

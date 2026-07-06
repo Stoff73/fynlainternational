@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Fynla\Packs\Gb\Investment;
 
-use App\Jobs\RunMonteCarloSimulation;
+use Fynla\Packs\Gb\Jobs\RunMonteCarloSimulation;
 use Fynla\Packs\Gb\Models\Investment\InvestmentScenario;
 use Illuminate\Support\Str;
 

@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Fynla\Packs\Gb\Plans;
 
 use Fynla\Core\Models\User;
-use App\Services\UserProfile\UserProfileService;
+use Fynla\Packs\Gb\UserProfile\UserProfileService;
 
 /**
  * Fetches the user's disposable income from the income tab.

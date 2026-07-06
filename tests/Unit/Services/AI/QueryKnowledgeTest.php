@@ -2,8 +2,8 @@
 
 declare(strict_types=1);
 
+use Fynla\Packs\Gb\AI\Prompts\QueryKnowledge;
 use Fynla\Packs\Gb\Constants\QuerySchemas;
-use App\Services\AI\Prompts\QueryKnowledge;
 
 describe('QueryKnowledge', function () {
     it('returns pension + income + affordability knowledge for retirement_contribution', function () {
