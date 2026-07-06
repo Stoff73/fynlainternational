@@ -134,5 +134,11 @@ Route::middleware(['auth:sanctum', 'active.jurisdiction', 'pack.enabled:za'])
             Route::post('summary', [ZaEstateController::class, 'summary'])->name('summary');
             Route::get('exemptions', [ZaEstateController::class, 'exemptions'])->name('exemptions');
             Route::post('cgt-on-death', [ZaEstateController::class, 'cgtOnDeath'])->name('cgt-on-death');
+
+            // Donations register (slice 2) — feeds SARS donations tax.
+            Route::get('donations', [ZaEstateController::class, 'donations'])->name('donations.index');
+            Route::post('donations', [ZaEstateController::class, 'storeDonation'])->name('donations.store');
+            Route::delete('donations/{id}', [ZaEstateController::class, 'deleteDonation'])->whereNumber('id')->name('donations.destroy');
+            Route::get('donations-tax', [ZaEstateController::class, 'donationsTax'])->name('donations-tax');
         });
     });

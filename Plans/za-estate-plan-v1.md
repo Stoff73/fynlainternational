@@ -16,7 +16,7 @@ wiring + one persistence model. Mirror `ZaSavingsController`/`ZaProtectionContro
 | Slice | Scope | Risk | Status |
 |-------|-------|------|--------|
 | 1 | `ZaEstateController` (summary + exemptions + cgt-on-death) + routes + Feature tests | LOW | **DONE 2026-07-06** — 3 endpoints wired to ZaEstateEngine, `/api/za/estate/*` pack-registered + auth-guarded, EstateSummaryRequest bounds inputs, 6 Feature tests (duty/spousal/CGT/auth/validation). Arch + ZA suites 422 green. |
-| 2 | `ZaDonation` model + `za_donations` migration + donations CRUD + cumulative→donations-tax | MED | TODO |
+| 2 | `ZaDonation` model + `za_donations` migration + donations CRUD + cumulative→donations-tax | MED | **DONE 2026-07-06** — model + migration + StoreZaDonationRequest; donations list/store/delete (caller-scoped) + donations-tax endpoint aggregating non-exempt donations since the SARS 2018-03-01 anchor into `ZaTaxEngine::calculateDonationsTax`. 4 new tests (tax position, cumulative, IDOR, exempt-flag). |
 | 3 | ZA Estate Vue view + components | MED (no SA persona to E2E; unit/manual) | TODO |
 
 ## Per-slice ritual
