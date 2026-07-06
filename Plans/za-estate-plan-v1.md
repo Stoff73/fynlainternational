@@ -15,7 +15,7 @@ wiring + one persistence model. Mirror `ZaSavingsController`/`ZaProtectionContro
 
 | Slice | Scope | Risk | Status |
 |-------|-------|------|--------|
-| 1 | `ZaEstateController` (summary + exemptions) + routes + Feature tests | LOW (read-only engine wiring) | TODO |
+| 1 | `ZaEstateController` (summary + exemptions + cgt-on-death) + routes + Feature tests | LOW | **DONE 2026-07-06** — 3 endpoints wired to ZaEstateEngine, `/api/za/estate/*` pack-registered + auth-guarded, EstateSummaryRequest bounds inputs, 6 Feature tests (duty/spousal/CGT/auth/validation). Arch + ZA suites 422 green. |
 | 2 | `ZaDonation` model + `za_donations` migration + donations CRUD + cumulative→donations-tax | MED | TODO |
 | 3 | ZA Estate Vue view + components | MED (no SA persona to E2E; unit/manual) | TODO |
 
