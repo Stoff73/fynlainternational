@@ -13,7 +13,9 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-// Serve Vue.js SPA for all routes (catch-all)
+// Serve Vue.js SPA for all routes (catch-all). Excludes api/* so unknown
+// API endpoints 404 as JSON instead of silently returning the SPA shell
+// with a 200 — that masked stale frontend calls during the pack relocation.
 Route::get('/{any}', function () {
     return view('app');
-})->where('any', '.*');
+})->where('any', '^(?!api(?:/|$)).*');

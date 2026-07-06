@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Http\Middleware;
 
 use Closure;
+use Fynla\Core\Models\User;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Laravel\Sanctum\PersonalAccessToken;
@@ -54,6 +55,9 @@ class PreviewWriteInterceptor
         'api/auth/register',      // Allow preview users to create real accounts
         'api/auth/verify-code',   // Required for registration verification
         'api/auth/resend-code',   // Required for registration verification
+        'api/auth/mfa/verify',    // MFA challenge during login must always work
+        'api/auth/mfa/recovery',  // MFA recovery-code login must always work
+        'api/webhooks/revolut',   // Payment webhooks are HMAC-verified, never preview
         'api/auth/password-reset/request',       // Allow password reset
         'api/auth/password-reset/verify-email',  // Allow password reset
         'api/auth/password-reset/resend-code',   // Allow password reset
@@ -145,7 +149,7 @@ class PreviewWriteInterceptor
      * Since this middleware runs before auth:sanctum, we need to manually
      * resolve the user from the Authorization header.
      */
-    private function resolveUserFromToken(Request $request): ?\Fynla\Core\Models\User
+    private function resolveUserFromToken(Request $request): ?User
     {
         $token = $request->bearerToken();
 

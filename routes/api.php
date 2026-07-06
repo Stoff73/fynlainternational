@@ -1,5 +1,10 @@
 <?php
 
+use App\Http\Controllers\Api\ActionDefinitionController;
+use App\Http\Controllers\Api\AdminController;
+use App\Http\Controllers\Api\AdvisorController;
+use App\Http\Controllers\Api\AgentInternalController;
+use App\Http\Controllers\Api\AiAuditController;
 use App\Http\Controllers\Api\AiChatController;
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\BugReportController;
@@ -9,6 +14,7 @@ use App\Http\Controllers\Api\DocumentController;
 use App\Http\Controllers\Api\FamilyMembersController;
 use App\Http\Controllers\Api\GDPRController;
 use App\Http\Controllers\Api\InfoGuideController;
+use App\Http\Controllers\Api\JointAccountLogController;
 use App\Http\Controllers\Api\JourneyController;
 use App\Http\Controllers\Api\LifeStageController;
 use App\Http\Controllers\Api\MFAController;
@@ -16,15 +22,18 @@ use App\Http\Controllers\Api\NetWorthController;
 use App\Http\Controllers\Api\OccupationController;
 use App\Http\Controllers\Api\OnboardingController;
 use App\Http\Controllers\Api\PasswordResetController;
+use App\Http\Controllers\Api\PaymentController;
 use App\Http\Controllers\Api\PersonalAccountsController;
 use App\Http\Controllers\Api\PostcodeLookupController;
 use App\Http\Controllers\Api\PreviewController;
 use App\Http\Controllers\Api\ProfileCompletenessController;
-use App\Http\Controllers\Api\RiskPreferenceController;
+use App\Http\Controllers\Api\ReferralController;
 use App\Http\Controllers\Api\SessionController;
 use App\Http\Controllers\Api\Settings\AssumptionsController;
 use App\Http\Controllers\Api\SpousePermissionController;
+use App\Http\Controllers\Api\UserMetricsController;
 use App\Http\Controllers\Api\UserProfileController;
+use App\Http\Controllers\Api\WebhookController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -236,7 +245,7 @@ Route::middleware('auth:sanctum')->prefix('net-worth')->group(function () {
 
 // Joint Account Logs routes
 Route::middleware('auth:sanctum')->prefix('joint-account-logs')->group(function () {
-    Route::get('/', [\App\Http\Controllers\Api\JointAccountLogController::class, 'index']);
+    Route::get('/', [JointAccountLogController::class, 'index']);
 });
 
 // Property routes — relocated to packs/country-gb/routes/api.php in R-9-final-v.
@@ -283,7 +292,7 @@ Route::middleware('auth:sanctum')->prefix('dashboard')->group(function () {
 
 // Payment routes (public)
 Route::prefix('payment')->group(function () {
-    Route::get('/plans', [\App\Http\Controllers\Api\PaymentController::class, 'plans']);
+    Route::get('/plans', [PaymentController::class, 'plans']);
 });
 
 // Payment routes (authenticated)
@@ -292,29 +301,29 @@ Route::prefix('payment')->group(function () {
 // invoice download) are deliberately excluded so a half-authenticated user
 // can still inspect their state. validate-discount is read-only.
 Route::middleware('auth:sanctum')->prefix('payment')->group(function () {
-    Route::get('/trial-status', [\App\Http\Controllers\Api\PaymentController::class, 'trialStatus']);
-    Route::get('/billing-history', [\App\Http\Controllers\Api\PaymentController::class, 'billingHistory']);
-    Route::post('/validate-discount', [\App\Http\Controllers\Api\PaymentController::class, 'validateDiscountCode'])->middleware('throttle:20,1');
-    Route::get('/invoices/{invoice}/download', [\App\Http\Controllers\Api\PaymentController::class, 'downloadInvoice'])->middleware('throttle:10,1');
+    Route::get('/trial-status', [PaymentController::class, 'trialStatus']);
+    Route::get('/billing-history', [PaymentController::class, 'billingHistory']);
+    Route::post('/validate-discount', [PaymentController::class, 'validateDiscountCode'])->middleware('throttle:20,1');
+    Route::get('/invoices/{invoice}/download', [PaymentController::class, 'downloadInvoice'])->middleware('throttle:10,1');
 });
 
 Route::middleware(['auth:sanctum', 'mfa.verified'])->prefix('payment')->group(function () {
-    Route::post('/create-order', [\App\Http\Controllers\Api\PaymentController::class, 'createOrder'])->middleware('throttle:10,1');
-    Route::post('/confirm', [\App\Http\Controllers\Api\PaymentController::class, 'confirmPayment'])->middleware('throttle:10,1');
-    Route::post('/upgrade', [\App\Http\Controllers\Api\PaymentController::class, 'upgradeSubscription'])->middleware('throttle:10,1');
-    Route::post('/cancel-subscription', [\App\Http\Controllers\Api\PaymentController::class, 'cancelSubscription'])->middleware('throttle:1,1');
-    Route::post('/delete-all-data', [\App\Http\Controllers\Api\PaymentController::class, 'deleteAllData'])->middleware('throttle:1,5');
+    Route::post('/create-order', [PaymentController::class, 'createOrder'])->middleware('throttle:10,1');
+    Route::post('/confirm', [PaymentController::class, 'confirmPayment'])->middleware('throttle:10,1');
+    Route::post('/upgrade', [PaymentController::class, 'upgradeSubscription'])->middleware('throttle:10,1');
+    Route::post('/cancel-subscription', [PaymentController::class, 'cancelSubscription'])->middleware('throttle:1,1');
+    Route::post('/delete-all-data', [PaymentController::class, 'deleteAllData'])->middleware('throttle:1,5');
 });
 
 // Referral
 Route::middleware('auth:sanctum')->prefix('referral')->group(function () {
-    Route::get('/code', [\App\Http\Controllers\Api\ReferralController::class, 'getMyCode']);
-    Route::post('/invite', [\App\Http\Controllers\Api\ReferralController::class, 'sendInvitation'])->middleware('throttle:10,1');
-    Route::get('/list', [\App\Http\Controllers\Api\ReferralController::class, 'myReferrals']);
+    Route::get('/code', [ReferralController::class, 'getMyCode']);
+    Route::post('/invite', [ReferralController::class, 'sendInvitation'])->middleware('throttle:10,1');
+    Route::get('/list', [ReferralController::class, 'myReferrals']);
 });
 
 // Revolut webhook (no auth:sanctum — verified by HMAC signature)
-Route::post('/webhooks/revolut', [\App\Http\Controllers\Api\WebhookController::class, 'handleRevolut'])->middleware('throttle:60,1');
+Route::post('/webhooks/revolut', [WebhookController::class, 'handleRevolut'])->middleware('throttle:60,1');
 
 // User Settings routes
 Route::middleware('auth:sanctum')->prefix('settings')->group(function () {
@@ -329,44 +338,44 @@ Route::middleware('auth:sanctum')->prefix('settings')->group(function () {
 // used to mutate users, AI provider, backups, or discount codes without MFA.
 Route::middleware(['auth:sanctum', 'permission:admin.access'])->prefix('admin')->group(function () {
     // Dashboard
-    Route::get('/dashboard', [\App\Http\Controllers\Api\AdminController::class, 'dashboard']);
+    Route::get('/dashboard', [AdminController::class, 'dashboard']);
 
     // Roles list (for user management dropdowns)
-    Route::get('/roles', [\App\Http\Controllers\Api\AdminController::class, 'getRoles']);
+    Route::get('/roles', [AdminController::class, 'getRoles']);
 
     // User management - view (support + admin via admin.access)
-    Route::get('/users', [\App\Http\Controllers\Api\AdminController::class, 'getUsers']);
+    Route::get('/users', [AdminController::class, 'getUsers']);
 
     // User module status tracking
-    Route::get('users/{id}/module-status', [\App\Http\Controllers\Api\AdminController::class, 'moduleStatus']);
+    Route::get('users/{id}/module-status', [AdminController::class, 'moduleStatus']);
 
     // Subscription stats
-    Route::get('/subscriptions/stats', [\App\Http\Controllers\Api\AdminController::class, 'getSubscriptionStats']);
+    Route::get('/subscriptions/stats', [AdminController::class, 'getSubscriptionStats']);
 
     // AI provider management - read
-    Route::get('/ai-provider', [\App\Http\Controllers\Api\AdminController::class, 'getAiProvider']);
+    Route::get('/ai-provider', [AdminController::class, 'getAiProvider']);
 
     // AI Audit trail (read-only)
     Route::prefix('ai-audit')->group(function () {
-        Route::get('/users', [\App\Http\Controllers\Api\AiAuditController::class, 'users']);
-        Route::get('/users/{userId}/conversations', [\App\Http\Controllers\Api\AiAuditController::class, 'conversations']);
-        Route::get('/conversations/{conversationId}/messages', [\App\Http\Controllers\Api\AiAuditController::class, 'messages']);
+        Route::get('/users', [AiAuditController::class, 'users']);
+        Route::get('/users/{userId}/conversations', [AiAuditController::class, 'conversations']);
+        Route::get('/conversations/{conversationId}/messages', [AiAuditController::class, 'messages']);
     });
 
     // Database backup - list (read-only, no rate limit)
     Route::middleware(['permission:admin.backup'])->group(function () {
-        Route::get('/backup/list', [\App\Http\Controllers\Api\AdminController::class, 'listBackups']);
+        Route::get('/backup/list', [AdminController::class, 'listBackups']);
     });
 
     // User Metrics (read-only)
-    Route::get('/user-metrics/snapshot', [\App\Http\Controllers\Api\UserMetricsController::class, 'snapshot']);
-    Route::get('/user-metrics/trials', [\App\Http\Controllers\Api\UserMetricsController::class, 'trials']);
-    Route::get('/user-metrics/plans', [\App\Http\Controllers\Api\UserMetricsController::class, 'plans']);
-    Route::get('/user-metrics/activity', [\App\Http\Controllers\Api\UserMetricsController::class, 'activity']);
-    Route::get('/user-metrics/engagement', [\App\Http\Controllers\Api\UserMetricsController::class, 'engagement']);
+    Route::get('/user-metrics/snapshot', [UserMetricsController::class, 'snapshot']);
+    Route::get('/user-metrics/trials', [UserMetricsController::class, 'trials']);
+    Route::get('/user-metrics/plans', [UserMetricsController::class, 'plans']);
+    Route::get('/user-metrics/activity', [UserMetricsController::class, 'activity']);
+    Route::get('/user-metrics/engagement', [UserMetricsController::class, 'engagement']);
 
     // Discount Code Management - read
-    Route::get('/discount-codes', [\App\Http\Controllers\Api\AdminController::class, 'listDiscountCodes']);
+    Route::get('/discount-codes', [AdminController::class, 'listDiscountCodes']);
 });
 
 // Admin Panel write routes (RBAC + MFA-verified)
@@ -376,29 +385,29 @@ Route::middleware(['auth:sanctum', 'permission:admin.access'])->prefix('admin')-
 Route::middleware(['auth:sanctum', 'permission:admin.access', 'mfa.verified'])->prefix('admin')->group(function () {
     // User management - create/update (requires users.edit)
     Route::middleware('permission:users.edit')->group(function () {
-        Route::post('/users', [\App\Http\Controllers\Api\AdminController::class, 'createUser']);
-        Route::put('/users/{id}', [\App\Http\Controllers\Api\AdminController::class, 'updateUser']);
+        Route::post('/users', [AdminController::class, 'createUser']);
+        Route::put('/users/{id}', [AdminController::class, 'updateUser']);
     });
 
     // User management - delete (requires users.delete)
-    Route::delete('/users/{id}', [\App\Http\Controllers\Api\AdminController::class, 'deleteUser'])
+    Route::delete('/users/{id}', [AdminController::class, 'deleteUser'])
         ->middleware('permission:users.delete');
 
     // AI provider management - write (global switch — affects every prompt)
-    Route::post('/ai-provider', [\App\Http\Controllers\Api\AdminController::class, 'setAiProvider']);
+    Route::post('/ai-provider', [AdminController::class, 'setAiProvider']);
 
     // Database backup - write operations (rate limited: 3 per minute)
     Route::middleware(['permission:admin.backup', 'throttle:3,1'])->group(function () {
-        Route::post('/backup/create', [\App\Http\Controllers\Api\AdminController::class, 'createBackup']);
-        Route::post('/backup/restore', [\App\Http\Controllers\Api\AdminController::class, 'restoreBackup']);
-        Route::delete('/backup/delete', [\App\Http\Controllers\Api\AdminController::class, 'deleteBackup']);
+        Route::post('/backup/create', [AdminController::class, 'createBackup']);
+        Route::post('/backup/restore', [AdminController::class, 'restoreBackup']);
+        Route::delete('/backup/delete', [AdminController::class, 'deleteBackup']);
     });
 
     // Discount Code Management - write
-    Route::post('/discount-codes', [\App\Http\Controllers\Api\AdminController::class, 'createDiscountCode']);
-    Route::put('/discount-codes/{id}', [\App\Http\Controllers\Api\AdminController::class, 'updateDiscountCode']);
-    Route::delete('/discount-codes/{id}', [\App\Http\Controllers\Api\AdminController::class, 'deleteDiscountCode']);
-    Route::patch('/discount-codes/{id}/toggle', [\App\Http\Controllers\Api\AdminController::class, 'toggleDiscountCode']);
+    Route::post('/discount-codes', [AdminController::class, 'createDiscountCode']);
+    Route::put('/discount-codes/{id}', [AdminController::class, 'updateDiscountCode']);
+    Route::delete('/discount-codes/{id}', [AdminController::class, 'deleteDiscountCode']);
+    Route::patch('/discount-codes/{id}/toggle', [AdminController::class, 'toggleDiscountCode']);
 });
 
 // Retirement Action Definitions (admin-configurable plan actions) — relocated to packs/country-gb/routes/api.php in R-9g.
@@ -411,16 +420,16 @@ Route::middleware(['auth:sanctum', 'permission:admin.access', 'mfa.verified'])->
 Route::middleware(['auth:sanctum', 'permission:admin.access', 'throttle:30,1'])
     ->prefix('admin/action-definitions/{module}')
     ->group(function () {
-        Route::get('/', [\App\Http\Controllers\Api\ActionDefinitionController::class, 'index']);
-        Route::get('/{id}', [\App\Http\Controllers\Api\ActionDefinitionController::class, 'show']);
-        Route::post('/', [\App\Http\Controllers\Api\ActionDefinitionController::class, 'store']);
-        Route::patch('/{id}', [\App\Http\Controllers\Api\ActionDefinitionController::class, 'update']);
-        Route::delete('/{id}', [\App\Http\Controllers\Api\ActionDefinitionController::class, 'destroy']);
-        Route::patch('/{id}/toggle', [\App\Http\Controllers\Api\ActionDefinitionController::class, 'toggleEnabled']);
+        Route::get('/', [ActionDefinitionController::class, 'index']);
+        Route::get('/{id}', [ActionDefinitionController::class, 'show']);
+        Route::post('/', [ActionDefinitionController::class, 'store']);
+        Route::patch('/{id}', [ActionDefinitionController::class, 'update']);
+        Route::delete('/{id}', [ActionDefinitionController::class, 'destroy']);
+        Route::patch('/{id}/toggle', [ActionDefinitionController::class, 'toggleEnabled']);
     });
 
 Route::middleware(['auth:sanctum', 'permission:admin.access'])
-    ->get('admin/decision-matrix/{module}', [\App\Http\Controllers\Api\ActionDefinitionController::class, 'decisionMatrix']);
+    ->get('admin/decision-matrix/{module}', [ActionDefinitionController::class, 'decisionMatrix']);
 
 // Tax Year + Tax Settings routes — relocated to packs/country-gb/routes/api.php in R-9i.
 
@@ -460,12 +469,12 @@ Route::middleware(['auth:sanctum', 'throttle:20,1'])->prefix('ai-chat')->group(f
 
 // Internal Agent API routes (Python Agent SDK sidecar callbacks)
 Route::prefix('internal/agent')->middleware('agent.token')->group(function () {
-    Route::get('/analysis/{module}', [\App\Http\Controllers\Api\AgentInternalController::class, 'moduleAnalysis']);
-    Route::get('/tax/{topic}', [\App\Http\Controllers\Api\AgentInternalController::class, 'taxInformation']);
-    Route::post('/scenario', [\App\Http\Controllers\Api\AgentInternalController::class, 'scenario']);
-    Route::post('/prerequisite-check', [\App\Http\Controllers\Api\AgentInternalController::class, 'prerequisiteCheck']);
-    Route::get('/user-context/{userId}', [\App\Http\Controllers\Api\AgentInternalController::class, 'userContext']);
-    Route::get('/recommendations', [\App\Http\Controllers\Api\AgentInternalController::class, 'recommendations']);
+    Route::get('/analysis/{module}', [AgentInternalController::class, 'moduleAnalysis']);
+    Route::get('/tax/{topic}', [AgentInternalController::class, 'taxInformation']);
+    Route::post('/scenario', [AgentInternalController::class, 'scenario']);
+    Route::post('/prerequisite-check', [AgentInternalController::class, 'prerequisiteCheck']);
+    Route::get('/user-context/{userId}', [AgentInternalController::class, 'userContext']);
+    Route::get('/recommendations', [AgentInternalController::class, 'recommendations']);
 });
 
 // ===========================
@@ -473,7 +482,7 @@ Route::prefix('internal/agent')->middleware('agent.token')->group(function () {
 // ===========================
 Route::middleware(['auth:sanctum', 'advisor'])
     ->prefix('advisor')
-    ->controller(\App\Http\Controllers\Api\AdvisorController::class)
+    ->controller(AdvisorController::class)
     ->group(function () {
         Route::get('dashboard', 'dashboard');
         Route::get('clients', 'clients');
@@ -491,123 +500,3 @@ Route::middleware(['auth:sanctum', 'advisor'])
 // Bug Report route (works for both authenticated and guest users)
 Route::post('/bug-report', [BugReportController::class, 'store'])
     ->middleware('throttle:bug-reports');
-
-/*
- |-----------------------------------------------------------------------
- | ZA Pack Routes (WS 1.2b)
- |-----------------------------------------------------------------------
- |
- | All SA-specific endpoints are grouped under /api/za/*. The
- | active.jurisdiction middleware validates pack registration and (when
- | authenticated) user entitlement against FYNLA_ACTIVE_PACKS. The
- | pack.enabled:za middleware is a belt-and-braces check that the pack
- | has booted — useful for routes that don't have {cc} in the URL.
- |
- | Contracts resolved via pack.za.* container bindings registered in
- | packs/country-za/src/Providers/ZaPackServiceProvider.php.
- |
- | TODO(WS-D): /api/za/* currently has installation-level gating only
- | (pack.enabled:za). active.jurisdiction is a no-op without {cc} in the
- | URL (ActiveJurisdictionMiddleware L42-46). When user_jurisdictions
- | becomes a row-based check, refactor this group to /api/{cc=za}/* so
- | per-user entitlement enforces. See architect audit §2 (2026-04-18).
- */
-Route::middleware(['auth:sanctum', 'active.jurisdiction', 'pack.enabled:za'])
-    ->prefix('za')
-    ->as('za.')
-    ->group(function () {
-        Route::prefix('savings')->as('savings.')->group(function () {
-            Route::get('dashboard', [\Fynla\Packs\Za\Http\Controllers\ZaSavingsController::class, 'dashboard'])
-                ->name('dashboard');
-            Route::get('contributions', [\Fynla\Packs\Za\Http\Controllers\ZaSavingsController::class, 'listContributions'])
-                ->name('contributions.index');
-            Route::post('contributions', [\Fynla\Packs\Za\Http\Controllers\ZaSavingsController::class, 'storeContribution'])
-                ->name('contributions.store');
-            Route::post('emergency-fund/assess', [\Fynla\Packs\Za\Http\Controllers\ZaSavingsController::class, 'assessEmergencyFund'])
-                ->name('emergency-fund.assess');
-            Route::get('accounts', [\Fynla\Packs\Za\Http\Controllers\ZaSavingsController::class, 'listAccounts'])
-                ->name('accounts.index');
-            Route::post('accounts', [\Fynla\Packs\Za\Http\Controllers\ZaSavingsController::class, 'storeAccount'])
-                ->name('accounts.store');
-        });
-
-        // WS 1.3c — Investment
-        Route::prefix('investments')->as('investments.')->group(function () {
-            Route::get('dashboard', [\Fynla\Packs\Za\Http\Controllers\ZaInvestmentController::class, 'dashboard'])
-                ->name('dashboard');
-            Route::get('accounts', [\Fynla\Packs\Za\Http\Controllers\ZaInvestmentController::class, 'listAccounts'])
-                ->name('accounts.index');
-            Route::post('accounts', [\Fynla\Packs\Za\Http\Controllers\ZaInvestmentController::class, 'storeAccount'])
-                ->name('accounts.store');
-            Route::get('holdings', [\Fynla\Packs\Za\Http\Controllers\ZaInvestmentController::class, 'listHoldings'])
-                ->name('holdings.index');
-            Route::get('holdings/{holdingId}/lots', [\Fynla\Packs\Za\Http\Controllers\ZaInvestmentController::class, 'listLots'])
-                ->whereNumber('holdingId')
-                ->name('holdings.lots');
-            Route::post('holdings/purchase', [\Fynla\Packs\Za\Http\Controllers\ZaInvestmentController::class, 'storePurchase'])
-                ->name('holdings.purchase');
-            Route::post('holdings/disposal', [\Fynla\Packs\Za\Http\Controllers\ZaInvestmentController::class, 'recordDisposal'])
-                ->name('holdings.disposal');
-            Route::post('cgt/calculate', [\Fynla\Packs\Za\Http\Controllers\ZaInvestmentController::class, 'calculateCgt'])
-                ->name('cgt.calculate');
-        });
-
-        // WS 1.3c — Exchange Control
-        Route::prefix('exchange-control')->as('exchange-control.')->group(function () {
-            Route::get('dashboard', [\Fynla\Packs\Za\Http\Controllers\ZaExchangeControlController::class, 'dashboard'])
-                ->name('dashboard');
-            Route::get('transfers', [\Fynla\Packs\Za\Http\Controllers\ZaExchangeControlController::class, 'listTransfers'])
-                ->name('transfers.index');
-            Route::post('transfers', [\Fynla\Packs\Za\Http\Controllers\ZaExchangeControlController::class, 'storeTransfer'])
-                ->name('transfers.store');
-            Route::post('check-approval', [\Fynla\Packs\Za\Http\Controllers\ZaExchangeControlController::class, 'checkApproval'])
-                ->name('check-approval');
-        });
-
-        // WS 1.4d — Retirement
-        Route::prefix('retirement')->as('retirement.')->group(function () {
-            Route::get('dashboard', [\Fynla\Packs\Za\Http\Controllers\ZaRetirementController::class, 'dashboard'])->name('dashboard');
-
-            Route::get('funds', [\Fynla\Packs\Za\Http\Controllers\ZaRetirementController::class, 'listFunds'])->name('funds.index');
-            Route::post('funds', [\Fynla\Packs\Za\Http\Controllers\ZaRetirementController::class, 'storeFund'])->name('funds.store');
-            Route::get('funds/{fundId}/buckets', [\Fynla\Packs\Za\Http\Controllers\ZaRetirementController::class, 'showBuckets'])->name('funds.buckets');
-
-            Route::post('contributions', [\Fynla\Packs\Za\Http\Controllers\ZaRetirementController::class, 'storeContribution'])->name('contributions.store');
-
-            Route::post('savings-pot/simulate', [\Fynla\Packs\Za\Http\Controllers\ZaRetirementController::class, 'simulateSavingsPotWithdrawal'])->name('savings-pot.simulate');
-            Route::post('savings-pot/withdraw', [\Fynla\Packs\Za\Http\Controllers\ZaRetirementController::class, 'withdrawSavingsPot'])->name('savings-pot.withdraw');
-
-            Route::post('tax-relief/calculate', [\Fynla\Packs\Za\Http\Controllers\ZaRetirementController::class, 'calculateTaxRelief'])->name('tax-relief.calculate');
-
-            Route::prefix('annuities')->as('annuities.')->group(function () {
-                Route::post('living/quote', [\Fynla\Packs\Za\Http\Controllers\ZaRetirementController::class, 'quoteLivingAnnuity'])->name('living.quote');
-                Route::post('life/quote', [\Fynla\Packs\Za\Http\Controllers\ZaRetirementController::class, 'quoteLifeAnnuity'])->name('life.quote');
-                Route::post('compulsory-apportion', [\Fynla\Packs\Za\Http\Controllers\ZaRetirementController::class, 'apportionCompulsory'])->name('compulsory-apportion');
-            });
-
-            Route::prefix('reg28')->as('reg28.')->group(function () {
-                Route::match(['get', 'post'], 'check', [\Fynla\Packs\Za\Http\Controllers\ZaRetirementController::class, 'checkReg28'])->name('check');
-                Route::get('snapshots', [\Fynla\Packs\Za\Http\Controllers\ZaRetirementController::class, 'listReg28Snapshots'])->name('snapshots.index');
-                Route::post('snapshots', [\Fynla\Packs\Za\Http\Controllers\ZaRetirementController::class, 'storeReg28Snapshot'])->name('snapshots.store');
-            });
-        });
-
-        // WS 1.5b — Protection
-        Route::prefix('protection')->as('protection.')->group(function () {
-            Route::get('dashboard', [\Fynla\Packs\Za\Http\Controllers\ZaProtectionController::class, 'dashboard'])->name('dashboard');
-
-            Route::get('policies', [\Fynla\Packs\Za\Http\Controllers\ZaProtectionController::class, 'listPolicies'])->name('policies.index');
-            Route::post('policies', [\Fynla\Packs\Za\Http\Controllers\ZaProtectionController::class, 'storePolicy'])->name('policies.store');
-            Route::get('policies/{id}', [\Fynla\Packs\Za\Http\Controllers\ZaProtectionController::class, 'showPolicy'])->whereNumber('id')->name('policies.show');
-            Route::put('policies/{id}', [\Fynla\Packs\Za\Http\Controllers\ZaProtectionController::class, 'updatePolicy'])->whereNumber('id')->name('policies.update');
-            Route::delete('policies/{id}', [\Fynla\Packs\Za\Http\Controllers\ZaProtectionController::class, 'deletePolicy'])->whereNumber('id')->name('policies.destroy');
-
-            Route::get('policy-types', [\Fynla\Packs\Za\Http\Controllers\ZaProtectionController::class, 'policyTypes'])->name('policy-types');
-            Route::get('tax-treatment/{type}', [\Fynla\Packs\Za\Http\Controllers\ZaProtectionController::class, 'taxTreatment'])->name('tax-treatment');
-
-            Route::get('coverage-gap', [\Fynla\Packs\Za\Http\Controllers\ZaProtectionController::class, 'coverageGap'])->name('coverage-gap');
-
-            Route::get('beneficiaries/{policyId}', [\Fynla\Packs\Za\Http\Controllers\ZaProtectionController::class, 'listBeneficiaries'])->whereNumber('policyId')->name('beneficiaries.index');
-            Route::post('beneficiaries/{policyId}', [\Fynla\Packs\Za\Http\Controllers\ZaProtectionController::class, 'storeBeneficiaries'])->whereNumber('policyId')->name('beneficiaries.store');
-        });
-    });
