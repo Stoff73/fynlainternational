@@ -11,7 +11,7 @@ const diversificationService = {
      * @returns {Promise} Diversification analysis data
      */
     async getAccountDiversification(accountId) {
-        const response = await api.get(`/investment/accounts/${accountId}/diversification`);
+        const response = await api.get(`/gb/investment/accounts/${accountId}/diversification`);
         return response.data;
     },
 
@@ -21,7 +21,7 @@ const diversificationService = {
      * @returns {Promise} Diversification analysis data
      */
     async getPensionDiversification(pensionId) {
-        const response = await api.get(`/retirement/pensions/dc/${pensionId}/diversification`);
+        const response = await api.get(`/gb/retirement/pensions/dc/${pensionId}/diversification`);
         return response.data;
     },
 };

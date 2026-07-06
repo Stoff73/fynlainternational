@@ -32,7 +32,7 @@ const actions = {
     commit('SET_ERROR', null);
 
     try {
-      const response = await api.get('/recommendations', { params });
+      const response = await api.get('/gb/recommendations', { params });
       commit('SET_RECOMMENDATIONS', response.data.data);
     } catch (error) {
       commit('SET_ERROR', error.response?.data?.message || 'Failed to fetch recommendations');
@@ -43,7 +43,7 @@ const actions = {
 
   async fetchTopRecommendations({ commit }, limit = 5) {
     try {
-      const response = await api.get('/recommendations/top', {
+      const response = await api.get('/gb/recommendations/top', {
         params: { limit },
       });
       commit('SET_TOP_RECOMMENDATIONS', response.data.data);

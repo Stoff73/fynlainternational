@@ -19,7 +19,7 @@ const rebalancingService = {
    * @returns {Promise<Object>} Rebalancing result with actions and CGT analysis
    */
   async calculateRebalancing(data) {
-    const response = await api.post('/investment/rebalancing/calculate', data);
+    const response = await api.post('/gb/investment/rebalancing/calculate', data);
     return response.data;
   },
 
@@ -36,7 +36,7 @@ const rebalancingService = {
    * @returns {Promise<Object>} Rebalancing result
    */
   async calculateFromOptimization(data) {
-    const response = await api.post('/investment/rebalancing/from-optimization', data);
+    const response = await api.post('/gb/investment/rebalancing/from-optimization', data);
     return response.data;
   },
 
@@ -52,7 +52,7 @@ const rebalancingService = {
    * @returns {Promise<Object>} Comparison result with CGT difference
    */
   async compareCGTStrategies(data) {
-    const response = await api.post('/investment/rebalancing/compare-cgt', data);
+    const response = await api.post('/gb/investment/rebalancing/compare-cgt', data);
     return response.data;
   },
 
@@ -67,7 +67,7 @@ const rebalancingService = {
    * @returns {Promise<Object>} Modified rebalancing within CGT allowance
    */
   async rebalanceWithinCGTAllowance(data) {
-    const response = await api.post('/investment/rebalancing/within-cgt-allowance', data);
+    const response = await api.post('/gb/investment/rebalancing/within-cgt-allowance', data);
     return response.data;
   },
 
@@ -80,7 +80,7 @@ const rebalancingService = {
    * @returns {Promise<Object>} List of rebalancing actions
    */
   async getRebalancingActions(params = {}) {
-    const response = await api.get('/investment/rebalancing/actions', { params });
+    const response = await api.get('/gb/investment/rebalancing/actions', { params });
     return response.data;
   },
 
@@ -91,7 +91,7 @@ const rebalancingService = {
    * @returns {Promise<Object>} Saved actions
    */
   async saveRebalancingActions(actions) {
-    const response = await api.post('/investment/rebalancing/save', { actions });
+    const response = await api.post('/gb/investment/rebalancing/save', { actions });
     return response.data;
   },
 
@@ -108,7 +108,7 @@ const rebalancingService = {
    * @returns {Promise<Object>} Updated action
    */
   async updateRebalancingAction(id, data) {
-    const response = await api.put(`/investment/rebalancing/actions/${id}`, data);
+    const response = await api.put(`/gb/investment/rebalancing/actions/${id}`, data);
     return response.data;
   },
 
@@ -119,7 +119,7 @@ const rebalancingService = {
    * @returns {Promise<Object>} Success response
    */
   async deleteRebalancingAction(id) {
-    const response = await api.delete(`/investment/rebalancing/actions/${id}`);
+    const response = await api.delete(`/gb/investment/rebalancing/actions/${id}`);
     return response.data;
   },
 
@@ -130,7 +130,7 @@ const rebalancingService = {
    * @returns {Promise<Object>} Rebalancing analysis with drift, actions, and CGT
    */
   async getAccountRebalancing(accountId) {
-    const response = await api.get(`/investment/accounts/${accountId}/rebalancing`);
+    const response = await api.get(`/gb/investment/accounts/${accountId}/rebalancing`);
     return response.data;
   },
 
@@ -142,7 +142,7 @@ const rebalancingService = {
    * @returns {Promise<Object>} Updated threshold data
    */
   async updateRebalancingThreshold(accountId, thresholdPercent) {
-    const response = await api.patch(`/investment/accounts/${accountId}/rebalancing-threshold`, {
+    const response = await api.patch(`/gb/investment/accounts/${accountId}/rebalancing-threshold`, {
       threshold_percent: thresholdPercent,
     });
     return response.data;

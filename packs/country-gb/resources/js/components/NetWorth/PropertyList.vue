@@ -214,7 +214,7 @@ export default {
 
         if (data.property.id) {
           // Update existing property
-          propertyResponse = await api.put(`/properties/${data.property.id}`, data.property);
+          propertyResponse = await api.put(`/gb/properties/${data.property.id}`, data.property);
           const updatedProperty = propertyResponse.data.data?.property || propertyResponse.data;
           const index = this.properties.findIndex(p => p.id === data.property.id);
           if (index !== -1) {
@@ -243,7 +243,7 @@ export default {
             data.property.mortgage_ownership_percentage = data.mortgage.ownership_percentage;
           }
 
-          propertyResponse = await api.post('/properties', data.property);
+          propertyResponse = await api.post('/gb/properties', data.property);
           const newProperty = propertyResponse.data.data?.property || propertyResponse.data;
           this.properties.push(newProperty);
 
@@ -288,7 +288,7 @@ export default {
       this.error = null;
 
       try {
-        const response = await api.get('/properties');
+        const response = await api.get('/gb/properties');
         this.properties = response.data.data?.properties || response.data.properties || [];
       } catch (error) {
         logger.error('Error fetching properties:', error);

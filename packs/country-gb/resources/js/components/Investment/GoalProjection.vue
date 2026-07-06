@@ -551,7 +551,7 @@ export default {
     async loadGoals() {
       try {
         // This would typically come from a Vuex store or API call
-        const response = await api.get('/investment/goals');
+        const response = await api.get('/gb/investment/goals');
         this.goals = response.data.goals || [];
 
         if (this.goals.length > 0) {
@@ -571,17 +571,17 @@ export default {
 
       try {
         // Load projection data
-        const projResponse = await api.get(`/investment/goal-progress/${this.selectedGoalId}`);
+        const projResponse = await api.get(`/gb/investment/goal-progress/${this.selectedGoalId}`);
         this.projectionData = projResponse.data.data;
 
         // Load shortfall analysis if goal is off-track
         if (this.projectionData.on_track_status !== 'On Track') {
-          const shortfallResponse = await api.get(`/investment/goal-progress/${this.selectedGoalId}/shortfall`);
+          const shortfallResponse = await api.get(`/gb/investment/goal-progress/${this.selectedGoalId}/shortfall`);
           this.shortfallData = shortfallResponse.data.data;
         }
 
         // Load glide path recommendation
-        const glidePathResponse = await api.get('/investment/goal-progress/glide-path', {
+        const glidePathResponse = await api.get('/gb/investment/goal-progress/glide-path', {
           params: {
             goal_id: this.selectedGoalId,
           },

@@ -214,7 +214,7 @@ export default {
       this.error = null;
 
       try {
-        const response = await api.post('/estate/calculate-intestacy', {
+        const response = await api.post('/gb/estate/calculate-intestacy', {
           estate_value: this.estateValue
         });
         this.distribution = response.data.data;

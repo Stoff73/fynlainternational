@@ -2327,7 +2327,7 @@ export default {
     onMounted(() => {
       initializeFromProps();
       fetchCommitments();
-      api.get('/properties').then(res => {
+      api.get('/gb/properties').then(res => {
         const data = res.data?.data || res.data;
         properties.value = Array.isArray(data) ? data : [];
       }).catch(() => {});

@@ -12,7 +12,7 @@ const dcPensionHoldingsService = {
    * @returns {Promise} API response
    */
   async createHolding(dcPensionId, holdingData) {
-    const response = await api.post(`/retirement/pensions/dc/${dcPensionId}/holdings`, holdingData);
+    const response = await api.post(`/gb/retirement/pensions/dc/${dcPensionId}/holdings`, holdingData);
     return response.data;
   },
 
@@ -24,7 +24,7 @@ const dcPensionHoldingsService = {
    * @returns {Promise} API response
    */
   async updateHolding(dcPensionId, holdingId, holdingData) {
-    const response = await api.put(`/retirement/pensions/dc/${dcPensionId}/holdings/${holdingId}`, holdingData);
+    const response = await api.put(`/gb/retirement/pensions/dc/${dcPensionId}/holdings/${holdingId}`, holdingData);
     return response.data;
   },
 
@@ -35,7 +35,7 @@ const dcPensionHoldingsService = {
    * @returns {Promise} API response
    */
   async deleteHolding(dcPensionId, holdingId) {
-    const response = await api.delete(`/retirement/pensions/dc/${dcPensionId}/holdings/${holdingId}`);
+    const response = await api.delete(`/gb/retirement/pensions/dc/${dcPensionId}/holdings/${holdingId}`);
     return response.data;
   },
 
@@ -46,7 +46,7 @@ const dcPensionHoldingsService = {
    * @returns {Promise} API response
    */
   async bulkUpdateHoldings(dcPensionId, holdings) {
-    const response = await api.post(`/retirement/pensions/dc/${dcPensionId}/holdings/bulk-update`, {
+    const response = await api.post(`/gb/retirement/pensions/dc/${dcPensionId}/holdings/bulk-update`, {
       holdings,
     });
     return response.data;
@@ -57,7 +57,7 @@ const dcPensionHoldingsService = {
    * @returns {Promise} API response with portfolio analysis data
    */
   async getPortfolioAnalysis() {
-    const response = await api.get('/retirement/portfolio-analysis');
+    const response = await api.get('/gb/retirement/portfolio-analysis');
     return response.data;
   },
 
@@ -67,7 +67,7 @@ const dcPensionHoldingsService = {
    * @returns {Promise} API response with portfolio analysis data
    */
   async getPensionPortfolioAnalysis(dcPensionId) {
-    const response = await api.get(`/retirement/portfolio-analysis/${dcPensionId}`);
+    const response = await api.get(`/gb/retirement/portfolio-analysis/${dcPensionId}`);
     return response.data;
   },
 };

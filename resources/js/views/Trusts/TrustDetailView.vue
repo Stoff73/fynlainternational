@@ -237,7 +237,7 @@ export default {
         if (stored) {
           this.trust = stored;
         } else {
-          const response = await api.get('/estate/trusts');
+          const response = await api.get('/gb/estate/trusts');
           if (response.data.success) {
             const trusts = response.data.data;
             this.trust = trusts.find(t => t.id === parseInt(this.trustId));

@@ -10,7 +10,7 @@ const savingsService = {
      * @returns {Promise} Savings data including accounts, goals, and analysis
      */
     async getSavingsData() {
-        const response = await api.get('/savings');
+        const response = await api.get('/gb/savings');
         return response.data;
     },
 
@@ -20,7 +20,7 @@ const savingsService = {
      * @returns {Promise} Analysis results with recommendations
      */
     async analyzeSavings(data) {
-        const response = await api.post('/savings/analyze', data);
+        const response = await api.post('/gb/savings/analyze', data);
         return response.data;
     },
 
@@ -29,7 +29,7 @@ const savingsService = {
      * @returns {Promise} Prioritized recommendations
      */
     async getRecommendations() {
-        const response = await api.get('/savings/recommendations');
+        const response = await api.get('/gb/savings/recommendations');
         return response.data;
     },
 
@@ -39,7 +39,7 @@ const savingsService = {
      * @returns {Promise} Scenario analysis results
      */
     async runScenario(scenarioData) {
-        const response = await api.post('/savings/scenarios', scenarioData);
+        const response = await api.post('/gb/savings/scenarios', scenarioData);
         return response.data;
     },
 
@@ -49,7 +49,7 @@ const savingsService = {
      * @returns {Promise} ISA allowance data
      */
     async getISAAllowance(taxYear) {
-        const response = await api.get(`/savings/isa-allowance/${taxYear}`);
+        const response = await api.get(`/gb/savings/isa-allowance/${taxYear}`);
         return response.data;
     },
 
@@ -60,7 +60,7 @@ const savingsService = {
      * @returns {Promise} Created account
      */
     async createAccount(accountData) {
-        const response = await api.post('/savings/accounts', accountData);
+        const response = await api.post('/gb/savings/accounts', accountData);
         return response.data;
     },
 
@@ -70,7 +70,7 @@ const savingsService = {
      * @returns {Promise} Account data
      */
     async getAccount(id) {
-        const response = await api.get(`/savings/accounts/${id}`);
+        const response = await api.get(`/gb/savings/accounts/${id}`);
         return response.data;
     },
 
@@ -81,7 +81,7 @@ const savingsService = {
      * @returns {Promise} Updated account
      */
     async updateAccount(id, accountData) {
-        const response = await api.put(`/savings/accounts/${id}`, accountData);
+        const response = await api.put(`/gb/savings/accounts/${id}`, accountData);
         return response.data;
     },
 
@@ -91,7 +91,7 @@ const savingsService = {
      * @returns {Promise} Deletion confirmation
      */
     async deleteAccount(id) {
-        const response = await api.delete(`/savings/accounts/${id}`);
+        const response = await api.delete(`/gb/savings/accounts/${id}`);
         return response.data;
     },
 
@@ -101,7 +101,7 @@ const savingsService = {
      * @returns {Promise} Updated inclusion status
      */
     async toggleRetirementInclusion(id) {
-        const response = await api.patch(`/savings/accounts/${id}/toggle-retirement`);
+        const response = await api.patch(`/gb/savings/accounts/${id}/toggle-retirement`);
         return response.data;
     },
 
@@ -111,7 +111,7 @@ const savingsService = {
      * @returns {Promise} Array of goals
      */
     async getGoals() {
-        const response = await api.get('/savings/goals');
+        const response = await api.get('/gb/savings/goals');
         return response.data;
     },
 
@@ -121,7 +121,7 @@ const savingsService = {
      * @returns {Promise} Expenditure profile data
      */
     async getExpenditureProfile() {
-        const response = await api.get('/savings/expenditure-profile');
+        const response = await api.get('/gb/savings/expenditure-profile');
         return response.data;
     },
 
@@ -131,7 +131,7 @@ const savingsService = {
      * @returns {Promise} Updated profile
      */
     async updateExpenditureProfile(profileData) {
-        const response = await api.put('/savings/expenditure-profile', profileData);
+        const response = await api.put('/gb/savings/expenditure-profile', profileData);
         return response.data;
     },
 };

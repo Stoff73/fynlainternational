@@ -398,7 +398,7 @@ export default {
 
       try {
         // Fetch performance analysis
-        const perfResponse = await api.get('/investment/performance-attribution/analyze', {
+        const perfResponse = await api.get('/gb/investment/performance-attribution/analyze', {
           params: {
             period: this.selectedPeriod,
           },
@@ -406,7 +406,7 @@ export default {
         this.performanceData = perfResponse.data.data;
 
         // Fetch risk metrics
-        const riskResponse = await api.get('/investment/performance-attribution/risk-metrics', {
+        const riskResponse = await api.get('/gb/investment/performance-attribution/risk-metrics', {
           params: {
             period: this.selectedPeriod,
           },

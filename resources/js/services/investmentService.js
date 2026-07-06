@@ -10,7 +10,7 @@ const investmentService = {
      * @returns {Promise} Investment data including accounts, holdings, goals, and risk profile
      */
     async getInvestmentData() {
-        const response = await api.get('/investment');
+        const response = await api.get('/gb/investment');
         return response.data;
     },
 
@@ -19,7 +19,7 @@ const investmentService = {
      * @returns {Promise} Analysis results with recommendations
      */
     async analyzeInvestment() {
-        const response = await api.post('/investment/analyze');
+        const response = await api.post('/gb/investment/analyze');
         return response.data;
     },
 
@@ -28,7 +28,7 @@ const investmentService = {
      * @returns {Promise} Prioritized recommendations
      */
     async getRecommendations() {
-        const response = await api.get('/investment/recommendations');
+        const response = await api.get('/gb/investment/recommendations');
         return response.data;
     },
 
@@ -38,7 +38,7 @@ const investmentService = {
      * @returns {Promise} Scenario analysis results
      */
     async runScenario(scenarioData) {
-        const response = await api.post('/investment/scenarios', scenarioData);
+        const response = await api.post('/gb/investment/scenarios', scenarioData);
         return response.data;
     },
 
@@ -55,7 +55,7 @@ const investmentService = {
      * @returns {Promise} Job ID for polling
      */
     async startMonteCarlo(params) {
-        const response = await api.post('/investment/monte-carlo', params);
+        const response = await api.post('/gb/investment/monte-carlo', params);
         return response.data;
     },
 
@@ -65,7 +65,7 @@ const investmentService = {
      * @returns {Promise} Simulation results or status
      */
     async getMonteCarloResults(jobId) {
-        const response = await api.get(`/investment/monte-carlo/${jobId}`);
+        const response = await api.get(`/gb/investment/monte-carlo/${jobId}`);
         return response.data;
     },
 
@@ -84,7 +84,7 @@ const investmentService = {
      */
     async createAccount(accountData) {
         try {
-            const response = await api.post('/investment/accounts', accountData);
+            const response = await api.post('/gb/investment/accounts', accountData);
             return response.data;
         } catch (error) {
             console.error('Account creation failed:', error.response?.data);
@@ -99,7 +99,7 @@ const investmentService = {
      * @returns {Promise} Updated account
      */
     async updateAccount(id, accountData) {
-        const response = await api.put(`/investment/accounts/${id}`, accountData);
+        const response = await api.put(`/gb/investment/accounts/${id}`, accountData);
         return response.data;
     },
 
@@ -109,7 +109,7 @@ const investmentService = {
      * @returns {Promise} Deletion confirmation
      */
     async deleteAccount(id) {
-        const response = await api.delete(`/investment/accounts/${id}`);
+        const response = await api.delete(`/gb/investment/accounts/${id}`);
         return response.data;
     },
 
@@ -119,7 +119,7 @@ const investmentService = {
      * @returns {Promise} Updated account with new include_in_retirement value
      */
     async toggleRetirementInclusion(id) {
-        const response = await api.patch(`/investment/accounts/${id}/toggle-retirement`);
+        const response = await api.patch(`/gb/investment/accounts/${id}/toggle-retirement`);
         return response.data;
     },
 
@@ -142,7 +142,7 @@ const investmentService = {
      */
     async createHolding(holdingData) {
         try {
-            const response = await api.post('/investment/holdings', holdingData);
+            const response = await api.post('/gb/investment/holdings', holdingData);
             return response.data;
         } catch (error) {
             console.error('Holding creation failed:', error.response?.data);
@@ -157,7 +157,7 @@ const investmentService = {
      * @returns {Promise} Updated holding
      */
     async updateHolding(id, holdingData) {
-        const response = await api.put(`/investment/holdings/${id}`, holdingData);
+        const response = await api.put(`/gb/investment/holdings/${id}`, holdingData);
         return response.data;
     },
 
@@ -167,7 +167,7 @@ const investmentService = {
      * @returns {Promise} Deletion confirmation
      */
     async deleteHolding(id) {
-        const response = await api.delete(`/investment/holdings/${id}`);
+        const response = await api.delete(`/gb/investment/holdings/${id}`);
         return response.data;
     },
 
@@ -182,7 +182,7 @@ const investmentService = {
      * @returns {Promise} Risk profile
      */
     async saveRiskProfile(profileData) {
-        const response = await api.post('/investment/risk-profile', profileData);
+        const response = await api.post('/gb/investment/risk-profile', profileData);
         return response.data;
     },
 
@@ -194,7 +194,7 @@ const investmentService = {
      * @returns {Promise} Complete tax analysis with opportunities and efficiency score
      */
     async analyzeTaxPosition(params = {}) {
-        const response = await api.get('/investment/tax-optimization/analyze', { params });
+        const response = await api.get('/gb/investment/tax-optimization/analyze', { params });
         return response.data;
     },
 
@@ -209,7 +209,7 @@ const investmentService = {
      * @returns {Promise} ISA strategy with recommendations
      */
     async getISAStrategy(params = {}) {
-        const response = await api.get('/investment/tax-optimization/isa-strategy', { params });
+        const response = await api.get('/gb/investment/tax-optimization/isa-strategy', { params });
         return response.data;
     },
 
@@ -223,7 +223,7 @@ const investmentService = {
      * @returns {Promise} Loss harvesting opportunities and strategy
      */
     async getCGTHarvestingOpportunities(params = {}) {
-        const response = await api.get('/investment/tax-optimization/cgt-harvesting', { params });
+        const response = await api.get('/gb/investment/tax-optimization/cgt-harvesting', { params });
         return response.data;
     },
 
@@ -236,7 +236,7 @@ const investmentService = {
      * @returns {Promise} Bed and ISA opportunities and execution plan
      */
     async getBedAndISAOpportunities(params = {}) {
-        const response = await api.get('/investment/tax-optimization/bed-and-isa', { params });
+        const response = await api.get('/gb/investment/tax-optimization/bed-and-isa', { params });
         return response.data;
     },
 
@@ -248,7 +248,7 @@ const investmentService = {
      * @returns {Promise} Filtered recommendations
      */
     async getTaxRecommendations(params = {}) {
-        const response = await api.get('/investment/tax-optimization/recommendations', { params });
+        const response = await api.get('/gb/investment/tax-optimization/recommendations', { params });
         return response.data;
     },
 
@@ -263,7 +263,7 @@ const investmentService = {
      * @returns {Promise} Complete asset location analysis
      */
     async analyzeAssetLocation(params = {}) {
-        const response = await api.get('/investment/asset-location/analyze', { params });
+        const response = await api.get('/gb/investment/asset-location/analyze', { params });
         return response.data;
     },
 
@@ -282,7 +282,7 @@ const investmentService = {
      * @returns {Promise} Strategy recommendations with summary and per-account breakdown
      */
     async getPortfolioStrategy() {
-        const response = await api.get('/investment/portfolio-strategy');
+        const response = await api.get('/gb/investment/portfolio-strategy');
         return response.data;
     },
 
@@ -293,7 +293,7 @@ const investmentService = {
      * @returns {Promise} Projection data with growth scenarios
      */
     async getPortfolioProjections(params = {}) {
-        const response = await api.post('/investment/projections', params);
+        const response = await api.post('/gb/investment/projections', params);
         return response.data;
     },
 

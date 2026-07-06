@@ -365,7 +365,7 @@ export default {
 
     async loadWillData() {
       try {
-        const response = await api.get('/estate/will');
+        const response = await api.get('/gb/estate/will');
         this.willData = response.data.data || null;
       } catch (error) {
         // Will might not exist yet, that's fine

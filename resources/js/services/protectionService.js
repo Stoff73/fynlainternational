@@ -10,7 +10,7 @@ const protectionService = {
      * @returns {Promise} Protection data including profile, policies, and analysis
      */
     async getProtectionData() {
-        const response = await api.get('/protection');
+        const response = await api.get('/gb/protection');
         return response.data;
     },
 
@@ -20,7 +20,7 @@ const protectionService = {
      * @returns {Promise} Saved profile
      */
     async saveProfile(profileData) {
-        const response = await api.post('/protection/profile', profileData);
+        const response = await api.post('/gb/protection/profile', profileData);
         return response.data;
     },
 
@@ -30,7 +30,7 @@ const protectionService = {
      * @returns {Promise} Updated profile
      */
     async updateHasNoPolicies(hasNoPolicies) {
-        const response = await api.patch('/protection/profile/has-no-policies', {
+        const response = await api.patch('/gb/protection/profile/has-no-policies', {
             has_no_policies: hasNoPolicies,
         });
         return response.data;
@@ -42,7 +42,7 @@ const protectionService = {
      * @returns {Promise} Analysis results with gaps and recommendations
      */
     async analyzeProtection(data) {
-        const response = await api.post('/protection/analyze', data);
+        const response = await api.post('/gb/protection/analyze', data);
         return response.data;
     },
 
@@ -51,7 +51,7 @@ const protectionService = {
      * @returns {Promise} Prioritized recommendations
      */
     async getRecommendations() {
-        const response = await api.get('/protection/recommendations');
+        const response = await api.get('/gb/protection/recommendations');
         return response.data;
     },
 
@@ -61,7 +61,7 @@ const protectionService = {
      * @returns {Promise} Scenario analysis results
      */
     async runScenario(scenarioData) {
-        const response = await api.post('/protection/scenarios', scenarioData);
+        const response = await api.post('/gb/protection/scenarios', scenarioData);
         return response.data;
     },
 
@@ -72,7 +72,7 @@ const protectionService = {
      * @returns {Promise} Created policy
      */
     async createLifePolicy(policyData) {
-        const response = await api.post('/protection/policies/life', policyData);
+        const response = await api.post('/gb/protection/policies/life', policyData);
         return response.data;
     },
 
@@ -83,7 +83,7 @@ const protectionService = {
      * @returns {Promise} Updated policy
      */
     async updateLifePolicy(id, policyData) {
-        const response = await api.put(`/protection/policies/life/${id}`, policyData);
+        const response = await api.put(`/gb/protection/policies/life/${id}`, policyData);
         return response.data;
     },
 
@@ -93,7 +93,7 @@ const protectionService = {
      * @returns {Promise} Deletion confirmation
      */
     async deleteLifePolicy(id) {
-        const response = await api.delete(`/protection/policies/life/${id}`);
+        const response = await api.delete(`/gb/protection/policies/life/${id}`);
         return response.data;
     },
 
@@ -104,7 +104,7 @@ const protectionService = {
      * @returns {Promise} Created policy
      */
     async createCriticalIllnessPolicy(policyData) {
-        const response = await api.post('/protection/policies/critical-illness', policyData);
+        const response = await api.post('/gb/protection/policies/critical-illness', policyData);
         return response.data;
     },
 
@@ -115,7 +115,7 @@ const protectionService = {
      * @returns {Promise} Updated policy
      */
     async updateCriticalIllnessPolicy(id, policyData) {
-        const response = await api.put(`/protection/policies/critical-illness/${id}`, policyData);
+        const response = await api.put(`/gb/protection/policies/critical-illness/${id}`, policyData);
         return response.data;
     },
 
@@ -125,7 +125,7 @@ const protectionService = {
      * @returns {Promise} Deletion confirmation
      */
     async deleteCriticalIllnessPolicy(id) {
-        const response = await api.delete(`/protection/policies/critical-illness/${id}`);
+        const response = await api.delete(`/gb/protection/policies/critical-illness/${id}`);
         return response.data;
     },
 
@@ -136,7 +136,7 @@ const protectionService = {
      * @returns {Promise} Created policy
      */
     async createIncomeProtectionPolicy(policyData) {
-        const response = await api.post('/protection/policies/income-protection', policyData);
+        const response = await api.post('/gb/protection/policies/income-protection', policyData);
         return response.data;
     },
 
@@ -147,7 +147,7 @@ const protectionService = {
      * @returns {Promise} Updated policy
      */
     async updateIncomeProtectionPolicy(id, policyData) {
-        const response = await api.put(`/protection/policies/income-protection/${id}`, policyData);
+        const response = await api.put(`/gb/protection/policies/income-protection/${id}`, policyData);
         return response.data;
     },
 
@@ -157,7 +157,7 @@ const protectionService = {
      * @returns {Promise} Deletion confirmation
      */
     async deleteIncomeProtectionPolicy(id) {
-        const response = await api.delete(`/protection/policies/income-protection/${id}`);
+        const response = await api.delete(`/gb/protection/policies/income-protection/${id}`);
         return response.data;
     },
 
@@ -168,7 +168,7 @@ const protectionService = {
      * @returns {Promise} Created policy
      */
     async createDisabilityPolicy(policyData) {
-        const response = await api.post('/protection/policies/disability', policyData);
+        const response = await api.post('/gb/protection/policies/disability', policyData);
         return response.data;
     },
 
@@ -179,7 +179,7 @@ const protectionService = {
      * @returns {Promise} Updated policy
      */
     async updateDisabilityPolicy(id, policyData) {
-        const response = await api.put(`/protection/policies/disability/${id}`, policyData);
+        const response = await api.put(`/gb/protection/policies/disability/${id}`, policyData);
         return response.data;
     },
 
@@ -189,7 +189,7 @@ const protectionService = {
      * @returns {Promise} Deletion confirmation
      */
     async deleteDisabilityPolicy(id) {
-        const response = await api.delete(`/protection/policies/disability/${id}`);
+        const response = await api.delete(`/gb/protection/policies/disability/${id}`);
         return response.data;
     },
 
@@ -200,7 +200,7 @@ const protectionService = {
      * @returns {Promise} Created policy
      */
     async createSicknessIllnessPolicy(policyData) {
-        const response = await api.post('/protection/policies/sickness-illness', policyData);
+        const response = await api.post('/gb/protection/policies/sickness-illness', policyData);
         return response.data;
     },
 
@@ -211,7 +211,7 @@ const protectionService = {
      * @returns {Promise} Updated policy
      */
     async updateSicknessIllnessPolicy(id, policyData) {
-        const response = await api.put(`/protection/policies/sickness-illness/${id}`, policyData);
+        const response = await api.put(`/gb/protection/policies/sickness-illness/${id}`, policyData);
         return response.data;
     },
 
@@ -221,7 +221,7 @@ const protectionService = {
      * @returns {Promise} Deletion confirmation
      */
     async deleteSicknessIllnessPolicy(id) {
-        const response = await api.delete(`/protection/policies/sickness-illness/${id}`);
+        const response = await api.delete(`/gb/protection/policies/sickness-illness/${id}`);
         return response.data;
     },
 };

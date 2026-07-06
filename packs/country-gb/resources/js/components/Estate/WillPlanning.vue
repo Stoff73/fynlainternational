@@ -555,7 +555,7 @@ export default {
     async loadWill() {
       // Preview users are real DB users - use normal API
       try {
-        const response = await api.get('/estate/will');
+        const response = await api.get('/gb/estate/will');
         this.will = response.data.data;
 
         // Parse executors — backend stores as comma-separated string in executor_name
@@ -576,7 +576,7 @@ export default {
         // Load full WillDocument if exists (created via Will Builder)
         if (this.will.will_document_id) {
           try {
-            const docResponse = await api.get(`/estate/will-builder/${this.will.will_document_id}`);
+            const docResponse = await api.get(`/gb/estate/will-builder/${this.will.will_document_id}`);
             this.willDocument = docResponse.data?.data || null;
           } catch {
             // Will document not available — that's OK
@@ -595,7 +595,7 @@ export default {
     async loadBequests() {
       // Preview users are real DB users - use normal API
       try {
-        const response = await api.get('/estate/bequests');
+        const response = await api.get('/gb/estate/bequests');
         this.bequests = response.data.data;
       } catch (error) {
         logger.error('Failed to load bequests:', error);
@@ -605,7 +605,7 @@ export default {
     async loadNetEstateValue() {
       // Preview users are real DB users - use normal API
       try {
-        const response = await api.post('/estate/calculate-iht');
+        const response = await api.post('/gb/estate/calculate-iht');
         // NEW: Use iht_summary.current.net_estate from unified structure
         if (response.data?.iht_summary?.current?.net_estate !== undefined) {
           this.netEstateValue = response.data.iht_summary.current.net_estate;
@@ -657,7 +657,7 @@ export default {
           executor_name: this.form.executors.filter(e => e.trim()).join(', '),
         };
         delete payload.executors;
-        await api.post('/estate/will', payload);
+        await api.post('/gb/estate/will', payload);
         this.successMessage = 'Will saved successfully';
         this.isEditing = false;
         this.originalForm = JSON.parse(JSON.stringify(this.form));
@@ -692,7 +692,7 @@ export default {
       if (!confirm('Are you sure you want to delete this bequest?')) return;
 
       try {
-        await api.delete(`/estate/bequests/${id}`);
+        await api.delete(`/gb/estate/bequests/${id}`);
         this.successMessage = 'Bequest deleted successfully';
         if (this.successTimeout) clearTimeout(this.successTimeout);
         this.successTimeout = setTimeout(() => this.successMessage = '', 3000);

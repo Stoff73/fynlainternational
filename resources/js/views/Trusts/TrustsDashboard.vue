@@ -426,7 +426,7 @@ export default {
         return;
       }
       try {
-        const response = await this.$http.post(`/api/estate/trusts/${trust.id}/calculate-iht-impact`);
+        const response = await this.$http.post(`/api/gb/estate/trusts/${trust.id}/calculate-iht-impact`);
         if (response.data.success) {
           this.$router.push(`/trusts/${trust.id}?tab=tax`);
         }

@@ -40,65 +40,65 @@ export default {
 
   // Retirement Action Definitions
   getRetirementActions() {
-    return api.get('/admin/retirement-actions');
+    return api.get('/gb/admin/retirement-actions');
   },
 
   createRetirementAction(data) {
-    return api.post('/admin/retirement-actions', data);
+    return api.post('/gb/admin/retirement-actions', data);
   },
 
   updateRetirementAction(id, data) {
-    return api.put(`/admin/retirement-actions/${id}`, data);
+    return api.put(`/gb/admin/retirement-actions/${id}`, data);
   },
 
   deleteRetirementAction(id) {
-    return api.delete(`/admin/retirement-actions/${id}`);
+    return api.delete(`/gb/admin/retirement-actions/${id}`);
   },
 
   toggleRetirementAction(id) {
-    return api.patch(`/admin/retirement-actions/${id}/toggle`);
+    return api.patch(`/gb/admin/retirement-actions/${id}/toggle`);
   },
 
   // Investment Action Definitions
   getInvestmentActions() {
-    return api.get('/admin/investment-actions');
+    return api.get('/gb/admin/investment-actions');
   },
 
   createInvestmentAction(data) {
-    return api.post('/admin/investment-actions', data);
+    return api.post('/gb/admin/investment-actions', data);
   },
 
   updateInvestmentAction(id, data) {
-    return api.put(`/admin/investment-actions/${id}`, data);
+    return api.put(`/gb/admin/investment-actions/${id}`, data);
   },
 
   deleteInvestmentAction(id) {
-    return api.delete(`/admin/investment-actions/${id}`);
+    return api.delete(`/gb/admin/investment-actions/${id}`);
   },
 
   toggleInvestmentAction(id) {
-    return api.patch(`/admin/investment-actions/${id}/toggle`);
+    return api.patch(`/gb/admin/investment-actions/${id}/toggle`);
   },
 
   // Protection Action Definitions
   getProtectionActions() {
-    return api.get('/admin/protection-actions');
+    return api.get('/gb/admin/protection-actions');
   },
 
   createProtectionAction(data) {
-    return api.post('/admin/protection-actions', data);
+    return api.post('/gb/admin/protection-actions', data);
   },
 
   updateProtectionAction(id, data) {
-    return api.put(`/admin/protection-actions/${id}`, data);
+    return api.put(`/gb/admin/protection-actions/${id}`, data);
   },
 
   deleteProtectionAction(id) {
-    return api.delete(`/admin/protection-actions/${id}`);
+    return api.delete(`/gb/admin/protection-actions/${id}`);
   },
 
   toggleProtectionAction(id) {
-    return api.patch(`/admin/protection-actions/${id}/toggle`);
+    return api.patch(`/gb/admin/protection-actions/${id}/toggle`);
   },
 
   // Database Backup

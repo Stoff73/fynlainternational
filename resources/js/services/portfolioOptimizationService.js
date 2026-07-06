@@ -14,7 +14,7 @@ const portfolioOptimizationService = {
      * @returns {Promise} Efficient frontier data with current position
      */
     async calculateEfficientFrontier(params = {}) {
-        const response = await api.post('/investment/optimization/efficient-frontier', params);
+        const response = await api.post('/gb/investment/optimization/efficient-frontier', params);
         return response.data;
     },
 
@@ -26,7 +26,7 @@ const portfolioOptimizationService = {
      * @returns {Promise} Minimum variance portfolio allocation
      */
     async optimiseMinimumVariance(constraints = {}) {
-        const response = await api.post('/investment/optimization/minimize-variance', constraints);
+        const response = await api.post('/gb/investment/optimization/minimize-variance', constraints);
         return response.data;
     },
 
@@ -39,7 +39,7 @@ const portfolioOptimizationService = {
      * @returns {Promise} Tangency portfolio allocation
      */
     async optimiseMaximumSharpe(params = {}) {
-        const response = await api.post('/investment/optimization/maximize-sharpe', params);
+        const response = await api.post('/gb/investment/optimization/maximize-sharpe', params);
         return response.data;
     },
 
@@ -55,7 +55,7 @@ const portfolioOptimizationService = {
         if (!params.target_return) {
             throw new Error('target_return is required');
         }
-        const response = await api.post('/investment/optimization/target-return', params);
+        const response = await api.post('/gb/investment/optimization/target-return', params);
         return response.data;
     },
 
@@ -65,7 +65,7 @@ const portfolioOptimizationService = {
      * @returns {Promise} Risk parity portfolio allocation
      */
     async optimiseRiskParity() {
-        const response = await api.post('/investment/optimization/risk-parity');
+        const response = await api.post('/gb/investment/optimization/risk-parity');
         return response.data;
     },
 
@@ -114,7 +114,7 @@ const portfolioOptimizationService = {
      * @returns {Promise} Success message
      */
     async clearCache() {
-        const response = await api.delete('/investment/optimization/clear-cache');
+        const response = await api.delete('/gb/investment/optimization/clear-cache');
         return response.data;
     },
 
@@ -124,7 +124,7 @@ const portfolioOptimizationService = {
      */
     async getCorrelationMatrix() {
         // This endpoint will be added when we build correlation analysis
-        const response = await api.get('/investment/optimization/correlation-matrix');
+        const response = await api.get('/gb/investment/optimization/correlation-matrix');
         return response.data;
     },
 

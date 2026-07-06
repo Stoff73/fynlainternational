@@ -58,7 +58,7 @@ const actions = {
     commit('setLoading', true);
     commit('setError', null);
     try {
-      const response = await api.get('/tax-year/current');
+      const response = await api.get('/gb/tax-year/current');
       const data = response.data?.data || {};
       commit('setActiveTaxYear', {
         taxYear: data.tax_year,

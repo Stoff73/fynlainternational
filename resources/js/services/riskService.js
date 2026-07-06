@@ -15,7 +15,7 @@ const riskService = {
    * @returns {Promise} Array of risk level configurations
    */
   async getLevels() {
-    const response = await api.get('/investment/risk/levels');
+    const response = await api.get('/gb/investment/risk/levels');
     return response.data;
   },
 
@@ -24,7 +24,7 @@ const riskService = {
    * @returns {Promise} Risk profile data including risk_level, time_horizon_years, etc.
    */
   async getProfile() {
-    const response = await api.get('/investment/risk/profile');
+    const response = await api.get('/gb/investment/risk/profile');
     return response.data;
   },
 
@@ -39,7 +39,7 @@ const riskService = {
    * @returns {Promise} Updated risk profile
    */
   async setProfile(data) {
-    const response = await api.post('/investment/risk/profile', data);
+    const response = await api.post('/gb/investment/risk/profile', data);
     return response.data;
   },
 
@@ -49,7 +49,7 @@ const riskService = {
    * @returns {Promise} Array of allowed risk level values
    */
   async getAllowedLevels() {
-    const response = await api.get('/investment/risk/allowed-levels');
+    const response = await api.get('/gb/investment/risk/allowed-levels');
     return response.data;
   },
 
@@ -59,7 +59,7 @@ const riskService = {
    * @returns {Promise} Validation result with is_valid and message
    */
   async validateProductLevel(riskLevel) {
-    const response = await api.post('/investment/risk/validate-product-level', {
+    const response = await api.post('/gb/investment/risk/validate-product-level', {
       risk_level: riskLevel,
     });
     return response.data;
@@ -71,7 +71,7 @@ const riskService = {
    * @returns {Promise} Detailed risk level configuration including allocation and returns
    */
   async getRiskConfig(level) {
-    const response = await api.get(`/investment/risk/config/${level}`);
+    const response = await api.get(`/gb/investment/risk/config/${level}`);
     return response.data;
   },
 
@@ -80,7 +80,7 @@ const riskService = {
    * @returns {Promise} Updated risk profile with factor breakdown
    */
   async recalculate() {
-    const response = await api.post('/investment/risk/recalculate');
+    const response = await api.post('/gb/investment/risk/recalculate');
     return response.data;
   },
 

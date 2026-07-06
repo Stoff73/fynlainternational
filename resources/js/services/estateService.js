@@ -10,7 +10,7 @@ const estateService = {
      * @returns {Promise} Estate data including assets, liabilities, gifts, and IHT profile
      */
     async getEstateData() {
-        const response = await api.get('/estate');
+        const response = await api.get('/gb/estate');
         return response.data;
     },
 
@@ -20,7 +20,7 @@ const estateService = {
      * @returns {Promise} Analysis results with IHT calculation and recommendations
      */
     async analyzeEstate(data = {}) {
-        const response = await api.post('/estate/analyze', data);
+        const response = await api.post('/gb/estate/analyze', data);
         return response.data;
     },
 
@@ -29,7 +29,7 @@ const estateService = {
      * @returns {Promise} Prioritized recommendations
      */
     async getRecommendations() {
-        const response = await api.get('/estate/recommendations');
+        const response = await api.get('/gb/estate/recommendations');
         return response.data;
     },
 
@@ -39,7 +39,7 @@ const estateService = {
      * @returns {Promise} Scenario analysis results
      */
     async runScenario(scenarioData) {
-        const response = await api.post('/estate/scenarios', scenarioData);
+        const response = await api.post('/gb/estate/scenarios', scenarioData);
         return response.data;
     },
 
@@ -49,7 +49,7 @@ const estateService = {
      * @returns {Promise} IHT calculation breakdown
      */
     async calculateIHT(data) {
-        const response = await api.post('/estate/calculate-iht', data);
+        const response = await api.post('/gb/estate/calculate-iht', data);
         return response.data;
     },
 
@@ -59,7 +59,7 @@ const estateService = {
      */
     async calculateIHTPlanning() {
         // Add cache-busting timestamp to force fresh calculation
-        const response = await api.post('/estate/calculate-iht', {
+        const response = await api.post('/gb/estate/calculate-iht', {
             _timestamp: Date.now()
         });
         return response.data;
@@ -70,7 +70,7 @@ const estateService = {
      * @returns {Promise} Net worth breakdown
      */
     async getNetWorth() {
-        const response = await api.get('/estate/net-worth');
+        const response = await api.get('/gb/estate/net-worth');
         return response.data;
     },
 
@@ -80,7 +80,7 @@ const estateService = {
      * @returns {Promise} Cash flow statement
      */
     async getCashFlow(taxYear) {
-        const response = await api.get('/estate/cash-flow', {
+        const response = await api.get('/gb/estate/cash-flow', {
             params: { taxYear }
         });
         return response.data;
@@ -93,7 +93,7 @@ const estateService = {
      * @returns {Promise} Created/updated profile
      */
     async storeOrUpdateProfile(profileData) {
-        const response = await api.post('/estate/profile', profileData);
+        const response = await api.post('/gb/estate/profile', profileData);
         return response.data;
     },
 
@@ -104,7 +104,7 @@ const estateService = {
      * @returns {Promise} Created asset
      */
     async createAsset(assetData) {
-        const response = await api.post('/estate/assets', assetData);
+        const response = await api.post('/gb/estate/assets', assetData);
         return response.data;
     },
 
@@ -115,7 +115,7 @@ const estateService = {
      * @returns {Promise} Updated asset
      */
     async updateAsset(id, assetData) {
-        const response = await api.put(`/estate/assets/${id}`, assetData);
+        const response = await api.put(`/gb/estate/assets/${id}`, assetData);
         return response.data;
     },
 
@@ -125,7 +125,7 @@ const estateService = {
      * @returns {Promise} Deletion confirmation
      */
     async deleteAsset(id) {
-        const response = await api.delete(`/estate/assets/${id}`);
+        const response = await api.delete(`/gb/estate/assets/${id}`);
         return response.data;
     },
 
@@ -136,7 +136,7 @@ const estateService = {
      * @returns {Promise} Created liability
      */
     async createLiability(liabilityData) {
-        const response = await api.post('/estate/liabilities', liabilityData);
+        const response = await api.post('/gb/estate/liabilities', liabilityData);
         return response.data;
     },
 
@@ -147,7 +147,7 @@ const estateService = {
      * @returns {Promise} Updated liability
      */
     async updateLiability(id, liabilityData) {
-        const response = await api.put(`/estate/liabilities/${id}`, liabilityData);
+        const response = await api.put(`/gb/estate/liabilities/${id}`, liabilityData);
         return response.data;
     },
 
@@ -157,7 +157,7 @@ const estateService = {
      * @returns {Promise} Deletion confirmation
      */
     async deleteLiability(id) {
-        const response = await api.delete(`/estate/liabilities/${id}`);
+        const response = await api.delete(`/gb/estate/liabilities/${id}`);
         return response.data;
     },
 
@@ -168,7 +168,7 @@ const estateService = {
      * @returns {Promise} Created gift
      */
     async createGift(giftData) {
-        const response = await api.post('/estate/gifts', giftData);
+        const response = await api.post('/gb/estate/gifts', giftData);
         return response.data;
     },
 
@@ -179,7 +179,7 @@ const estateService = {
      * @returns {Promise} Updated gift
      */
     async updateGift(id, giftData) {
-        const response = await api.put(`/estate/gifts/${id}`, giftData);
+        const response = await api.put(`/gb/estate/gifts/${id}`, giftData);
         return response.data;
     },
 
@@ -189,7 +189,7 @@ const estateService = {
      * @returns {Promise} Deletion confirmation
      */
     async deleteGift(id) {
-        const response = await api.delete(`/estate/gifts/${id}`);
+        const response = await api.delete(`/gb/estate/gifts/${id}`);
         return response.data;
     },
 
@@ -198,7 +198,7 @@ const estateService = {
      * @returns {Promise} Planned gifting strategy with PET cycles and timeline
      */
     async getPlannedGiftingStrategy() {
-        const response = await api.get('/estate/gifts/planned-strategy');
+        const response = await api.get('/gb/estate/gifts/planned-strategy');
         return response.data;
     },
 
@@ -208,7 +208,7 @@ const estateService = {
      * @returns {Promise} Personalized gifting strategy with asset-specific guidance
      */
     async getPersonalizedGiftingStrategy() {
-        const response = await api.get('/estate/gifts/personalized-strategy');
+        const response = await api.get('/gb/estate/gifts/personalized-strategy');
         return response.data;
     },
 
@@ -221,7 +221,7 @@ const estateService = {
      * @returns {Promise} Personalized trust strategy with CLT scenarios and taxation
      */
     async getPersonalizedTrustStrategy() {
-        const response = await api.get('/estate/gifts/trust-strategy');
+        const response = await api.get('/gb/estate/gifts/trust-strategy');
         return response.data;
     },
 
@@ -230,7 +230,7 @@ const estateService = {
      * @returns {Promise} Life policy strategy comparison with premiums and future value calculations
      */
     async getLifePolicyStrategy() {
-        const response = await api.get('/estate/life-policy-strategy');
+        const response = await api.get('/gb/estate/life-policy-strategy');
         return response.data;
     },
 
@@ -241,7 +241,7 @@ const estateService = {
      * @returns {Promise} List of trusts
      */
     async getTrusts() {
-        const response = await api.get('/estate/trusts');
+        const response = await api.get('/gb/estate/trusts');
         return response.data;
     },
 
@@ -251,7 +251,7 @@ const estateService = {
      * @returns {Promise} Created trust
      */
     async createTrust(trustData) {
-        const response = await api.post('/estate/trusts', trustData);
+        const response = await api.post('/gb/estate/trusts', trustData);
         return response.data;
     },
 
@@ -262,7 +262,7 @@ const estateService = {
      * @returns {Promise} Updated trust
      */
     async updateTrust(id, trustData) {
-        const response = await api.put(`/estate/trusts/${id}`, trustData);
+        const response = await api.put(`/gb/estate/trusts/${id}`, trustData);
         return response.data;
     },
 
@@ -272,7 +272,7 @@ const estateService = {
      * @returns {Promise} Deletion confirmation
      */
     async deleteTrust(id) {
-        const response = await api.delete(`/estate/trusts/${id}`);
+        const response = await api.delete(`/gb/estate/trusts/${id}`);
         return response.data;
     },
 
@@ -282,7 +282,7 @@ const estateService = {
      * @returns {Promise} Trust analysis and efficiency metrics
      */
     async analyzeTrust(id) {
-        const response = await api.get(`/estate/trusts/${id}/analyze`);
+        const response = await api.get(`/gb/estate/trusts/${id}/analyze`);
         return response.data;
     },
 
@@ -292,7 +292,7 @@ const estateService = {
      * @returns {Promise} Trust recommendations based on estate
      */
     async getTrustRecommendations(params = {}) {
-        const response = await api.get('/estate/trust-recommendations', { params });
+        const response = await api.get('/gb/estate/trust-recommendations', { params });
         return response.data;
     },
 
@@ -302,7 +302,7 @@ const estateService = {
      * @returns {Promise} Discount calculation
      */
     async calculateDiscountedGiftDiscount(data) {
-        const response = await api.post('/estate/calculate-discount', data);
+        const response = await api.post('/gb/estate/calculate-discount', data);
         return response.data;
     },
 
@@ -312,102 +312,102 @@ const estateService = {
      * @returns {Promise} Saved will
      */
     async saveWill(willData) {
-        const response = await api.post('/estate/will', willData);
+        const response = await api.post('/gb/estate/will', willData);
         return response.data;
     },
 
     // ==================== LASTING POWERS OF ATTORNEY ====================
 
     async getLpas() {
-        const response = await api.get('/estate/lpa');
+        const response = await api.get('/gb/estate/lpa');
         return response.data;
     },
 
     async getLpa(id) {
-        const response = await api.get(`/estate/lpa/${id}`);
+        const response = await api.get(`/gb/estate/lpa/${id}`);
         return response.data;
     },
 
     async createLpa(data) {
-        const response = await api.post('/estate/lpa', data);
+        const response = await api.post('/gb/estate/lpa', data);
         return response.data;
     },
 
     async updateLpa(id, data) {
-        const response = await api.put(`/estate/lpa/${id}`, data);
+        const response = await api.put(`/gb/estate/lpa/${id}`, data);
         return response.data;
     },
 
     async deleteLpa(id) {
-        const response = await api.delete(`/estate/lpa/${id}`);
+        const response = await api.delete(`/gb/estate/lpa/${id}`);
         return response.data;
     },
 
     async uploadLpa(formData) {
-        const response = await api.post('/estate/lpa/upload', formData, {
+        const response = await api.post('/gb/estate/lpa/upload', formData, {
             headers: { 'Content-Type': 'multipart/form-data' },
         });
         return response.data;
     },
 
     async getLpaCompliance(id) {
-        const response = await api.get(`/estate/lpa/${id}/compliance`);
+        const response = await api.get(`/gb/estate/lpa/${id}/compliance`);
         return response.data;
     },
 
     async markLpaRegistered(id, data = {}) {
-        const response = await api.post(`/estate/lpa/${id}/register`, data);
+        const response = await api.post(`/gb/estate/lpa/${id}/register`, data);
         return response.data;
     },
 
     async getLpaDonorDefaults() {
-        const response = await api.get('/estate/lpa/donor-defaults');
+        const response = await api.get('/gb/estate/lpa/donor-defaults');
         return response.data;
     },
 
     // Will Builder
     async getWillBuilderPrePopulate() {
-        const response = await api.get('/estate/will-builder/pre-populate');
+        const response = await api.get('/gb/estate/will-builder/pre-populate');
         return response.data;
     },
 
     async getWillBuilderDraft() {
-        const response = await api.get('/estate/will-builder');
+        const response = await api.get('/gb/estate/will-builder');
         return response.data;
     },
 
     async createWillDocument(data) {
-        const response = await api.post('/estate/will-builder', data);
+        const response = await api.post('/gb/estate/will-builder', data);
         return response.data;
     },
 
     async getWillDocument(id) {
-        const response = await api.get(`/estate/will-builder/${id}`);
+        const response = await api.get(`/gb/estate/will-builder/${id}`);
         return response.data;
     },
 
     async updateWillDocument(id, data) {
-        const response = await api.put(`/estate/will-builder/${id}`, data);
+        const response = await api.put(`/gb/estate/will-builder/${id}`, data);
         return response.data;
     },
 
     async completeWillDocument(id) {
-        const response = await api.post(`/estate/will-builder/${id}/complete`);
+        const response = await api.post(`/gb/estate/will-builder/${id}/complete`);
         return response.data;
     },
 
     async generateMirrorWill(id) {
-        const response = await api.post(`/estate/will-builder/${id}/mirror`);
+        const response = await api.post(`/gb/estate/will-builder/${id}/mirror`);
         return response.data;
     },
 
     async validateWillDocument(id) {
-        const response = await api.get(`/estate/will-builder/${id}/validate`);
+        const response = await api.get(`/gb/estate/will-builder/${id}/validate`);
         return response.data;
     },
 
     async deleteWillDocument(id) {
-        const response = await api.delete(`/estate/will-builder/${id}`);
+        const response = await api.delete(`/gb/estate/will-builder/${id}`);
         return response.data;
     },
 };

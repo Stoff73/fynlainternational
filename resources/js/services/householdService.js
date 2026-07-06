@@ -1,6 +1,6 @@
 import api from './api';
 
-const API_BASE = '/household';
+const API_BASE = '/gb/household';
 
 export default {
     /**

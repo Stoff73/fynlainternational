@@ -855,7 +855,7 @@ export default {
     async loadTaxInfo() {
       this.loadingTaxInfo = true;
       try {
-        const response = await api.get(`/tax-info/investment/${this.account.account_type}`);
+        const response = await api.get(`/gb/tax-info/investment/${this.account.account_type}`);
         this.taxInfo = response.data.data;
       } catch (err) {
         logger.error('Error loading tax info:', err);

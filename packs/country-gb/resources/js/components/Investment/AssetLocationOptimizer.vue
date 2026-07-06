@@ -407,11 +407,11 @@ export default {
 
       try {
         // Fetch asset location analysis
-        const analysisResponse = await api.get('/investment/asset-location/analyze');
+        const analysisResponse = await api.get('/gb/investment/asset-location/analyze');
         this.analysis = analysisResponse.data.data;
 
         // Fetch recommendations
-        const recResponse = await api.get('/investment/asset-location/recommendations');
+        const recResponse = await api.get('/gb/investment/asset-location/recommendations');
         this.recommendations = recResponse.data.recommendations || [];
       } catch (err) {
         logger.error('Error loading asset location analysis:', err);

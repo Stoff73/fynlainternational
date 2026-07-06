@@ -36,7 +36,7 @@ const actions = {
     commit('setError', null);
 
     try {
-      const response = await api.get('/estate/trusts');
+      const response = await api.get('/gb/estate/trusts');
       commit('setTrusts', response.data.data);
       return response.data;
     } catch (error) {
@@ -59,7 +59,7 @@ const actions = {
     try {
       // In a full implementation, you'd have a specific endpoint for this
       // For now, fetch all and filter
-      const response = await api.get('/estate/trusts');
+      const response = await api.get('/gb/estate/trusts');
       const trust = response.data.data.find(t => t.id === parseInt(id));
       commit('setSelectedTrust', trust);
       return trust;
@@ -81,7 +81,7 @@ const actions = {
     commit('setError', null);
 
     try {
-      const response = await api.get(`/estate/trusts/${trustId}/assets`);
+      const response = await api.get(`/gb/estate/trusts/${trustId}/assets`);
       commit('setTrustAssets', response.data.data);
       return response.data.data;
     } catch (error) {
@@ -98,7 +98,7 @@ const actions = {
     commit('setError', null);
 
     try {
-      const response = await api.post('/estate/trusts', trustData);
+      const response = await api.post('/gb/estate/trusts', trustData);
       await dispatch('fetchTrusts'); // Refresh list
       return response.data;
     } catch (error) {
@@ -115,7 +115,7 @@ const actions = {
     commit('setError', null);
 
     try {
-      const response = await api.put(`/estate/trusts/${id}`, data);
+      const response = await api.put(`/gb/estate/trusts/${id}`, data);
       await dispatch('fetchTrusts'); // Refresh list
       return response.data;
     } catch (error) {
@@ -132,7 +132,7 @@ const actions = {
     commit('setError', null);
 
     try {
-      const response = await api.delete(`/estate/trusts/${id}`);
+      const response = await api.delete(`/gb/estate/trusts/${id}`);
       await dispatch('fetchTrusts'); // Refresh list
       return response.data;
     } catch (error) {
@@ -153,7 +153,7 @@ const actions = {
     commit('setError', null);
 
     try {
-      const response = await api.post(`/estate/trusts/${trustId}/calculate-iht-impact`);
+      const response = await api.post(`/gb/estate/trusts/${trustId}/calculate-iht-impact`);
       return response.data.data;
     } catch (error) {
       const errorMessage = error.response?.data?.message || 'Failed to calculate IHT impact';
@@ -173,7 +173,7 @@ const actions = {
     commit('setError', null);
 
     try {
-      const response = await api.get('/estate/trusts/upcoming-tax-returns', {
+      const response = await api.get('/gb/estate/trusts/upcoming-tax-returns', {
         params: { months_ahead: monthsAhead },
       });
       return response.data.data;

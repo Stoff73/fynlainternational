@@ -426,7 +426,7 @@ export default {
       this.error = null;
 
       try {
-        const response = await api.get('/investment/performance-attribution/multi-benchmark', {
+        const response = await api.get('/gb/investment/performance-attribution/multi-benchmark', {
           params: {
             period: this.selectedPeriod,
           },

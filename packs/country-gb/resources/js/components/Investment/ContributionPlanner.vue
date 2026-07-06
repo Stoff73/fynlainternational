@@ -445,7 +445,7 @@ export default {
       this.error = null;
 
       try {
-        const response = await api.post('/investment/contribution/optimize', this.formData);
+        const response = await api.post('/gb/investment/contribution/optimize', this.formData);
         this.optimizationResult = response.data;
       } catch (err) {
         logger.error('Error optimising contributions:', err);

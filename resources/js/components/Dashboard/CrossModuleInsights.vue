@@ -84,7 +84,7 @@ export default {
     async fetchStrategies() {
       this.loading = true;
       try {
-        const response = await api.post('/holistic/analyze');
+        const response = await api.post('/gb/holistic/analyze');
         if (response.data?.success) {
           this.strategies = response.data.data?.cross_module_strategies || [];
         }

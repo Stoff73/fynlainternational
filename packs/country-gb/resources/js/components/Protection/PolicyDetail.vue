@@ -577,13 +577,13 @@ export default {
 
     getApiEndpoint(policyType) {
       const endpoints = {
-        life: '/api/protection/life-insurance',
-        criticalIllness: '/api/protection/critical-illness',
-        incomeProtection: '/api/protection/income-protection',
-        disability: '/api/protection/disability',
-        sicknessIllness: '/api/protection/sickness-illness',
+        life: '/api/gb/protection/life-insurance',
+        criticalIllness: '/api/gb/protection/critical-illness',
+        incomeProtection: '/api/gb/protection/income-protection',
+        disability: '/api/gb/protection/disability',
+        sicknessIllness: '/api/gb/protection/sickness-illness',
       };
-      return endpoints[policyType] || '/api/protection/life-insurance';
+      return endpoints[policyType] || '/api/gb/protection/life-insurance';
     },
 
     formatCoverageType(type) {

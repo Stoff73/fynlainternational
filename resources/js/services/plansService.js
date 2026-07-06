@@ -11,7 +11,7 @@ const plansService = {
    * @returns {Promise} API response with plan data
    */
   async generatePlan(type) {
-    const response = await api.get(`/plans/${type}`);
+    const response = await api.get(`/gb/plans/${type}`);
     return response.data;
   },
 
@@ -21,7 +21,7 @@ const plansService = {
    * @returns {Promise} API response with plan data
    */
   async generateGoalPlan(goalId) {
-    const response = await api.get(`/plans/goal/${goalId}`);
+    const response = await api.get(`/gb/plans/goal/${goalId}`);
     return response.data;
   },
 
@@ -32,7 +32,7 @@ const plansService = {
    * @returns {Promise} API response with recalculated plan
    */
   async recalculateScenario(type, enabledActionIds) {
-    const response = await api.post(`/plans/${type}/recalculate`, {
+    const response = await api.post(`/gb/plans/${type}/recalculate`, {
       enabled_action_ids: enabledActionIds,
     });
     return response.data;
@@ -45,7 +45,7 @@ const plansService = {
    * @returns {Promise} API response with recalculated plan
    */
   async recalculateGoalScenario(goalId, enabledActionIds) {
-    const response = await api.post(`/plans/goal/${goalId}/recalculate`, {
+    const response = await api.post(`/gb/plans/goal/${goalId}/recalculate`, {
       enabled_action_ids: enabledActionIds,
     });
     return response.data;
@@ -56,7 +56,7 @@ const plansService = {
    * @returns {Promise} API response with status per plan type
    */
   async getDashboardStatuses() {
-    const response = await api.get('/plans/statuses');
+    const response = await api.get('/gb/plans/statuses');
     return response.data;
   },
 
@@ -66,7 +66,7 @@ const plansService = {
    * @returns {Promise} API response
    */
   async clearPlanCache(type) {
-    const response = await api.delete(`/plans/${type}/clear-cache`);
+    const response = await api.delete(`/gb/plans/${type}/clear-cache`);
     return response.data;
   },
 
@@ -77,7 +77,7 @@ const plansService = {
    * @returns {Promise} API response
    */
   async updateFundingSource(type, payload) {
-    const response = await api.put(`/plans/${type}/funding-source`, payload);
+    const response = await api.put(`/gb/plans/${type}/funding-source`, payload);
     return response.data;
   },
 };

@@ -25,7 +25,7 @@ const letterService = {
    * @returns {Promise}
    */
   async getWillData() {
-    const response = await api.get('/estate/will');
+    const response = await api.get('/gb/estate/will');
     return response.data;
   },
 };
