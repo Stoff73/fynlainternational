@@ -89,6 +89,9 @@ describe('No Float Money', function () {
             'packs/country-gb/src/Plans/DistributionAccount.php:*',
             'packs/country-gb/src/Plans/InvestmentPlanService.php:*',
             'packs/country-gb/src/Plans/RetirementPlanService.php:*',
+            // R-17 batch 8: BaseAgent lifted to core with its pre-existing
+            // roundToPenny display helper. Carried ADR-005 debt.
+            'core/app/Core/Agents/BaseAgent.php:roundToPenny',
         ];
 
         $violations = [];

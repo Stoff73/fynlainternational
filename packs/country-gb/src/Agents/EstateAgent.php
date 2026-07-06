@@ -4,13 +4,10 @@ declare(strict_types=1);
 
 namespace Fynla\Packs\Gb\Agents;
 
-use App\Agents\BaseAgent;
-
-use Fynla\Packs\Gb\Constants\TaxDefaults;
-use Fynla\Packs\Gb\Models\Estate\Will;
+use Fynla\Core\Agents\BaseAgent;
 use Fynla\Core\Models\Goal;
-use Fynla\Packs\Gb\Models\LifeInsurancePolicy;
 use Fynla\Core\Models\User;
+use Fynla\Packs\Gb\Constants\TaxDefaults;
 use Fynla\Packs\Gb\Coordination\RecommendationPersonaliser;
 use Fynla\Packs\Gb\Estate\ComprehensiveEstatePlanService;
 use Fynla\Packs\Gb\Estate\EstateAssetAggregatorService;
@@ -20,7 +17,10 @@ use Fynla\Packs\Gb\Estate\IHTCalculationService;
 use Fynla\Packs\Gb\Estate\LifeCoverCalculator;
 use Fynla\Packs\Gb\Estate\PersonalizedTrustStrategyService;
 use Fynla\Packs\Gb\Estate\WillAnalysisService;
+use Fynla\Packs\Gb\Models\Estate\Will;
+use Fynla\Packs\Gb\Models\LifeInsurancePolicy;
 use Fynla\Packs\Gb\Tax\TaxConfigService;
+use Fynla\Packs\Gb\Traits\FormatsCurrency;
 use Illuminate\Support\Facades\Cache;
 
 /**
@@ -31,6 +31,8 @@ use Illuminate\Support\Facades\Cache;
  */
 class EstateAgent extends BaseAgent
 {
+    use FormatsCurrency;
+
     /**
      * Fallback current age when user date of birth is unknown.
      */
@@ -1577,5 +1579,4 @@ class EstateAgent extends BaseAgent
             "estate_analysis_{$userId}",
         ]);
     }
-
 }

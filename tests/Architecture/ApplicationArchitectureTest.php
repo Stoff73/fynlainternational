@@ -17,16 +17,15 @@ arch('all API controllers extend Controller')
 
 // Test: All agents extend BaseAgent
 arch('all agents extend BaseAgent')
-    ->expect('App\Agents')
+    ->expect('Fynla\Packs\Gb\Agents')
     ->classes()
-    ->toExtend('App\Agents\BaseAgent')
-    ->ignoring('App\Agents\BaseAgent');
+    ->toExtend('Fynla\Core\Agents\BaseAgent');
 
 // R-8: 7 module agents relocated to GB pack — parallel rule for pack agents.
 arch('all GB pack agents extend BaseAgent')
     ->expect('Fynla\Packs\Gb\Agents')
     ->classes()
-    ->toExtend('App\Agents\BaseAgent');
+    ->toExtend('Fynla\Core\Agents\BaseAgent');
 
 // Test: All models use proper traits
 // R-14b-vii: app/Models/ is empty post-User relocation; models live in
@@ -104,7 +103,7 @@ arch('ZA pack controllers do not use DB facade directly')
 
 // Test: Services and Agents use strict types
 arch('all agents use strict types')
-    ->expect('App\Agents')
+    ->expect('Fynla\Core\Agents')
     ->toUseStrictTypes();
 
 arch('all GB pack agents use strict types')
@@ -196,10 +195,9 @@ arch('services are organized by module')
 
 // Test: All agents have required methods
 arch('all agents have analyze method')
-    ->expect('App\Agents')
+    ->expect('Fynla\Packs\Gb\Agents')
     ->classes()
-    ->toHaveMethod('analyze')
-    ->ignoring('App\Agents\BaseAgent');
+    ->toHaveMethod('analyze');
 
 arch('all GB pack agents have analyze method')
     ->expect('Fynla\Packs\Gb\Agents')

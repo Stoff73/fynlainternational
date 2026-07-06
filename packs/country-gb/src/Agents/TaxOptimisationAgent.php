@@ -2,11 +2,12 @@
 
 declare(strict_types=1);
 
-namespace App\Agents;
+namespace Fynla\Packs\Gb\Agents;
 
 use Fynla\Core\Models\User;
 use Fynla\Packs\Gb\Tax\TaxOptimisationService;
 use Fynla\Packs\Gb\Tax\TaxConfigService;
+use Fynla\Core\Agents\BaseAgent;
 use Fynla\Core\Contracts\TaxOptimisationEngine;
 
 /**

@@ -2,7 +2,8 @@
 
 declare(strict_types=1);
 
-use App\Agents\BaseAgent;
+use Fynla\Core\Agents\BaseAgent;
+use Fynla\Packs\Gb\Traits\FormatsCurrency;
 use Illuminate\Support\Facades\Cache;
 
 /**
@@ -10,6 +11,10 @@ use Illuminate\Support\Facades\Cache;
  */
 class TestableAgent extends BaseAgent
 {
+    // R-17 batch 8: FormatsCurrency moved off the neutral core BaseAgent and
+    // onto the GB agents that use it — the double mirrors that arrangement.
+    use FormatsCurrency;
+
     public function analyze(int $userId): array
     {
         return ['userId' => $userId];

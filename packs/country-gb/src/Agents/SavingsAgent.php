@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Fynla\Packs\Gb\Agents;
 
-use App\Agents\BaseAgent;
 use Carbon\Carbon;
+use Fynla\Core\Agents\BaseAgent;
 use Fynla\Core\Models\Goal;
 use Fynla\Core\Models\LifeEvent;
 use Fynla\Core\Models\User;
@@ -24,10 +24,12 @@ use Fynla\Packs\Gb\Savings\RateComparator;
 use Fynla\Packs\Gb\Savings\SavingsActionDefinitionService;
 use Fynla\Packs\Gb\Savings\SavingsDataReadinessService;
 use Fynla\Packs\Gb\Tax\TaxConfigService;
+use Fynla\Packs\Gb\Traits\FormatsCurrency;
 use Fynla\Packs\Gb\Traits\ResolvesExpenditure;
 
 class SavingsAgent extends BaseAgent
 {
+    use FormatsCurrency;
     use ResolvesExpenditure;
 
     protected int $cacheTtl = 1800;

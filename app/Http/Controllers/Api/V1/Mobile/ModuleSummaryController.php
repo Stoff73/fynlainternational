@@ -4,15 +4,15 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers\Api\V1\Mobile;
 
+use App\Http\Controllers\Controller;
+use App\Http\Traits\SanitizedErrorResponse;
 use Fynla\Packs\Gb\Agents\EstateAgent;
 use Fynla\Packs\Gb\Agents\GoalsAgent;
 use Fynla\Packs\Gb\Agents\InvestmentAgent;
 use Fynla\Packs\Gb\Agents\ProtectionAgent;
 use Fynla\Packs\Gb\Agents\RetirementAgent;
 use Fynla\Packs\Gb\Agents\SavingsAgent;
-use App\Agents\TaxOptimisationAgent;
-use App\Http\Controllers\Controller;
-use App\Http\Traits\SanitizedErrorResponse;
+use Fynla\Packs\Gb\Agents\TaxOptimisationAgent;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;

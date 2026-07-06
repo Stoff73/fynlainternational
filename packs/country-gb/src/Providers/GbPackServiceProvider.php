@@ -4,14 +4,24 @@ declare(strict_types=1);
 
 namespace Fynla\Packs\Gb\Providers;
 
+use App\Services\ExchangeControl\UkExchangeControl;
+use Fynla\Core\Contracts\GoalCalculationEngine;
 use Fynla\Core\Registry\PackManifest as CorePackManifest;
 use Fynla\Core\Registry\PackRegistry;
+use Fynla\Packs\Gb\Agents\TaxOptimisationAgent;
+use Fynla\Packs\Gb\Estate\UkEstateEngine;
+use Fynla\Packs\Gb\Goals\GoalCalculationService;
+use Fynla\Packs\Gb\Investment\UkInvestmentEngine;
 use Fynla\Packs\Gb\LifeTables\GbLifeTableProvider;
 use Fynla\Packs\Gb\Localisation\GbLocalisation;
+use Fynla\Packs\Gb\Protection\UkProtectionEngine;
 use Fynla\Packs\Gb\Query\GbPackAssetRepository;
 use Fynla\Packs\Gb\Query\GbPackAssetResolver;
 use Fynla\Packs\Gb\Query\GbPackEstateRepository;
 use Fynla\Packs\Gb\Query\GbPackUserRelationProvider;
+use Fynla\Packs\Gb\Retirement\UkRetirementEngine;
+use Fynla\Packs\Gb\Savings\UkSavingsEngine;
+use Fynla\Packs\Gb\Tax\TaxConfigService;
 use Fynla\Packs\Gb\Validation\GbBankingValidator;
 use Fynla\Packs\Gb\Validation\NinoValidator;
 use Illuminate\Support\Facades\Route;
@@ -36,14 +46,14 @@ class GbPackServiceProvider extends ServiceProvider
     {
         // 9 contract bindings carried over from app/Providers/GbPackServiceProvider.
         // FQCNs still point at \App\…; updated in-place as files move.
-        $this->app->bind('pack.gb.tax', \Fynla\Packs\Gb\Tax\TaxConfigService::class);
-        $this->app->bind('pack.gb.retirement', \Fynla\Packs\Gb\Retirement\UkRetirementEngine::class);
-        $this->app->bind('pack.gb.investment', \Fynla\Packs\Gb\Investment\UkInvestmentEngine::class);
-        $this->app->bind('pack.gb.protection', \Fynla\Packs\Gb\Protection\UkProtectionEngine::class);
-        $this->app->bind('pack.gb.estate', \Fynla\Packs\Gb\Estate\UkEstateEngine::class);
-        $this->app->bind('pack.gb.savings', \Fynla\Packs\Gb\Savings\UkSavingsEngine::class);
-        $this->app->bind('pack.gb.exchange_control', \App\Services\ExchangeControl\UkExchangeControl::class);
-        $this->app->bind('pack.gb.tax_optimisation', \App\Agents\TaxOptimisationAgent::class);
+        $this->app->bind('pack.gb.tax', TaxConfigService::class);
+        $this->app->bind('pack.gb.retirement', UkRetirementEngine::class);
+        $this->app->bind('pack.gb.investment', UkInvestmentEngine::class);
+        $this->app->bind('pack.gb.protection', UkProtectionEngine::class);
+        $this->app->bind('pack.gb.estate', UkEstateEngine::class);
+        $this->app->bind('pack.gb.savings', UkSavingsEngine::class);
+        $this->app->bind('pack.gb.exchange_control', UkExchangeControl::class);
+        $this->app->bind('pack.gb.tax_optimisation', TaxOptimisationAgent::class);
 
         // R-11: real GB implementations of the 4 remaining contracts.
         $this->app->bind('pack.gb.localisation', GbLocalisation::class);
@@ -81,8 +91,8 @@ class GbPackServiceProvider extends ServiceProvider
         // the contract from the container — keeps the jurisdiction-
         // specific rules out of the core model.
         $this->app->bind(
-            \Fynla\Core\Contracts\GoalCalculationEngine::class,
-            \Fynla\Packs\Gb\Goals\GoalCalculationService::class,
+            GoalCalculationEngine::class,
+            GoalCalculationService::class,
         );
     }
 

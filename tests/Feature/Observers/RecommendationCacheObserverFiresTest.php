@@ -2,7 +2,6 @@
 
 declare(strict_types=1);
 
-use App\Agents\TaxOptimisationAgent;
 use Fynla\Core\Models\LifeEvent;
 use Fynla\Core\Models\User;
 use Fynla\Packs\Gb\Agents\CoordinatingAgent;
@@ -11,6 +10,7 @@ use Fynla\Packs\Gb\Agents\InvestmentAgent;
 use Fynla\Packs\Gb\Agents\ProtectionAgent;
 use Fynla\Packs\Gb\Agents\RetirementAgent;
 use Fynla\Packs\Gb\Agents\SavingsAgent;
+use Fynla\Packs\Gb\Agents\TaxOptimisationAgent;
 use Fynla\Packs\Gb\Models\DCPension;
 use Fynla\Packs\Gb\Models\Investment\InvestmentAccount;
 use Fynla\Packs\Gb\Models\Property;
@@ -25,7 +25,6 @@ use Fynla\Packs\Gb\Models\SavingsAccount;
  * Routes to agent-specific invalidateUserCache() calls based on model class.
  * CoordinatingAgent is ALWAYS invalidated. Joint owner is also invalidated.
  */
-
 beforeEach(function () {
     $this->user = User::factory()->create();
     $this->jointOwner = User::factory()->create();

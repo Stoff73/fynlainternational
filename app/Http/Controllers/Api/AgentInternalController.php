@@ -4,6 +4,9 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers\Api;
 
+use App\Http\Controllers\Controller;
+use App\Services\PrerequisiteGateService;
+use Fynla\Core\Models\User;
 use Fynla\Packs\Gb\Agents\CoordinatingAgent;
 use Fynla\Packs\Gb\Agents\EstateAgent;
 use Fynla\Packs\Gb\Agents\GoalsAgent;
@@ -11,10 +14,7 @@ use Fynla\Packs\Gb\Agents\InvestmentAgent;
 use Fynla\Packs\Gb\Agents\ProtectionAgent;
 use Fynla\Packs\Gb\Agents\RetirementAgent;
 use Fynla\Packs\Gb\Agents\SavingsAgent;
-use App\Agents\TaxOptimisationAgent;
-use App\Http\Controllers\Controller;
-use Fynla\Core\Models\User;
-use App\Services\PrerequisiteGateService;
+use Fynla\Packs\Gb\Agents\TaxOptimisationAgent;
 use Fynla\Packs\Gb\Tax\TaxConfigService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;

@@ -10,7 +10,7 @@ use Fynla\Packs\Gb\Agents\InvestmentAgent;
 use Fynla\Packs\Gb\Agents\ProtectionAgent;
 use Fynla\Packs\Gb\Agents\RetirementAgent;
 use Fynla\Packs\Gb\Agents\SavingsAgent;
-use App\Agents\TaxOptimisationAgent;
+use Fynla\Packs\Gb\Agents\TaxOptimisationAgent;
 use Illuminate\Database\Eloquent\Model;
 
 /**

@@ -2,14 +2,14 @@
 
 declare(strict_types=1);
 
+use Fynla\Core\Models\User;
 use Fynla\Packs\Gb\Agents\EstateAgent;
 use Fynla\Packs\Gb\Agents\GoalsAgent;
 use Fynla\Packs\Gb\Agents\InvestmentAgent;
 use Fynla\Packs\Gb\Agents\ProtectionAgent;
 use Fynla\Packs\Gb\Agents\RetirementAgent;
 use Fynla\Packs\Gb\Agents\SavingsAgent;
-use App\Agents\TaxOptimisationAgent;
-use Fynla\Core\Models\User;
+use Fynla\Packs\Gb\Agents\TaxOptimisationAgent;
 
 beforeEach(function () {
     // Mock all agents to avoid complex dependency chains

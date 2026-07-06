@@ -3,15 +3,15 @@
 declare(strict_types=1);
 
 arch('BaseAgent is abstract')
-    ->expect('App\Agents\BaseAgent')
+    ->expect('Fynla\Core\Agents\BaseAgent')
     ->toBeAbstract();
 
 arch('BaseAgent has required abstract methods')
-    ->expect('App\Agents\BaseAgent')
+    ->expect('Fynla\Core\Agents\BaseAgent')
     ->toHaveMethod('analyze')
     ->toHaveMethod('generateRecommendations')
     ->toHaveMethod('buildScenarios');
 
 arch('Agent classes are in the Agents namespace')
-    ->expect('App\Agents')
+    ->expect('Fynla\Packs\Gb\Agents')
     ->toBeClasses();

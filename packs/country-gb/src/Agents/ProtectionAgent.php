@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Fynla\Packs\Gb\Agents;
 
-use App\Agents\BaseAgent;
 use App\Services\UserProfile\ProfileCompletenessChecker;
+use Fynla\Core\Agents\BaseAgent;
 use Fynla\Core\Models\Goal;
 use Fynla\Core\Models\User;
 use Fynla\Packs\Gb\Coordination\RecommendationPersonaliser;
@@ -14,9 +14,12 @@ use Fynla\Packs\Gb\Protection\CoverageGapAnalyzer;
 use Fynla\Packs\Gb\Protection\ProtectionDataReadinessService;
 use Fynla\Packs\Gb\Protection\RecommendationEngine;
 use Fynla\Packs\Gb\Protection\ScenarioBuilder;
+use Fynla\Packs\Gb\Traits\FormatsCurrency;
 
 class ProtectionAgent extends BaseAgent
 {
+    use FormatsCurrency;
+
     /**
      * Create a new Protection Agent instance.
      */

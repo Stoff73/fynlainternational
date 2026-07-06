@@ -1,7 +1,6 @@
 <?php
 
 declare(strict_types=1);
-use App\Agents\TaxOptimisationAgent;
 use App\Services\ExchangeControl\UkExchangeControl;
 use Fynla\Core\Contracts\BankingValidator;
 use Fynla\Core\Contracts\EstateEngine;
@@ -14,6 +13,7 @@ use Fynla\Core\Contracts\RetirementEngine;
 use Fynla\Core\Contracts\SavingsEngine;
 use Fynla\Core\Contracts\TaxEngine;
 use Fynla\Core\Contracts\TaxOptimisationEngine;
+use Fynla\Packs\Gb\Agents\TaxOptimisationAgent;
 use Fynla\Packs\Gb\Estate\UkEstateEngine;
 use Fynla\Packs\Gb\Investment\UkInvestmentEngine;
 use Fynla\Packs\Gb\Protection\UkProtectionEngine;
@@ -146,7 +146,7 @@ describe('Pack Isolation', function () {
             // (relocates in R-17 batch 7); pinned by allow-list below.
             $packDir.DIRECTORY_SEPARATOR.'Risk'.DIRECTORY_SEPARATOR,
             // R-8: 7 module agents (Coordinating + 6 module agents) moved
-            // into the GB pack. They extend App\Agents\BaseAgent (still in
+            // into the GB pack. They extend Fynla\Core\Agents\BaseAgent (still in
             // app/Agents pending follow-up) and import deferred R-14a peers
             // (Coordination/Protection/AI services) across the boundary;
             // pinned by allow-list below.
@@ -247,18 +247,16 @@ describe('Pack Isolation', function () {
             // Eloquent target class via PackUserRelationProvider, keeping
             // the relation API intact while removing pack literals from
             // core). The R-14b-deferred section is now empty.
-            // App\Agents\BaseAgent — abstract parent of all module agents.
+            // Fynla\Core\Agents\BaseAgent — abstract parent of all module agents.
             // Stays in app/Agents/ as a generic orchestrator base (no UK-only
             // logic except a TaxDefaults cache-TTL constant). The 7 relocated
             // GB agents extend it across the boundary.
-            'App\\Agents\\BaseAgent',
-            // App\Agents\TaxOptimisationAgent — implements the
+            // Fynla\Packs\Gb\Agents\TaxOptimisationAgent — implements the
             // TaxOptimisationEngine contract; bound by GbPackServiceProvider
             // as `pack.gb.tax_optimisation`. Stays in app/Agents/ awaiting
             // its own R-8 follow-up agent relocation; its TaxOptimisationService
             // dependency now lives in pack (R-14a-Tax-iii). Pack CoordinatingAgent
             // injects it across the boundary.
-            'App\\Agents\\TaxOptimisationAgent',
             // R-9-final-i: Goal-shaped Requests wrap the deferred
             // App\Models\Goal (one of the 6 R-14b core models). They stay in
             // app/Http/Requests/Goals until the Goal relocation in R-14b

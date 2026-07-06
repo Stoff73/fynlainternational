@@ -2,23 +2,25 @@
 
 declare(strict_types=1);
 
-namespace App\Agents;
+namespace Fynla\Core\Agents;
 
-use Fynla\Packs\Gb\Constants\TaxDefaults;
-use Fynla\Packs\Gb\Traits\FormatsCurrency;
 use Illuminate\Support\Facades\Cache;
 
 abstract class BaseAgent
 {
-    use FormatsCurrency;
-
     protected const CACHE_VERSION = 'v1';
 
     /**
-     * Cache time-to-live in seconds.
-     * Uses TaxDefaults::CACHE_TTL_STANDARD for consistency across agents.
+     * Default cache time-to-live in seconds (24 hours). Mirrors the pack's
+     * TaxDefaults::CACHE_TTL_STANDARD without coupling the neutral base to a
+     * jurisdiction pack (R-17 batch 8); packs may override $cacheTtl.
      */
-    protected int $cacheTtl = TaxDefaults::CACHE_TTL_STANDARD;
+    protected const CACHE_TTL_STANDARD = 86400;
+
+    /**
+     * Cache time-to-live in seconds.
+     */
+    protected int $cacheTtl = self::CACHE_TTL_STANDARD;
 
     /**
      * Analyze user data and generate insights.

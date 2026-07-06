@@ -4,11 +4,10 @@ declare(strict_types=1);
 
 namespace Fynla\Packs\Gb\Agents;
 
-use App\Agents\BaseAgent;
-use App\Agents\TaxOptimisationAgent;
 use App\Services\PrerequisiteGateService;
 use App\Services\WhatIf\WhatIfScenarioService;
 use Carbon\Carbon;
+use Fynla\Core\Agents\BaseAgent;
 use Fynla\Core\Models\FamilyMember;
 use Fynla\Core\Models\Goal;
 use Fynla\Core\Models\LifeEvent;

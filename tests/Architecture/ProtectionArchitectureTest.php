@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 arch('ProtectionAgent extends BaseAgent')
     ->expect('Fynla\Packs\Gb\Agents\ProtectionAgent')
-    ->toExtend('App\Agents\BaseAgent');
+    ->toExtend('Fynla\Core\Agents\BaseAgent');
 
 arch('Protection services are in correct namespace')
     ->expect('App\Services\Protection')
