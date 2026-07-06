@@ -12,7 +12,7 @@ declare(strict_types=1);
 // Test: All controllers extend ApiController
 arch('all API controllers extend Controller')
     ->expect('App\Http\Controllers\Api')
-    ->toExtend('App\Http\Controllers\Controller')
+    ->toExtend('Fynla\Core\Http\Controller')
     ->ignoring('App\Http\Controllers\Api\Controller');
 
 // Test: All agents extend BaseAgent

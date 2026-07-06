@@ -4,16 +4,16 @@ declare(strict_types=1);
 
 namespace Fynla\Packs\Gb\Http\Controllers\Estate;
 
-use App\Http\Controllers\Controller;
-use App\Http\Traits\SanitizedErrorResponse;
-use Fynla\Packs\Gb\Models\Estate\Asset;
-use Fynla\Packs\Gb\Models\Estate\IHTProfile;
+use Fynla\Core\Http\Controller;
+use Fynla\Core\Http\Traits\SanitizedErrorResponse;
 use Fynla\Packs\Gb\Estate\CashFlowProjector;
 use Fynla\Packs\Gb\Estate\EstateAssetAggregatorService;
 use Fynla\Packs\Gb\Estate\GiftingStrategyOptimizer;
 use Fynla\Packs\Gb\Estate\PersonalizedGiftingStrategyService;
 use Fynla\Packs\Gb\Estate\PersonalizedTrustStrategyService;
 use Fynla\Packs\Gb\Estate\TrustService;
+use Fynla\Packs\Gb\Models\Estate\Asset;
+use Fynla\Packs\Gb\Models\Estate\IHTProfile;
 use Fynla\Packs\Gb\Tax\TaxConfigService;
 use Fynla\Packs\Gb\Traits\FormatsCurrency;
 use Illuminate\Http\JsonResponse;

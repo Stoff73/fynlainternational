@@ -4,12 +4,13 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers\Api;
 
-use App\Http\Controllers\Controller;
 use App\Http\Requests\Documents\ConfirmExtractionRequest;
 use App\Http\Requests\Documents\UploadDocumentRequest;
-use App\Http\Traits\SanitizedErrorResponse;
-use Fynla\Core\Models\Document;
 use App\Services\Documents\DocumentProcessor;
+use App\Services\Documents\ExcelParserService;
+use Fynla\Core\Http\Controller;
+use Fynla\Core\Http\Traits\SanitizedErrorResponse;
+use Fynla\Core\Models\Document;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
@@ -49,7 +50,7 @@ class DocumentController extends Controller
             $mimeType = $file->getMimeType();
 
             // Excel files use a different processing path
-            $excelParser = app(\App\Services\Documents\ExcelParserService::class);
+            $excelParser = app(ExcelParserService::class);
             if ($excelParser->isSpreadsheet($mimeType)) {
                 $result = $this->processor->processExcel($file, $request->user());
 

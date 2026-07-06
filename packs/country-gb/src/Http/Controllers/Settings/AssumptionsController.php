@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Fynla\Packs\Gb\Http\Controllers\Settings;
 
-use App\Http\Controllers\Controller;
-use App\Http\Traits\SanitizedErrorResponse;
+use Fynla\Core\Http\Controller;
+use Fynla\Core\Http\Traits\SanitizedErrorResponse;
 use Fynla\Packs\Gb\Settings\AssumptionsService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;

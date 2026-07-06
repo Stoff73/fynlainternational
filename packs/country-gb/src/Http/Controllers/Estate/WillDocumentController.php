@@ -4,13 +4,12 @@ declare(strict_types=1);
 
 namespace Fynla\Packs\Gb\Http\Controllers\Estate;
 
+use Fynla\Core\Http\Controller;
+use Fynla\Core\Http\Traits\SanitizedErrorResponse;
 use Fynla\Core\Models\Document;
-
-use App\Http\Controllers\Controller;
-use Fynla\Packs\Gb\Http\Requests\Estate\SaveWillDocumentRequest;
-use App\Http\Traits\SanitizedErrorResponse;
-use Fynla\Packs\Gb\Models\Estate\WillDocument;
 use Fynla\Packs\Gb\Estate\WillDocumentService;
+use Fynla\Packs\Gb\Http\Requests\Estate\SaveWillDocumentRequest;
+use Fynla\Packs\Gb\Models\Estate\WillDocument;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;

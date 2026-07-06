@@ -4,12 +4,19 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers\Api;
 
-use App\Http\Controllers\Controller;
 use App\Http\Requests\LoginRequest;
 use App\Http\Requests\RegisterRequest;
-use Fynla\Core\Http\Resources\UserResource;
-use App\Http\Traits\SanitizedErrorResponse;
 use App\Mail\VerificationCode;
+use App\Services\Audit\AuditService;
+use App\Services\Auth\LoginLockoutService;
+use App\Services\Auth\MFAService;
+use App\Services\Auth\SessionService;
+use App\Services\LifeStage\LifeStageService;
+use App\Services\Payment\ReferralService;
+use App\Services\Payment\TrialService;
+use Fynla\Core\Http\Controller;
+use Fynla\Core\Http\Resources\UserResource;
+use Fynla\Core\Http\Traits\SanitizedErrorResponse;
 use Fynla\Core\Models\AuditLog;
 use Fynla\Core\Models\EmailVerificationCode;
 use Fynla\Core\Models\LoginAttempt;
@@ -17,11 +24,6 @@ use Fynla\Core\Models\PendingRegistration;
 use Fynla\Core\Models\Role;
 use Fynla\Core\Models\User;
 use Fynla\Core\Models\UserSession;
-use App\Services\Audit\AuditService;
-use App\Services\Auth\LoginLockoutService;
-use App\Services\Auth\MFAService;
-use App\Services\Auth\SessionService;
-use App\Services\Payment\TrialService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -187,7 +189,7 @@ class AuthController extends Controller
         // Runs AFTER successful Auth::attempt so failed login attempts cannot
         // trigger a database write, and audits the promotion event.
         if (! $user->is_admin && in_array($email, config('auth.admin_emails', []), true)) {
-            $adminRole = \Fynla\Core\Models\Role::findByName(\Fynla\Core\Models\Role::ROLE_ADMIN);
+            $adminRole = Role::findByName(Role::ROLE_ADMIN);
             if ($adminRole) {
                 $user->role_id = $adminRole->id;
                 $user->is_admin = true;
@@ -275,7 +277,7 @@ class AuthController extends Controller
         // Audit log
         $this->auditService->logAuth(AuditLog::ACTION_LOGOUT, $user);
 
-        if ($token && $token instanceof \Laravel\Sanctum\PersonalAccessToken) {
+        if ($token && $token instanceof PersonalAccessToken) {
             // Delete the session record first (if exists)
             UserSession::where('token_id', $token->id)->delete();
 
@@ -360,7 +362,7 @@ class AuthController extends Controller
         // Include life stage data completeness so frontend has it immediately
         $dataCompletedSteps = [];
         if ($user->life_stage) {
-            $lifeStageService = app(\App\Services\LifeStage\LifeStageService::class);
+            $lifeStageService = app(LifeStageService::class);
             $dataCompletedSteps = $lifeStageService->getDataCompleteness($user);
         }
 
@@ -545,7 +547,7 @@ class AuthController extends Controller
             // Link referral if user registered with a referral code
             if ($pending->referral_code) {
                 try {
-                    app(\App\Services\Payment\ReferralService::class)
+                    app(ReferralService::class)
                         ->applyReferralOnRegistration($user, $pending->referral_code);
                 } catch (\Exception $e) {
                     Log::error('Failed to link referral on registration', [

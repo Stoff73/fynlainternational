@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace Fynla\Packs\Gb\Http\Controllers;
 
-use App\Http\Controllers\Controller;
-use App\Http\Traits\SanitizedErrorResponse;
 use Carbon\Carbon;
+use Fynla\Core\Http\Controller;
+use Fynla\Core\Http\Traits\SanitizedErrorResponse;
 use Fynla\Core\Models\User;
 use Fynla\Core\Traits\CalculatesOwnershipShare;
 use Fynla\Packs\Gb\Http\Requests\StoreMortgageRequest;

@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Fynla\Packs\Gb\Http\Controllers;
 
-use App\Http\Controllers\Controller;
-use App\Http\Traits\SanitizedErrorResponse;
+use Fynla\Core\Http\Controller;
+use Fynla\Core\Http\Traits\SanitizedErrorResponse;
 use Fynla\Core\Models\Goal;
 use Fynla\Packs\Gb\Agents\GoalsAgent;
 use Fynla\Packs\Gb\Goals\FinancialForecastService;

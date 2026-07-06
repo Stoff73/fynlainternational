@@ -5,7 +5,7 @@ declare(strict_types=1);
 use App\Http\Controllers\Api\FamilyMembersController;
 use App\Http\Controllers\Api\PersonalAccountsController;
 use App\Http\Controllers\Api\UserProfileController;
-use App\Http\Controllers\Controller;
+use Fynla\Core\Http\Controller;
 use Fynla\Packs\Gb\UserProfile\PersonalAccountsService;
 use Fynla\Packs\Gb\UserProfile\UserProfileService;
 

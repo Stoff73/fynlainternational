@@ -4,8 +4,10 @@ declare(strict_types=1);
 
 namespace Fynla\Packs\Gb\Http\Controllers\Estate;
 
-use App\Http\Controllers\Controller;
-use App\Http\Traits\SanitizedErrorResponse;
+use Carbon\Carbon;
+use Fynla\Core\Http\Controller;
+use Fynla\Core\Http\Traits\SanitizedErrorResponse;
+use Fynla\Core\Models\User;
 use Fynla\Packs\Gb\Estate\LifePolicyStrategyService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -66,11 +68,11 @@ class LifePolicyController extends Controller
                 // Use CURRENT IHT liability (not projected - life insurance covers today's liability)
                 $ihtLiability = $ihtSummary['current']['iht_liability'];
                 $yearsUntilDeath = (int) $ihtSummary['projected']['years_to_death'];
-                $currentAge = \Carbon\Carbon::parse($user->date_of_birth)->age;
+                $currentAge = Carbon::parse($user->date_of_birth)->age;
 
                 // Get spouse data for joint policy calculation
-                $spouse = $user->spouse_id ? \Fynla\Core\Models\User::find($user->spouse_id) : null;
-                $spouseAge = $spouse && $spouse->date_of_birth ? \Carbon\Carbon::parse($spouse->date_of_birth)->age : null;
+                $spouse = $user->spouse_id ? User::find($user->spouse_id) : null;
+                $spouseAge = $spouse && $spouse->date_of_birth ? Carbon::parse($spouse->date_of_birth)->age : null;
                 $spouseGender = $spouse ? $spouse->gender : null;
 
             } else {
@@ -97,7 +99,7 @@ class LifePolicyController extends Controller
                 // Use CURRENT IHT liability (not projected - life insurance covers today's liability)
                 $ihtLiability = $ihtSummary['current']['iht_liability'];
                 $yearsUntilDeath = (int) $ihtSummary['projected']['years_to_death'];
-                $currentAge = \Carbon\Carbon::parse($user->date_of_birth)->age;
+                $currentAge = Carbon::parse($user->date_of_birth)->age;
 
                 $spouseAge = null;
                 $spouseGender = null;

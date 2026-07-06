@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers\Api;
 
-use App\Http\Controllers\Controller;
-use App\Http\Traits\SanitizedErrorResponse;
 use App\Services\Dashboard\DashboardAggregator;
+use Fynla\Core\Http\Controller;
+use Fynla\Core\Http\Traits\SanitizedErrorResponse;
 use Fynla\Core\Services\CacheInvalidationService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;

@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Fynla\Packs\Gb\Http\Controllers;
 
-use App\Http\Controllers\Controller;
+use Fynla\Core\Http\Controller;
 use Fynla\Packs\Gb\Tax\TaxConfigService;
 use Illuminate\Http\JsonResponse;
 

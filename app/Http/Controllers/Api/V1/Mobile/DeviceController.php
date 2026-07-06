@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers\Api\V1\Mobile;
 
-use App\Http\Controllers\Controller;
 use App\Http\Requests\V1\RegisterDeviceRequest;
-use App\Http\Traits\SanitizedErrorResponse;
+use Fynla\Core\Http\Controller;
+use Fynla\Core\Http\Traits\SanitizedErrorResponse;
 use Fynla\Core\Models\DeviceToken;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;

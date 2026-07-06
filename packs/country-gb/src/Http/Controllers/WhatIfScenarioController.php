@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Fynla\Packs\Gb\Http\Controllers;
 
-use App\Http\Controllers\Controller;
-use App\Http\Traits\SanitizedErrorResponse;
+use Fynla\Core\Http\Controller;
+use Fynla\Core\Http\Traits\SanitizedErrorResponse;
 use Fynla\Packs\Gb\Http\Requests\StoreWhatIfScenarioRequest;
 use Fynla\Packs\Gb\Http\Resources\WhatIfScenarioResource;
 use Fynla\Packs\Gb\Models\WhatIfScenario;

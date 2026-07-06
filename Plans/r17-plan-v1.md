@@ -3,7 +3,7 @@ type: plan
 workstream: R-17 — final relocation batch (pack boundary closure)
 version: v1
 date: 2026-07-06
-status: ACTIVE — this file is the batch tracker; update the Status column as batches land
+status: CLOSED 2026-07-06 — all 10 batches done; R-15 gate met (allow-list 0, exemptions retired). Follow-on: R-18 UK-surface extraction (42-file criterion-2 tail, enumerated in batch 10 row)
 spec: Plans/r17-spec-v1.md
 inventory_basis: full dependency inventory 2026-07-06 (agent-verified against live tree)
 ---
@@ -43,8 +43,8 @@ impact (verified). No class-name collisions in any target namespace.
 | 6 | Plans + Coordination → pack (depends on 3+4) | 7 | MED | **DONE 2026-07-06** (`4b16bc3`) — allow-list 40→33; a baselined Larastan error fixed by the move (11→10). |
 | 7 | NetWorth → pack | 4 | **HIGH** | **DONE 2026-07-06** — PRD Q1 resolved by R-9 precedent: NO new contract; NetWorthService→`Gb\NetWorth`, CrossModuleAssetAggregator→`Gb\Shared`, NetWorthController+routes→pack (`/api/gb/net-worth/*`, shim-covered, frontend updated), NetWorthCacheObserver→pack Observers (registration stays in EventServiceProvider per R-9b precedent). Allow-list 33→31. Shim regression test fixture updated. Suite 2,979 green, live smoke 200×2. |
 | 8 | Agents | 2 | **HIGHEST** | **DONE 2026-07-06** — BaseAgent neutralised (TTL inlined as core const; GBP-hardcoded FormatsCurrency pushed down to the 3 agents that use it) → `Fynla\Core\Agents`; TaxOptimisationAgent → `Gb\Agents` with `pack.gb.tax_optimisation` rebound (tinker-verified); arch expectations repointed from empty `App\Agents` to real locations; BaseAgentTest double given the trait. Allow-list 31→29. roundToPenny float pin. Suite 2,978 green + known DomicileInfo parallel flake (passes isolated ×2 — add to flake watch). PRD Q2 note: the 4 core call-sites keep direct pack-agent imports for now — they already imported 6 pack agents pre-batch, so no NEW debt; registry decision folded into batch 9's core→pack sweep. |
-| 9 | Sweep: remaining UK-specific `app/Services` outside original target set (NetWorth done in 7; Property, Trust, WhatIf, UserProfile-UK, Benefits, Business, Chattel, LifeStage, Dashboard aggregators, Documents UK mappers, AI UK prompts, ExchangeControl rebind) → zero allow-list | ~30 | MED, mechanical after 1-8 | TODO |
-| 10 | Gate check: allow-list = 0, `grep Fynla\\Packs app/ core/` clean outside sanctioned wiring, full suite + Larastan + browser walkthrough | — | — | TODO |
+| 9 | Long-tail sweep | 30 | MED | **DONE 2026-07-06** (`1afb24c` + 9c) — 28 UK classes + ChildBenefitService + AdviceReviewService to pack; UkExchangeControl rebound (closes triage E-3); Controller → `Fynla\Core\Http\Controller` + SanitizedErrorResponse → `Fynla\Core\Http\Traits` (~186 consumers resed). Allow-list 29→**0**. |
+| 10 | Gate check | — | — | **PASSED 2026-07-06** — Allow-list **0** AND the R-2..R-9 directory exemptions retired (whole pack scanned, zero App\ refs incl. comments). Suite 2,978 green (3 parallel flakes pass isolated: DomicileInfo ×2, SavingsAgentGoals ×2, InvestmentController, AdminBackup — time/CPU-load family, on the flake watch-list). Larastan clean (baseline 10, net −1 vs adoption). Browser walkthrough: persona dashboard + protection + net-worth render, 0 server errors, 0 shim hits. **Criterion-2 tail (documented deviation per spec A1):** 42 app/core files still import `Fynla\Packs` in the app→pack direction — UK-surface controllers still in app (UserProfile, PersonalAccounts, LifeStage, ProfileCompleteness, JointAccountLog, ActionDefinition, Preview, AiChat, AgentInternal, 2× Mobile), 5 app observers, EventServiceProvider/AppServiceProvider wiring, Dashboard/Admin aggregator services, Documents UK mappers. These are the R-18 follow-on (UK-surface extraction), not R-15 gate items — the gate as written in plan v3 §17 (empty allow-list) is met. |
 
 ## Batch details
 

@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers\Api;
 
-use App\Http\Controllers\Controller;
+use Fynla\Core\Http\Controller;
 use Fynla\Core\Models\User;
 use Fynla\Packs\Gb\Agents\CoordinatingAgent;
 use Fynla\Packs\Gb\Agents\EstateAgent;

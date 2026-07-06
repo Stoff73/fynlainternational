@@ -4,14 +4,16 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers\Api;
 
-use App\Http\Controllers\Controller;
-use Fynla\Core\Http\Resources\UserResource;
-use App\Http\Traits\SanitizedErrorResponse;
-use Fynla\Core\Models\AuditLog;
-use Fynla\Core\Models\LoginAttempt;
 use App\Services\Audit\AuditService;
 use App\Services\Auth\LoginLockoutService;
 use App\Services\Auth\MFAService;
+use Fynla\Core\Http\Controller;
+use Fynla\Core\Http\Resources\UserResource;
+use Fynla\Core\Http\Traits\SanitizedErrorResponse;
+use Fynla\Core\Models\AuditLog;
+use Fynla\Core\Models\LoginAttempt;
+use Fynla\Core\Models\User;
+use Fynla\Core\Models\UserSession;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
@@ -163,7 +165,7 @@ class MFAController extends Controller
             return $genericError;
         }
 
-        $user = \Fynla\Core\Models\User::find($userId);
+        $user = User::find($userId);
 
         if (! $user) {
             return $genericError;
@@ -213,7 +215,7 @@ class MFAController extends Controller
         // Create session for this token
         $accessToken = $user->tokens()->latest()->first();
         if ($accessToken) {
-            \Fynla\Core\Models\UserSession::createForToken($user, $accessToken);
+            UserSession::createForToken($user, $accessToken);
         }
 
         return response()->json([
@@ -249,7 +251,7 @@ class MFAController extends Controller
             return $genericError;
         }
 
-        $user = \Fynla\Core\Models\User::find($userId);
+        $user = User::find($userId);
 
         if (! $user) {
             return $genericError;
@@ -275,7 +277,7 @@ class MFAController extends Controller
         // Create session for this token
         $accessToken = $user->tokens()->latest()->first();
         if ($accessToken) {
-            \Fynla\Core\Models\UserSession::createForToken($user, $accessToken);
+            UserSession::createForToken($user, $accessToken);
         }
 
         $remainingCodes = $this->mfaService->getRemainingRecoveryCodeCount($user);

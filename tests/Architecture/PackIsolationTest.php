@@ -85,96 +85,9 @@ describe('Pack Isolation', function () {
         // Each import is allow-listed below. Subsequent workstreams shrink
         // the allow-list; R-15 closes the exemption.
         $exemptDirs = [
-            $packDir.DIRECTORY_SEPARATOR.'Providers'.DIRECTORY_SEPARATOR,
-            $packDir.DIRECTORY_SEPARATOR.'Constants'.DIRECTORY_SEPARATOR,
-            $packDir.DIRECTORY_SEPARATOR.'Traits'.DIRECTORY_SEPARATOR,
-            $packDir.DIRECTORY_SEPARATOR.'Models'.DIRECTORY_SEPARATOR,
-            // R-5: Estate/Tax services still import App\Services\* peers
-            // (Investment, Retirement, Goals, Risk, Settings, Cache, Shared,
-            // UserProfile) that relocate in R-6/R-7. Pinned by allow-list.
-            $packDir.DIRECTORY_SEPARATOR.'Estate'.DIRECTORY_SEPARATOR,
-            $packDir.DIRECTORY_SEPARATOR.'Tax'.DIRECTORY_SEPARATOR,
-            // R-6a: Retirement clean services moved into the GB pack still
-            // collaborate with the 8 deferred Fynla\Packs\Gb\Retirement\* peers
-            // (R-14a) and with Fynla\Packs\Gb\Investment\* peers (R-6b),
-            // Fynla\Packs\Gb\Settings\AssumptionsService (R-7), and
-            // Fynla\Packs\Gb\UserProfile\UserProfileService (R-7). Pinned by
-            // allow-list below.
-            $packDir.DIRECTORY_SEPARATOR.'Retirement'.DIRECTORY_SEPARATOR,
-            // R-6b: Investment services move in 4 sub-commits. Top-level
-            // (R-6b-i) imports the 19 deferred Fynla\Packs\Gb\Investment\*
-            // R-14a peers, plus Fynla\Packs\Gb\Investment\Rebalancing\*
-            // (R-6b-iii target), Fynla\Packs\Gb\Investment\Utilities\* (R-6b-iv
-            // target), Fynla\Packs\Gb\Jobs\RunMonteCarloSimulation,
-            // Fynla\Packs\Gb\Plans\PlanConfigService, and
-            // Fynla\Core\Services\MonteCarloEngine. Pinned by allow-list.
-            $packDir.DIRECTORY_SEPARATOR.'Investment'.DIRECTORY_SEPARATOR,
-            // R-6c: Protection clean services moved into the GB pack. The
-            // 3 R-14a deferred peers (ComprehensiveProtectionPlanService,
-            // CoverageGapAnalyzer, ProtectionActionDefinitionService) stay
-            // in app/Services/Protection/ pending int-minor money refactor.
-            // Pack code still imports them via cross-boundary use; pinned
-            // by allow-list below.
-            $packDir.DIRECTORY_SEPARATOR.'Protection'.DIRECTORY_SEPARATOR,
-            // R-6d: Savings clean services moved into the GB pack. ISATracker
-            // is the sole R-14a deferral (?float $amount signature). Pack
-            // RateComparator imports Fynla\Packs\Gb\Savings\ISATracker across
-            // the boundary; pinned by allow-list below.
-            $packDir.DIRECTORY_SEPARATOR.'Savings'.DIRECTORY_SEPARATOR,
-            // R-7a: Goals clean services moved into the GB pack. The 3
-            // R-14a deferrals (GoalAssignmentService, GoalProgressService,
-            // LifeEventAllocationService) stay in app/Services/Goals/.
-            // Pack GoalStrategyService imports two of them across the
-            // boundary; pinned by allow-list below.
-            $packDir.DIRECTORY_SEPARATOR.'Goals'.DIRECTORY_SEPARATOR,
-            // R-7b: Plans clean services moved into the GB pack. The 4
-            // R-14a deferrals (BasePlanService, DistributionAccount,
-            // InvestmentPlanService, RetirementPlanService) stay in
-            // app/Services/Plans/. Pack Plans services extend BasePlanService
-            // and reference App\Agents\* (R-8 deferral) across the boundary;
-            // pinned by allow-list below.
-            $packDir.DIRECTORY_SEPARATOR.'Plans'.DIRECTORY_SEPARATOR,
-            // R-7c: Coordination clean services moved into the GB pack. The
-            // 3 R-14a deferrals (CashFlowCoordinator, CrossModuleStrategyService,
-            // HouseholdPlanningService) stay in app/Services/Coordination/.
-            // Pack RecommendationsAggregatorService imports
-            // Fynla\Packs\Gb\Investment\PortfolioAnalyzer (R-14a) across the
-            // boundary; pinned by allow-list below.
-            $packDir.DIRECTORY_SEPARATOR.'Coordination'.DIRECTORY_SEPARATOR,
-            // R-17 batch 2: Risk services relocated into the pack.
-            // AutoRiskCalculator still imports Fynla\Packs\Gb\NetWorth\NetWorthService
-            // (relocates in R-17 batch 7); pinned by allow-list below.
-            $packDir.DIRECTORY_SEPARATOR.'Risk'.DIRECTORY_SEPARATOR,
-            // R-8: 7 module agents (Coordinating + 6 module agents) moved
-            // into the GB pack. They extend Fynla\Core\Agents\BaseAgent (still in
-            // app/Agents pending follow-up) and import deferred R-14a peers
-            // (Coordination/Protection/AI services) across the boundary;
-            // pinned by allow-list below.
-            $packDir.DIRECTORY_SEPARATOR.'Agents'.DIRECTORY_SEPARATOR,
-            // R-9a: 18 UK Resources moved into the GB pack. Pack resources
-            // for UK joint-ownable models (Property, Mortgage, Investment,
-            // Savings, Chattel, BusinessInterest) reference
-            // App\Http\Resources\UserResource for the user / joint_owner
-            // relationships; pinned by allow-list below.
-            $packDir.DIRECTORY_SEPARATOR.'Http'.DIRECTORY_SEPARATOR.'Resources'.DIRECTORY_SEPARATOR,
-            // R-9b: 6 UK module observers moved into the GB pack. Risk
-            // observers extend Fynla\Packs\Gb\Observers\RiskRecalculationObserver
-            // (generic base, stays in app/Observers/); pinned by allow-list.
-            $packDir.DIRECTORY_SEPARATOR.'Observers'.DIRECTORY_SEPARATOR,
-            // R-9d: UK module controllers begin moving into the GB pack
-            // (Savings first). Controllers extend App\Http\Controllers\Controller
-            // (Laravel base controller, stays in core) and use
-            // App\Http\Traits\SanitizedErrorResponse (cross-cutting trait,
-            // stays in core); pinned by allow-list below.
-            $packDir.DIRECTORY_SEPARATOR.'Http'.DIRECTORY_SEPARATOR.'Controllers'.DIRECTORY_SEPARATOR,
-            // R-9e: 50 module-folder Requests relocated in R-9c had no App\
-            // imports, so the requests directory wasn't exempted at the time.
-            // The flat StoreProtectionActionDefinitionRequest moved in R-9e
-            // imports Fynla\Core\Services\PermissionService for admin-permission
-            // gating. Exempt the directory (and pin the import via allow-list
-            // below) rather than refactor PermissionService into core for the
-            // sake of one request.
-            $packDir.DIRECTORY_SEPARATOR.'Http'.DIRECTORY_SEPARATOR.'Requests'.DIRECTORY_SEPARATOR,
+            // R-17 CLOSED (2026-07-06): the R-2..R-9 directory exemptions are
+            // retired — the entire pack is scanned and must contain zero App\
+            // imports. Do not add entries here; fix the import instead.
         ];
 
         $violations = [];
@@ -294,8 +207,6 @@ describe('Pack Isolation', function () {
             // R-9d: pack controllers extend the Laravel base controller and
             // use the cross-cutting SanitizedErrorResponse trait. Both stay
             // in core as framework / shared infrastructure.
-            'App\\Http\\Controllers\\Controller',
-            'App\\Http\\Traits\\SanitizedErrorResponse',
             // R-9e: StoreProtectionActionDefinitionRequest gates admin
             // creation of protection action definitions via the cross-cutting
             // PermissionService (used by every admin-permission check across
@@ -490,7 +401,6 @@ describe('Pack Isolation', function () {
         // empty once a core-mediated asset query layer is in place.
         $allowed = [
             // App\ — only the base controller stays in the legacy namespace.
-            'App\\Http\\Controllers\\Controller',
             // Cross-pack — UK models the SA Http layer reads for joint
             // assets and aggregate calculations.
             'Fynla\\Packs\\Gb\\Models\\DCPension',

@@ -4,13 +4,13 @@ declare(strict_types=1);
 
 namespace Fynla\Packs\Gb\Http\Controllers\Estate;
 
-use App\Http\Controllers\Controller;
-use Fynla\Packs\Gb\Http\Requests\Estate\StoreLpaRequest;
-use Fynla\Packs\Gb\Http\Requests\Estate\UpdateLpaRequest;
-use Fynla\Packs\Gb\Http\Requests\Estate\UploadLpaRequest;
+use Fynla\Core\Http\Controller;
 use Fynla\Packs\Gb\Estate\LpaComplianceService;
 use Fynla\Packs\Gb\Estate\LpaDocumentService;
 use Fynla\Packs\Gb\Estate\LpaService;
+use Fynla\Packs\Gb\Http\Requests\Estate\StoreLpaRequest;
+use Fynla\Packs\Gb\Http\Requests\Estate\UpdateLpaRequest;
+use Fynla\Packs\Gb\Http\Requests\Estate\UploadLpaRequest;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 

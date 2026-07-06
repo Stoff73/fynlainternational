@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace Fynla\Packs\Gb\Http\Controllers\Investment;
 
-use App\Http\Controllers\Controller;
-use App\Http\Traits\SanitizedErrorResponse;
-use Fynla\Packs\Gb\Models\Investment\InvestmentScenario;
+use Fynla\Core\Http\Controller;
+use Fynla\Core\Http\Traits\SanitizedErrorResponse;
 use Fynla\Packs\Gb\Investment\ScenarioService;
+use Fynla\Packs\Gb\Models\Investment\InvestmentScenario;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 

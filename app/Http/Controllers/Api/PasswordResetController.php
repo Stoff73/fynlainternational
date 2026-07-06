@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers\Api;
 
-use App\Http\Controllers\Controller;
-use App\Http\Traits\SanitizedErrorResponse;
-use Fynla\Core\Models\PasswordResetSession;
 use App\Services\Auth\PasswordResetService;
+use Fynla\Core\Http\Controller;
+use Fynla\Core\Http\Traits\SanitizedErrorResponse;
+use Fynla\Core\Models\PasswordResetSession;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 

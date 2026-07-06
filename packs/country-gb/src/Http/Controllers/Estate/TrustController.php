@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Fynla\Packs\Gb\Http\Controllers\Estate;
 
-use App\Http\Controllers\Controller;
+use Fynla\Core\Http\Controller;
 use Fynla\Core\Models\User;
 use Fynla\Core\Services\CacheInvalidationService;
 use Fynla\Packs\Gb\Estate\IHTCalculationService;

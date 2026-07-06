@@ -4,13 +4,13 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers\Api;
 
-use App\Http\Controllers\Controller;
-use App\Http\Traits\SanitizedErrorResponse;
 use App\Jobs\FireAwinConversionJob;
-use Fynla\Core\Models\Payment;
-use Fynla\Core\Models\SubscriptionPlan;
 use App\Services\Payment\RevolutService;
 use App\Services\Payment\SubscriptionRenewalService;
+use Fynla\Core\Http\Controller;
+use Fynla\Core\Http\Traits\SanitizedErrorResponse;
+use Fynla\Core\Models\Payment;
+use Fynla\Core\Models\SubscriptionPlan;
 use Illuminate\Database\QueryException;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;

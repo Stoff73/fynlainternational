@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers\Api;
 
-use App\Http\Controllers\Controller;
 use App\Http\Requests\UpdateDomicileInfoRequest;
 use App\Http\Requests\UpdateIncomeOccupationRequest;
 use App\Http\Requests\UpdatePersonalInfoRequest;
-use App\Http\Traits\SanitizedErrorResponse;
+use Fynla\Core\Http\Controller;
 use Fynla\Core\Http\Resources\UserResource;
+use Fynla\Core\Http\Traits\SanitizedErrorResponse;
 use Fynla\Core\Models\ExpenditureProfile;
 use Fynla\Core\Models\User;
 use Fynla\Core\Services\CacheInvalidationService;

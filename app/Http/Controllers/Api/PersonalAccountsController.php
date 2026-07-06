@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers\Api;
 
-use App\Http\Controllers\Controller;
 use App\Http\Requests\StorePersonalAccountLineItemRequest;
 use App\Http\Requests\UpdatePersonalAccountLineItemRequest;
-use App\Http\Traits\SanitizedErrorResponse;
 use Carbon\Carbon;
+use Fynla\Core\Http\Controller;
+use Fynla\Core\Http\Traits\SanitizedErrorResponse;
 use Fynla\Core\Models\User;
 use Fynla\Packs\Gb\Models\PersonalAccount;
 use Fynla\Packs\Gb\UserProfile\PersonalAccountsService;

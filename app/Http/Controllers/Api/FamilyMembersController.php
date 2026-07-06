@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers\Api;
 
-use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreFamilyMemberRequest;
 use App\Http\Requests\UpdateFamilyMemberRequest;
-use App\Http\Traits\SanitizedErrorResponse;
 use App\Mail\SpouseAccountCreated;
 use App\Mail\SpouseDataSharingRequest;
+use Fynla\Core\Http\Controller;
+use Fynla\Core\Http\Traits\SanitizedErrorResponse;
 use Fynla\Core\Models\FamilyMember;
 use Fynla\Core\Models\Permission;
 use Fynla\Core\Models\SpousePermission;

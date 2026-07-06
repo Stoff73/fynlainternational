@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers\Api;
 
-use App\Http\Controllers\Controller;
-use App\Http\Traits\SanitizedErrorResponse;
 use App\Services\LifeStage\LifeStageService;
+use Fynla\Core\Http\Controller;
+use Fynla\Core\Http\Traits\SanitizedErrorResponse;
 use Fynla\Core\Models\User;
 use Fynla\Packs\Gb\Support\PrerequisiteGateService;
 use Illuminate\Http\JsonResponse;

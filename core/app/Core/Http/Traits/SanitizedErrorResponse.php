@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Http\Traits;
+namespace Fynla\Core\Http\Traits;
 
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Log;

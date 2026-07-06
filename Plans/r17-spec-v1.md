@@ -3,7 +3,7 @@ type: spec
 workstream: R-17 — final relocation batch (pack boundary closure)
 version: v1
 date: 2026-07-06
-status: draft (autonomous loop — assumptions flagged for CSJ veto)
+status: closed 2026-07-06 — acceptance criteria met (criterion 2 deviation documented in plan batch 10)
 parent: Plans/architecture-plan-v3.md (§17 R-15 gate, §16a R-14a deferrals)
 successor_gate: PackIsolationTest allow-list = 0 entries
 ---

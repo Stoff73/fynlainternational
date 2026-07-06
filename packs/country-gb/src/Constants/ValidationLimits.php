@@ -12,7 +12,7 @@ use Fynla\Packs\Gb\Tax\TaxConfigService;
  * These constants define the maximum values used in validation rules.
  * For tax-related limits, use TaxConfigService methods instead of hardcoding.
  *
- * @see App\Services\TaxConfigService for dynamic tax limits
+ * @see TaxConfigService for dynamic tax limits
  */
 class ValidationLimits
 {

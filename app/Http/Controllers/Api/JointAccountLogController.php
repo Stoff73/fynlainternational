@@ -4,9 +4,13 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers\Api;
 
-use App\Http\Controllers\Controller;
-use App\Http\Traits\SanitizedErrorResponse;
+use Fynla\Core\Http\Controller;
+use Fynla\Core\Http\Traits\SanitizedErrorResponse;
+use Fynla\Packs\Gb\Models\Investment\InvestmentAccount;
 use Fynla\Packs\Gb\Models\JointAccountLog;
+use Fynla\Packs\Gb\Models\Mortgage;
+use Fynla\Packs\Gb\Models\Property;
+use Fynla\Packs\Gb\Models\SavingsAccount;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
@@ -38,10 +42,10 @@ class JointAccountLogController extends Controller
         // FQCNs (R-4); legacy rows are backfilled by the data migration.
         if ($type) {
             $typeMap = [
-                'property' => \Fynla\Packs\Gb\Models\Property::class,
-                'mortgage' => \Fynla\Packs\Gb\Models\Mortgage::class,
-                'investment' => \Fynla\Packs\Gb\Models\Investment\InvestmentAccount::class,
-                'savings' => \Fynla\Packs\Gb\Models\SavingsAccount::class,
+                'property' => Property::class,
+                'mortgage' => Mortgage::class,
+                'investment' => InvestmentAccount::class,
+                'savings' => SavingsAccount::class,
             ];
 
             if (isset($typeMap[$type])) {
@@ -64,18 +68,18 @@ class JointAccountLogController extends Controller
             // loggable_type now points at the GB pack namespace. Legacy
             // App\Models\X rows are backfilled by the data migration.
             $assetType = match ($log->loggable_type) {
-                \Fynla\Packs\Gb\Models\Property::class => 'property',
-                \Fynla\Packs\Gb\Models\Mortgage::class => 'mortgage',
-                \Fynla\Packs\Gb\Models\Investment\InvestmentAccount::class => 'investment',
-                \Fynla\Packs\Gb\Models\SavingsAccount::class => 'savings',
+                Property::class => 'property',
+                Mortgage::class => 'mortgage',
+                InvestmentAccount::class => 'investment',
+                SavingsAccount::class => 'savings',
                 default => 'account',
             };
 
             $assetName = match ($log->loggable_type) {
-                \Fynla\Packs\Gb\Models\Property::class => $log->loggable?->address_line_1 ?? 'Unknown Property',
-                \Fynla\Packs\Gb\Models\Mortgage::class => $log->loggable?->lender_name ?? 'Unknown Mortgage',
-                \Fynla\Packs\Gb\Models\Investment\InvestmentAccount::class => $log->loggable?->account_name ?? 'Unknown Investment',
-                \Fynla\Packs\Gb\Models\SavingsAccount::class => $log->loggable?->account_name ?? 'Unknown Savings',
+                Property::class => $log->loggable?->address_line_1 ?? 'Unknown Property',
+                Mortgage::class => $log->loggable?->lender_name ?? 'Unknown Mortgage',
+                InvestmentAccount::class => $log->loggable?->account_name ?? 'Unknown Investment',
+                SavingsAccount::class => $log->loggable?->account_name ?? 'Unknown Savings',
                 default => 'Unknown Asset',
             };
 

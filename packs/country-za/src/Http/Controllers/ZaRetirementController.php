@@ -4,7 +4,10 @@ declare(strict_types=1);
 
 namespace Fynla\Packs\Za\Http\Controllers;
 
-use App\Http\Controllers\Controller;
+use Fynla\Core\Http\Controller;
+use Fynla\Core\Money\Currency;
+use Fynla\Core\Money\Money;
+use Fynla\Packs\Gb\Models\DCPension;
 use Fynla\Packs\Za\Http\Requests\Retirement\CalculateTaxReliefRequest;
 use Fynla\Packs\Za\Http\Requests\Retirement\CompulsoryApportionRequest;
 use Fynla\Packs\Za\Http\Requests\Retirement\LifeAnnuityQuoteRequest;
@@ -17,9 +20,6 @@ use Fynla\Packs\Za\Http\Resources\Retirement\Reg28SnapshotResource;
 use Fynla\Packs\Za\Http\Resources\Retirement\ZaAnnuityQuoteResource;
 use Fynla\Packs\Za\Http\Resources\Retirement\ZaRetirementBucketResource;
 use Fynla\Packs\Za\Http\Resources\Retirement\ZaRetirementFundResource;
-use Fynla\Packs\Gb\Models\DCPension;
-use Fynla\Core\Money\Currency;
-use Fynla\Core\Money\Money;
 use Fynla\Packs\Za\Models\ZaReg28Snapshot;
 use Fynla\Packs\Za\Models\ZaRetirementFundBucket;
 use Fynla\Packs\Za\Retirement\ZaCompulsoryAnnuitisationService;

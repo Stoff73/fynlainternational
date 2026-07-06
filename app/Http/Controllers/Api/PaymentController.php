@@ -4,32 +4,34 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers\Api;
 
-use App\Http\Controllers\Controller;
-use App\Http\Traits\SanitizedErrorResponse;
 use App\Jobs\FireAwinConversionJob;
 use App\Mail\DataDeletionConfirmation;
 use App\Mail\PaymentConfirmation;
 use App\Mail\SubscriptionCancellation;
-use Fynla\Core\Models\Invoice;
-use Fynla\Core\Models\Payment;
-use Fynla\Core\Models\SubscriptionPlan;
-use Fynla\Core\Models\User;
 use App\Services\Marketing\AwinTrackingService;
 use App\Services\Payment\DataPurgeService;
 use App\Services\Payment\DiscountCodeService;
 use App\Services\Payment\InvoiceService;
-use App\Services\Payment\RevolutService;
 use App\Services\Payment\ReferralService;
+use App\Services\Payment\RevolutService;
 use App\Services\Payment\RevolutSubscriptionService;
+use Fynla\Core\Http\Controller;
+use Fynla\Core\Http\Traits\SanitizedErrorResponse;
+use Fynla\Core\Models\Invoice;
+use Fynla\Core\Models\Payment;
+use Fynla\Core\Models\Subscription;
+use Fynla\Core\Models\SubscriptionPlan;
+use Fynla\Core\Models\User;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
+use Symfony\Component\HttpFoundation\Response;
 
 class PaymentController extends Controller
 {
@@ -710,7 +712,7 @@ class PaymentController extends Controller
             }
 
             $accessUntil = DB::transaction(function () use ($subscription, $request) {
-                $locked = \Fynla\Core\Models\Subscription::where('id', $subscription->id)->lockForUpdate()->first();
+                $locked = Subscription::where('id', $subscription->id)->lockForUpdate()->first();
 
                 if (! in_array($locked->status, ['active', 'past_due'])) {
                     return null;
@@ -954,7 +956,7 @@ class PaymentController extends Controller
      *
      * GET /api/payment/invoices/{invoice}/download
      */
-    public function downloadInvoice(Request $request, Invoice $invoice): \Symfony\Component\HttpFoundation\Response
+    public function downloadInvoice(Request $request, Invoice $invoice): Response
     {
         $user = $request->user();
 
@@ -980,7 +982,7 @@ class PaymentController extends Controller
     /**
      * Send a cancellation confirmation email to the user.
      */
-    private function sendCancellationEmail(User $user, \Fynla\Core\Models\Subscription $subscription): void
+    private function sendCancellationEmail(User $user, Subscription $subscription): void
     {
         try {
             Mail::to($user->email)->send(new SubscriptionCancellation($user, $subscription));

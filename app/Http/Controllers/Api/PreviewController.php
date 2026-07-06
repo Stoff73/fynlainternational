@@ -4,12 +4,13 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers\Api;
 
-use App\Http\Controllers\Controller;
+use Fynla\Core\Http\Controller;
+use Fynla\Core\Models\FamilyMember;
+use Fynla\Core\Models\User;
 use Fynla\Packs\Gb\Models\CriticalIllnessPolicy;
 use Fynla\Packs\Gb\Models\DBPension;
 use Fynla\Packs\Gb\Models\DCPension;
 use Fynla\Packs\Gb\Models\Estate\Liability;
-use Fynla\Core\Models\FamilyMember;
 use Fynla\Packs\Gb\Models\IncomeProtectionPolicy;
 use Fynla\Packs\Gb\Models\Investment\Holding;
 use Fynla\Packs\Gb\Models\Investment\InvestmentAccount;
@@ -18,9 +19,9 @@ use Fynla\Packs\Gb\Models\Mortgage;
 use Fynla\Packs\Gb\Models\Property;
 use Fynla\Packs\Gb\Models\SavingsAccount;
 use Fynla\Packs\Gb\Models\StatePension;
-use Fynla\Core\Models\User;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
@@ -122,8 +123,8 @@ class PreviewController extends Controller
         // CRITICAL SECURITY: Clear any existing session to prevent data leakage
         // This ensures that if a real user was logged in, their session is destroyed
         // before we log in the preview user
-        if (\Illuminate\Support\Facades\Auth::guard('web')->check()) {
-            \Illuminate\Support\Facades\Auth::guard('web')->logout();
+        if (Auth::guard('web')->check()) {
+            Auth::guard('web')->logout();
         }
 
         // Invalidate the session and regenerate CSRF token (if session is available)

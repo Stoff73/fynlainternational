@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers\Api;
 
-use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreActionDefinitionRequest;
-use App\Http\Traits\SanitizedErrorResponse;
+use Fynla\Core\Http\Controller;
+use Fynla\Core\Http\Traits\SanitizedErrorResponse;
 use Fynla\Packs\Gb\Models\EstateActionDefinition;
 use Fynla\Packs\Gb\Models\InvestmentActionDefinition;
 use Fynla\Packs\Gb\Models\ProtectionActionDefinition;

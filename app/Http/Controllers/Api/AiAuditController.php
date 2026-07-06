@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers\Api;
 
-use App\Http\Controllers\Controller;
+use Fynla\Core\Http\Controller;
 use Fynla\Core\Models\AiAdviceLog;
 use Fynla\Core\Models\AiConversation;
 use Fynla\Core\Models\AiMessage;

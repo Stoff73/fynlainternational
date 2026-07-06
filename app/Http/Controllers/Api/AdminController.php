@@ -4,20 +4,22 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers\Api;
 
-use App\Http\Controllers\Controller;
 use App\Http\Resources\AdminUserResource;
-use App\Http\Traits\SanitizedErrorResponse;
+use App\Services\Admin\DatabaseMetricsService;
+use App\Services\Admin\UserModuleTrackingService;
+use Fynla\Core\Http\Controller;
+use Fynla\Core\Http\Traits\SanitizedErrorResponse;
 use Fynla\Core\Models\DiscountCode;
 use Fynla\Core\Models\Payment;
 use Fynla\Core\Models\Role;
 use Fynla\Core\Models\Subscription;
 use Fynla\Core\Models\User;
-use App\Services\Admin\DatabaseMetricsService;
-use App\Services\Admin\UserModuleTrackingService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Artisan;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Log;
 
 class AdminController extends Controller
 {
@@ -571,7 +573,7 @@ class AdminController extends Controller
      */
     public function getAiProvider(): JsonResponse
     {
-        $provider = \Illuminate\Support\Facades\Cache::get('ai_provider', config('services.ai_provider', 'anthropic'));
+        $provider = Cache::get('ai_provider', config('services.ai_provider', 'anthropic'));
 
         return response()->json([
             'success' => true,
@@ -616,9 +618,9 @@ class AdminController extends Controller
         }
 
         // Store in cache (persists across requests, survives config:clear)
-        \Illuminate\Support\Facades\Cache::forever('ai_provider', $provider);
+        Cache::forever('ai_provider', $provider);
 
-        \Illuminate\Support\Facades\Log::info('[Admin] AI provider switched', [
+        Log::info('[Admin] AI provider switched', [
             'provider' => $provider,
             'changed_by' => $request->user()->id,
         ]);

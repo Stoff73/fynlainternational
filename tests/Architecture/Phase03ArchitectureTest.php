@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-use App\Http\Controllers\Controller;
+use Fynla\Core\Http\Controller;
 use Fynla\Packs\Gb\Http\Controllers\NetWorthController;
 use Fynla\Packs\Gb\NetWorth\NetWorthService;
 

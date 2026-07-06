@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace Fynla\Packs\Gb\Http\Controllers;
 
-use App\Http\Controllers\Controller;
+use Fynla\Core\Http\Controller;
+use Fynla\Core\Http\Traits\SanitizedErrorResponse;
 use Fynla\Packs\Gb\Http\Requests\Tax\StoreTaxConfigurationRequest;
-use App\Http\Traits\SanitizedErrorResponse;
 use Fynla\Packs\Gb\Models\TaxConfiguration;
 use Fynla\Packs\Gb\Models\TaxConfigurationAudit;
 use Illuminate\Http\JsonResponse;

@@ -4,14 +4,15 @@ declare(strict_types=1);
 
 namespace Fynla\Packs\Gb\Http\Controllers\Estate;
 
-use App\Http\Controllers\Controller;
-use App\Http\Traits\SanitizedErrorResponse;
-use Fynla\Packs\Gb\Models\Estate\Will;
-use Fynla\Packs\Gb\Models\LifeInsurancePolicy;
+use Fynla\Core\Http\Controller;
+use Fynla\Core\Http\Traits\SanitizedErrorResponse;
 use Fynla\Core\Models\User;
 use Fynla\Packs\Gb\Estate\EstateAssetAggregatorService;
 use Fynla\Packs\Gb\Estate\IHTCalculationService;
 use Fynla\Packs\Gb\Estate\IHTFormattingService;
+use Fynla\Packs\Gb\Models\Estate\IHTProfile;
+use Fynla\Packs\Gb\Models\Estate\Will;
+use Fynla\Packs\Gb\Models\LifeInsurancePolicy;
 use Fynla\Packs\Gb\Tax\TaxConfigService;
 use Fynla\Packs\Gb\Traits\FormatsCurrency;
 use Illuminate\Http\JsonResponse;
@@ -206,7 +207,7 @@ class IHTController extends Controller
             'charitable_giving_percent' => ['nullable', 'numeric', 'min:0', 'max:100'],
         ]);
 
-        $profile = \Fynla\Packs\Gb\Models\Estate\IHTProfile::updateOrCreate(
+        $profile = IHTProfile::updateOrCreate(
             ['user_id' => $user->id],
             $validated
         );

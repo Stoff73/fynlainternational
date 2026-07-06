@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Fynla\Packs\Gb\Http\Controllers\Investment;
 
-use App\Http\Controllers\Controller;
+use Fynla\Core\Http\Controller;
 use Fynla\Packs\Gb\Investment\ContributionOptimizer;
 use Fynla\Packs\Gb\Models\Investment\InvestmentAccount;
 use Illuminate\Http\JsonResponse;

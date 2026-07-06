@@ -4,7 +4,9 @@ declare(strict_types=1);
 
 namespace Fynla\Packs\Za\Http\Controllers;
 
-use App\Http\Controllers\Controller;
+use Fynla\Core\Http\Controller;
+use Fynla\Core\Models\FamilyMember;
+use Fynla\Packs\Gb\Models\Mortgage;
 use Fynla\Packs\Za\Http\Requests\Protection\CoverageGapRequest;
 use Fynla\Packs\Za\Http\Requests\Protection\StoreZaBeneficiariesRequest;
 use Fynla\Packs\Za\Http\Requests\Protection\StoreZaProtectionPolicyRequest;
@@ -12,8 +14,6 @@ use Fynla\Packs\Za\Http\Requests\Protection\UpdateZaProtectionPolicyRequest;
 use Fynla\Packs\Za\Http\Resources\Protection\ZaCoverageGapResource;
 use Fynla\Packs\Za\Http\Resources\Protection\ZaProtectionBeneficiaryResource;
 use Fynla\Packs\Za\Http\Resources\Protection\ZaProtectionPolicyResource;
-use Fynla\Core\Models\FamilyMember;
-use Fynla\Packs\Gb\Models\Mortgage;
 use Fynla\Packs\Za\Models\ZaProtectionBeneficiary;
 use Fynla\Packs\Za\Models\ZaProtectionPolicy;
 use Fynla\Packs\Za\Protection\ZaProtectionEngine;
@@ -93,6 +93,7 @@ class ZaProtectionController extends Controller
                 $b['policy_id'] = $policy->id;
                 ZaProtectionBeneficiary::create($b);
             }
+
             return $policy->load('beneficiaries');
         });
 

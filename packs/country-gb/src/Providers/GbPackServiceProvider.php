@@ -31,7 +31,7 @@ use Illuminate\Support\ServiceProvider;
  * Registers the UK pack with the core PackRegistry and binds the 14
  * country-pack contract keys to the existing UK service classes.
  *
- * Phase 1 state: bindings still resolve to \App\Services\… because
+ * R-17 (2026-07-06): all bindings resolve to pack-local classes —
  * the UK code has not yet relocated into this pack's src/ tree. Each
  * subsequent workstream (R-3 → R-9) moves files and updates the
  * corresponding binding's FQCN to the new namespace.
@@ -45,7 +45,7 @@ class GbPackServiceProvider extends ServiceProvider
     public function register(): void
     {
         // 9 contract bindings carried over from app/Providers/GbPackServiceProvider.
-        // FQCNs still point at \App\…; updated in-place as files move.
+        // R-17: every FQCN below is pack-local; the legacy-namespace era is closed.
         $this->app->bind('pack.gb.tax', TaxConfigService::class);
         $this->app->bind('pack.gb.retirement', UkRetirementEngine::class);
         $this->app->bind('pack.gb.investment', UkInvestmentEngine::class);
@@ -99,7 +99,7 @@ class GbPackServiceProvider extends ServiceProvider
     public function boot(PackRegistry $registry): void
     {
         // R-4: polymorphic *_type columns store the model FQCN. A one-shot
-        // data migration converts legacy App\Models\X values to the
+        // data migration converts legacy pre-relocation model FQCN values to the
         // relocated Fynla\Packs\Gb\Models\X namespace
         // (database/migrations/…_backfill_polymorphic_morph_map_aliases.php).
         // A morph map is intentionally NOT registered here — it would

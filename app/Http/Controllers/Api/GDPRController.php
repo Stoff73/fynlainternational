@@ -4,25 +4,26 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers\Api;
 
-use App\Http\Controllers\Controller;
-use App\Http\Traits\SanitizedErrorResponse;
 use App\Mail\DeletionVerificationCode;
-use Fynla\Core\Models\AuditLog;
-use Fynla\Core\Models\DataExport;
-use Fynla\Core\Models\ErasureRequest;
-use Fynla\Core\Models\User;
-use Fynla\Core\Models\UserConsent;
 use App\Services\Audit\AuditService;
 use App\Services\Auth\MFAService;
 use App\Services\GDPR\ConsentService;
 use App\Services\GDPR\DataErasureService;
 use App\Services\GDPR\DataExportService;
+use Fynla\Core\Http\Controller;
+use Fynla\Core\Http\Traits\SanitizedErrorResponse;
+use Fynla\Core\Models\AuditLog;
+use Fynla\Core\Models\DataExport;
+use Fynla\Core\Models\ErasureRequest;
+use Fynla\Core\Models\User;
+use Fynla\Core\Models\UserConsent;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Str;
+use Symfony\Component\HttpFoundation\StreamedResponse;
 
 class GDPRController extends Controller
 {
@@ -142,7 +143,7 @@ class GDPRController extends Controller
     /**
      * Download the export file
      */
-    public function downloadExport(Request $request, int $id): JsonResponse|\Symfony\Component\HttpFoundation\StreamedResponse
+    public function downloadExport(Request $request, int $id): JsonResponse|StreamedResponse
     {
         $export = DataExport::where('id', $id)
             ->where('user_id', $request->user()->id)
