@@ -5,11 +5,11 @@ declare(strict_types=1);
 namespace Fynla\Packs\Gb\Models;
 
 use Fynla\Core\Models\Household;
-
 use Fynla\Core\Models\User;
-
 use Fynla\Core\Traits\Auditable;
 use Fynla\Core\Traits\HasJointOwnership;
+use Fynla\Packs\Gb\Models\Estate\Trust;
+use Illuminate\Contracts\Encryption\DecryptException;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -107,7 +107,7 @@ class CashAccount extends Model
                 }
                 try {
                     return Crypt::decryptString($value);
-                } catch (\Illuminate\Contracts\Encryption\DecryptException $e) {
+                } catch (DecryptException $e) {
                     return $value;
                 }
             },
@@ -127,7 +127,7 @@ class CashAccount extends Model
                 }
                 try {
                     return Crypt::decryptString($value);
-                } catch (\Illuminate\Contracts\Encryption\DecryptException $e) {
+                } catch (DecryptException $e) {
                     return $value;
                 }
             },
