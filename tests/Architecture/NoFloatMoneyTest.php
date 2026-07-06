@@ -80,6 +80,15 @@ describe('No Float Money', function () {
             'packs/country-gb/src/Protection/CoverageGapAnalyzer.php:*',
             'packs/country-gb/src/Protection/ProtectionActionDefinitionService.php:*',
             'packs/country-gb/src/Savings/ISATracker.php:*',
+            // R-17 batch 6: Plans/Coordination R-14a deferrals relocated
+            // wholesale. Same carried-debt file-level pins. Int-minor closes.
+            'packs/country-gb/src/Coordination/CashFlowCoordinator.php:*',
+            'packs/country-gb/src/Coordination/CrossModuleStrategyService.php:*',
+            'packs/country-gb/src/Coordination/HouseholdPlanningService.php:*',
+            'packs/country-gb/src/Plans/BasePlanService.php:*',
+            'packs/country-gb/src/Plans/DistributionAccount.php:*',
+            'packs/country-gb/src/Plans/InvestmentPlanService.php:*',
+            'packs/country-gb/src/Plans/RetirementPlanService.php:*',
         ];
 
         $violations = [];

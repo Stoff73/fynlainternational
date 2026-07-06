@@ -6,16 +6,16 @@ namespace Fynla\Packs\Gb\Http\Controllers\Plans;
 
 use App\Http\Controllers\Controller;
 use App\Http\Traits\SanitizedErrorResponse;
-use App\Services\Plans\InvestmentPlanService;
-use App\Services\Plans\RetirementPlanService;
 use Fynla\Core\Services\CacheInvalidationService;
 use Fynla\Packs\Gb\Models\Investment\InvestmentAccount;
 use Fynla\Packs\Gb\Models\PlanActionFundingSelection;
 use Fynla\Packs\Gb\Models\SavingsAccount;
 use Fynla\Packs\Gb\Plans\EstatePlanService;
 use Fynla\Packs\Gb\Plans\GoalPlanService;
+use Fynla\Packs\Gb\Plans\InvestmentPlanService;
 use Fynla\Packs\Gb\Plans\PlanConfigService;
 use Fynla\Packs\Gb\Plans\ProtectionPlanService;
+use Fynla\Packs\Gb\Plans\RetirementPlanService;
 use Fynla\Packs\Gb\Plans\SavingsPlanService;
 use Fynla\Packs\Gb\Plans\WhatIfCalculator;
 use Illuminate\Http\JsonResponse;

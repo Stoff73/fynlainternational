@@ -26,11 +26,6 @@ parameters:
 			path: packs/country-gb/src/Investment/ScenarioService.php
 
 		-
-			message: "#^Method Fynla\\\\Packs\\\\Gb\\\\Plans\\\\WhatIfCalculator\\:\\:resolveService\\(\\) has invalid return type Fynla\\\\Packs\\\\Gb\\\\Plans\\\\BasePlanService\\.$#"
-			count: 1
-			path: packs/country-gb/src/Plans/WhatIfCalculator.php
-
-		-
 			message: "#^Access to an undefined property Fynla\\\\Packs\\\\Gb\\\\Protection\\\\RecommendationEngine\\:\\:\\$taxCalculator\\.$#"
 			count: 1
 			path: packs/country-gb/src/Protection/RecommendationEngine.php

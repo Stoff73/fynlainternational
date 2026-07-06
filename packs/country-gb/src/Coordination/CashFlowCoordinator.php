@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Services\Coordination;
+namespace Fynla\Packs\Gb\Coordination;
 
 use Fynla\Packs\Gb\Models\CriticalIllnessPolicy;
 use Fynla\Packs\Gb\Models\DCPension;

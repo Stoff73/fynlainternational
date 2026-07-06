@@ -6,11 +6,11 @@ namespace Fynla\Packs\Gb\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use App\Http\Traits\SanitizedErrorResponse;
-use App\Services\Coordination\CashFlowCoordinator;
 use Fynla\Core\Models\RecommendationTracking;
 use Fynla\Core\Services\CacheInvalidationService;
 use Fynla\Packs\Gb\Agents\CoordinatingAgent;
 use Fynla\Packs\Gb\Constants\TaxDefaults;
+use Fynla\Packs\Gb\Coordination\CashFlowCoordinator;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;

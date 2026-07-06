@@ -4,9 +4,6 @@ declare(strict_types=1);
 
 namespace Fynla\Packs\Gb\Plans;
 
-use App\Services\Plans\InvestmentPlanService;
-use App\Services\Plans\RetirementPlanService;
-
 /**
  * Handles precise backend recalculation of what-if scenarios
  * when the user clicks "Recalculate" (as opposed to approximate frontend calcs).

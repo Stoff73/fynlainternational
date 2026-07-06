@@ -3,7 +3,7 @@
 declare(strict_types=1);
 
 use Fynla\Core\Models\User;
-use App\Services\Coordination\CrossModuleStrategyService;
+use Fynla\Packs\Gb\Coordination\CrossModuleStrategyService;
 use Fynla\Packs\Gb\Tax\TaxConfigService;
 
 function createCrossModuleStrategyService(?TaxConfigService $taxConfig = null): CrossModuleStrategyService

@@ -6,7 +6,7 @@ namespace Fynla\Packs\Gb\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use App\Http\Traits\SanitizedErrorResponse;
-use App\Services\Coordination\HouseholdPlanningService;
+use Fynla\Packs\Gb\Coordination\HouseholdPlanningService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 

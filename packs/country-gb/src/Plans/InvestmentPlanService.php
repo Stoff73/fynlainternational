@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Services\Plans;
+namespace Fynla\Packs\Gb\Plans;
 
 use Carbon\Carbon;
 use Fynla\Core\Models\Goal;

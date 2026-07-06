@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-use App\Services\Coordination\CashFlowCoordinator;
+use Fynla\Packs\Gb\Coordination\CashFlowCoordinator;
 use Fynla\Packs\Gb\Coordination\ConflictResolver;
 use Fynla\Packs\Gb\Coordination\HolisticPlanner;
 use Fynla\Packs\Gb\Coordination\PriorityRanker;

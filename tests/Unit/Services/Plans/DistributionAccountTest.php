@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-use App\Services\Plans\DistributionAccount;
+use Fynla\Packs\Gb\Plans\DistributionAccount;
 
 describe('DistributionAccount', function () {
     it('initialises with correct balance', function () {

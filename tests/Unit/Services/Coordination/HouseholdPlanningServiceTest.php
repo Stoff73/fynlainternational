@@ -2,10 +2,12 @@
 
 declare(strict_types=1);
 
+use Fynla\Core\Models\FamilyMember;
+use Fynla\Core\Models\User;
+use Fynla\Packs\Gb\Coordination\HouseholdPlanningService;
+use Fynla\Packs\Gb\Models\DCPension;
 use Fynla\Packs\Gb\Models\Property;
 use Fynla\Packs\Gb\Models\SavingsAccount;
-use Fynla\Core\Models\User;
-use App\Services\Coordination\HouseholdPlanningService;
 use Fynla\Packs\Gb\Tax\TaxConfigService;
 
 function createHouseholdService(): HouseholdPlanningService
@@ -52,26 +54,26 @@ function createMarriedCouple(): array
     $spouse->save();
 
     // Create main residence and child for RNRB qualification
-    \Fynla\Packs\Gb\Models\Property::factory()->create([
+    Property::factory()->create([
         'user_id' => $user->id,
         'property_type' => 'main_residence',
         'current_value' => 450000,
         'ownership_type' => 'individual',
         'ownership_percentage' => 100,
     ]);
-    \Fynla\Core\Models\FamilyMember::factory()->create([
+    FamilyMember::factory()->create([
         'user_id' => $user->id,
         'relationship' => 'child',
         'first_name' => 'Oliver',
     ]);
-    \Fynla\Packs\Gb\Models\Property::factory()->create([
+    Property::factory()->create([
         'user_id' => $spouse->id,
         'property_type' => 'main_residence',
         'current_value' => 450000,
         'ownership_type' => 'individual',
         'ownership_percentage' => 100,
     ]);
-    \Fynla\Core\Models\FamilyMember::factory()->create([
+    FamilyMember::factory()->create([
         'user_id' => $spouse->id,
         'relationship' => 'child',
         'first_name' => 'Oliver',
@@ -224,7 +226,7 @@ describe('HouseholdPlanningService', function () {
             [$user, $spouse] = createMarriedCouple();
 
             // Create DC pension for user
-            \Fynla\Packs\Gb\Models\DCPension::factory()->create([
+            DCPension::factory()->create([
                 'user_id' => $user->id,
                 'current_fund_value' => 250000,
                 'scheme_name' => 'Workplace Pension',

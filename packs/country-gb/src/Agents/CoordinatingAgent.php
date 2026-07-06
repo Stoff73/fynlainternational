@@ -6,8 +6,6 @@ namespace Fynla\Packs\Gb\Agents;
 
 use App\Agents\BaseAgent;
 use App\Agents\TaxOptimisationAgent;
-use App\Services\Coordination\CashFlowCoordinator;
-use App\Services\Coordination\CrossModuleStrategyService;
 use App\Services\NetWorth\NetWorthService;
 use App\Services\PrerequisiteGateService;
 use App\Services\WhatIf\WhatIfScenarioService;
@@ -17,7 +15,9 @@ use Fynla\Core\Models\Goal;
 use Fynla\Core\Models\LifeEvent;
 use Fynla\Core\Models\User;
 use Fynla\Packs\Gb\AI\AiToolDefinitions;
+use Fynla\Packs\Gb\Coordination\CashFlowCoordinator;
 use Fynla\Packs\Gb\Coordination\ConflictResolver;
+use Fynla\Packs\Gb\Coordination\CrossModuleStrategyService;
 use Fynla\Packs\Gb\Coordination\HolisticPlanner;
 use Fynla\Packs\Gb\Coordination\PriorityRanker;
 use Fynla\Packs\Gb\Models\BusinessInterest;

@@ -334,9 +334,6 @@ describe('Pack Isolation', function () {
             // keep these in app/Services/Coordination/ until the int-minor
             // money refactor. Pack CoordinatingAgent imports both across
             // the boundary.
-            'App\\Services\\Coordination\\CashFlowCoordinator', // R-14a
-            'App\\Services\\Coordination\\CrossModuleStrategyService', // R-14a
-            'App\\Services\\Coordination\\HouseholdPlanningService', // R-14a
             // R-14a deferred Goals services — float-money signatures (ADR-005)
             // keep these in app/Services/Goals/ until the int-minor money
             // refactor lands. Pack GoalStrategyService imports
@@ -364,10 +361,6 @@ describe('Pack Isolation', function () {
             // SavingsPlanService extend BasePlanService; WhatIfCalculator
             // imports InvestmentPlanService + RetirementPlanService;
             // GoalPlanService instantiates DistributionAccount.
-            'App\\Services\\Plans\\BasePlanService', // R-14a
-            'App\\Services\\Plans\\DistributionAccount', // R-14a
-            'App\\Services\\Plans\\InvestmentPlanService', // R-14a
-            'App\\Services\\Plans\\RetirementPlanService', // R-14a
             // R-14a deferred Protection services — pack ProtectionPlanService
             // imports ComprehensiveProtectionPlanService and
             // ProtectionActionDefinitionService across the boundary; pack
