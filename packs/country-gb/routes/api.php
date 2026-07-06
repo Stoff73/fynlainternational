@@ -656,13 +656,13 @@ Route::middleware('auth:sanctum')->prefix('plans')->group(function () {
     Route::get('/goal/{goalId}', [PlanController::class, 'generateGoalPlan']);
     Route::post('/goal/{goalId}/recalculate', [PlanController::class, 'recalculateGoalPlan']);
     Route::get('/{type}', [PlanController::class, 'generate'])
-        ->where('type', 'investment|protection|retirement|estate');
+        ->where('type', 'savings|investment|protection|retirement|estate');
     Route::post('/{type}/recalculate', [PlanController::class, 'recalculate'])
-        ->where('type', 'investment|protection|retirement|estate');
+        ->where('type', 'savings|investment|protection|retirement|estate');
     Route::delete('/{type}/clear-cache', [PlanController::class, 'clearCache'])
-        ->where('type', 'investment|protection|retirement|estate');
+        ->where('type', 'savings|investment|protection|retirement|estate');
     Route::put('/{type}/funding-source', [PlanController::class, 'updateFundingSource'])
-        ->where('type', 'investment|protection|retirement|estate');
+        ->where('type', 'savings|investment|protection|retirement|estate');
 });
 
 // Holistic Planning routes (coordinating agent)

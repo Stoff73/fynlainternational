@@ -97,3 +97,4 @@ mcp-servers/
 fynlaBrain/
 
 .compound-engineering/*.local.yaml
+test-results/
