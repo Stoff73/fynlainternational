@@ -82,6 +82,12 @@
         </table>
         <p v-else class="text-sm text-neutral-400">No donations recorded yet.</p>
       </section>
+
+      <!-- FAIS + POPIA regulatory disclosures -->
+      <section v-if="compliance" class="text-xs text-neutral-400 space-y-2 px-1">
+        <p><strong>{{ compliance.fais.heading }}.</strong> {{ compliance.fais.body }}</p>
+        <p><strong>{{ compliance.popia.heading }}.</strong> {{ compliance.popia.body }}</p>
+      </section>
     </div>
   </AppLayout>
 </template>
@@ -104,10 +110,13 @@ export default {
       donationsTax: null,
       newDonation: { amount: null, date: '', recipient: '' },
       savingDonation: false,
+      compliance: null,
     };
   },
   async mounted() {
     await this.refreshDonations();
+    const c = await zaEstateService.getCompliance();
+    this.compliance = c.data || null;
   },
   methods: {
     async runSummary() {

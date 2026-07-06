@@ -29,6 +29,10 @@ const zaEstateService = {
     const { data } = await api.get('/za/estate/donations-tax');
     return data;
   },
+  async getCompliance() {
+    const { data } = await api.get('/za/compliance');
+    return data;
+  },
 };
 
 export default zaEstateService;

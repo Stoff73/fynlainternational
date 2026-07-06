@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+use Fynla\Packs\Za\Http\Controllers\ZaComplianceController;
 use Fynla\Packs\Za\Http\Controllers\ZaCoordinationController;
 use Fynla\Packs\Za\Http\Controllers\ZaEstateController;
 use Fynla\Packs\Za\Http\Controllers\ZaExchangeControlController;
@@ -154,4 +155,7 @@ Route::middleware(['auth:sanctum', 'active.jurisdiction', 'pack.enabled:za'])
         Route::prefix('coordination')->as('coordination.')->group(function () {
             Route::get('summary', [ZaCoordinationController::class, 'summary'])->name('summary');
         });
+
+        // SA regulatory compliance disclosures (FAIS + POPIA).
+        Route::get('compliance', [ZaComplianceController::class, 'index'])->name('compliance');
     });
