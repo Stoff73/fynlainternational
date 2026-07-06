@@ -111,6 +111,7 @@ const ZaSavingsDashboard = () => import('@/views/ZA/ZaSavingsDashboard.vue');
 const ZaInvestmentDashboard = () => import('@/views/ZA/ZaInvestmentDashboard.vue');
 const ZaExchangeControlDashboard = () => import('@/views/ZA/ZaExchangeControlDashboard.vue');
 const ZaRetirementDashboard = () => import('@/views/ZA/ZaRetirementDashboard.vue');
+const ZaEstateDashboard = () => import('@/views/ZA/ZaEstateDashboard.vue');
 const SavingsAccountDetail = () => import('@/views/Savings/SavingsAccountDetail.vue');
 const GoalsDashboard = () => import('@/views/Goals/GoalsDashboard.vue');
 const CashOverview = () => import('@/views/NetWorth/CashOverview.vue');
@@ -703,6 +704,19 @@ const routes = [
       breadcrumb: [
         { label: 'Home', path: '/dashboard' },
         { label: 'South Africa — Investments', path: '/za/investments' },
+      ],
+    },
+  },
+  {
+    path: '/za/estate',
+    name: 'za-estate',
+    component: ZaEstateDashboard,
+    meta: {
+      requiresAuth: true,
+      requiresJurisdiction: 'za',
+      breadcrumb: [
+        { label: 'Home', path: '/dashboard' },
+        { label: 'South Africa — Estate Planning', path: '/za/estate' },
       ],
     },
   },

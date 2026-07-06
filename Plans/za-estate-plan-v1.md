@@ -17,7 +17,7 @@ wiring + one persistence model. Mirror `ZaSavingsController`/`ZaProtectionContro
 |-------|-------|------|--------|
 | 1 | `ZaEstateController` (summary + exemptions + cgt-on-death) + routes + Feature tests | LOW | **DONE 2026-07-06** — 3 endpoints wired to ZaEstateEngine, `/api/za/estate/*` pack-registered + auth-guarded, EstateSummaryRequest bounds inputs, 6 Feature tests (duty/spousal/CGT/auth/validation). Arch + ZA suites 422 green. |
 | 2 | `ZaDonation` model + `za_donations` migration + donations CRUD + cumulative→donations-tax | MED | **DONE 2026-07-06** — model + migration + StoreZaDonationRequest; donations list/store/delete (caller-scoped) + donations-tax endpoint aggregating non-exempt donations since the SARS 2018-03-01 anchor into `ZaTaxEngine::calculateDonationsTax`. 4 new tests (tax position, cumulative, IDOR, exempt-flag). |
-| 3 | ZA Estate Vue view + components | MED (no SA persona to E2E; unit/manual) | TODO |
+| 3 | ZA Estate Vue view + service + route | MED | **DONE 2026-07-06** — `zaEstateService` (7 methods), `ZaEstateDashboard.vue` (estate-duty calculator + donations register with running donations-tax + add/remove), route `/za/estate` (requiresJurisdiction: za). Compiles clean (7.4kB chunk); design-guide compliant. Full E2E deferred until SA personas exist (spec §5 crit 6). **SA Estate module complete: backend + UI.** |
 
 ## Per-slice ritual
 git mv/create → strict_types + pack namespace → routes in packs/country-za/routes/api.php
