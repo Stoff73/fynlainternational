@@ -2,15 +2,15 @@
 
 declare(strict_types=1);
 
-use Fynla\Packs\Gb\Models\InvestmentActionDefinition;
 use Fynla\Core\Models\User;
-use App\Services\Investment\FeeAnalyzer;
-use Fynla\Packs\Gb\Investment\InvestmentActionDefinitionService;
-use Fynla\Packs\Gb\Plans\PlanConfigService;
-use Fynla\Packs\Gb\Tax\TaxConfigService;
 use Fynla\Packs\Gb\Database\Seeders\InvestmentActionDefinitionSeeder;
 use Fynla\Packs\Gb\Database\Seeders\PlanConfigurationSeeder;
 use Fynla\Packs\Gb\Database\Seeders\TaxConfigurationSeeder;
+use Fynla\Packs\Gb\Investment\FeeAnalyzer;
+use Fynla\Packs\Gb\Investment\InvestmentActionDefinitionService;
+use Fynla\Packs\Gb\Models\InvestmentActionDefinition;
+use Fynla\Packs\Gb\Plans\PlanConfigService;
+use Fynla\Packs\Gb\Tax\TaxConfigService;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
 uses(RefreshDatabase::class);

@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-use Fynla\Packs\Gb\Models\TaxConfiguration;
 use Fynla\Core\Models\User;
-use App\Services\Investment\ContributionOptimizer;
+use Fynla\Packs\Gb\Investment\ContributionOptimizer;
+use Fynla\Packs\Gb\Models\TaxConfiguration;
 
 beforeEach(function () {
     // Ensure active tax configuration exists

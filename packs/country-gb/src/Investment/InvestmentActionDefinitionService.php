@@ -4,11 +4,10 @@ declare(strict_types=1);
 
 namespace Fynla\Packs\Gb\Investment;
 
-use Fynla\Packs\Gb\Constants\TaxDefaults;
 use Fynla\Core\Models\Goal;
+use Fynla\Packs\Gb\Constants\TaxDefaults;
 use Fynla\Packs\Gb\Models\InvestmentActionDefinition;
 use Fynla\Packs\Gb\Plans\PlanConfigService;
-use App\Services\Investment\FeeAnalyzer;
 use Fynla\Packs\Gb\Tax\TaxConfigService;
 use Fynla\Packs\Gb\Traits\FormatsCurrency;
 

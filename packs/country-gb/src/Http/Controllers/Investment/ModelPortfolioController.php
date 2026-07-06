@@ -6,10 +6,10 @@ namespace Fynla\Packs\Gb\Http\Controllers\Investment;
 
 use App\Http\Controllers\Controller;
 use App\Http\Traits\SanitizedErrorResponse;
-use Fynla\Packs\Gb\Models\Investment\InvestmentAccount;
-use App\Services\Investment\ModelPortfolio\AssetAllocationOptimizer;
+use Fynla\Packs\Gb\Investment\ModelPortfolio\AssetAllocationOptimizer;
 use Fynla\Packs\Gb\Investment\ModelPortfolio\FundSelector;
 use Fynla\Packs\Gb\Investment\ModelPortfolio\ModelPortfolioBuilder;
+use Fynla\Packs\Gb\Models\Investment\InvestmentAccount;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 

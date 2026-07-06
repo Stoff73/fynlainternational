@@ -1,11 +1,6 @@
 parameters:
 	ignoreErrors:
 		-
-			message: "#^Access to an undefined property App\\\\Services\\\\Investment\\\\AssetLocation\\\\AssetLocationOptimizer\\:\\:\\$taxCalculator\\.$#"
-			count: 1
-			path: app/Services/Investment/AssetLocation/AssetLocationOptimizer.php
-
-		-
 			message: "#^Called 'pluck' on Laravel collection, but could have been retrieved as a query\\.$#"
 			count: 1
 			path: core/app/Core/Services/PermissionService.php
@@ -19,6 +14,11 @@ parameters:
 			message: "#^Access to an undefined property Fynla\\\\Packs\\\\Gb\\\\Estate\\\\PersonalizedGiftingStrategyService\\:\\:\\$taxCalculator\\.$#"
 			count: 1
 			path: packs/country-gb/src/Estate/PersonalizedGiftingStrategyService.php
+
+		-
+			message: "#^Access to an undefined property Fynla\\\\Packs\\\\Gb\\\\Investment\\\\AssetLocation\\\\AssetLocationOptimizer\\:\\:\\$taxCalculator\\.$#"
+			count: 1
+			path: packs/country-gb/src/Investment/AssetLocation/AssetLocationOptimizer.php
 
 		-
 			message: "#^Job class App\\\\Jobs\\\\RunMonteCarloSimulation constructor invoked with 2 parameters in App\\\\Jobs\\\\RunMonteCarloSimulation\\:\\:dispatch\\(\\), 6\\-8 required\\.$#"

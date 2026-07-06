@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-use App\Services\Investment\FeeAnalyzer;
+use Fynla\Packs\Gb\Investment\FeeAnalyzer;
 use Fynla\Packs\Gb\Models\Investment\Holding;
 use Fynla\Packs\Gb\Models\Investment\InvestmentAccount;
 use Fynla\Packs\Gb\Risk\RiskPreferenceService;

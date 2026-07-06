@@ -6,10 +6,10 @@ namespace Fynla\Packs\Gb\Http\Controllers\Investment;
 
 use App\Http\Controllers\Controller;
 use App\Http\Traits\SanitizedErrorResponse;
-use App\Services\Investment\Tax\BedAndISACalculator;
+use Fynla\Packs\Gb\Investment\Tax\BedAndISACalculator;
 use Fynla\Packs\Gb\Investment\Tax\CGTHarvestingCalculator;
-use App\Services\Investment\Tax\ISAAllowanceOptimizer;
-use App\Services\Investment\Tax\TaxOptimizationAnalyzer;
+use Fynla\Packs\Gb\Investment\Tax\ISAAllowanceOptimizer;
+use Fynla\Packs\Gb\Investment\Tax\TaxOptimizationAnalyzer;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;

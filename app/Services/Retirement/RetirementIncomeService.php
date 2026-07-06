@@ -4,15 +4,15 @@ declare(strict_types=1);
 
 namespace App\Services\Retirement;
 
+use Fynla\Core\Models\User;
+use Fynla\Packs\Gb\Investment\InvestmentProjectionService;
 use Fynla\Packs\Gb\Models\DBPension;
 use Fynla\Packs\Gb\Models\Investment\InvestmentAccount;
 use Fynla\Packs\Gb\Models\RetirementProfile;
 use Fynla\Packs\Gb\Models\SavingsAccount;
 use Fynla\Packs\Gb\Models\StatePension;
-use Fynla\Core\Models\User;
-use App\Services\Investment\InvestmentProjectionService;
-use Fynla\Packs\Gb\Tax\TaxBandTracker;
 use Fynla\Packs\Gb\Retirement\RequiredCapitalCalculator;
+use Fynla\Packs\Gb\Tax\TaxBandTracker;
 use Fynla\Packs\Gb\Tax\TaxConfigService;
 
 /**

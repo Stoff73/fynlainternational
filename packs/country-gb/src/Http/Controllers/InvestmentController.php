@@ -4,38 +4,42 @@ declare(strict_types=1);
 
 namespace Fynla\Packs\Gb\Http\Controllers;
 
-use Fynla\Packs\Gb\Agents\InvestmentAgent;
 use App\Http\Controllers\Controller;
+use App\Http\Traits\SanitizedErrorResponse;
+use App\Jobs\RunMonteCarloSimulation;
+use Carbon\Carbon;
+use Fynla\Core\Models\User;
+use Fynla\Core\Traits\CalculatesOwnershipShare;
+use Fynla\Packs\Gb\Agents\InvestmentAgent;
+use Fynla\Packs\Gb\Goals\GoalStrategyService;
+use Fynla\Packs\Gb\Goals\LifeEventIntegrationService;
 use Fynla\Packs\Gb\Http\Requests\Investment\AccountProjectionsRequest;
 use Fynla\Packs\Gb\Http\Requests\Investment\ScenarioRequest;
 use Fynla\Packs\Gb\Http\Requests\Investment\StartMonteCarloRequest;
 use Fynla\Packs\Gb\Http\Requests\Investment\StoreHoldingRequest;
+use Fynla\Packs\Gb\Http\Requests\Investment\StoreInvestmentAccountRequest;
 use Fynla\Packs\Gb\Http\Requests\Investment\StoreInvestmentGoalRequest;
 use Fynla\Packs\Gb\Http\Requests\Investment\StoreRiskProfileRequest;
 use Fynla\Packs\Gb\Http\Requests\Investment\UpdateHoldingRequest;
-use Fynla\Packs\Gb\Http\Requests\Investment\UpdateInvestmentGoalRequest;
-use Fynla\Packs\Gb\Http\Requests\Investment\StoreInvestmentAccountRequest;
 use Fynla\Packs\Gb\Http\Requests\Investment\UpdateInvestmentAccountRequest;
+use Fynla\Packs\Gb\Http\Requests\Investment\UpdateInvestmentGoalRequest;
 use Fynla\Packs\Gb\Http\Resources\HoldingResource;
 use Fynla\Packs\Gb\Http\Resources\InvestmentAccountResource;
-use App\Http\Traits\SanitizedErrorResponse;
-use App\Jobs\RunMonteCarloSimulation;
+use Fynla\Packs\Gb\Investment\DiversificationAnalyzer;
+use Fynla\Packs\Gb\Investment\InvestmentProjectionService;
+use Fynla\Packs\Gb\Investment\ReturnCalculationService;
 use Fynla\Packs\Gb\Models\Investment\Holding;
 use Fynla\Packs\Gb\Models\Investment\InvestmentAccount;
 use Fynla\Packs\Gb\Models\Investment\InvestmentGoal;
 use Fynla\Packs\Gb\Models\Investment\RiskProfile;
-use Fynla\Packs\Gb\Goals\GoalStrategyService;
-use Fynla\Packs\Gb\Goals\LifeEventIntegrationService;
-use Fynla\Packs\Gb\Investment\DiversificationAnalyzer;
-use App\Services\Investment\InvestmentProjectionService;
-use Fynla\Packs\Gb\Investment\ReturnCalculationService;
-use Fynla\Core\Traits\CalculatesOwnershipShare;
+use Fynla\Packs\Gb\Models\JointAccountLog;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 use Illuminate\Validation\Rule;
+use Illuminate\Validation\ValidationException;
 
 /**
  * Investment Controller
@@ -228,7 +232,7 @@ class InvestmentController extends Controller
                     'message' => 'Monte Carlo simulation started',
                 ],
             ]);
-        } catch (\Illuminate\Validation\ValidationException $e) {
+        } catch (ValidationException $e) {
             // Re-throw validation exceptions to let Laravel handle them (422 response)
             throw $e;
         } catch (\Exception $e) {
@@ -333,13 +337,13 @@ class InvestmentController extends Controller
             && isset($validated['tax_relief_type'])
             && in_array($validated['tax_relief_type'], ['eis', 'seis', 'sitr'])
             && isset($validated['investment_date'])) {
-            $investmentDate = \Carbon\Carbon::parse($validated['investment_date']);
+            $investmentDate = Carbon::parse($validated['investment_date']);
             $validated['disposal_restriction_date'] = $investmentDate->addYears(3)->format('Y-m-d');
         }
 
         // Auto-calculate CSOP three-year date (grant_date + 3 years)
         if ($validated['account_type'] === 'csop' && isset($validated['grant_date'])) {
-            $grantDate = \Carbon\Carbon::parse($validated['grant_date']);
+            $grantDate = Carbon::parse($validated['grant_date']);
             $validated['csop_three_year_date'] = $grantDate->copy()->addYears(3)->format('Y-m-d');
         }
 
@@ -347,7 +351,7 @@ class InvestmentController extends Controller
         if ($validated['account_type'] === 'saye'
             && isset($validated['scheme_start_date'])
             && isset($validated['scheme_duration_months'])) {
-            $startDate = \Carbon\Carbon::parse($validated['scheme_start_date']);
+            $startDate = Carbon::parse($validated['scheme_start_date']);
             $validated['saye_maturity_date'] = $startDate->copy()->addMonths($validated['scheme_duration_months'])->format('Y-m-d');
         }
 
@@ -491,7 +495,7 @@ class InvestmentController extends Controller
         // Auto-calculate CSOP three-year date on update if grant_date changes
         $accountType = $validated['account_type'] ?? $account->account_type;
         if ($accountType === 'csop' && isset($validated['grant_date'])) {
-            $grantDate = \Carbon\Carbon::parse($validated['grant_date']);
+            $grantDate = Carbon::parse($validated['grant_date']);
             $validated['csop_three_year_date'] = $grantDate->copy()->addYears(3)->format('Y-m-d');
         }
 
@@ -500,7 +504,7 @@ class InvestmentController extends Controller
             $startDate = $validated['scheme_start_date'] ?? $account->scheme_start_date;
             $duration = $validated['scheme_duration_months'] ?? $account->scheme_duration_months;
             if ($startDate && $duration) {
-                $startDateCarbon = \Carbon\Carbon::parse($startDate);
+                $startDateCarbon = Carbon::parse($startDate);
                 $validated['saye_maturity_date'] = $startDateCarbon->copy()->addMonths($duration)->format('Y-m-d');
             }
         }
@@ -911,7 +915,7 @@ class InvestmentController extends Controller
     /**
      * Log joint investment account update for audit trail
      */
-    private function logJointAccountUpdate(\Fynla\Core\Models\User $user, InvestmentAccount $account, array $validated): void
+    private function logJointAccountUpdate(User $user, InvestmentAccount $account, array $validated): void
     {
         $beforeValues = [
             'current_value' => [
@@ -927,7 +931,7 @@ class InvestmentController extends Controller
             ],
         ];
 
-        \Fynla\Packs\Gb\Models\JointAccountLog::logEdit(
+        JointAccountLog::logEdit(
             $user->id,
             $account->joint_owner_id,
             $account,

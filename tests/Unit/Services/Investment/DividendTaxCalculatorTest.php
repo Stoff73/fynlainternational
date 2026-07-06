@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-use App\Services\Investment\DividendTaxCalculator;
+use Fynla\Packs\Gb\Investment\DividendTaxCalculator;
 use Fynla\Packs\Gb\Tax\TaxConfigService;
 
 beforeEach(function () {

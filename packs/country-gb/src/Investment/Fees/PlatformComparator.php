@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Services\Investment\Fees;
+namespace Fynla\Packs\Gb\Investment\Fees;
 
 /**
  * Platform Comparator

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Services\Investment;
+namespace Fynla\Packs\Gb\Investment;
 
 use Fynla\Core\Constants\InvestmentDefaults;
 use Fynla\Packs\Gb\Models\Investment\InvestmentAccount;
@@ -16,8 +16,8 @@ use Illuminate\Support\Collection;
  * Calculates total fees (platform fees, fund OCF, transaction costs) and their impact
  *
  * Consolidated from:
- * - App\Services\Investment\FeeAnalyzer (collection-based methods)
- * - App\Services\Investment\Fees\FeeAnalyzer (comprehensive analysis)
+ * - Fynla\Packs\Gb\Investment\FeeAnalyzer (collection-based methods)
+ * - Fynla\Packs\Gb\Investment\Fees\FeeAnalyzer (comprehensive analysis)
  *
  * Fee Types:
  * - Platform fees (% of portfolio value)

@@ -4,12 +4,11 @@ declare(strict_types=1);
 
 namespace Fynla\Packs\Gb\Investment;
 
-use App\Services\Investment\FeeAnalyzer;
-use App\Services\Investment\Tax\TaxOptimizationAnalyzer;
 use Fynla\Core\Constants\InvestmentDefaults;
 use Fynla\Core\Models\User;
 use Fynla\Packs\Gb\Constants\TaxDefaults;
 use Fynla\Packs\Gb\Investment\Rebalancing\DriftAnalyzer;
+use Fynla\Packs\Gb\Investment\Tax\TaxOptimizationAnalyzer;
 use Fynla\Packs\Gb\Models\Investment\InvestmentAccount;
 use Fynla\Packs\Gb\Risk\RiskPreferenceService;
 use Fynla\Packs\Gb\Tax\TaxConfigService;

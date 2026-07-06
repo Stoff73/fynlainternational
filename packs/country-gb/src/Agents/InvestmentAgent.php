@@ -5,22 +5,21 @@ declare(strict_types=1);
 namespace Fynla\Packs\Gb\Agents;
 
 use App\Agents\BaseAgent;
-
+use Fynla\Core\Models\User;
 use Fynla\Packs\Gb\Constants\TaxDefaults;
+use Fynla\Packs\Gb\Investment\DiversificationAnalyzer;
+use Fynla\Packs\Gb\Investment\FeeAnalyzer;
+use Fynla\Packs\Gb\Investment\InvestmentActionDefinitionService;
+use Fynla\Packs\Gb\Investment\InvestmentProjectionService;
+use Fynla\Packs\Gb\Investment\MonteCarloSimulator;
+use Fynla\Packs\Gb\Investment\PortfolioAnalyzer;
+use Fynla\Packs\Gb\Investment\Recommendation\DataReadinessService;
+use Fynla\Packs\Gb\Investment\SimpleAssetAllocationOptimizer;
+use Fynla\Packs\Gb\Investment\TaxEfficiencyCalculator;
 use Fynla\Packs\Gb\Models\Investment\InvestmentAccount;
 use Fynla\Packs\Gb\Models\Investment\InvestmentGoal;
 use Fynla\Packs\Gb\Models\Investment\RiskProfile;
 use Fynla\Packs\Gb\Models\SavingsAccount;
-use Fynla\Core\Models\User;
-use Fynla\Packs\Gb\Investment\DiversificationAnalyzer;
-use App\Services\Investment\FeeAnalyzer;
-use Fynla\Packs\Gb\Investment\InvestmentActionDefinitionService;
-use App\Services\Investment\InvestmentProjectionService;
-use Fynla\Packs\Gb\Investment\MonteCarloSimulator;
-use App\Services\Investment\PortfolioAnalyzer;
-use Fynla\Packs\Gb\Investment\Recommendation\DataReadinessService;
-use Fynla\Packs\Gb\Investment\SimpleAssetAllocationOptimizer;
-use App\Services\Investment\TaxEfficiencyCalculator;
 use Fynla\Packs\Gb\Tax\TaxConfigService;
 use Illuminate\Support\Facades\Cache;
 

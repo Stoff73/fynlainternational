@@ -8,7 +8,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Traits\SanitizedErrorResponse;
 use Fynla\Packs\Gb\Investment\Performance\AlphaBetaCalculator;
 use Fynla\Packs\Gb\Investment\Performance\BenchmarkComparator;
-use App\Services\Investment\Performance\PerformanceAttributionAnalyzer;
+use Fynla\Packs\Gb\Investment\Performance\PerformanceAttributionAnalyzer;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;

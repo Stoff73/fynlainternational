@@ -203,7 +203,7 @@ describe('Hardcoded Financial Values', function () use ($projectRoot) {
 describe('Strict Types in Service Files', function () {
 
     arch('all investment recommendation services use strict types')
-        ->expect('App\Services\Investment\Recommendation')
+        ->expect('Fynla\Packs\Gb\Investment\Recommendation')
         ->toUseStrictTypes();
 
     arch('all savings services use strict types')

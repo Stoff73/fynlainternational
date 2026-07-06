@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace Fynla\Packs\Gb\Estate;
 
-use App\Services\Investment\InvestmentProjectionService;
 use Carbon\Carbon;
 use Fynla\Core\Models\User;
 use Fynla\Packs\Gb\Goals\LifeEventService;
+use Fynla\Packs\Gb\Investment\InvestmentProjectionService;
 use Fynla\Packs\Gb\Models\DCPension;
 use Fynla\Packs\Gb\Models\Estate\Gift;
 use Fynla\Packs\Gb\Models\Estate\IHTCalculation;

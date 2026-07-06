@@ -96,15 +96,15 @@ describe('Pack Isolation', function () {
             $packDir.DIRECTORY_SEPARATOR.'Tax'.DIRECTORY_SEPARATOR,
             // R-6a: Retirement clean services moved into the GB pack still
             // collaborate with the 8 deferred App\Services\Retirement\* peers
-            // (R-14a) and with App\Services\Investment\* peers (R-6b),
+            // (R-14a) and with Fynla\Packs\Gb\Investment\* peers (R-6b),
             // Fynla\Packs\Gb\Settings\AssumptionsService (R-7), and
             // App\Services\UserProfile\UserProfileService (R-7). Pinned by
             // allow-list below.
             $packDir.DIRECTORY_SEPARATOR.'Retirement'.DIRECTORY_SEPARATOR,
             // R-6b: Investment services move in 4 sub-commits. Top-level
-            // (R-6b-i) imports the 19 deferred App\Services\Investment\*
-            // R-14a peers, plus App\Services\Investment\Rebalancing\*
-            // (R-6b-iii target), App\Services\Investment\Utilities\* (R-6b-iv
+            // (R-6b-i) imports the 19 deferred Fynla\Packs\Gb\Investment\*
+            // R-14a peers, plus Fynla\Packs\Gb\Investment\Rebalancing\*
+            // (R-6b-iii target), Fynla\Packs\Gb\Investment\Utilities\* (R-6b-iv
             // target), App\Jobs\RunMonteCarloSimulation,
             // Fynla\Packs\Gb\Plans\PlanConfigService, and
             // Fynla\Core\Services\MonteCarloEngine. Pinned by allow-list.
@@ -138,7 +138,7 @@ describe('Pack Isolation', function () {
             // 3 R-14a deferrals (CashFlowCoordinator, CrossModuleStrategyService,
             // HouseholdPlanningService) stay in app/Services/Coordination/.
             // Pack RecommendationsAggregatorService imports
-            // App\Services\Investment\PortfolioAnalyzer (R-14a) across the
+            // Fynla\Packs\Gb\Investment\PortfolioAnalyzer (R-14a) across the
             // boundary; pinned by allow-list below.
             $packDir.DIRECTORY_SEPARATOR.'Coordination'.DIRECTORY_SEPARATOR,
             // R-17 batch 2: Risk services relocated into the pack.
@@ -352,27 +352,11 @@ describe('Pack Isolation', function () {
             // (ADR-005) keep these in app/Services/Investment/ until the
             // int-minor money refactor. Pack code that collaborates with
             // them imports across the boundary.
-            'App\\Services\\Investment\\ContributionOptimizer', // R-14a
-            'App\\Services\\Investment\\FeeAnalyzer', // R-14a
-            'App\\Services\\Investment\\InvestmentProjectionService', // R-14a
-            'App\\Services\\Investment\\PortfolioAnalyzer', // R-14a
-            'App\\Services\\Investment\\TaxEfficiencyCalculator', // R-14a
-            'App\\Services\\Investment\\AssetLocation\\AssetLocationOptimizer', // R-14a
-            'App\\Services\\Investment\\Fees\\OCFImpactCalculator', // R-14a
-            'App\\Services\\Investment\\Fees\\PlatformComparator', // R-14a
-            'App\\Services\\Investment\\Goals\\GoalProbabilityCalculator', // R-14a
-            'App\\Services\\Investment\\Goals\\GoalProgressAnalyzer', // R-14a
-            'App\\Services\\Investment\\Goals\\ShortfallAnalyzer', // R-14a
-            'App\\Services\\Investment\\ModelPortfolio\\AssetAllocationOptimizer', // R-14a
-            'App\\Services\\Investment\\Performance\\PerformanceAttributionAnalyzer', // R-14a
-            'App\\Services\\Investment\\Tax\\BedAndISACalculator', // R-14a
-            'App\\Services\\Investment\\Tax\\ISAAllowanceOptimizer', // R-14a
-            'App\\Services\\Investment\\Tax\\TaxOptimizationAnalyzer', // R-14a
             // R-6b complete: all 37 clean Investment services have relocated
             // (R-6b-i top-level, R-6b-ii Analytics + AssetLocation,
             // R-6b-iii ModelPortfolio + Performance + Rebalancing,
             // R-6b-iv Recommendation + Tax + Utilities). The 19 remaining
-            // App\Services\Investment\* entries above are R-14a deferrals
+            // Fynla\Packs\Gb\Investment\* entries above are R-14a deferrals
             // pinned by the int-minor money refactor.
             // App\Jobs\* — Job dispatched by ScenarioService when running
             // Monte Carlo simulations. Stays in app/Jobs after R-6b.

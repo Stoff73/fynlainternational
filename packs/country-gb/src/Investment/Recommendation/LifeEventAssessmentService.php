@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Services\Investment\Recommendation;
+namespace Fynla\Packs\Gb\Investment\Recommendation;
 
 use Carbon\Carbon;
 

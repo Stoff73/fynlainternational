@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace App\Services\Investment;
+namespace Fynla\Packs\Gb\Investment;
 
-use App\Services\Investment\Goals\GoalProbabilityCalculator;
-use App\Services\Investment\Tax\ISAAllowanceOptimizer;
+use Fynla\Packs\Gb\Investment\Goals\GoalProbabilityCalculator;
+use Fynla\Packs\Gb\Investment\Tax\ISAAllowanceOptimizer;
 use Fynla\Core\Models\User;
 use Fynla\Packs\Gb\Models\Investment\InvestmentAccount;
 use Fynla\Packs\Gb\Models\Investment\InvestmentGoal;

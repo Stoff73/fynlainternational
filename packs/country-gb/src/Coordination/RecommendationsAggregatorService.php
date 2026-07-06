@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace Fynla\Packs\Gb\Coordination;
 
+use Fynla\Core\Models\User;
 use Fynla\Packs\Gb\Agents\ProtectionAgent;
 use Fynla\Packs\Gb\Agents\RetirementAgent;
 use Fynla\Packs\Gb\Agents\SavingsAgent;
-use Fynla\Core\Models\User;
 use Fynla\Packs\Gb\Estate\ComprehensiveEstatePlanService;
-use App\Services\Investment\PortfolioAnalyzer;
+use Fynla\Packs\Gb\Investment\PortfolioAnalyzer;
 use Illuminate\Support\Facades\Log;
 
 class RecommendationsAggregatorService

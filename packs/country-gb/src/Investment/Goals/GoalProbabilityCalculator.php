@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Services\Investment\Goals;
+namespace Fynla\Packs\Gb\Investment\Goals;
 
 /**
  * Goal Probability Calculator

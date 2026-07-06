@@ -8,7 +8,7 @@ namespace Fynla\Packs\Gb\Investment\Analytics;
  * Portfolio Statistics Calculator
  * Calculates comprehensive risk and return metrics for portfolios
  *
- * Moved from: App\Services\Investment\EfficientFrontier\PortfolioStatisticsCalculator
+ * Moved from: Fynla\Packs\Gb\Investment\EfficientFrontier\PortfolioStatisticsCalculator
  *
  * Metrics:
  * - Expected Return: Weighted average of asset returns

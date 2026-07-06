@@ -5,7 +5,8 @@ declare(strict_types=1);
 namespace Fynla\Packs\Gb\Http\Controllers\Investment;
 
 use App\Http\Controllers\Controller;
-use App\Services\Investment\ContributionOptimizer;
+use Fynla\Packs\Gb\Investment\ContributionOptimizer;
+use Fynla\Packs\Gb\Models\Investment\InvestmentAccount;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
@@ -89,7 +90,7 @@ class ContributionOptimizerController extends Controller
 
         // Get current portfolio value
         $user = $request->user();
-        $currentValue = \Fynla\Packs\Gb\Models\Investment\InvestmentAccount::where('user_id', $user->id)
+        $currentValue = InvestmentAccount::where('user_id', $user->id)
             ->sum('current_value');
 
         $result = $this->contributionOptimizer->optimizeContributions(

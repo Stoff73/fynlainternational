@@ -36,6 +36,30 @@ describe('No Float Money', function () {
             // with its pre-existing float OCF helper. Carried ADR-005 debt, not
             // new float-money code. Int-minor refactor pending.
             'packs/country-gb/src/Settings/AssumptionsService.php:calculateHoldingsWeightedOcf',
+            // R-17 batch 3: the 19 Investment services relocated wholesale from
+            // app/Services/Investment — the R-14a float-money deferral set
+            // (51 pre-existing float signatures). File-level "<path>:*" pins
+            // carry that debt with the move; do NOT add new files here without
+            // an ADR-005 justification. Int-minor refactor closes these.
+            'packs/country-gb/src/Investment/AssetLocation/AssetLocationOptimizer.php:*',
+            'packs/country-gb/src/Investment/ContributionOptimizer.php:*',
+            'packs/country-gb/src/Investment/DividendTaxCalculator.php:*',
+            'packs/country-gb/src/Investment/FeeAnalyzer.php:*',
+            'packs/country-gb/src/Investment/Fees/OCFImpactCalculator.php:*',
+            'packs/country-gb/src/Investment/Fees/PlatformComparator.php:*',
+            'packs/country-gb/src/Investment/Goals/GoalProbabilityCalculator.php:*',
+            'packs/country-gb/src/Investment/Goals/GoalProgressAnalyzer.php:*',
+            'packs/country-gb/src/Investment/Goals/ShortfallAnalyzer.php:*',
+            'packs/country-gb/src/Investment/InvestmentProjectionService.php:*',
+            'packs/country-gb/src/Investment/ModelPortfolio/AssetAllocationOptimizer.php:*',
+            'packs/country-gb/src/Investment/Performance/PerformanceAttributionAnalyzer.php:*',
+            'packs/country-gb/src/Investment/PortfolioAnalyzer.php:*',
+            'packs/country-gb/src/Investment/Recommendation/LifeEventAssessmentService.php:*',
+            'packs/country-gb/src/Investment/Recommendation/UserContextBuilder.php:*',
+            'packs/country-gb/src/Investment/Tax/BedAndISACalculator.php:*',
+            'packs/country-gb/src/Investment/Tax/ISAAllowanceOptimizer.php:*',
+            'packs/country-gb/src/Investment/Tax/TaxOptimizationAnalyzer.php:*',
+            'packs/country-gb/src/Investment/TaxEfficiencyCalculator.php:*',
         ];
 
         $violations = [];
@@ -70,7 +94,7 @@ describe('No Float Money', function () {
                         $relPath = str_replace(base_path().'/', '', $path);
                         $methodName = $m[1] ?? '';
                         $key = "{$relPath}:{$methodName}";
-                        if (in_array($key, $allowed, true)) {
+                        if (in_array($key, $allowed, true) || in_array("{$relPath}:*", $allowed, true)) {
                             continue;
                         }
                         $violations[] = "{$relPath}:".($lineNum + 1).": {$trimmed}";

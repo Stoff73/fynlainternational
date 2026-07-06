@@ -6,10 +6,10 @@ namespace Fynla\Packs\Gb\Http\Controllers\Investment;
 
 use App\Http\Controllers\Controller;
 use App\Http\Traits\SanitizedErrorResponse;
+use Fynla\Packs\Gb\Investment\FeeAnalyzer;
+use Fynla\Packs\Gb\Investment\Fees\OCFImpactCalculator;
+use Fynla\Packs\Gb\Investment\Fees\PlatformComparator;
 use Fynla\Packs\Gb\Models\Investment\Holding;
-use App\Services\Investment\FeeAnalyzer;
-use App\Services\Investment\Fees\OCFImpactCalculator;
-use App\Services\Investment\Fees\PlatformComparator;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;

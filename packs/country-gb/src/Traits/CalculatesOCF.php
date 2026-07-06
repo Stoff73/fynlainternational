@@ -20,8 +20,8 @@ use Illuminate\Support\Collection;
  * money keyword — so the trait can safely live inside `packs/`.
  *
  * Used by:
- * - App\Services\Investment\FeeAnalyzer
- * - App\Services\Investment\Fees\OCFImpactCalculator
+ * - Fynla\Packs\Gb\Investment\FeeAnalyzer
+ * - Fynla\Packs\Gb\Investment\Fees\OCFImpactCalculator
  */
 trait CalculatesOCF
 {
@@ -31,8 +31,8 @@ trait CalculatesOCF
      * Each holding's OCF is weighted by its proportion of the total portfolio
      * value. Holdings without an explicit OCF are estimated via estimateOCF().
      *
-     * @param  Collection  $holdings         Portfolio holdings (must have current_value, ocf, asset_type)
-     * @param  float       $portfolioPounds  Total portfolio value in pounds
+     * @param  Collection  $holdings  Portfolio holdings (must have current_value, ocf, asset_type)
+     * @param  float  $portfolioPounds  Total portfolio value in pounds
      * @return float Weighted OCF as a decimal (e.g. 0.005 = 0.5%)
      */
     protected function calculateWeightedOCF(Collection $holdings, float $portfolioPounds): float
@@ -75,9 +75,9 @@ trait CalculatesOCF
      * and a reduced fee rate, compounded over the given number of years.
      *
      * @param  float  $portfolioPounds  Current portfolio value in pounds
-     * @param  float  $annualSavings    Annual fee savings in currency
-     * @param  int    $years            Projection period in years
-     * @param  float  $returnRate       Expected gross annual return as a decimal (e.g. 0.06 = 6%)
+     * @param  float  $annualSavings  Annual fee savings in currency
+     * @param  int  $years  Projection period in years
+     * @param  float  $returnRate  Expected gross annual return as a decimal (e.g. 0.06 = 6%)
      * @return float Projected compound savings over the period
      */
     protected function calculateCompoundSavings(float $portfolioPounds, float $annualSavings, int $years, float $returnRate): float

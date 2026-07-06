@@ -2,14 +2,14 @@
 
 declare(strict_types=1);
 
+use Fynla\Core\Models\User;
 use Fynla\Packs\Gb\Agents\ProtectionAgent;
 use Fynla\Packs\Gb\Agents\RetirementAgent;
 use Fynla\Packs\Gb\Agents\SavingsAgent;
-use Fynla\Core\Models\User;
 use Fynla\Packs\Gb\Coordination\RecommendationPersonaliser;
 use Fynla\Packs\Gb\Coordination\RecommendationsAggregatorService;
 use Fynla\Packs\Gb\Estate\ComprehensiveEstatePlanService;
-use App\Services\Investment\PortfolioAnalyzer;
+use Fynla\Packs\Gb\Investment\PortfolioAnalyzer;
 
 beforeEach(function () {
     $this->user = User::factory()->create();
@@ -334,7 +334,7 @@ it('calculates correct statistics in getSummary', function () {
 });
 
 it('handles service exceptions gracefully during aggregation', function () {
-    $this->protectionEngine->shouldReceive('analyze')->andThrow(new \Exception('Protection service error'));
+    $this->protectionEngine->shouldReceive('analyze')->andThrow(new Exception('Protection service error'));
 
     $this->savingsCalculator->shouldReceive('analyze')->andReturn([
         'emergency_fund' => [

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Services\Investment\Performance;
+namespace Fynla\Packs\Gb\Investment\Performance;
 
 use Fynla\Packs\Gb\Models\Investment\InvestmentAccount;
 use Fynla\Packs\Gb\Investment\Performance\AlphaBetaCalculator;

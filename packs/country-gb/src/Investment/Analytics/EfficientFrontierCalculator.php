@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace Fynla\Packs\Gb\Investment\Analytics;
 
-use Fynla\Packs\Gb\Models\Investment\InvestmentAccount;
 use Fynla\Packs\Gb\Investment\Utilities\MatrixOperations;
 use Fynla\Packs\Gb\Investment\Utilities\StatisticalFunctions;
+use Fynla\Packs\Gb\Models\Investment\InvestmentAccount;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Log;
 
@@ -15,8 +15,8 @@ use Illuminate\Support\Facades\Log;
  * Implements Modern Portfolio Theory (MPT) calculations
  *
  * Consolidated from:
- * - App\Services\Investment\Analytics\EfficientFrontierCalculator (user holdings-based)
- * - App\Services\Investment\EfficientFrontier\EfficientFrontierCalculator (asset class-based)
+ * - Fynla\Packs\Gb\Investment\Analytics\EfficientFrontierCalculator (user holdings-based)
+ * - Fynla\Packs\Gb\Investment\EfficientFrontier\EfficientFrontierCalculator (asset class-based)
  *
  * Supports two modes:
  * 1. User Portfolio Mode: Analyzes actual user holdings with DI services

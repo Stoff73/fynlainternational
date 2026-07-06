@@ -4,12 +4,15 @@ declare(strict_types=1);
 
 namespace Fynla\Packs\Gb\Http\Controllers\Investment;
 
-use Fynla\Packs\Gb\Constants\TaxDefaults;
 use App\Http\Controllers\Controller;
 use App\Http\Traits\SanitizedErrorResponse;
+use Carbon\Carbon;
+use Fynla\Core\Models\User;
+use Fynla\Packs\Gb\Constants\TaxDefaults;
 use Fynla\Packs\Gb\Investment\AssetLocation\AccountTypeRecommender;
-use App\Services\Investment\AssetLocation\AssetLocationOptimizer;
+use Fynla\Packs\Gb\Investment\AssetLocation\AssetLocationOptimizer;
 use Fynla\Packs\Gb\Investment\AssetLocation\TaxDragCalculator;
+use Fynla\Packs\Gb\Models\Investment\Holding;
 use Fynla\Packs\Gb\Tax\TaxConfigService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -189,7 +192,7 @@ class AssetLocationController extends Controller
 
         try {
             // SECURITY: Fetch with ownership check to prevent information disclosure
-            $holding = \Fynla\Packs\Gb\Models\Investment\Holding::whereHas('investmentAccount', function ($query) use ($user) {
+            $holding = Holding::whereHas('investmentAccount', function ($query) use ($user) {
                 $query->where('user_id', $user->id);
             })->where('id', $validated['holding_id'])->firstOrFail();
 
@@ -236,14 +239,14 @@ class AssetLocationController extends Controller
     /**
      * Build default tax profile for user
      *
-     * @param  \Fynla\Core\Models\User  $user  User
+     * @param  User  $user  User
      * @return array Tax profile
      */
     private function buildDefaultTaxProfile($user): array
     {
         $annualIncome = $user->gross_annual_income ?? 50000;
         $age = $user->date_of_birth
-            ? \Carbon\Carbon::parse($user->date_of_birth)->age
+            ? Carbon::parse($user->date_of_birth)->age
             : 45;
 
         $incomeTax = $this->taxConfig->getIncomeTax();

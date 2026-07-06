@@ -6,10 +6,10 @@ namespace Fynla\Packs\Gb\Http\Controllers\Investment;
 
 use App\Http\Controllers\Controller;
 use App\Http\Traits\SanitizedErrorResponse;
+use Fynla\Packs\Gb\Investment\Goals\GoalProbabilityCalculator;
+use Fynla\Packs\Gb\Investment\Goals\GoalProgressAnalyzer;
+use Fynla\Packs\Gb\Investment\Goals\ShortfallAnalyzer;
 use Fynla\Packs\Gb\Models\Investment\InvestmentGoal;
-use App\Services\Investment\Goals\GoalProbabilityCalculator;
-use App\Services\Investment\Goals\GoalProgressAnalyzer;
-use App\Services\Investment\Goals\ShortfallAnalyzer;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;

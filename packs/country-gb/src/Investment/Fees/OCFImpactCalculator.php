@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Services\Investment\Fees;
+namespace Fynla\Packs\Gb\Investment\Fees;
 
 use Fynla\Core\Constants\InvestmentDefaults;
 use Fynla\Packs\Gb\Models\Investment\Holding;
