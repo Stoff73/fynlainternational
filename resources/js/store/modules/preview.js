@@ -256,6 +256,11 @@ const actions = {
                 commit('auth/setToken', token, { root: true });
                 commit('auth/setUser', response.data.user, { root: true });
 
+                // Hydrate jurisdiction state (active_jurisdictions etc.) via the
+                // canonical session fetch — the preview login response doesn't
+                // carry it, and the sidebar adapts to the persona's jurisdictions.
+                await dispatch('auth/fetchUser', null, { root: true }).catch(() => {});
+
                 // Set the life stage from the persona mapping
                 dispatch('lifeStage/setStageFromPersona', personaId, { root: true });
 
@@ -311,6 +316,9 @@ const actions = {
                 // Update auth state with the new preview user
                 commit('auth/setUser', response.data.user, { root: true });
                 commit('auth/setToken', token, { root: true });
+
+                // Hydrate jurisdiction state for the new persona (see enterPreviewMode).
+                await dispatch('auth/fetchUser', null, { root: true }).catch(() => {});
 
                 // Set the life stage from the persona mapping
                 dispatch('lifeStage/setStageFromPersona', personaId, { root: true });
@@ -379,13 +387,14 @@ const actions = {
     /**
      * Exit preview mode
      */
-    async exitPreview({ commit, state }) {
+    async exitPreview({ commit, state, dispatch }) {
         const referrer = state.previewReferrer || '/';
 
         // Clear preview auth state FIRST to prevent 401 interceptor redirects
         await removeToken();
         commit('auth/setUser', null, { root: true });
         commit('auth/setToken', null, { root: true });
+        dispatch('jurisdiction/reset', null, { root: true }).catch(() => {});
         commit('SET_PREVIEW_REFERRER', null);
 
         // Call the preview exit endpoint (after clearing local state)

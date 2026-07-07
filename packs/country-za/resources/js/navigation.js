@@ -1,20 +1,23 @@
 /**
- * ZA pack — sidebar navigation manifest.
+ * ZA pack — navigation manifest.
  *
- * Returns the South Africa modules contributed to the sidebar. Unlike the
- * GB pack (whose UK sidebar is currently hardcoded in `SideMenu.vue`), the
- * ZA section is data-driven (per WS 1.2b) — `SideMenu.vue` renders one
- * `<SideMenuItem v-for="mod in zaModules">` for each entry returned here.
+ * Declares the ZA modules and their routes. The sidebar NEVER shows a
+ * country section, header, or link — its shape is fixed and content
+ * adapts (see `sidebar_architecture_pattern`): SideMenu.vue routes the
+ * existing module items to these /za/* dashboards when the user is
+ * ZA-only, and shows SA-only modules (Exchange Control) as ordinary flat
+ * items when ZA is active. Jurisdictions activate automatically — geo at
+ * registration or cross-border asset entry — never via a nav link.
+ *
+ * This manifest currently feeds `jurisdiction/sidebarModules` (module
+ * keys) and documents the pack's route surface for WS R-12.
  *
  * Module entry shape: `{ key, label, route, icon, section }`
  *   - key: stable identifier, prefix `za-` to avoid UK name collision
  *   - label: user-facing label (British spelling; TFSA abbreviation allowed)
  *   - route: absolute SPA path under `/za/*`
  *   - icon: name from `resources/js/components/SideMenuIcon.vue` allow-list
- *   - section: section key (must exist in `SideMenu.vue` expandedSections)
- *
- * Later SA workstreams (WS 1.3c / 1.4d / 1.5b / 1.6b) append entries to
- * the `modules` array and the sidebar item appears with no further edits.
+ *   - section: existing SideMenu section the module belongs to
  */
 export default function navigation() {
     return {
@@ -25,35 +28,35 @@ export default function navigation() {
                 label: 'Savings (TFSA)',
                 route: '/za/savings',
                 icon: 'banknotes',
-                section: 'zaSection',
+                section: 'cashManagement',
             },
             {
                 key: 'za-investment',
                 label: 'Investments',
                 route: '/za/investments',
                 icon: 'trending-up',
-                section: 'zaSection',
+                section: 'finances',
             },
             {
                 key: 'za-exchange-control',
                 label: 'Exchange Control',
                 route: '/za/exchange-control',
                 icon: 'map',
-                section: 'zaSection',
+                section: 'finances',
             },
             {
                 key: 'za-retirement',
                 label: 'Retirement',
                 route: '/za/retirement',
                 icon: 'briefcase',
-                section: 'zaSection',
+                section: 'finances',
             },
             {
                 key: 'za-protection',
                 label: 'Protection',
                 route: '/za/protection',
                 icon: 'shield',
-                section: 'zaSection',
+                section: 'family',
             },
             // WS 1.6b will add za-estate here
         ],

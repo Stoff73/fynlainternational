@@ -60,15 +60,16 @@
 
         <!-- Cash Management -->
         <SideMenuSection label="Cash Management" :collapsed="effectiveCollapsed" :expanded="isSectionExpanded('cashManagement')" @toggle="toggleSection('cashManagement')">
-          <SideMenuItem icon="banknotes" label="Bank Accounts" to="/net-worth/cash" :collapsed="effectiveCollapsed" :active="isActive('/net-worth/cash')" :active-colour="currentStage ? stageColour : ''" @navigate="closeMobile" />
+          <SideMenuItem icon="banknotes" :label="zaOnly ? 'Savings (TFSA)' : 'Bank Accounts'" :to="zaOnly ? '/za/savings' : '/net-worth/cash'" :collapsed="effectiveCollapsed" :active="isActive(zaOnly ? '/za/savings' : '/net-worth/cash')" :active-colour="currentStage ? stageColour : ''" @navigate="closeMobile" />
           <SideMenuItem icon="currency-pound" label="Income" :to="{ path: '/valuable-info', query: { section: 'income' } }" :collapsed="effectiveCollapsed" :active="isValuableInfoSection('income')" :active-colour="currentStage ? stageColour : ''" @navigate="closeMobile" />
           <SideMenuItem icon="arrow-up-tray" label="Expenditure" :to="{ path: '/valuable-info', query: { section: 'expenditure' } }" :collapsed="effectiveCollapsed" :active="isValuableInfoSection('expenditure')" :active-colour="currentStage ? stageColour : ''" @navigate="closeMobile" />
         </SideMenuSection>
 
         <!-- Finances -->
         <SideMenuSection label="Finances" :collapsed="effectiveCollapsed" :expanded="isSectionExpanded('finances')" @toggle="toggleSection('finances')">
-          <SideMenuItem icon="trending-up" label="Investments" to="/net-worth/investments" :collapsed="effectiveCollapsed" :active="isInvestmentsActive" :active-colour="currentStage ? stageColour : ''" @navigate="closeMobile" />
-          <SideMenuItem icon="clock" label="Retirement" to="/net-worth/retirement" :collapsed="effectiveCollapsed" :active="isActive('/net-worth/retirement')" :active-colour="currentStage ? stageColour : ''" @navigate="closeMobile" />
+          <SideMenuItem icon="trending-up" label="Investments" :to="zaOnly ? '/za/investments' : '/net-worth/investments'" :collapsed="effectiveCollapsed" :active="zaOnly ? isActive('/za/investments') : isInvestmentsActive" :active-colour="currentStage ? stageColour : ''" @navigate="closeMobile" />
+          <SideMenuItem icon="clock" label="Retirement" :to="zaOnly ? '/za/retirement' : '/net-worth/retirement'" :collapsed="effectiveCollapsed" :active="isActive(zaOnly ? '/za/retirement' : '/net-worth/retirement')" :active-colour="currentStage ? stageColour : ''" @navigate="closeMobile" />
+          <SideMenuItem v-if="zaActive" icon="map" label="Exchange Control" to="/za/exchange-control" :collapsed="effectiveCollapsed" :active="isActive('/za/exchange-control')" :active-colour="currentStage ? stageColour : ''" @navigate="closeMobile" />
           <SideMenuItem icon="home-modern" label="Property" to="/net-worth/property" :collapsed="effectiveCollapsed" :active="isActive('/net-worth/property')" :active-colour="currentStage ? stageColour : ''" :locked="isLocked('standard')" requiredPlan="Standard" @navigate="closeMobile" />
           <SideMenuItem icon="credit-card" label="Liabilities" to="/net-worth/liabilities" :collapsed="effectiveCollapsed" :active="isLiabilitiesActive" :active-colour="currentStage ? stageColour : ''" :locked="isLocked('standard')" requiredPlan="Standard" @navigate="closeMobile" />
           <SideMenuItem icon="cube" label="Personal Valuables" to="/net-worth/chattels" :collapsed="effectiveCollapsed" :active="isActive('/net-worth/chattels')" :active-colour="currentStage ? stageColour : ''" :locked="isLocked('standard')" requiredPlan="Standard" @navigate="closeMobile" />
@@ -78,11 +79,11 @@
 
         <!-- Family (has spouse) / Admin (no spouse) -->
         <SideMenuSection :label="hasSpouse ? 'Family' : 'Personal Affairs'" :collapsed="effectiveCollapsed" :expanded="isSectionExpanded('family')" @toggle="toggleSection('family')">
-          <SideMenuItem icon="shield-check" label="Protection" to="/protection" :collapsed="effectiveCollapsed" :active="isActive('/protection')" :active-colour="currentStage ? stageColour : ''" @navigate="closeMobile" />
+          <SideMenuItem icon="shield-check" label="Protection" :to="zaOnly ? '/za/protection' : '/protection'" :collapsed="effectiveCollapsed" :active="isActive(zaOnly ? '/za/protection' : '/protection')" :active-colour="currentStage ? stageColour : ''" @navigate="closeMobile" />
           <SideMenuItem icon="document-check" label="Will" to="/estate/will-builder" :collapsed="effectiveCollapsed" :active="isWillBuilderActive" :active-colour="currentStage ? stageColour : ''" :locked="isLocked('pro')" requiredPlan="Pro" @navigate="closeMobile" />
           <SideMenuItem icon="envelope" :label="hasSpouse ? 'Letter to Spouse' : 'Expression of Wishes'" :to="{ path: '/valuable-info', query: { section: 'letter' } }" :collapsed="effectiveCollapsed" :active="isValuableInfoSection('letter')" :active-colour="currentStage ? stageColour : ''" :locked="isLocked('standard')" requiredPlan="Standard" @navigate="closeMobile" />
           <SideMenuItem icon="building-library" label="Trusts" to="/trusts" :collapsed="effectiveCollapsed" :active="isActive('/trusts')" :active-colour="currentStage ? stageColour : ''" :locked="isLocked('pro')" requiredPlan="Pro" @navigate="closeMobile" />
-          <SideMenuItem icon="document-text" label="Estate Planning" to="/estate" :collapsed="effectiveCollapsed" :active="isEstateActive" :active-colour="currentStage ? stageColour : ''" :locked="isLocked('pro')" requiredPlan="Pro" @navigate="closeMobile" />
+          <SideMenuItem icon="document-text" label="Estate Planning" :to="zaOnly ? '/za/estate' : '/estate'" :collapsed="effectiveCollapsed" :active="zaOnly ? isActive('/za/estate') : isEstateActive" :active-colour="currentStage ? stageColour : ''" :locked="isLocked('pro')" requiredPlan="Pro" @navigate="closeMobile" />
           <SideMenuItem icon="key" label="Power of Attorney" to="/estate/power-of-attorney" :collapsed="effectiveCollapsed" :active="isLpaActive" :active-colour="currentStage ? stageColour : ''" :locked="isLocked('pro')" requiredPlan="Pro" @navigate="closeMobile" />
         </SideMenuSection>
 
@@ -95,24 +96,6 @@
           <SideMenuItem icon="flag" label="Goals" to="/goals" :collapsed="effectiveCollapsed" :active="isGoalsOverviewActive" :active-colour="currentStage ? stageColour : ''" @navigate="closeMobile" />
           <SideMenuItem icon="calendar" label="Life Events" :to="{ path: '/goals', query: { tab: 'events' } }" :collapsed="effectiveCollapsed" :active="isGoalsEventsActive" :active-colour="currentStage ? stageColour : ''" @navigate="closeMobile" />
           <SideMenuItem icon="lightning-bolt" label="Actions" to="/actions" :collapsed="effectiveCollapsed" :active="isActive('/actions')" :active-colour="currentStage ? stageColour : ''" @navigate="closeMobile" />
-        </SideMenuSection>
-
-        <!-- South Africa — data-driven from jurisdiction/zaModules (WS 1.2b).
-             Later SA UI workstreams (1.3c, 1.4d, 1.5b, 1.6b) append entries
-             to packs/country-za/resources/js/navigation.js and the items
-             appear here without further edits. -->
-        <SideMenuSection v-if="hasZa" label="South Africa" :collapsed="effectiveCollapsed" :expanded="isSectionExpanded('zaSection')" @toggle="toggleSection('zaSection')">
-          <SideMenuItem
-            v-for="mod in zaModules"
-            :key="mod.key"
-            :icon="mod.icon"
-            :label="mod.label"
-            :to="{ path: mod.route }"
-            :collapsed="effectiveCollapsed"
-            :active="currentPath.startsWith(mod.route)"
-            :active-colour="currentStage ? stageColour : ''"
-            @navigate="closeMobile"
-          />
         </SideMenuSection>
 
         <!-- Advisor (conditional) -->
@@ -238,13 +221,14 @@ export default {
     const isAdmin = computed(() => store.getters['auth/isAdmin']);
     const isAdvisor = computed(() => store.getters['auth/isAdvisor']);
     const isPreviewMode = computed(() => store.getters['preview/isPreviewMode']);
-    // WS 1.2b — data-driven ZA sidebar. zaModules returns config objects
-    // ({ key, label, route, icon, section }) from the jurisdiction store.
-    // Later SA workstreams append entries to the ZA pack navigation
-    // manifest (packs/country-za/resources/js/navigation.js) and the
-    // sidebar picks them up without further edits here.
-    const zaModules = computed(() => store.getters['jurisdiction/zaModules']);
-    const hasZa = computed(() => zaModules.value.length > 0);
+    // Jurisdiction-adaptive sidebar: the sidebar shape is FIXED — never a
+    // country section, header, or link. Content adapts: a ZA-only user's
+    // module items route to the /za/* dashboards; Exchange Control (an
+    // SA-only module) appears whenever ZA is active. Jurisdictions activate
+    // automatically (geo at registration, cross-border asset entry).
+    const zaActive = computed(() => store.getters['jurisdiction/hasJurisdiction']('za'));
+    const gbActive = computed(() => store.getters['jurisdiction/hasJurisdiction']('gb'));
+    const zaOnly = computed(() => zaActive.value && !gbActive.value);
     const hasSpouse = computed(() => {
       if (isPreviewMode.value) {
         return store.getters['preview/hasSpouse'];
@@ -453,9 +437,17 @@ export default {
       if (path.startsWith('/admin')) {
         return 'adminPanel';
       }
-      // WS 1.2b — auto-expand ZA section when on any /za/* route.
-      if (path.startsWith('/za/')) {
-        return 'zaSection';
+      // ZA dashboards live inside the ordinary sections — no country section.
+      if (path.startsWith('/za/savings')) {
+        return 'cashManagement';
+      }
+      if (path.startsWith('/za/investments') ||
+          path.startsWith('/za/retirement') ||
+          path.startsWith('/za/exchange-control')) {
+        return 'finances';
+      }
+      if (path.startsWith('/za/protection') || path.startsWith('/za/estate')) {
+        return 'family';
       }
       return null;
     });
@@ -567,8 +559,8 @@ export default {
       isAdmin,
       isAdvisor,
       hasSpouse,
-      zaModules,
-      hasZa,
+      zaActive,
+      zaOnly,
       effectiveCollapsed,
       menuWidthClass,
       showBugReportModal,

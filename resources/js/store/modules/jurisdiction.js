@@ -69,19 +69,6 @@ const getters = {
   },
 
   /**
-   * The ZA sidebar-config objects for the current user. Empty array
-   * when the user isn't ZA-active. Consumed by SideMenu.vue to render
-   * the ZA section via v-for.
-   */
-  zaModules: (state) => {
-    if (!state.activeJurisdictions.includes('za')) return [];
-    const pack = PACK_NAVIGATIONS.za;
-    if (!pack) return [];
-    const entries = pack()?.modules || [];
-    return entries.filter((e) => typeof e === 'object');
-  },
-
-  /**
    * Predicate used by route guards: does the user hold this jurisdiction?
    */
   hasJurisdiction: (state) => (code) =>
