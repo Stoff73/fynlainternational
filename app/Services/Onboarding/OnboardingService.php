@@ -485,8 +485,10 @@ class OnboardingService
         if ($data['employment_status'] === 'retired' && isset($data['retirement_date']) && $user->date_of_birth) {
             $birthDate = Carbon::parse($user->date_of_birth);
             $retirementDate = Carbon::parse($data['retirement_date']);
-            $retirementAge = $retirementDate->diffInYears($birthDate);
-            $currentAge = Carbon::now()->diffInYears($birthDate);
+            // Carbon 3: diffInYears is signed — diff from the birth date
+            // forwards or both ages come out negative.
+            $retirementAge = (int) $birthDate->diffInYears($retirementDate);
+            $currentAge = (int) $birthDate->diffInYears(Carbon::now());
 
             RetirementProfile::updateOrCreate(
                 ['user_id' => $userId],

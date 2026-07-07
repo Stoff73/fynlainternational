@@ -4,15 +4,14 @@ declare(strict_types=1);
 
 namespace Fynla\Packs\Gb\AI;
 
-use Fynla\Packs\Gb\AI\Prompts\ComplianceRules;
-use Fynla\Packs\Gb\AI\Prompts\CoreIdentity;
-use Fynla\Packs\Gb\AI\Prompts\FcaProcessInstructions;
-use Fynla\Packs\Gb\AI\Prompts\QueryKnowledge;
-use Fynla\Packs\Gb\Support\PrerequisiteGateService;
 use Fynla\Core\Models\FamilyMember;
 use Fynla\Core\Models\Goal;
 use Fynla\Core\Models\LifeEvent;
 use Fynla\Core\Models\User;
+use Fynla\Packs\Gb\AI\Prompts\ComplianceRules;
+use Fynla\Packs\Gb\AI\Prompts\CoreIdentity;
+use Fynla\Packs\Gb\AI\Prompts\FcaProcessInstructions;
+use Fynla\Packs\Gb\AI\Prompts\QueryKnowledge;
 use Fynla\Packs\Gb\Constants\QuerySchemas;
 use Fynla\Packs\Gb\Constants\TaxDefaults;
 use Fynla\Packs\Gb\Goals\LifeEventIntegrationService;
@@ -30,6 +29,7 @@ use Fynla\Packs\Gb\Models\LifeInsurancePolicy;
 use Fynla\Packs\Gb\Models\Property;
 use Fynla\Packs\Gb\Models\SavingsAccount;
 use Fynla\Packs\Gb\NetWorth\NetWorthService;
+use Fynla\Packs\Gb\Support\PrerequisiteGateService;
 use Fynla\Packs\Gb\Tax\TaxConfigService;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Log;
@@ -225,7 +225,7 @@ class SystemPromptBuilder
         $familyMembers = $user->familyMembers()->orderBy('date_of_birth')->get();
         foreach ($familyMembers as $member) {
             $memberName = $member->first_name ?? 'Unknown';
-            $memberAge = $member->date_of_birth ? now()->diffInYears($member->date_of_birth) : null;
+            $memberAge = $member->date_of_birth ? (int) $member->date_of_birth->diffInYears(now()) : null;
             $relationship = ucfirst($member->relationship ?? 'family member');
             $familyLines[] = $memberAge
                 ? "  - {$relationship}: {$memberName} (age {$memberAge})"
@@ -714,7 +714,7 @@ class SystemPromptBuilder
                     $familyParts[] = "[Spouse: {$spouse->first_name} {$spouse->surname}]";
                 }
                 foreach ($family as $m) {
-                    $age = $m->date_of_birth ? now()->diffInYears($m->date_of_birth) : '?';
+                    $age = $m->date_of_birth ? (int) $m->date_of_birth->diffInYears(now()) : '?';
                     $familyParts[] = "[ID:{$m->id} \"{$m->first_name} {$m->last_name}\" {$m->relationship} age {$age}]";
                 }
                 if (! empty($familyParts)) {

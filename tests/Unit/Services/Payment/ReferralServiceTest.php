@@ -126,8 +126,8 @@ describe('applyReferralBonus', function () {
         $referrerSub->refresh();
         $refereeSub->refresh();
 
-        expect($referrerSub->current_period_end->diffInDays($referrerOriginalEnd))->toBe(7);
-        expect($refereeSub->current_period_end->diffInDays($refereeOriginalEnd))->toBe(7);
+        expect((int) abs($referrerSub->current_period_end->diffInDays($referrerOriginalEnd)))->toBe(7);
+        expect((int) abs($refereeSub->current_period_end->diffInDays($refereeOriginalEnd)))->toBe(7);
 
         $referral = Referral::where('referee_id', $referee->id)->first();
         expect($referral->bonus_applied)->toBeTrue();
@@ -161,8 +161,8 @@ describe('applyReferralBonus', function () {
         $referrerSub->refresh();
         $refereeSub->refresh();
 
-        expect($referrerSub->current_period_end->diffInMonths($referrerOriginalEnd))->toBe(1);
-        expect($refereeSub->current_period_end->diffInMonths($refereeOriginalEnd))->toBe(1);
+        expect((int) abs($referrerSub->current_period_end->diffInMonths($referrerOriginalEnd)))->toBe(1);
+        expect((int) abs($refereeSub->current_period_end->diffInMonths($refereeOriginalEnd)))->toBe(1);
     });
 
     it('does not apply bonus twice', function () {

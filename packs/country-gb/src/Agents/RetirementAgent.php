@@ -203,7 +203,9 @@ class RetirementAgent extends BaseAgent
 
             // Post-retirement goal detection
             $postRetirementGoals = [];
-            $currentAge = $user->date_of_birth ? (int) now()->diffInYears($user->date_of_birth) : null;
+            // Carbon 3: diffInYears is signed — diff from the DOB forwards,
+            // not from now() backwards, or the age comes out negative.
+            $currentAge = $user->date_of_birth ? (int) $user->date_of_birth->diffInYears(now()) : null;
 
             if ($currentAge) {
                 $yearsToRetirementForGoals = max(0, $retirementAge - $currentAge);

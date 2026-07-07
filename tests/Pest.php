@@ -73,10 +73,16 @@ uses(
 
 // Global setup for all tests that need TaxConfiguration
 beforeEach(function () {
-    // Ensure active tax configuration exists for tests
+    // Ensure active tax configuration exists for tests.
+    // Pinned to 2019/20 — outside the factory's random 2021–2026 pool and any
+    // explicit test year — so per-test TaxConfiguration::factory() creates can
+    // never collide with this row on the tax_year unique key (was a ~1/6
+    // duplicate-entry flake per unconditional create site).
     if (class_exists(\Fynla\Packs\Gb\Models\TaxConfiguration::class)) {
         if (! \Fynla\Packs\Gb\Models\TaxConfiguration::where('is_active', true)->exists()) {
-            \Fynla\Packs\Gb\Models\TaxConfiguration::factory()->create(['is_active' => true]);
+            \Fynla\Packs\Gb\Models\TaxConfiguration::factory()
+                ->forTaxYear('2019/20')
+                ->create(['is_active' => true]);
         }
     }
 })->in('Feature', 'Unit/Services', 'Unit/Observers', 'Unit/Agents/ProtectionAgentTest.php', 'Unit/Agents/SavingsAgentTest.php', 'Unit/Agents/GoalsAgentTest.php', 'Unit/Agents/SavingsAgentGoalsTest.php', 'Unit/Agents/ProtectionAgentGoalsTest.php', 'Unit/Agents/EstateAgentGoalsTest.php', 'Unit/Agents/RetirementAgentGoalsTest.php', 'Integration', 'Unit/Core/Models', 'Unit/Core/TaxYear/TaxYearResolverDbTest.php', 'Unit/Core/Jurisdiction/ActiveJurisdictionsDbTest.php');

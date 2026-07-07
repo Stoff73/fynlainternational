@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace Fynla\Packs\Gb\Estate;
 
+use Carbon\Carbon;
+use Fynla\Core\Models\User;
 use Fynla\Packs\Gb\Models\Estate\Gift;
 use Fynla\Packs\Gb\Models\Estate\IHTProfile;
-use Fynla\Core\Models\User;
 use Fynla\Packs\Gb\Tax\TaxConfigService;
-use Carbon\Carbon;
 
 class SpouseNRBTrackerService
 {
@@ -40,14 +40,16 @@ class SpouseNRBTrackerService
         // Filter gifts within 7 years (assuming death is now for calculation purposes)
         // Both PETs and CLTs consume the Nil Rate Band
         $recentGifts = $spouseGifts->filter(function ($gift) {
-            $yearsAgo = Carbon::now()->diffInYears($gift->gift_date);
+            // Carbon 3: diffInYears is signed — diff from the gift date
+            // forwards or every past gift comes out negative (< 7).
+            $yearsAgo = $gift->gift_date->diffInYears(Carbon::now());
 
             return $yearsAgo < 7 && in_array($gift->gift_type, ['pet', 'clt'], true);
         })->sortBy('gift_date');
 
         // 14-year rule: CLTs made 7-14 years before death also reduce available NRB
         $historicalCLTs = $spouseGifts->filter(function ($gift) {
-            $yearsAgo = Carbon::now()->diffInYears($gift->gift_date);
+            $yearsAgo = $gift->gift_date->diffInYears(Carbon::now());
 
             return $yearsAgo >= 7 && $yearsAgo < 14 && $gift->gift_type === 'clt';
         });

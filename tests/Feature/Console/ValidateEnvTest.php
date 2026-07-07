@@ -46,6 +46,15 @@ it('passes a fully-configured production environment', function () {
     ];
     $keys = [...array_keys($set), 'LIFECYCLE_TEST_RECIPIENT'];
 
+    // Snapshot originals so finally RESTORES them. Deleting them instead
+    // (putenv with no value) erases phpunit.xml's DB_DATABASE override for
+    // the rest of the process — every later test app boot falls back to
+    // .env and runs against the DEV database.
+    $original = [];
+    foreach ($keys as $k) {
+        $original[$k] = getenv($k);
+    }
+
     try {
         putenv('LIFECYCLE_TEST_RECIPIENT');
         unset($_ENV['LIFECYCLE_TEST_RECIPIENT'], $_SERVER['LIFECYCLE_TEST_RECIPIENT']);
@@ -59,8 +68,14 @@ it('passes a fully-configured production environment', function () {
             ->assertExitCode(0);
     } finally {
         foreach ($keys as $k) {
-            putenv($k);
-            unset($_ENV[$k], $_SERVER[$k]);
+            if ($original[$k] === false) {
+                putenv($k);
+                unset($_ENV[$k], $_SERVER[$k]);
+            } else {
+                putenv("{$k}={$original[$k]}");
+                $_ENV[$k] = $original[$k];
+                $_SERVER[$k] = $original[$k];
+            }
         }
     }
 });

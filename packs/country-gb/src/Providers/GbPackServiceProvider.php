@@ -11,6 +11,7 @@ use Fynla\Packs\Gb\Agents\TaxOptimisationAgent;
 use Fynla\Packs\Gb\Estate\UkEstateEngine;
 use Fynla\Packs\Gb\ExchangeControl\UkExchangeControl;
 use Fynla\Packs\Gb\Goals\GoalCalculationService;
+use Fynla\Packs\Gb\Goals\GoalProgressService;
 use Fynla\Packs\Gb\Investment\UkInvestmentEngine;
 use Fynla\Packs\Gb\LifeTables\GbLifeTableProvider;
 use Fynla\Packs\Gb\Localisation\GbLocalisation;
@@ -20,6 +21,9 @@ use Fynla\Packs\Gb\Query\GbPackAssetResolver;
 use Fynla\Packs\Gb\Query\GbPackEstateRepository;
 use Fynla\Packs\Gb\Query\GbPackUserRelationProvider;
 use Fynla\Packs\Gb\Retirement\UkRetirementEngine;
+use Fynla\Packs\Gb\Savings\FSCSAssessor;
+use Fynla\Packs\Gb\Savings\PSACalculator;
+use Fynla\Packs\Gb\Savings\SavingsActionDefinitionService;
 use Fynla\Packs\Gb\Savings\UkSavingsEngine;
 use Fynla\Packs\Gb\Tax\TaxConfigService;
 use Fynla\Packs\Gb\Validation\GbBankingValidator;
@@ -94,6 +98,16 @@ class GbPackServiceProvider extends ServiceProvider
             GoalCalculationEngine::class,
             GoalCalculationService::class,
         );
+
+        // Laravel 12: the container now passes an optional constructor
+        // parameter's default (null) instead of auto-wiring it, unless the
+        // class is explicitly bound. SavingsAgent's optional collaborators
+        // must be bound here or its PSA/FSCS/action-definition/goal-progress
+        // features silently switch off (Container::resolveClass, L12).
+        $this->app->bind(GoalProgressService::class);
+        $this->app->bind(PSACalculator::class);
+        $this->app->bind(FSCSAssessor::class);
+        $this->app->bind(SavingsActionDefinitionService::class);
     }
 
     public function boot(PackRegistry $registry): void

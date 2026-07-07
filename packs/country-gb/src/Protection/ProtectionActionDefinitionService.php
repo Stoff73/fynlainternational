@@ -4,15 +4,16 @@ declare(strict_types=1);
 
 namespace Fynla\Packs\Gb\Protection;
 
+use Carbon\Carbon;
+use Fynla\Core\Models\User;
 use Fynla\Packs\Gb\Models\CriticalIllnessPolicy;
 use Fynla\Packs\Gb\Models\IncomeProtectionPolicy;
 use Fynla\Packs\Gb\Models\LifeInsurancePolicy;
 use Fynla\Packs\Gb\Models\ProtectionActionDefinition;
 use Fynla\Packs\Gb\Models\ProtectionProfile;
-use Fynla\Core\Models\User;
 use Fynla\Packs\Gb\Tax\TaxConfigService;
 use Fynla\Packs\Gb\Traits\FormatsCurrency;
-use Carbon\Carbon;
+use Illuminate\Support\Collection;
 
 class ProtectionActionDefinitionService
 {
@@ -1132,7 +1133,7 @@ class ProtectionActionDefinitionService
 
         // Step 2: Expiring policies with details
         $expiringDetails = $expiringPolicies->map(function ($p) {
-            $daysLeft = now()->diffInDays($p->policy_end_date);
+            $daysLeft = (int) now()->diffInDays($p->policy_end_date);
 
             return ($p->provider ?? 'Unknown').' (£'.number_format((float) $p->sum_assured, 0).', expires '.$p->policy_end_date->format('j F Y').' — '.$daysLeft.' days remaining)';
         })->implode('; ');
@@ -1154,7 +1155,7 @@ class ProtectionActionDefinitionService
 
         $results = [];
         foreach ($expiringPolicies as $policy) {
-            $daysLeft = now()->diffInDays($policy->policy_end_date);
+            $daysLeft = (int) now()->diffInDays($policy->policy_end_date);
             $policyTrace = $trace;
             $policyTrace[] = [
                 'question' => 'What are the details of the expiring policy from '.($policy->provider ?? 'Unknown').'?',
@@ -1205,7 +1206,7 @@ class ProtectionActionDefinitionService
 
         // Step 2: Expired policies with details
         $expiredDetails = $expiredPolicies->map(function ($p) {
-            $daysSince = $p->policy_end_date->diffInDays(now());
+            $daysSince = (int) $p->policy_end_date->diffInDays(now());
 
             return ($p->provider ?? 'Unknown').' (£'.number_format((float) $p->sum_assured, 0).', expired '.$p->policy_end_date->format('j F Y').' — '.$daysSince.' days ago)';
         })->implode('; ');
@@ -1229,7 +1230,7 @@ class ProtectionActionDefinitionService
 
         $results = [];
         foreach ($expiredPolicies as $policy) {
-            $daysSince = $policy->policy_end_date->diffInDays(now());
+            $daysSince = (int) $policy->policy_end_date->diffInDays(now());
             $policyTrace = $trace;
             $policyTrace[] = [
                 'question' => 'What are the details of the expired policy from '.($policy->provider ?? 'Unknown').'?',
@@ -2174,7 +2175,7 @@ class ProtectionActionDefinitionService
     /**
      * Format a list of life insurance policies into a readable summary string.
      */
-    private function formatLifePolicySummary(\Illuminate\Support\Collection $policies): string
+    private function formatLifePolicySummary(Collection $policies): string
     {
         if ($policies->isEmpty()) {
             return 'None';
@@ -2197,7 +2198,7 @@ class ProtectionActionDefinitionService
     /**
      * Format a list of income protection policies into a readable summary string.
      */
-    private function formatIpPolicySummary(\Illuminate\Support\Collection $policies): string
+    private function formatIpPolicySummary(Collection $policies): string
     {
         if ($policies->isEmpty()) {
             return 'None';
@@ -2220,7 +2221,7 @@ class ProtectionActionDefinitionService
     /**
      * Format a list of critical illness policies into a readable summary string.
      */
-    private function formatCiPolicySummary(\Illuminate\Support\Collection $policies): string
+    private function formatCiPolicySummary(Collection $policies): string
     {
         if ($policies->isEmpty()) {
             return 'None';

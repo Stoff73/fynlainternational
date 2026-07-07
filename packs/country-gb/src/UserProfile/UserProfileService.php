@@ -4,11 +4,10 @@ declare(strict_types=1);
 
 namespace Fynla\Packs\Gb\UserProfile;
 
-use Fynla\Packs\Gb\Benefits\ChildBenefitService;
-use Fynla\Packs\Gb\Property\PropertyService;
 use Carbon\Carbon;
 use Fynla\Core\Models\FamilyMember;
 use Fynla\Core\Models\User;
+use Fynla\Packs\Gb\Benefits\ChildBenefitService;
 use Fynla\Packs\Gb\Models\CriticalIllnessPolicy;
 use Fynla\Packs\Gb\Models\DCPension;
 use Fynla\Packs\Gb\Models\DisabilityPolicy;
@@ -19,6 +18,7 @@ use Fynla\Packs\Gb\Models\LifeInsurancePolicy;
 use Fynla\Packs\Gb\Models\Property;
 use Fynla\Packs\Gb\Models\SavingsAccount;
 use Fynla\Packs\Gb\Models\SicknessIllnessPolicy;
+use Fynla\Packs\Gb\Property\PropertyService;
 use Fynla\Packs\Gb\Shared\CrossModuleAssetAggregator;
 use Fynla\Packs\Gb\Tax\UKTaxCalculator;
 
@@ -850,7 +850,9 @@ class UserProfileService
                 $lumpSumDate = Carbon::parse($account->planned_lump_sum_date);
 
                 // Only include if lump sum is planned within the next 12 months
-                if ($lumpSumDate->isFuture() && $lumpSumDate->diffInMonths(Carbon::now()) <= 12) {
+                // Carbon 3: diffInMonths is signed — diff from now() forwards
+                // or every future date is negative and passes the <= 12 check.
+                if ($lumpSumDate->isFuture() && Carbon::now()->diffInMonths($lumpSumDate) <= 12) {
                     $lumpSumAmount = $account->planned_lump_sum_amount;
                 }
             }

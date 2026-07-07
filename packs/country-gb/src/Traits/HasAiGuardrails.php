@@ -24,7 +24,7 @@ trait HasAiGuardrails
      */
     protected static function getAiProvider(): string
     {
-        return \Illuminate\Support\Facades\Cache::get('ai_provider', config('services.ai_provider', 'anthropic'));
+        return Cache::get('ai_provider', config('services.ai_provider', 'anthropic'));
     }
 
     private const DAILY_TOKEN_LIMITS = [
@@ -125,7 +125,7 @@ trait HasAiGuardrails
 
         // Reset is at midnight tomorrow
         $resetAt = now()->copy()->addDay()->startOfDay();
-        $secondsUntilReset = now()->diffInSeconds($resetAt);
+        $secondsUntilReset = (int) now()->diffInSeconds($resetAt);
 
         return [
             'used' => $used,

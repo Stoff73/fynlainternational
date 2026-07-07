@@ -66,7 +66,7 @@ class IHTPeriodicChargeCalculator
         // Calculate years since trust creation
         $chargeDate = $chargeDate ?? Carbon::now();
         $trustCreationDate = Carbon::parse($trust->trust_creation_date);
-        $yearsSinceCreation = $trustCreationDate->diffInYears($chargeDate);
+        $yearsSinceCreation = (int) $trustCreationDate->diffInYears($chargeDate);
 
         // Periodic charges apply every 10 years
         if ($yearsSinceCreation < 10 || $yearsSinceCreation % 10 !== 0) {
@@ -211,7 +211,7 @@ class IHTPeriodicChargeCalculator
             $now = Carbon::now();
 
             // Calculate next charge date
-            $yearsSinceCreation = $trustCreationDate->diffInYears($now);
+            $yearsSinceCreation = (int) $trustCreationDate->diffInYears($now);
             $nextChargeYears = (int) ((floor($yearsSinceCreation / 10) + 1) * 10);
             $nextChargeDate = $trustCreationDate->copy()->addYears($nextChargeYears);
 

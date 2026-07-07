@@ -1,51 +1,67 @@
 parameters:
 	ignoreErrors:
 		-
-			message: "#^Called 'pluck' on Laravel collection, but could have been retrieved as a query\\.$#"
+			message: '#^Called ''env'' outside of the config directory which returns null when the config is cached, use ''config''\.$#'
+			identifier: larastan.noEnvCallsOutsideOfConfig
+			count: 7
+			path: app/Console/Commands/ValidateEnv.php
+
+		-
+			message: '#^Called ''pluck'' on Laravel collection, but could have been retrieved as a query\.$#'
+			identifier: larastan.noUnnecessaryCollectionCall
 			count: 1
 			path: core/app/Core/Services/PermissionService.php
 
 		-
-			message: "#^Access to an undefined property Fynla\\\\Packs\\\\Gb\\\\Estate\\\\GiftingStrategyOptimizer\\:\\:\\$taxCalculator\\.$#"
+			message: '#^Access to an undefined property Fynla\\Packs\\Gb\\Estate\\GiftingStrategyOptimizer\:\:\$taxCalculator\.$#'
+			identifier: property.notFound
 			count: 1
 			path: packs/country-gb/src/Estate/GiftingStrategyOptimizer.php
 
 		-
-			message: "#^Access to an undefined property Fynla\\\\Packs\\\\Gb\\\\Estate\\\\PersonalizedGiftingStrategyService\\:\\:\\$taxCalculator\\.$#"
+			message: '#^Access to an undefined property Fynla\\Packs\\Gb\\Estate\\PersonalizedGiftingStrategyService\:\:\$taxCalculator\.$#'
+			identifier: property.notFound
 			count: 1
 			path: packs/country-gb/src/Estate/PersonalizedGiftingStrategyService.php
 
 		-
-			message: "#^Access to an undefined property Fynla\\\\Packs\\\\Gb\\\\Investment\\\\AssetLocation\\\\AssetLocationOptimizer\\:\\:\\$taxCalculator\\.$#"
+			message: '#^Access to an undefined property Fynla\\Packs\\Gb\\Investment\\AssetLocation\\AssetLocationOptimizer\:\:\$taxCalculator\.$#'
+			identifier: property.notFound
 			count: 1
 			path: packs/country-gb/src/Investment/AssetLocation/AssetLocationOptimizer.php
 
 		-
-			message: "#^Job class Fynla\\\\Packs\\\\Gb\\\\Jobs\\\\RunMonteCarloSimulation constructor invoked with 2 parameters in Fynla\\\\Packs\\\\Gb\\\\Jobs\\\\RunMonteCarloSimulation\\:\\:dispatch\\(\\), 6\\-8 required\\.$#"
+			message: '#^Job class Fynla\\Packs\\Gb\\Jobs\\RunMonteCarloSimulation constructor invoked with 2 parameters in Fynla\\Packs\\Gb\\Jobs\\RunMonteCarloSimulation\:\:dispatch\(\), 6\-8 required\.$#'
+			identifier: arguments.count
 			count: 1
 			path: packs/country-gb/src/Investment/ScenarioService.php
 
 		-
-			message: "#^Access to an undefined property Fynla\\\\Packs\\\\Gb\\\\Protection\\\\RecommendationEngine\\:\\:\\$taxCalculator\\.$#"
+			message: '#^Access to an undefined property Fynla\\Packs\\Gb\\Protection\\RecommendationEngine\:\:\$taxCalculator\.$#'
+			identifier: property.notFound
 			count: 1
 			path: packs/country-gb/src/Protection/RecommendationEngine.php
 
 		-
-			message: "#^Access to an undefined property Fynla\\\\Packs\\\\Gb\\\\Savings\\\\PSACalculator\\:\\:\\$taxCalculator\\.$#"
+			message: '#^Access to an undefined property Fynla\\Packs\\Gb\\Savings\\PSACalculator\:\:\$taxCalculator\.$#'
+			identifier: property.notFound
 			count: 1
 			path: packs/country-gb/src/Savings/PSACalculator.php
 
 		-
-			message: "#^Access to an undefined property Fynla\\\\Packs\\\\Gb\\\\Savings\\\\SavingsActionDefinitionService\\:\\:\\$taxCalculator\\.$#"
+			message: '#^Access to an undefined property Fynla\\Packs\\Gb\\Savings\\SavingsActionDefinitionService\:\:\$taxCalculator\.$#'
+			identifier: property.notFound
 			count: 1
 			path: packs/country-gb/src/Savings/SavingsActionDefinitionService.php
 
 		-
-			message: "#^Access to an undefined property Fynla\\\\Packs\\\\Gb\\\\Savings\\\\SavingsDataReadinessService\\:\\:\\$taxCalculator\\.$#"
+			message: '#^Access to an undefined property Fynla\\Packs\\Gb\\Savings\\SavingsDataReadinessService\:\:\$taxCalculator\.$#'
+			identifier: property.notFound
 			count: 1
 			path: packs/country-gb/src/Savings/SavingsDataReadinessService.php
 
 		-
-			message: "#^Access to an undefined property Fynla\\\\Packs\\\\Gb\\\\Tax\\\\TaxOptimisationService\\:\\:\\$taxCalculator\\.$#"
+			message: '#^Access to an undefined property Fynla\\Packs\\Gb\\Tax\\TaxOptimisationService\:\:\$taxCalculator\.$#'
+			identifier: property.notFound
 			count: 1
 			path: packs/country-gb/src/Tax/TaxOptimisationService.php

@@ -5,14 +5,16 @@ declare(strict_types=1);
 use Fynla\Core\Models\Goal;
 use Fynla\Core\Models\Household;
 use Fynla\Core\Models\LifeEvent;
-use Fynla\Packs\Gb\Models\SavingsAccount;
 use Fynla\Core\Models\User;
+use Fynla\Packs\Gb\Agents\SavingsAgent;
+use Fynla\Packs\Gb\Models\SavingsAccount;
+use Fynla\Packs\Gb\Models\TaxConfiguration;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
 uses(RefreshDatabase::class);
 
 beforeEach(function () {
-    \Fynla\Packs\Gb\Models\TaxConfiguration::factory()->create(['is_active' => true]);
+    TaxConfiguration::factory()->create(['is_active' => true]);
     $this->household = Household::factory()->create();
     $this->user = User::factory()->create([
         'household_id' => $this->household->id,
@@ -34,13 +36,17 @@ describe('SavingsAgent goal recommendations', function () {
             'goal_name' => 'Holiday Fund',
             'target_amount' => 20000,
             'current_amount' => 5000,
+            // Pinned: factory randomises start_date over -2y..-1m; a recent
+            // start makes 25% progress legitimately "on track" and no
+            // recommendation fires (flake window ~10%).
+            'start_date' => now()->subYear(),
             'target_date' => now()->addMonths(6),
             'assigned_module' => 'savings',
             'status' => 'active',
             'monthly_contribution' => 200,
         ]);
 
-        $agent = app(\Fynla\Packs\Gb\Agents\SavingsAgent::class);
+        $agent = app(SavingsAgent::class);
         $analysis = $agent->analyze($this->user->id);
 
         // generateRecommendations returns a flat array
@@ -60,7 +66,7 @@ describe('SavingsAgent goal recommendations', function () {
             'current_balance' => 1000,
         ]);
 
-        $agent = app(\Fynla\Packs\Gb\Agents\SavingsAgent::class);
+        $agent = app(SavingsAgent::class);
         $analysis = $agent->analyze($this->user->id);
         $recommendations = $agent->generateRecommendations(
             array_merge($analysis, ['user_id' => $this->user->id])
@@ -89,7 +95,7 @@ describe('SavingsAgent goal recommendations', function () {
             'status' => 'confirmed',
         ]);
 
-        $agent = app(\Fynla\Packs\Gb\Agents\SavingsAgent::class);
+        $agent = app(SavingsAgent::class);
         $analysis = $agent->analyze($this->user->id);
         $recommendations = $agent->generateRecommendations(
             array_merge($analysis, ['user_id' => $this->user->id])

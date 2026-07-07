@@ -656,7 +656,7 @@ class User extends Authenticatable
         $arrivalDate = \Carbon\Carbon::parse($this->uk_arrival_date);
         $now = \Carbon\Carbon::now();
 
-        return $arrivalDate->diffInYears($now);
+        return (int) $arrivalDate->diffInYears($now);
     }
 
     /**

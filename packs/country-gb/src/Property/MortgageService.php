@@ -218,7 +218,7 @@ class MortgageService
             return 0;
         }
 
-        return $today->diffInMonths($maturityDate);
+        return (int) $today->diffInMonths($maturityDate);
     }
 
     /**
