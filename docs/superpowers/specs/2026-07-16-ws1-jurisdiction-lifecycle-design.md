@@ -3,7 +3,7 @@ type: spec
 date: 2026-07-16
 workstream: WS1 — Jurisdiction Lifecycle
 program: International Layer (WS1–WS6)
-status: draft (awaiting user review)
+status: IMPLEMENTED (2026-07-16 — full suite 3082 pass / 0 fail; commits a78bfbb, a0a4dba, b9649c7, 1940d12)
 branch: fix/reconciliation-fixes
 companion_evidence: July/July15Updates/reconciliation-2026-07-15.md, findings.md
 ---
