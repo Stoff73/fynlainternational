@@ -27,6 +27,7 @@ use Fynla\Core\Models\Role;
 use Fynla\Core\Models\User;
 use Fynla\Core\Models\UserSession;
 use Fynla\Core\TaxYear\TaxYearResolver;
+use Illuminate\Database\QueryException;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -413,13 +414,18 @@ class AuthController extends Controller
                     'starts_on' => $resolved->startsOn->format('Y-m-d'),
                     'ends_on' => $resolved->endsOn->format('Y-m-d'),
                 ];
-            } catch (\RuntimeException $e) {
-                // No tax_years row for this jurisdiction (GB today) — the
-                // frontend falls back to its existing GB tax-year chain.
+            } catch (QueryException $e) {
+                // Genuine DB fault — stay fail-open but keep it observable.
                 Log::warning('Session tax_year resolution failed — payload degrades to null', [
                     'jurisdiction' => $primaryCode,
                     'error' => $e->getMessage(),
                 ]);
+                $taxYear = null;
+            } catch (\RuntimeException) {
+                // Expected: no tax_years row for this jurisdiction (GB
+                // today) — the frontend falls back to its existing GB
+                // tax-year chain. Silent by design; warning here would fire
+                // on every GB session fetch.
                 $taxYear = null;
             }
         }
