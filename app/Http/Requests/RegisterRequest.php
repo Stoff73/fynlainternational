@@ -27,6 +27,7 @@ class RegisterRequest extends FormRequest
             'first_name' => ['required', 'string', 'max:255'],
             'middle_name' => ['nullable', 'string', 'max:255'],
             'surname' => ['required', 'string', 'max:255'],
+            'country_code' => ['required', 'string', \Illuminate\Validation\Rule::in(['GB', 'ZA'])],
             'email' => ['required', 'string', 'email', 'max:255'],
             'password' => [
                 'required',
@@ -45,6 +46,8 @@ class RegisterRequest extends FormRequest
     {
         return [
             'surname.required' => 'Last name is required.',
+            'country_code.required' => 'Please select your country of residence.',
+            'country_code.in' => 'Please select a supported country of residence.',
             'password.regex' => 'Password must contain at least one uppercase letter, one lowercase letter, one number, and one special character.',
         ];
     }

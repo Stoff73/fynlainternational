@@ -29,6 +29,7 @@ class PendingRegistration extends Model
         'first_name',
         'middle_name',
         'surname',
+        'country_code',
         'password',
         'verification_code',
         'verification_attempts',
@@ -69,6 +70,7 @@ class PendingRegistration extends Model
                 'first_name' => $data['first_name'],
                 'middle_name' => $data['middle_name'] ?? null,
                 'surname' => $data['surname'],
+                'country_code' => $data['country_code'] ?? null,
                 'password' => $data['password'], // Already hashed
                 'verification_code' => self::generateCode(),
                 'registration_source' => $data['registration_source'] ?? null,

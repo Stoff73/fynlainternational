@@ -72,6 +72,7 @@ class AuthController extends Controller
             'first_name' => $request->first_name,
             'middle_name' => $request->middle_name,
             'surname' => $request->surname,
+            'country_code' => $request->country_code,
             'password' => Hash::make($request->password),
             'registration_source' => $request->registration_source ?? null,
             'preview_persona_id' => $request->preview_persona_id ?? null,
@@ -521,6 +522,12 @@ class AuthController extends Controller
             // Sync is_admin flag (bypasses guarded)
             $user->is_admin = $isAdmin;
             $user->save();
+
+            // Assign the user's primary jurisdiction from their chosen country of
+            // residence (WS1). Legacy pending rows without a country_code default
+            // to GB. Single writer keeps every creation path consistent.
+            (new \Fynla\Core\Jurisdiction\AssignPrimaryJurisdiction)
+                ->assign($user, $pending->country_code ?? 'GB');
 
             Log::info('User created from pending registration', [
                 'user_id' => $user->id,
