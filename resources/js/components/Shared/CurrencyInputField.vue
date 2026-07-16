@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="relative">
-      <span class="absolute left-3 top-1/2 transform -translate-y-1/2 text-neutral-500">£</span>
+      <span class="absolute left-3 top-1/2 transform -translate-y-1/2 text-neutral-500">{{ currencySymbol }}</span>
       <input
         :value="displayValue"
         @input="handleInput"
@@ -19,6 +19,8 @@
 </template>
 
 <script>
+import { getLocalisation } from '@/utils/localisation';
+
 export default {
   name: 'CurrencyInputField',
 
@@ -55,6 +57,9 @@ export default {
     displayValue() {
       const num = parseFloat(this.modelValue) || 0;
       return num % 1 === 0 ? Math.round(num) : num;
+    },
+    currencySymbol() {
+      return getLocalisation()?.currencySymbol || '£';
     },
   },
 
