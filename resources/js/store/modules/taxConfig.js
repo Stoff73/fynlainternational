@@ -54,7 +54,18 @@ const mutations = {
 };
 
 const actions = {
-  async fetchActive({ commit }) {
+  async fetchActive({ commit, rootGetters }) {
+    // WS3 — /gb/tax-year/current is a GB pack route; users holding
+    // jurisdictions without GB get 403'd by ActiveJurisdictionMiddleware.
+    // Mirror its fail-open logic: skip only when the user holds 1+
+    // jurisdictions and none is GB (their tax year arrives via the
+    // session payload). Row-less users and GB holders (incl.
+    // cross-border) fetch as today.
+    const active = rootGetters['jurisdiction/activeJurisdictions'] || [];
+    if (active.length > 0 && !active.includes('gb')) {
+      return null;
+    }
+
     commit('setLoading', true);
     commit('setError', null);
     try {
