@@ -91,6 +91,13 @@ describe('jurisdiction tax year', () => {
     setJurisdictionTaxYear(null);
     expect(getCurrentTaxYear()).toBe('2025/26');
   });
+
+  it('clears on a malformed starts_on instead of poisoning boundary math', () => {
+    setJurisdictionTaxYear({ label: '2026/27', starts_on: '01/03/2026', ends_on: '2027-02-28' });
+    // Falls back to GB calendar math (6 April boundary):
+    expect(getTaxYearStart(new Date(2026, 6, 16))).toEqual(new Date(2026, 3, 6));
+    expect(getCurrentTaxYear(new Date(2026, 6, 16))).toBe('2026/27');
+  });
 });
 
 describe('GB tax year regression (no jurisdiction tax year)', () => {

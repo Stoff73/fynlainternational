@@ -307,6 +307,13 @@ export function setJurisdictionTaxYear(taxYear) {
     return;
   }
   const [, startMonth, startDay] = taxYear.starts_on.split('-').map(Number);
+  if (
+    !Number.isInteger(startMonth) || startMonth < 1 || startMonth > 12
+    || !Number.isInteger(startDay) || startDay < 1 || startDay > 31
+  ) {
+    _jurisdictionTaxYear = null;
+    return;
+  }
   _jurisdictionTaxYear = {
     label: taxYear.label,
     boundaryMonth: startMonth - 1, // JS Date months are 0-indexed
