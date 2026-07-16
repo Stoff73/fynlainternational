@@ -144,6 +144,7 @@ const actions = {
       // (mirrors logout/exitPreview); fetchUser re-hydrates after
       // biometric login, so Face ID is unaffected.
       dispatch('jurisdiction/reset', null, { root: true }).catch(() => {});
+      dispatch('taxConfig/clear', null, { root: true }).catch(() => {});
     } finally {
       commit('setLoading', false);
     }

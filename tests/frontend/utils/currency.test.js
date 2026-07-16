@@ -126,5 +126,6 @@ describe('formatZARCompact', () => {
     expect(formatZARCompact(12345)).toBe(`R${NBSP}12.3K`);
     expect(formatZARCompact(123)).toBe(`R${NBSP}123`);
     expect(formatZARCompact(0)).toBe(`R${NBSP}0`);
+    expect(formatZARCompact(-1234567)).toBe(`-R${NBSP}1.2M`);
   });
 });

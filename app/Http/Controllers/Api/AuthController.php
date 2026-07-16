@@ -413,9 +413,13 @@ class AuthController extends Controller
                     'starts_on' => $resolved->startsOn->format('Y-m-d'),
                     'ends_on' => $resolved->endsOn->format('Y-m-d'),
                 ];
-            } catch (\RuntimeException) {
+            } catch (\RuntimeException $e) {
                 // No tax_years row for this jurisdiction (GB today) — the
                 // frontend falls back to its existing GB tax-year chain.
+                Log::warning('Session tax_year resolution failed — payload degrades to null', [
+                    'jurisdiction' => $primaryCode,
+                    'error' => $e->getMessage(),
+                ]);
                 $taxYear = null;
             }
         }

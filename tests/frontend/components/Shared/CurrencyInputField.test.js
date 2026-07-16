@@ -23,4 +23,12 @@ describe('CurrencyInputField', () => {
     await wrapper.find('input').setValue('250');
     expect(wrapper.emitted('update:modelValue')[0]).toEqual([250]);
   });
+
+  it('picks up localisation set after mount on the next re-render', async () => {
+    const wrapper = mount(CurrencyInputField, { props: { modelValue: 0 } });
+    expect(wrapper.find('span').text()).toBe('£');
+    setLocalisation({ currency_code: 'ZAR', currency_symbol: 'R', locale: 'en_ZA', date_format: 'd M Y' });
+    await wrapper.setProps({ modelValue: 1 });
+    expect(wrapper.find('span').text()).toBe('R');
+  });
 });

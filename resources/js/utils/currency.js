@@ -2,7 +2,9 @@
  * Currency Formatting Utilities
  *
  * Centralized currency formatting functions for the FPS application.
- * Uses British locale (en-GB) and GBP currency formatting.
+ * Formats per the session localisation (currency code/symbol/locale),
+ * falling back to GBP / en-GB as the fail-open default when no session
+ * localisation has been hydrated.
  *
  * @module utils/currency
  */

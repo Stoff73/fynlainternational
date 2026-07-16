@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="relative">
-      <span class="absolute left-3 top-1/2 transform -translate-y-1/2 text-neutral-500">{{ currencySymbol }}</span>
+      <span class="absolute left-3 top-1/2 transform -translate-y-1/2 text-neutral-500">{{ currencySymbol() }}</span>
       <input
         :value="displayValue"
         @input="handleInput"
@@ -58,12 +58,16 @@ export default {
       const num = parseFloat(this.modelValue) || 0;
       return num % 1 === 0 ? Math.round(num) : num;
     },
-    currencySymbol() {
-      return getLocalisation()?.currencySymbol || '£';
-    },
   },
 
   methods: {
+    // Method (not computed): Vue caches computed values after first
+    // evaluation, so a session localisation hydrated after this component
+    // first mounted would never be picked up. Methods re-evaluate on every
+    // render, so the symbol self-heals once /api/auth/user resolves.
+    currencySymbol() {
+      return getLocalisation()?.currencySymbol || '£';
+    },
     handleInput(event) {
       const value = parseFloat(event.target.value) || 0;
       this.$emit('update:modelValue', value);

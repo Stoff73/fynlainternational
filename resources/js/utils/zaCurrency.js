@@ -27,8 +27,9 @@ export function formatZAR(value, { showDecimals = true } = {}) {
 export function formatZARCompact(value) {
   const n = Number(value) || 0;
   const abs = Math.abs(n);
-  if (abs >= 1000000) return `R\u00a0${(n / 1000000).toFixed(1)}M`;
-  if (abs >= 1000) return `R\u00a0${(n / 1000).toFixed(1)}K`;
+  const sign = n < 0 ? '-' : '';
+  if (abs >= 1000000) return `${sign}R\u00a0${(abs / 1000000).toFixed(1)}M`;
+  if (abs >= 1000) return `${sign}R\u00a0${(abs / 1000).toFixed(1)}K`;
   return formatZAR(n, { showDecimals: false });
 }
 

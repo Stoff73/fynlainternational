@@ -324,7 +324,9 @@ export function setJurisdictionTaxYear(taxYear) {
 /**
  * Compute the calendar-based UK tax year for a given date, ignoring any
  * backend override. Use this when you specifically need the calendar year
- * (e.g. to compare it to the admin-selected year).
+ * (e.g. to compare it to the admin-selected year). Jurisdiction-aware via
+ * getTaxYearStart — no longer strictly "UK" despite the function's name;
+ * it follows the session jurisdiction's boundary when one is set.
  */
 export function getCalendarTaxYear(referenceDate = new Date()) {
   const start = getTaxYearStart(referenceDate);
@@ -334,6 +336,10 @@ export function getCalendarTaxYear(referenceDate = new Date()) {
 
 /**
  * Get the current UK tax year as a formatted string (e.g., "2026/27").
+ *
+ * When no referenceDate is passed, the session jurisdiction tax-year label
+ * (set via setJurisdictionTaxYear) takes precedence first, ahead of the
+ * backend-selected year.
  *
  * When the backend has told us which tax year is active (via
  * setActiveTaxYear), that value is returned — this keeps the UI aligned

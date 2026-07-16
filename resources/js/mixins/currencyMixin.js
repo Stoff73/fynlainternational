@@ -24,7 +24,7 @@ import { getLocalisation } from '@/utils/localisation';
 export const currencyMixin = {
   methods: {
     /**
-     * Format a number as GBP currency (no decimals by default)
+     * Format a number in the session currency (GBP default; no decimals by default)
      * @param {number|null|undefined} value - The amount to format
      * @returns {string} Formatted currency string (e.g., "£1,234")
      */
