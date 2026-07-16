@@ -44,20 +44,24 @@ final class GbPackAssetRepository implements PackAssetRepository
             ->get()
             ->each(fn (Property $p) => $assets->push(self::propertyToSummary($p)));
 
+        // country_code='ZA' rows on these shared tables belong to the SA pack
+        // (surfaced by ZaPackAssetRepository) — exclude them here so the core
+        // composite does not double-count. GB and untagged (legacy null) rows stay.
         InvestmentAccount::query()
-            ->where('user_id', $userId)
-            ->orWhere('joint_owner_id', $userId)
+            ->where(fn ($q) => $q->where('user_id', $userId)->orWhere('joint_owner_id', $userId))
+            ->where(fn ($q) => $q->whereNull('country_code')->orWhere('country_code', '!=', 'ZA'))
             ->get()
             ->each(fn (InvestmentAccount $a) => $assets->push(self::investmentAccountToSummary($a)));
 
         SavingsAccount::query()
-            ->where('user_id', $userId)
-            ->orWhere('joint_owner_id', $userId)
+            ->where(fn ($q) => $q->where('user_id', $userId)->orWhere('joint_owner_id', $userId))
+            ->where(fn ($q) => $q->whereNull('country_code')->orWhere('country_code', '!=', 'ZA'))
             ->get()
             ->each(fn (SavingsAccount $s) => $assets->push(self::savingsAccountToSummary($s)));
 
         DCPension::query()
             ->where('user_id', $userId)
+            ->where(fn ($q) => $q->whereNull('country_code')->orWhere('country_code', '!=', 'ZA'))
             ->get()
             ->each(fn (DCPension $p) => $assets->push(self::dcPensionToSummary($p)));
 
