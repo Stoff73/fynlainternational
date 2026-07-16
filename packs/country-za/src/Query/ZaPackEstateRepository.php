@@ -5,18 +5,18 @@ declare(strict_types=1);
 namespace Fynla\Packs\Za\Query;
 
 use Fynla\Core\Contracts\PackEstateRepository;
+use Fynla\Packs\Za\Models\ZaDonation;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Collection;
 
 /**
- * SA pack Null implementation of the Estate query contract.
+ * SA estate query implementation (WS2).
  *
- * Phase 1 SA does not model Estate surfaces — there is no SA-side
- * IHT-equivalent (Estate Duty applies but is structurally separate
- * from the UK liabilities/trusts/gifts/LPAs shape captured here).
- *
- * Bound for structural symmetry; Phase 2 may revisit if SA Estate
- * models are added to the pack.
+ * SA has estate duty (not IHT), a donations register (not PET gifts), and no
+ * LPA. Only the donations register maps to this GB-shaped contract via
+ * giftsForUser(); SA estate-duty valuation is computed by ZaEstateEngine, not
+ * surfaced here. The IHT-profile / liability / trust / LPA / estate-asset
+ * methods return empty honestly rather than faking UK concepts SA lacks.
  */
 final class ZaPackEstateRepository implements PackEstateRepository
 {
@@ -42,7 +42,7 @@ final class ZaPackEstateRepository implements PackEstateRepository
 
     public function giftsForUser(int $userId): Collection
     {
-        return new Collection();
+        return ZaDonation::query()->where('user_id', $userId)->get();
     }
 
     public function lpasForUser(int $userId): Collection
