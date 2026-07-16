@@ -71,3 +71,19 @@ it('enforces unique user-jurisdiction composite', function () {
         'activated_at' => now(),
     ]))->toThrow(\Illuminate\Database\QueryException::class);
 });
+
+it('mass-assigns and casts deactivated_at and auto_detected (WS1)', function () {
+    $other = User::factory()->create();
+
+    $row = UserJurisdiction::create([
+        'user_id' => $other->id,
+        'jurisdiction_id' => $this->gb->id,
+        'is_primary' => true,
+        'activated_at' => now(),
+        'deactivated_at' => now(),
+        'auto_detected' => true,
+    ]);
+
+    expect($row->fresh()->deactivated_at)->not->toBeNull()
+        ->and($row->fresh()->auto_detected)->toBeTrue();
+});

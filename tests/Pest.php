@@ -40,7 +40,7 @@ uses(
 )->in(
     'Unit/Core/Models',
     'Unit/Core/TaxYear/TaxYearResolverDbTest.php',
-    'Unit/Core/Jurisdiction/ActiveJurisdictionsDbTest.php',
+    'Unit/Core/Jurisdiction',
     'Unit/Core/Observers',
 );
 

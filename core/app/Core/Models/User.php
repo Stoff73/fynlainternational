@@ -743,7 +743,8 @@ class User extends Authenticatable
             'user_id',
             'jurisdiction_id'
         )
-            ->withPivot(['is_primary', 'activated_at'])
+            ->withPivot(['is_primary', 'activated_at', 'deactivated_at', 'auto_detected'])
+            ->wherePivotNull('deactivated_at')
             ->withTimestamps();
     }
 

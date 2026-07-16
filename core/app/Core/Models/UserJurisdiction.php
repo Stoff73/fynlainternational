@@ -30,11 +30,15 @@ class UserJurisdiction extends Model
         'jurisdiction_id',
         'is_primary',
         'activated_at',
+        'deactivated_at',
+        'auto_detected',
     ];
 
     protected $casts = [
         'is_primary' => 'boolean',
         'activated_at' => 'datetime',
+        'deactivated_at' => 'datetime',
+        'auto_detected' => 'boolean',
     ];
 
     /**
