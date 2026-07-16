@@ -3,7 +3,7 @@ type: spec
 date: 2026-07-16
 workstream: WS2 — Query-Layer Un-Null (SA data reaches core)
 program: International Layer (WS1–WS6)
-status: draft (awaiting user review)
+status: IMPLEMENTED (2026-07-16 — full suite 3089 pass / 0 fail; commits cb84328, 6db3515, 08d98fb)
 branch: feat/international-layer
 depends_on: WS1 (jurisdiction lifecycle) — DONE
 companion_evidence: July/July15Updates/reconciliation-2026-07-15.md, findings.md
