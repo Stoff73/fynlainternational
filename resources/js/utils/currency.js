@@ -7,6 +7,27 @@
  * @module utils/currency
  */
 
+import { getLocalisation } from './localisation';
+import { formatZAR, formatZARCompact } from './zaCurrency';
+
+/**
+ * Resolve the session currency, falling back to GB defaults when no
+ * localisation has been hydrated (logged-out, public pages, GB users
+ * with a malformed block). WS3: the fallback keeps every GBP code path
+ * byte-for-byte identical to the pre-localisation behaviour.
+ */
+function activeCurrency() {
+  const loc = getLocalisation();
+  if (!loc || !loc.currencyCode) {
+    return { code: 'GBP', symbol: '£', locale: 'en-GB' };
+  }
+  return {
+    code: loc.currencyCode,
+    symbol: loc.currencySymbol || '£',
+    locale: loc.locale || 'en-GB',
+  };
+}
+
 /**
  * Format a number as GBP currency
  *
@@ -29,9 +50,15 @@ export function formatCurrency(amount, options = {}) {
     maximumFractionDigits = 0,
   } = options;
 
-  return new Intl.NumberFormat('en-GB', {
+  const { code, locale } = activeCurrency();
+
+  if (code === 'ZAR') {
+    return formatZAR(amount || 0, { showDecimals: maximumFractionDigits > 0 });
+  }
+
+  return new Intl.NumberFormat(code === 'GBP' ? 'en-GB' : locale, {
     style: 'currency',
-    currency: 'GBP',
+    currency: code,
     minimumFractionDigits,
     maximumFractionDigits,
   }).format(amount || 0);
@@ -66,16 +93,20 @@ export function formatCurrencyWithPence(amount) {
  * formatCurrencyCompact(123)         // "£123"
  */
 export function formatCurrencyCompact(amount) {
-  if (!amount) return '£0';
+  const { code, symbol } = activeCurrency();
+
+  if (code === 'ZAR') return formatZARCompact(amount || 0);
+
+  if (!amount) return `${symbol}0`;
 
   const absAmount = Math.abs(amount);
 
   if (absAmount >= 1000000) {
-    return `£${(amount / 1000000).toFixed(1)}M`;
+    return `${symbol}${(amount / 1000000).toFixed(1)}M`;
   }
 
   if (absAmount >= 1000) {
-    return `£${(amount / 1000).toFixed(1)}K`;
+    return `${symbol}${(amount / 1000).toFixed(1)}K`;
   }
 
   return formatCurrency(amount);
@@ -101,8 +132,14 @@ export function parseCurrency(currencyString) {
     return 0;
   }
 
-  // Remove currency symbol, commas, and spaces
-  const cleaned = currencyString.toString().replace(/[£,\s]/g, '');
+  // Remove the session currency symbol (if any) plus the GBP defaults:
+  // currency symbol, commas, and whitespace (incl. NBSP grouping).
+  const { symbol } = activeCurrency();
+  let cleaned = currencyString.toString();
+  if (symbol && symbol !== '£') {
+    cleaned = cleaned.split(symbol).join('');
+  }
+  cleaned = cleaned.replace(/[£,\s]/g, '');
   const parsed = parseFloat(cleaned);
 
   return isNaN(parsed) ? 0 : parsed;

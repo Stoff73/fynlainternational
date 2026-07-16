@@ -19,6 +19,7 @@ import {
   parseCurrency,
   formatPercentage,
 } from '@/utils/currency';
+import { getLocalisation } from '@/utils/localisation';
 
 export const currencyMixin = {
   methods: {
@@ -184,7 +185,8 @@ export const currencyMixin = {
      */
     formatNumber(value) {
       if (value == null || isNaN(value)) return '0';
-      return Number(value).toLocaleString('en-GB');
+      const locale = getLocalisation()?.locale || 'en-GB';
+      return Number(value).toLocaleString(locale);
     },
 
     /**
