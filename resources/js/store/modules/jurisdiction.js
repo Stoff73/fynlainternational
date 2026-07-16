@@ -20,7 +20,7 @@
 
 import gbNavigation from '@gb/navigation';
 import zaNavigation from '@za/navigation';
-import { setLocalisation, resetLocalisation } from '@/utils/localisation';
+import { setLocalisation } from '@/utils/localisation';
 import { setJurisdictionTaxYear } from '@/utils/dateFormatter';
 
 // Per-pack navigation registry (R-12). Each pack ships a default-exported
@@ -93,12 +93,9 @@ const actions = {
         ? String(payload.primary_jurisdiction).toLowerCase()
         : null,
       crossBorder: Boolean(payload.cross_border),
+      localisation: payload.localisation || null,
+      taxYear: payload.tax_year || null,
     });
-    // WS3 — mirror the session localisation into the module-level
-    // singletons that currency.js / dateFormatter.js read. Missing
-    // blocks clear them (fail-open to GB formatting).
-    setLocalisation(payload.localisation || null);
-    setJurisdictionTaxYear(payload.tax_year || null);
   },
 
   reset({ commit }) {
@@ -106,17 +103,22 @@ const actions = {
       active: [],
       primary: null,
       crossBorder: false,
+      localisation: null,
+      taxYear: null,
     });
-    resetLocalisation();
-    setJurisdictionTaxYear(null);
   },
 };
 
 const mutations = {
-  SET_JURISDICTION_STATE(state, { active, primary, crossBorder }) {
+  SET_JURISDICTION_STATE(state, { active, primary, crossBorder, localisation = null, taxYear = null }) {
     state.activeJurisdictions = active;
     state.primaryJurisdiction = primary;
     state.crossBorder = crossBorder;
+    // WS3 — mirror into the formatting singletons atomically with the
+    // state write (same pattern as taxConfig.setActiveTaxYear) so any
+    // direct commit keeps formatting in sync with jurisdiction state.
+    setLocalisation(localisation);
+    setJurisdictionTaxYear(taxYear);
   },
 };
 
