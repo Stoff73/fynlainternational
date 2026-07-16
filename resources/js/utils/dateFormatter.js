@@ -3,6 +3,12 @@
  * Provides functions for formatting and parsing dates in UK format (DD/MM/YYYY)
  */
 
+import { getLocalisation } from './localisation';
+
+// Deterministic month abbreviations for the 'd M Y' date format —
+// avoids Intl short-month variance across ICU versions.
+const MONTH_ABBREVIATIONS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+
 /**
  * Format a date as DD/MM/YYYY
  * @param {Date|string} date - The date to format
@@ -20,6 +26,14 @@ export function formatDate(date) {
   // Check if valid date
   if (!(dateObj instanceof Date) || isNaN(dateObj.getTime())) {
     return '';
+  }
+
+  // WS3: the session date format from the pack Localisation contract.
+  // Two-entry map, not a PHP-format interpreter: 'd M Y' (ZA) renders
+  // "16 Jul 2026"; anything else falls through to GB DD/MM/YYYY.
+  if (getLocalisation()?.dateFormat === 'd M Y') {
+    const abbrDay = String(dateObj.getDate()).padStart(2, '0');
+    return `${abbrDay} ${MONTH_ABBREVIATIONS[dateObj.getMonth()]} ${dateObj.getFullYear()}`;
   }
 
   // Extract day, month, year
@@ -130,7 +144,7 @@ export function formatDateLong(date, shortMonth = false) {
     year: 'numeric',
   };
 
-  return dateObj.toLocaleDateString('en-GB', options);
+  return dateObj.toLocaleDateString(getLocalisation()?.locale || 'en-GB', options);
 }
 
 /**
@@ -217,22 +231,26 @@ export function getRelativeTime(date) {
 /**
  * Get the current tax year start date.
  *
- * UK tax year runs from 6 April to 5 April.
+ * UK tax year runs from 6 April to 5 April; jurisdictions with a session
+ * tax year use their own boundary.
  *
  * @param {Date} [referenceDate] - Reference date (defaults to now)
  * @returns {Date} Start of the current tax year
  */
 export function getTaxYearStart(referenceDate = new Date()) {
+  const boundary = _jurisdictionTaxYear
+    ? { month: _jurisdictionTaxYear.boundaryMonth, day: _jurisdictionTaxYear.boundaryDay }
+    : { month: 3, day: 6 }; // GB: 6 April
+
   const year = referenceDate.getFullYear();
   const month = referenceDate.getMonth();
   const day = referenceDate.getDate();
 
-  // If before 6 April, tax year started previous year
-  if (month < 3 || (month === 3 && day < 6)) {
-    return new Date(year - 1, 3, 6); // 6 April previous year
+  if (month < boundary.month || (month === boundary.month && day < boundary.day)) {
+    return new Date(year - 1, boundary.month, boundary.day);
   }
 
-  return new Date(year, 3, 6); // 6 April this year
+  return new Date(year, boundary.month, boundary.day);
 }
 
 /**
@@ -243,7 +261,9 @@ export function getTaxYearStart(referenceDate = new Date()) {
  */
 export function getTaxYearEnd(referenceDate = new Date()) {
   const start = getTaxYearStart(referenceDate);
-  return new Date(start.getFullYear() + 1, 3, 5); // 5 April next year
+  const end = new Date(start.getFullYear() + 1, start.getMonth(), start.getDate());
+  end.setDate(end.getDate() - 1);
+  return end;
 }
 
 /**
@@ -267,6 +287,31 @@ let _activeTaxYearFromBackend = null;
  */
 export function setActiveTaxYear(taxYear) {
   _activeTaxYearFromBackend = taxYear || null;
+}
+
+/**
+ * Jurisdiction tax year from the session (WS3). Set by
+ * jurisdiction/hydrateFromSession with the /api/auth/user `tax_year`
+ * block ({label, starts_on, ends_on}) — non-null only for jurisdictions
+ * with a tax_years row (ZA today; GB uses the TaxConfiguration flow via
+ * setActiveTaxYear instead, so the two singletons never fight).
+ */
+let _jurisdictionTaxYear = null;
+
+/**
+ * Store the session tax year. Pass null (or a malformed block) to clear.
+ */
+export function setJurisdictionTaxYear(taxYear) {
+  if (!taxYear || !taxYear.label || !taxYear.starts_on) {
+    _jurisdictionTaxYear = null;
+    return;
+  }
+  const [, startMonth, startDay] = taxYear.starts_on.split('-').map(Number);
+  _jurisdictionTaxYear = {
+    label: taxYear.label,
+    boundaryMonth: startMonth - 1, // JS Date months are 0-indexed
+    boundaryDay: startDay,
+  };
 }
 
 /**
@@ -296,8 +341,13 @@ export function getCalendarTaxYear(referenceDate = new Date()) {
  * @returns {string} Tax year string like "2026/27"
  */
 export function getCurrentTaxYear(referenceDate) {
-  if (_activeTaxYearFromBackend && !referenceDate) {
-    return _activeTaxYearFromBackend;
+  if (!referenceDate) {
+    if (_jurisdictionTaxYear) {
+      return _jurisdictionTaxYear.label;
+    }
+    if (_activeTaxYearFromBackend) {
+      return _activeTaxYearFromBackend;
+    }
   }
   const start = getTaxYearStart(referenceDate || new Date());
   const startYear = start.getFullYear();
@@ -316,4 +366,5 @@ export default {
   getCurrentTaxYear,
   getCalendarTaxYear,
   setActiveTaxYear,
+  setJurisdictionTaxYear,
 };
