@@ -935,11 +935,12 @@ Co-Authored-By: Claude Fable 5 <noreply@anthropic.com>"
 
 **Files:**
 - Modify: `resources/js/store/modules/jurisdiction.js`
+- Modify: `resources/js/store/modules/auth.js` (`mobileLogout` only — one dispatch line)
 - Test: `tests/frontend/store/jurisdiction.test.js` (extend — exists from WS1)
 
 **Interfaces:**
 - Consumes: `setLocalisation`/`resetLocalisation` (Task 2), `setJurisdictionTaxYear` (Task 4); the `localisation` and `tax_year` payload keys (Task 1).
-- Produces: `jurisdiction/hydrateFromSession` and `jurisdiction/reset` keep their existing dispatch contracts (already wired in `auth.js` for login, fetchUser, and logout — **no auth.js change needed**).
+- Produces: `jurisdiction/hydrateFromSession` and `jurisdiction/reset` keep their existing dispatch contracts (already wired in `auth.js` for login, fetchUser, and web logout; `exitPreview` also dispatches reset). `mobileLogout` gains the missing `jurisdiction/reset` dispatch so a mobile logout can't leave the previous user's formatting live (audit finding §11d) — `fetchUser` re-hydrates after biometric login, so the Face ID flow is unaffected.
 
 - [ ] **Step 1: Write the failing tests**
 
@@ -1047,6 +1048,17 @@ In the `reset` action, after its `commit(...)` call, add:
     setJurisdictionTaxYear(null);
 ```
 
+In `resources/js/store/modules/auth.js`, inside the `mobileLogout` action (it already destructures `{ commit, dispatch }`), add after `commit('clearAuth');`:
+
+```javascript
+      // WS3 — clear jurisdiction formatting singletons on mobile logout
+      // (mirrors logout/exitPreview); fetchUser re-hydrates after
+      // biometric login, so Face ID is unaffected.
+      dispatch('jurisdiction/reset', null, { root: true }).catch(() => {});
+```
+
+(The reset behaviour itself is covered by this task's jurisdiction tests; the mobileLogout wiring is verified by code review here and the mobile-unaffected check in Task 8.)
+
 - [ ] **Step 4: Run tests to verify they pass**
 
 Run: `npx vitest run tests/frontend/store/jurisdiction.test.js`
@@ -1055,7 +1067,7 @@ Expected: all PASS (WS1 + new).
 - [ ] **Step 5: Commit**
 
 ```bash
-git add resources/js/store/modules/jurisdiction.js tests/frontend/store/jurisdiction.test.js
+git add resources/js/store/modules/jurisdiction.js resources/js/store/modules/auth.js tests/frontend/store/jurisdiction.test.js
 git commit -m "feat(intl): WS3 jurisdiction store hydrates localisation singletons
 
 Co-Authored-By: Claude Fable 5 <noreply@anthropic.com>"
@@ -1063,15 +1075,15 @@ Co-Authored-By: Claude Fable 5 <noreply@anthropic.com>"
 
 ---
 
-### Task 6: Frontend — gate taxConfig/fetchActive to GB-primary sessions
+### Task 6: Frontend — gate taxConfig/fetchActive to GB-holding sessions
 
 **Files:**
 - Modify: `resources/js/store/modules/taxConfig.js`
 - Test: `tests/frontend/store/taxConfig.test.js` (create)
 
 **Interfaces:**
-- Consumes: `jurisdiction/primaryJurisdiction` rootGetter (exists). Dispatch order guarantee: `auth/fetchUser` dispatches `jurisdiction/hydrateFromSession` **before** `taxConfig/fetchActive` (verified in `auth.js`), so the getter is populated when the guard runs. `App.vue:34` dispatches after `fetchUser` resolves — also safe.
-- Produces: `taxConfig/fetchActive` returns `null` without any HTTP call for non-GB-primary sessions; unchanged behaviour for GB/unset.
+- Consumes: `jurisdiction/activeJurisdictions` rootGetter (exists). Dispatch order guarantee: `auth/fetchUser` dispatches `jurisdiction/hydrateFromSession` **before** `taxConfig/fetchActive` (verified in `auth.js`), so the getter is populated when the guard runs. `App.vue:34` dispatches after `fetchUser` resolves — also safe.
+- Produces: `taxConfig/fetchActive` returns `null` without any HTTP call only when the session holds 1+ jurisdictions and none is GB (mirrors `ActiveJurisdictionMiddleware`'s fail-open logic); unchanged behaviour for GB holders (incl. cross-border) and row-less/unset sessions.
 
 - [ ] **Step 1: Write the failing tests**
 
@@ -1104,7 +1116,7 @@ describe('taxConfig/fetchActive jurisdiction gating (WS3)', () => {
     store.dispatch('jurisdiction/reset');
   });
 
-  it('skips the GB endpoint entirely for a ZA-primary session', async () => {
+  it('skips the GB endpoint entirely for a ZA-only session', async () => {
     store.dispatch('jurisdiction/hydrateFromSession', {
       active_jurisdictions: ['za'],
       primary_jurisdiction: 'za',
@@ -1115,6 +1127,23 @@ describe('taxConfig/fetchActive jurisdiction gating (WS3)', () => {
 
     expect(result).toBeNull();
     expect(api.get).not.toHaveBeenCalled();
+  });
+
+  it('still calls the GB endpoint for a cross-border GB+ZA session with ZA primary', async () => {
+    api.get.mockResolvedValue({
+      data: { data: { tax_year: '2026/27', effective_from: '2026-04-06', effective_to: '2027-04-05' } },
+    });
+
+    store.dispatch('jurisdiction/hydrateFromSession', {
+      active_jurisdictions: ['gb', 'za'],
+      primary_jurisdiction: 'za',
+      cross_border: true,
+    });
+
+    const result = await store.dispatch('taxConfig/fetchActive');
+
+    expect(api.get).toHaveBeenCalledWith('/gb/tax-year/current');
+    expect(result).toBe('2026/27');
   });
 
   it('still calls the GB endpoint for a GB-primary session', async () => {
@@ -1149,7 +1178,7 @@ describe('taxConfig/fetchActive jurisdiction gating (WS3)', () => {
 - [ ] **Step 2: Run tests to verify they fail**
 
 Run: `npx vitest run tests/frontend/store/taxConfig.test.js`
-Expected: first test FAILS (api.get called for ZA); other two PASS.
+Expected: first test FAILS (api.get called for the ZA-only session — no guard exists yet); other three PASS.
 
 - [ ] **Step 3: Implement the guard**
 
@@ -1157,12 +1186,14 @@ In `resources/js/store/modules/taxConfig.js`, change the `fetchActive` signature
 
 ```javascript
   async fetchActive({ commit, rootGetters }) {
-    // WS3 — /gb/tax-year/current is a GB pack route; a ZA-primary user's
-    // call would be blocked by ActiveJurisdictionMiddleware. Their tax
-    // year arrives via the session payload (setJurisdictionTaxYear), so
-    // skip the request entirely for non-GB-primary sessions.
-    const primary = rootGetters['jurisdiction/primaryJurisdiction'];
-    if (primary && primary !== 'gb') {
+    // WS3 — /gb/tax-year/current is a GB pack route; users holding
+    // jurisdictions without GB get 403'd by ActiveJurisdictionMiddleware.
+    // Mirror its fail-open logic: skip only when the user holds 1+
+    // jurisdictions and none is GB (their tax year arrives via the
+    // session payload). Row-less users and GB holders (incl.
+    // cross-border) fetch as today.
+    const active = rootGetters['jurisdiction/activeJurisdictions'] || [];
+    if (active.length > 0 && !active.includes('gb')) {
       return null;
     }
 
@@ -1180,7 +1211,7 @@ Expected: 3 PASS.
 
 ```bash
 git add resources/js/store/modules/taxConfig.js tests/frontend/store/taxConfig.test.js
-git commit -m "feat(intl): WS3 gate GB tax-year fetch to GB-primary sessions
+git commit -m "feat(intl): WS3 gate GB tax-year fetch to GB-holding sessions
 
 Co-Authored-By: Claude Fable 5 <noreply@anthropic.com>"
 ```
@@ -1309,6 +1340,10 @@ Per CLAUDE.md browser-testing rules — every check below is an actual interacti
 6. Log in as `chris@fynla.org` / `Password1!` (fetch the verification code from the DB per CLAUDE.md), spot-check Dashboard + one module page for unchanged GB output.
 7. Anything that cannot be tested must be reported as "I COULD NOT TEST THIS" — never marked verified.
 
+- [ ] **Step 3b: Drive-by — correct the stale ZaPreviewUserSeeder docblock**
+
+`packs/country-za/database/seeders/ZaPreviewUserSeeder.php` lines 22–28 claim "Surfacing an SA persona in the landing-page selector is blocked" — stale: `sa_professional` is fully wired (`PreviewController::VALID_PERSONAS`, frontend `preview.js` `PERSONA_ORDER`) and Step 3 above depends on selecting it. Replace that docblock sentence with a one-liner stating the persona IS selectable from the landing-page persona selector. Comment-only change; include it in Step 4's commit.
+
 - [ ] **Step 4: Fix anything found, re-run the affected suite, then final commit if fixes were made**
 
 ```bash
@@ -1318,7 +1353,7 @@ git commit -m "fix(intl): WS3 browser-verification fixes
 Co-Authored-By: Claude Fable 5 <noreply@anthropic.com>"
 ```
 
-(Skip this commit if no fixes were needed.)
+(If no fixes were needed, this commit still carries the Step 3b seeder docblock change — reword to `docs(intl): WS3 correct stale ZaPreviewUserSeeder docblock`.)
 
 - [ ] **Step 5: Mark the spec implemented**
 

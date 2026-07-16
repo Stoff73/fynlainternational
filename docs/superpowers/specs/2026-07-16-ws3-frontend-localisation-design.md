@@ -3,7 +3,7 @@ type: spec
 date: 2026-07-16
 workstream: WS3 — Frontend Localisation (SA user sees R / SA dates / 1-March tax year)
 program: International Layer (WS1–WS6)
-status: APPROVED (design approved by CSJ 2026-07-16; not yet implemented)
+status: AMENDED — 2026-07-16 — conflicts resolved against codebase audit (gate semantics, mobile reset, sweep ownership); build not started
 branch: feat/international-layer
 depends_on: WS1 (jurisdiction lifecycle) — DONE; WS2 (query-layer un-null) — DONE
 ---
@@ -146,6 +146,10 @@ Rejected:
   `setJurisdictionTaxYear(payload.tax_year)` (dateFormatter export, §4).
 - `jurisdiction/reset` (already dispatched on logout) calls
   `resetLocalisation()` and `setJurisdictionTaxYear(null)`.
+- `auth/mobileLogout` additionally dispatches `jurisdiction/reset` (it
+  currently doesn't, unlike `logout` and `exitPreview`) so a mobile logout
+  can't leave the previous user's formatting live on the login screen.
+  `fetchUser` re-hydrates after biometric login — Face ID flow unaffected.
 - Logged-out / public pages: config unset → GB defaults everywhere.
 
 ### 3. `currency.js` (+ mixin + shared input)
@@ -194,10 +198,12 @@ Rejected:
 
 ### 5. `taxConfig/fetchActive` gating
 
-Guard inside the action (one place, not per dispatch site): only call
-`/api/gb/tax-year/current` when the jurisdiction store's primary is `'gb'` or
-unset. ZA-primary users no longer fire a cross-pack request that the WS1
-middleware rejects.
+Guard inside the action (one place, not per dispatch site), mirroring the
+middleware's own fail-open logic: skip `/api/gb/tax-year/current` only when
+the user holds one or more jurisdictions and none of them is GB. Row-less
+users (fail-open) and GB holders — including future cross-border GB+ZA
+users whose primary is ZA — keep fetching the GB admin-tracked year; the
+call is only skipped where the WS1 middleware would 403 it.
 
 ### 6. Error handling summary
 
@@ -233,3 +239,13 @@ byte-for-byte identical to today in all paths.
   explicitly ZAR via `zaCurrencyMixin`).
 - Marketing/public pages (no session, no jurisdiction) — stay GB.
 - Backend `ZaLocalisation::formatMoney` comma-decimal alignment — follow-up.
+- `netWorth.js` hardcoded-GBP getters + orphaned `NetWorthOverviewCard.vue`
+  — dead code, spun off as its own task chip (delete/rewire).
+- JS chart-formatter callbacks that hardcode `£` (e.g.
+  `DashboardSparkline.vue`) — **WS4**; the WS4 sweep covers template
+  literals AND chart-formatter callbacks.
+- `willDocumentRenderer.js` stays GB-only (UK legal instrument). A ZA wills
+  capability under SA succession law is REQUIRED as separate SA-pack scope
+  — recorded on the program backlog, owned by no current workstream.
+- Mobile `appStateChange` foreground check keeps discarding its payload (no
+  singleton re-hydration — jurisdiction never changes mid-session).
