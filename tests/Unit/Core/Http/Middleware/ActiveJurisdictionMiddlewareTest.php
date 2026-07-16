@@ -7,136 +7,67 @@ use Fynla\Core\Registry\PackManifest;
 use Fynla\Core\Registry\PackRegistry;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
-use Illuminate\Routing\Route;
 
-describe('ActiveJurisdictionMiddleware', function () {
-    beforeEach(function () {
-        $this->registry = new PackRegistry();
-        $this->middleware = new ActiveJurisdictionMiddleware($this->registry);
+/**
+ * WS1: the middleware derives the pack from the request path (api/gb/* -> GB,
+ * api/za/* -> ZA) and enforces it against the user's jurisdictions. Row-less
+ * users fail open; scoped users are blocked from packs they don't hold.
+ * (End-to-end coverage lives in tests/Feature/Security/JurisdictionEnforcementTest.)
+ */
+beforeEach(function () {
+    $registry = new PackRegistry();
+    $registry->register(new PackManifest(
+        code: 'GB', name: 'United Kingdom', currency: 'GBP', locale: 'en_GB', tablePrefix: 'gb_',
+    ));
+    $this->middleware = new ActiveJurisdictionMiddleware($registry);
+});
 
-        $this->gbManifest = new PackManifest(
-            code: 'GB',
-            name: 'United Kingdom',
-            currency: 'GBP',
-            locale: 'en_GB',
-            tablePrefix: 'gb_',
-        );
-    });
+function jurisdictionRequest(string $path, ?array $codes = null): Request
+{
+    $request = Request::create($path, 'GET');
 
-    it('passes through when no cc route parameter exists', function () {
-        $request = Request::create('/api/core/health', 'GET');
-
-        // Set up a route without a {cc} parameter — must be bound to avoid LogicException
-        $route = new Route('GET', '/api/core/health', fn () => null);
-        $route->bind($request);
-        $request->setRouteResolver(fn () => $route);
-
-        $response = $this->middleware->handle($request, fn () => new Response('OK', 200));
-
-        expect($response->getStatusCode())->toBe(200);
-        expect($response->getContent())->toBe('OK');
-    });
-
-    it('returns 404 when pack is not registered', function () {
-        $request = Request::create('/api/xx/dashboard', 'GET');
-
-        $route = new Route('GET', '/api/{cc}/dashboard', fn () => null);
-        $route->bind($request);
-        $route->setParameter('cc', 'XX');
-        $request->setRouteResolver(fn () => $route);
-
-        $response = $this->middleware->handle($request, fn () => new Response('OK', 200));
-
-        expect($response->getStatusCode())->toBe(404);
-
-        $data = json_decode($response->getContent(), true);
-        expect($data['code'])->toBe('PACK_NOT_FOUND');
-    });
-
-    it('returns 403 when user lacks jurisdiction entitlement', function () {
-        $this->registry->register($this->gbManifest);
-
-        $request = Request::create('/api/gb/dashboard', 'GET');
-
-        $route = new Route('GET', '/api/{cc}/dashboard', fn () => null);
-        $route->bind($request);
-        $route->setParameter('cc', 'GB');
-        $request->setRouteResolver(fn () => $route);
-
-        // Create a mock authenticated user
+    if ($codes !== null) {
         $user = new stdClass();
         $user->id = 1;
+        $user->jurisdictions = collect(array_map(fn (string $c) => (object) ['code' => $c], $codes));
         $request->setUserResolver(fn () => $user);
+    }
 
-        // Set env to only allow ZA, not GB
-        putenv('FYNLA_ACTIVE_PACKS=ZA');
+    return $request;
+}
 
-        $response = $this->middleware->handle($request, fn () => new Response('OK', 200));
+function runJurisdiction(object $middleware, Request $request)
+{
+    return $middleware->handle($request, fn () => new Response('OK', 200));
+}
 
-        expect($response->getStatusCode())->toBe(403);
+it('passes through a core route with no pack prefix', function () {
+    $response = runJurisdiction($this->middleware, jurisdictionRequest('/api/user/family-members'));
 
-        $data = json_decode($response->getContent(), true);
-        expect($data['code'])->toBe('JURISDICTION_NOT_AUTHORISED');
+    expect($response->getStatusCode())->toBe(200)->and($response->getContent())->toBe('OK');
+});
 
-        // Clean up env
-        putenv('FYNLA_ACTIVE_PACKS');
-    });
+it('passes through when the user holds the pack jurisdiction', function () {
+    $response = runJurisdiction($this->middleware, jurisdictionRequest('/api/gb/dashboard', ['GB']));
 
-    it('passes through when pack is registered and user has entitlement', function () {
-        $this->registry->register($this->gbManifest);
+    expect($response->getStatusCode())->toBe(200);
+});
 
-        $request = Request::create('/api/gb/dashboard', 'GET');
+it('403s when the user holds jurisdictions but not this pack', function () {
+    $response = runJurisdiction($this->middleware, jurisdictionRequest('/api/gb/dashboard', ['ZA']));
 
-        $route = new Route('GET', '/api/{cc}/dashboard', fn () => null);
-        $route->bind($request);
-        $route->setParameter('cc', 'GB');
-        $request->setRouteResolver(fn () => $route);
+    expect($response->getStatusCode())->toBe(403)
+        ->and(json_decode($response->getContent(), true)['code'])->toBe('JURISDICTION_NOT_AUTHORISED');
+});
 
-        // Create a mock authenticated user
-        $user = new stdClass();
-        $user->id = 1;
-        $request->setUserResolver(fn () => $user);
+it('fail-opens for a row-less user (no jurisdictions)', function () {
+    $response = runJurisdiction($this->middleware, jurisdictionRequest('/api/gb/dashboard', []));
 
-        // Set env to allow GB
-        putenv('FYNLA_ACTIVE_PACKS=GB,ZA');
+    expect($response->getStatusCode())->toBe(200);
+});
 
-        $response = $this->middleware->handle($request, fn () => new Response('OK', 200));
+it('passes through an unauthenticated pack request', function () {
+    $response = runJurisdiction($this->middleware, jurisdictionRequest('/api/gb/dashboard'));
 
-        expect($response->getStatusCode())->toBe(200);
-        expect($response->getContent())->toBe('OK');
-
-        // Clean up env
-        putenv('FYNLA_ACTIVE_PACKS');
-    });
-
-    it('passes through for unauthenticated user when pack is registered', function () {
-        $this->registry->register($this->gbManifest);
-
-        $request = Request::create('/api/gb/dashboard', 'GET');
-
-        $route = new Route('GET', '/api/{cc}/dashboard', fn () => null);
-        $route->bind($request);
-        $route->setParameter('cc', 'GB');
-        $request->setRouteResolver(fn () => $route);
-
-        // No user resolver set — unauthenticated request
-        $response = $this->middleware->handle($request, fn () => new Response('OK', 200));
-
-        expect($response->getStatusCode())->toBe(200);
-    });
-
-    it('normalises lowercase country code to uppercase', function () {
-        $this->registry->register($this->gbManifest);
-
-        $request = Request::create('/api/gb/dashboard', 'GET');
-
-        $route = new Route('GET', '/api/{cc}/dashboard', fn () => null);
-        $route->bind($request);
-        $route->setParameter('cc', 'gb'); // lowercase
-        $request->setRouteResolver(fn () => $route);
-
-        $response = $this->middleware->handle($request, fn () => new Response('OK', 200));
-
-        expect($response->getStatusCode())->toBe(200);
-    });
+    expect($response->getStatusCode())->toBe(200);
 });
