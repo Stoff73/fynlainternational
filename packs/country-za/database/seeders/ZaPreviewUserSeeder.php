@@ -19,13 +19,11 @@ use Illuminate\Support\Str;
  * Seeds one South African preview persona with cross-module SA financial data
  * (SA Estate/Goals/Coordination demo + local E2E). Idempotent on the persona id.
  *
- * NOTE: this seeds the DATA layer only. Surfacing an SA persona in the
- * landing-page selector is blocked on two design decisions (flagged, not done
- * here): the core preview system (VALID_PERSONAS, personas JSON, preview.js)
- * is UK-hardcoded and would have to become pack-aware; and SA module access is
- * currently installation-gated via FYNLA_ACTIVE_PACKS rather than the per-user
- * jurisdiction model (WS-D). Until then, log in as this user directly for
- * testing/demo.
+ * NOTE: the persona IS selectable from the landing-page persona selector —
+ * it is wired end-to-end (PreviewController::VALID_PERSONAS + PERSONA_METADATA,
+ * frontend preview.js PERSONA_DATA/PERSONA_ORDER) and holds a primary ZA
+ * user_jurisdictions row (WS1), so it exercises the full SA session flow
+ * including WS3 localisation.
  */
 class ZaPreviewUserSeeder extends Seeder
 {

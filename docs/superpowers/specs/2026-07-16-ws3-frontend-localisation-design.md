@@ -3,7 +3,7 @@ type: spec
 date: 2026-07-16
 workstream: WS3 — Frontend Localisation (SA user sees R / SA dates / 1-March tax year)
 program: International Layer (WS1–WS6)
-status: AMENDED — 2026-07-16 — conflicts resolved against codebase audit (gate semantics, mobile reset, sweep ownership); build not started
+status: IMPLEMENTED (2026-07-16 — Pest 3092 pass / 1 skip / 0 fail; Larastan clean; all 5 WS3 Vitest files pass (56 new passing tests, 0 frontend regressions vs pre-WS3 baseline; 46 pre-existing stale spec files still failing — reported, not absorbed); browser-verified sa_professional ZAR/2026-27 + GB unregressed; commits e6f3581..74e83cd + fixes 08a426c, 10e15c3)
 branch: feat/international-layer
 depends_on: WS1 (jurisdiction lifecycle) — DONE; WS2 (query-layer un-null) — DONE
 ---

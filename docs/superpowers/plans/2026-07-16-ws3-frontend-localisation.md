@@ -1031,22 +1031,37 @@ import { setLocalisation, resetLocalisation } from '@/utils/localisation';
 import { setJurisdictionTaxYear } from '@/utils/dateFormatter';
 ```
 
-In the `hydrateFromSession` action, after the `commit('SET_JURISDICTION_STATE', {...});` call, add:
+Pass the localisation blocks through the commit payload and mirror them
+inside the mutation, atomically with the state write (same pattern as
+`taxConfig.js`'s `setActiveTaxYear` mutation — adjudicated 2026-07-16:
+mutation placement governs, so a future direct commit can't desync
+formatting from jurisdiction state):
 
 ```javascript
-    // WS3 — mirror the session localisation into the module-level
-    // singletons that currency.js / dateFormatter.js read. Missing
-    // blocks clear them (fail-open to GB formatting).
-    setLocalisation(payload.localisation || null);
-    setJurisdictionTaxYear(payload.tax_year || null);
+    // hydrateFromSession action — extend the existing commit payload:
+    commit('SET_JURISDICTION_STATE', {
+      active: /* unchanged */,
+      primary: /* unchanged */,
+      crossBorder: /* unchanged */,
+      localisation: payload.localisation || null,
+      taxYear: payload.tax_year || null,
+    });
+    // reset action — add localisation: null, taxYear: null to its commit.
+
+    // Mutation:
+  SET_JURISDICTION_STATE(state, { active, primary, crossBorder, localisation = null, taxYear = null }) {
+    state.activeJurisdictions = active;
+    state.primaryJurisdiction = primary;
+    state.crossBorder = crossBorder;
+    // WS3 — mirror into the formatting singletons atomically with the
+    // state write (same pattern as taxConfig.setActiveTaxYear) so any
+    // direct commit keeps formatting in sync with jurisdiction state.
+    setLocalisation(localisation);
+    setJurisdictionTaxYear(taxYear);
+  },
 ```
 
-In the `reset` action, after its `commit(...)` call, add:
-
-```javascript
-    resetLocalisation();
-    setJurisdictionTaxYear(null);
-```
+(`resetLocalisation` import becomes unused — `setLocalisation(null)` clears.)
 
 In `resources/js/store/modules/auth.js`, inside the `mobileLogout` action (it already destructures `{ commit, dispatch }`), add after `commit('clearAuth');`:
 
