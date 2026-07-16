@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-**Fynla** is a UK financial planning application (Laravel 10 + Vue.js 3 + MySQL 8) covering seven modules: Protection, Savings, Investment, Retirement, Estate Planning, Goals & Life Events, and Coordination.
+**Fynla** is a UK financial planning application (Laravel 12 + Vue.js 3 + MySQL 8) covering seven modules: Protection, Savings, Investment, Retirement, Estate Planning, Goals & Life Events, and Coordination.
 
 | Metric | Count |
 |--------|-------|
@@ -16,7 +16,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 | Agents | 9 |
 | Country Packs | 3 |
 
-**Production**: https://fynla.org | **Version**: v1.0
+**Dev/staging**: https://csjones.co/fynla_inter (International is **dev-only** — see Deployment) | **Version**: v1.0
 
 ## Commands
 
@@ -194,6 +194,8 @@ Never dispatch an agent with just "fix X" or "build Y". Always include:
 ## Deployment
 
 ### Two environments
+
+> **⚠️ Lineage (CSJ, 2026-07-15): Fynla International is DEV-ONLY and never goes to production.** It deploys **only** to `csjones.co/fynla_inter` and is separate in all respects from the legacy Fynla. **`fynla.org` runs the legacy repo (`~/Desktop/fynla`), not this codebase** — the `Production` row below and the "Deploying to production (fynla.org)" procedure are retained for reference but are **not** an International deploy target. Do not deploy International to `fynla.org`.
 
 Fynla runs on two environments, isolated database, code, and credentials:
 

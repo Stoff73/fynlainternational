@@ -75,4 +75,11 @@ describe('LifecycleEngine (G-(-1) MVP)', function () {
 
         expect($output)->toContain('lifecycle:run-daily');
     });
+
+    it('defaults config(lifecycle.throttle_ms) to 150 to pace batch sends under the SMTP cap', function () {
+        // 150ms (approximately 6.6 sends/sec) keeps batch lifecycle runs below
+        // SiteGround's ~10 msg/sec SMTP cap. The full engine reads this key
+        // between sends; here we assert the documented default is in place.
+        expect(config('lifecycle.throttle_ms'))->toBe(150);
+    });
 });

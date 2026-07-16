@@ -31,12 +31,6 @@ parameters:
 			path: packs/country-gb/src/Investment/AssetLocation/AssetLocationOptimizer.php
 
 		-
-			message: '#^Job class Fynla\\Packs\\Gb\\Jobs\\RunMonteCarloSimulation constructor invoked with 2 parameters in Fynla\\Packs\\Gb\\Jobs\\RunMonteCarloSimulation\:\:dispatch\(\), 6\-8 required\.$#'
-			identifier: arguments.count
-			count: 1
-			path: packs/country-gb/src/Investment/ScenarioService.php
-
-		-
 			message: '#^Access to an undefined property Fynla\\Packs\\Gb\\Protection\\RecommendationEngine\:\:\$taxCalculator\.$#'
 			identifier: property.notFound
 			count: 1

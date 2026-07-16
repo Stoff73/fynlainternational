@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Fynla\Packs\Gb\Http\Requests;
 
+use Fynla\Core\Rules\BelongsToCurrentUser;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
@@ -23,7 +24,7 @@ class UpdatePropertyRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'trust_id' => ['sometimes', 'nullable', 'exists:trusts,id'],
+            'trust_id' => ['sometimes', 'nullable', new BelongsToCurrentUser('trusts')],
             'property_type' => ['sometimes', Rule::in(['main_residence', 'secondary_residence', 'buy_to_let'])],
             'ownership_type' => ['sometimes', Rule::in(['individual', 'joint', 'tenants_in_common', 'trust'])],
             'joint_ownership_type' => ['sometimes', 'nullable', Rule::in(['joint_tenancy', 'tenants_in_common'])],

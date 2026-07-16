@@ -100,6 +100,21 @@ final class TaxDefaults
      */
     public const MPAA = 10000;
 
+    /**
+     * Maximum NET personal pension contribution that attracts tax relief for a
+     * non-earner (under-18 child or non-working adult). HMRC tops it up by 25%
+     * to reach a £3,600 gross input — the £720 government uplift below. Surface
+     * in TaxConfigService when the schema gains a non_earner_pension key; until
+     * then every strategy that quotes the figure reads it from this constant.
+     */
+    public const NON_EARNER_PENSION_NET_CONTRIBUTION = 2880;
+
+    /**
+     * Government uplift on a £2,880 net non-earner pension contribution
+     * (basic-rate relief grossed onto the net input): £2,880 + £720 = £3,600.
+     */
+    public const NON_EARNER_PENSION_GOVERNMENT_UPLIFT = 720;
+
     // ==================== Income Tax (2026/27) ====================
 
     /**

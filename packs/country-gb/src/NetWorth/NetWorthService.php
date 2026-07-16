@@ -493,9 +493,11 @@ class NetWorthService
                 ];
             });
 
-        // Get joint savings accounts
+        // Get joint savings accounts (jointOwner eager-loaded — the co_owner
+        // mapping reads the relation, which trips strict no-lazy-loading)
         $cashAccounts = SavingsAccount::where('user_id', $userId)
             ->where('ownership_type', 'joint')
+            ->with('jointOwner')
             ->get()
             ->map(function ($account) {
                 return [

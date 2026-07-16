@@ -10,6 +10,7 @@ use Fynla\Packs\Gb\Models\Mortgage;
 use Fynla\Packs\Gb\Models\Property;
 use Fynla\Packs\Gb\Models\SavingsAccount;
 use Fynla\Packs\Gb\NetWorth\NetWorthService;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
 uses(RefreshDatabase::class);
@@ -226,4 +227,32 @@ it('returns same result from cached net worth', function () {
     $result2 = $this->service->getCachedNetWorth($this->user);
 
     expect($result1)->toEqual($result2);
+});
+
+it('eager-loads jointOwner so joint savings co_owner renders under strict lazy-loading', function () {
+    // The savings mapper reads $account->jointOwner->name. Without an eager
+    // load this throws LazyLoadingViolationException in every non-production
+    // environment (Model::preventLazyLoading is on). Assert the co_owner name
+    // comes back without throwing.
+    Model::preventLazyLoading(true);
+
+    $coOwner = User::factory()->create([
+        'first_name' => 'Jamie',
+        'middle_name' => null,
+        'surname' => 'Rivers',
+    ]);
+
+    SavingsAccount::factory()->create([
+        'user_id' => $this->user->id,
+        'ownership_type' => 'joint',
+        'joint_owner_id' => $coOwner->id,
+        'ownership_percentage' => 50,
+        'current_balance' => 20000,
+    ]);
+
+    $jointAssets = $this->service->getJointAssets($this->user);
+    $savings = collect($jointAssets)->firstWhere('type', 'savings');
+
+    expect($savings)->not->toBeNull()
+        ->and($savings['co_owner'])->toBe('Jamie Rivers');
 });

@@ -71,7 +71,10 @@ class ChattelController extends Controller
 
         // Set defaults
         $validated['user_id'] = $user->id;
-        $validated['household_id'] = $validated['household_id'] ?? $user->household_id;
+        // household_id is derived from the authenticated user, never trusted from
+        // the request — a client-supplied value could inject the chattel into
+        // another household's aggregation (E-24). Matches Business/Property.
+        $validated['household_id'] = $user->household_id;
         $validated['ownership_type'] = $validated['ownership_type'] ?? 'individual';
         $validated['ownership_percentage'] = $validated['ownership_percentage'] ?? 100.00;
         $validated['valuation_date'] = $validated['valuation_date'] ?? now();

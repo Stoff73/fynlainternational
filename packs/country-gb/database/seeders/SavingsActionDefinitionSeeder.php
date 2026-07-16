@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Fynla\Packs\Gb\Database\Seeders;
 
 use Fynla\Packs\Gb\Models\SavingsActionDefinition;
+use Fynla\Packs\Gb\Tax\TaxConfigService;
 use Illuminate\Database\Seeder;
 
 /**
@@ -44,6 +45,18 @@ class SavingsActionDefinitionSeeder extends Seeder
 
     private function getDefinitions(): array
     {
+        // FSCS deposit protection is a regulatory value — source it from the
+        // active tax configuration rather than hardcoding (Rule #3). The
+        // TaxConfigurationSeeder runs before this seeder in DatabaseSeeder and
+        // in production. The fallback covers isolated tests that seed this
+        // seeder alone (TaxConfigService throws with no active tax year); the
+        // authoritative limit is served by FSCSAssessor from config at runtime.
+        try {
+            $fscsLimit = app(TaxConfigService::class)->getSavingsConfig('fscs_deposit_protection');
+        } catch (\RuntimeException) {
+            $fscsLimit = 120000;
+        }
+
         return [
             // ── Data Readiness (4) ────────────────────────────────────
 
@@ -458,11 +471,11 @@ class SavingsActionDefinitionSeeder extends Seeder
                 'what_if_impact_type' => 'default',
                 'trigger_config' => [
                     'condition' => 'institution_balance_above_fscs',
-                    'threshold' => 85000,
+                    'threshold' => $fscsLimit,
                 ],
                 'is_enabled' => true,
                 'sort_order' => 50,
-                'notes' => 'Triggers when total balance at a single institution exceeds £85,000 Financial Services Compensation Scheme limit.',
+                'notes' => 'Triggers when total balance at a single institution exceeds the Financial Services Compensation Scheme limit (sourced from active tax config).',
             ],
 
             [
@@ -477,7 +490,7 @@ class SavingsActionDefinitionSeeder extends Seeder
                 'what_if_impact_type' => 'default',
                 'trigger_config' => [
                     'condition' => 'institution_balance_approaching_fscs',
-                    'threshold' => 75000,
+                    'threshold' => $fscsLimit - 10000,
                 ],
                 'is_enabled' => true,
                 'sort_order' => 51,

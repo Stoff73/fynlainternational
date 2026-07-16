@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Fynla\Packs\Gb\Http\Requests\Chattel;
 
+use Fynla\Core\Rules\BelongsToCurrentUser;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
@@ -29,7 +30,7 @@ class StoreChattelRequest extends FormRequest
             'joint_owner_id' => ['nullable', 'exists:users,id'],
             'joint_owner_name' => ['nullable', 'string', 'max:255'],
             'household_id' => ['nullable', 'exists:households,id'],
-            'trust_id' => ['nullable', 'exists:trusts,id'],
+            'trust_id' => ['nullable', new BelongsToCurrentUser('trusts')],
 
             // Valuation
             'purchase_price' => ['nullable', 'numeric', 'min:0'],

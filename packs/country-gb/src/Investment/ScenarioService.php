@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Fynla\Packs\Gb\Investment;
 
+use Fynla\Core\Exceptions\FinancialCalculationException;
 use Fynla\Packs\Gb\Jobs\RunMonteCarloSimulation;
 use Fynla\Packs\Gb\Models\Investment\InvestmentScenario;
 use Illuminate\Support\Str;
@@ -152,22 +153,49 @@ class ScenarioService
      */
     public function runScenario(InvestmentScenario $scenario): string
     {
-        // Generate unique job ID
+        // RunMonteCarloSimulation takes positional scalars (start value, monthly
+        // contribution, expected return, volatility, years, iterations, goal).
+        // A scenario's `parameters` store percents under different keys, so map
+        // and convert here. Missing required inputs surface as a clear domain
+        // error rather than a TypeError deep in the queue worker.
+        $params = $scenario->parameters ?? [];
+
+        $startValue = $params['start_value'] ?? $params['current_value'] ?? null;
+        $years = $params['time_horizon_years'] ?? null;
+        $annualReturnPercent = $params['annual_return_percent'] ?? null;
+        $volatilityPercent = $params['volatility_percent'] ?? null;
+
+        $missing = array_keys(array_filter([
+            'start_value' => $startValue === null,
+            'time_horizon_years' => $years === null,
+            'annual_return_percent' => $annualReturnPercent === null,
+            'volatility_percent' => $volatilityPercent === null,
+        ]));
+
+        if ($missing !== []) {
+            throw FinancialCalculationException::missingData(
+                'investment scenario Monte Carlo parameters',
+                ['scenario_id' => $scenario->id, 'missing' => $missing],
+            );
+        }
+
         $jobId = Str::uuid()->toString();
 
-        // Update scenario with job ID and status
         $scenario->update([
             'status' => 'running',
             'monte_carlo_job_id' => $jobId,
         ]);
 
-        // Dispatch Monte Carlo job with scenario parameters
-        RunMonteCarloSimulation::dispatch($jobId, [
-            'user_id' => $scenario->user_id,
-            'scenario_id' => $scenario->id,
-            'parameters' => $scenario->parameters,
-            'iterations' => 1000,
-        ]);
+        RunMonteCarloSimulation::dispatch(
+            $jobId,
+            (float) $startValue,
+            (float) ($params['monthly_contribution'] ?? 0),
+            (float) $annualReturnPercent / 100,   // percent → decimal (0.07 for 7%)
+            (float) $volatilityPercent / 100,     // percent → decimal
+            (int) $years,
+            (int) ($params['simulations'] ?? 1000),
+            isset($params['goal_amount']) ? (float) $params['goal_amount'] : null,
+        );
 
         return $jobId;
     }

@@ -32,4 +32,20 @@ return [
 
     'events' => [],
 
+    /*
+    |--------------------------------------------------------------------------
+    | Send pacing (throttle)
+    |--------------------------------------------------------------------------
+    |
+    | Milliseconds to sleep between individual sends so batch lifecycle runs
+    | stay below the SMTP provider's rate limit. SiteGround caps shared mail at
+    | ~10 messages/sec; 150 ms (approximately 6.6/sec) gives headroom. Set to 0
+    | to disable pacing (tests, self-hosted SMTP). The full lifecycle engine
+    | reads this between sends; the G-(-1) dispatch stub does not send in a
+    | batch, so the key is inert until that engine lands.
+    |
+    */
+
+    'throttle_ms' => (int) env('LIFECYCLE_THROTTLE_MS', 150),
+
 ];
