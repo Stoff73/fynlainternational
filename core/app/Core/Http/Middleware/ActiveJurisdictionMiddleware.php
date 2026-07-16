@@ -11,16 +11,16 @@ use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
- * Middleware that validates the {cc} route parameter against registered packs
- * and checks the authenticated user's jurisdiction entitlement.
+ * Enforces per-user pack access on jurisdictional API routes.
  *
- * Applied to routes with /api/{cc}/* patterns. Core routes without
- * a {cc} parameter pass through unaffected.
- *
- * Phase 0: User entitlement is checked against the FYNLA_ACTIVE_PACKS
- * env var rather than a user_jurisdictions database table.
- *
- * TODO: Workstream D — replace env-based check with user_jurisdictions table query.
+ * The pack code is derived from the request path (api/gb/* -> GB, api/za/* -> ZA)
+ * since routes carry the prefix rather than a {cc} parameter. Core routes
+ * (api/auth, api/user, …) match no pack prefix and pass through. An
+ * authenticated user who holds any jurisdictions must hold a (non-deactivated)
+ * one for the derived pack, else 403. A row-less user is not blocked
+ * (fail-open) — every real user gets a jurisdiction at signup and via
+ * jurisdictions:backfill, so row-less is only a transient/legacy state.
+ * Packs not installed at all give 404.
  */
 class ActiveJurisdictionMiddleware
 {
@@ -32,82 +32,52 @@ class ActiveJurisdictionMiddleware
     /**
      * Handle an incoming request.
      *
-     * @param Request $request
      * @param Closure(Request): Response $next
-     *
-     * @return Response
      */
     public function handle(Request $request, Closure $next): Response
     {
-        $countryCode = $request->route('cc');
+        $countryCode = $this->packCodeFromPath($request);
 
-        // Core routes without {cc} parameter pass through
+        // Core routes (no pack prefix) pass through.
         if ($countryCode === null) {
             return $next($request);
         }
 
-        $countryCode = strtoupper((string) $countryCode);
-
-        // Check if the pack is registered at the installation level
         if (! $this->registry->isEnabled($countryCode)) {
             return new JsonResponse(
-                data: [
-                    'error' => 'Pack not found',
-                    'code' => 'PACK_NOT_FOUND',
-                ],
+                data: ['error' => 'Pack not found', 'code' => 'PACK_NOT_FOUND'],
                 status: 404,
             );
         }
 
-        // Check user jurisdiction entitlement (if authenticated)
-        if ($request->user()) {
-            if (! $this->userHasJurisdiction($countryCode)) {
-                return new JsonResponse(
-                    data: [
-                        'error' => 'Jurisdiction not authorised',
-                        'code' => 'JURISDICTION_NOT_AUTHORISED',
-                    ],
-                    status: 403,
-                );
-            }
+        $user = $request->user();
+
+        // $user->jurisdictions already excludes soft-deactivated rows. Fail-open
+        // for row-less users (they hold none yet); enforce for scoped users.
+        if ($user !== null
+            && $user->jurisdictions->isNotEmpty()
+            && ! $user->jurisdictions->contains('code', $countryCode)) {
+            return new JsonResponse(
+                data: ['error' => 'Jurisdiction not authorised', 'code' => 'JURISDICTION_NOT_AUTHORISED'],
+                status: 403,
+            );
         }
 
         return $next($request);
     }
 
     /**
-     * Check whether the current user has entitlement to the given jurisdiction.
-     *
-     * Phase 0: Checks the FYNLA_ACTIVE_PACKS env var (comma-separated codes).
-     * All authenticated users have access to all packs listed in the env var.
-     *
-     * TODO: Workstream D — replace with user_jurisdictions table check:
-     *   return UserJurisdiction::where('user_id', auth()->id())
-     *       ->where('jurisdiction_code', $code)
-     *       ->where('active', true)
-     *       ->exists();
-     *
-     * @param string $code ISO 3166-1 alpha-2 country code (uppercase)
-     *
-     * @return bool True if user has entitlement
+     * Derive the pack code from the request path: api/gb/* -> GB, api/za/* -> ZA.
+     * Core routes match neither and return null.
      */
-    private function userHasJurisdiction(string $code): bool
+    private function packCodeFromPath(Request $request): ?string
     {
-        // Use getenv() directly rather than Laravel's env() helper,
-        // because env() reads from the cached config repository once
-        // the app is booted and won't see putenv() changes at runtime.
-        $activePacks = getenv('FYNLA_ACTIVE_PACKS');
-
-        if ($activePacks === false || $activePacks === '') {
-            // Default: only GB is active
-            return $code === 'GB';
+        foreach ($this->registry->codes() as $code) {
+            if ($request->is('api/'.strtolower($code).'/*')) {
+                return strtoupper($code);
+            }
         }
 
-        $codes = array_map(
-            fn (string $c): string => strtoupper(trim($c)),
-            explode(',', $activePacks)
-        );
-
-        return in_array($code, $codes, true);
+        return null;
     }
 }

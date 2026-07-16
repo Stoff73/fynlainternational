@@ -36,6 +36,19 @@ class UserFactory extends Factory
     }
 
     /**
+     * Assign a specific primary jurisdiction (e.g. ->jurisdiction('GB') /
+     * ->jurisdiction('ZA')). Opt-in: the factory deliberately does NOT assign a
+     * default jurisdiction, so bare users stay row-less (WS1 enforcement
+     * fail-opens for row-less users, so existing pack-route tests keep passing).
+     */
+    public function jurisdiction(string $code): static
+    {
+        return $this->afterCreating(function (\Fynla\Core\Models\User $user) use ($code) {
+            (new \Fynla\Core\Jurisdiction\AssignPrimaryJurisdiction)->assign($user, $code);
+        });
+    }
+
+    /**
      * Indicate that the model's email address should be unverified.
      */
     public function unverified(): static

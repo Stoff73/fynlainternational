@@ -416,7 +416,21 @@ class PreviewUserSeeder extends Seeder
 
         $user->save();
 
+        $this->assignGbJurisdiction($user);
+
         return $user;
+    }
+
+    /**
+     * Assign GB as the primary jurisdiction (all preview personas are UK).
+     * Guarded so isolated tests that seed this seeder without the jurisdictions
+     * table are a no-op (WS1).
+     */
+    private function assignGbJurisdiction(User $user): void
+    {
+        if (\Fynla\Core\Models\Jurisdiction::byCode('GB') !== null) {
+            (new \Fynla\Core\Jurisdiction\AssignPrimaryJurisdiction)->assign($user, 'GB');
+        }
     }
 
     /**
@@ -566,6 +580,8 @@ class PreviewUserSeeder extends Seeder
                 'is_dependent' => false,
             ]
         );
+
+        $this->assignGbJurisdiction($spouse);
 
         return $spouse;
     }

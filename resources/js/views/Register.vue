@@ -101,6 +101,27 @@
             </p>
           </div>
 
+          <!-- Country of residence — sets the user's jurisdiction -->
+          <div>
+            <label for="country_code" class="label">
+              Country of residence <span class="text-raspberry-500">*</span>
+            </label>
+            <select
+              id="country_code"
+              v-model="form.country_code"
+              required
+              class="input-field"
+              :class="{ 'border-raspberry-600': errors.country_code }"
+            >
+              <option value="" disabled>Select your country</option>
+              <option value="GB">United Kingdom</option>
+              <option value="ZA">South Africa</option>
+            </select>
+            <p v-if="errors.country_code" class="mt-1 text-body-sm text-raspberry-600">
+              {{ errors.country_code[0] }}
+            </p>
+          </div>
+
           <div>
             <label for="email" class="label">
               Email address <span class="text-raspberry-500">*</span>
@@ -222,6 +243,7 @@ export default {
       first_name: '',
       middle_name: '',
       last_name: '',
+      country_code: '',
       email: '',
       password: '',
       password_confirmation: '',

@@ -398,6 +398,11 @@ class FamilyMembersController extends Controller
                 'postcode' => $currentUser->postcode,
             ]);
 
+            // Spouse inherits the creating user's jurisdiction (WS1 — no creation
+            // path leaves a user row-less).
+            (new \Fynla\Core\Jurisdiction\AssignPrimaryJurisdiction)
+                ->assign($spouseUser, $currentUser->primaryJurisdiction()?->code ?? 'GB');
+
             // Update current user
             $currentUser->spouse_id = $spouseUser->id;
             $currentUser->marital_status = 'married';
