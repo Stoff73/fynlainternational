@@ -14,9 +14,11 @@ use App\Services\Auth\SessionService;
 use App\Services\LifeStage\LifeStageService;
 use App\Services\Payment\ReferralService;
 use App\Services\Payment\TrialService;
+use Fynla\Core\Contracts\Localisation;
 use Fynla\Core\Http\Controller;
 use Fynla\Core\Http\Resources\UserResource;
 use Fynla\Core\Http\Traits\SanitizedErrorResponse;
+use Fynla\Core\Jurisdiction\AssignPrimaryJurisdiction;
 use Fynla\Core\Models\AuditLog;
 use Fynla\Core\Models\EmailVerificationCode;
 use Fynla\Core\Models\LoginAttempt;
@@ -24,6 +26,7 @@ use Fynla\Core\Models\PendingRegistration;
 use Fynla\Core\Models\Role;
 use Fynla\Core\Models\User;
 use Fynla\Core\Models\UserSession;
+use Fynla\Core\TaxYear\TaxYearResolver;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -382,6 +385,41 @@ class AuthController extends Controller
             ? strtolower((string) $primaryJurisdiction->code)
             : null;
 
+        // WS3 — localisation for the primary jurisdiction. Fail-open to
+        // GB-shaped defaults when the user has no primary jurisdiction or
+        // the pack binding is missing, mirroring WS1's fail-open stance.
+        $localisation = [
+            'currency_code' => 'GBP',
+            'currency_symbol' => '£',
+            'locale' => 'en_GB',
+            'date_format' => 'd/m/Y',
+        ];
+        $taxYear = null;
+
+        if ($primaryCode !== null && app()->bound("pack.{$primaryCode}.localisation")) {
+            /** @var Localisation $packLocalisation */
+            $packLocalisation = app("pack.{$primaryCode}.localisation");
+            $localisation = [
+                'currency_code' => $packLocalisation->currencyCode(),
+                'currency_symbol' => $packLocalisation->currencySymbol(),
+                'locale' => $packLocalisation->locale(),
+                'date_format' => $packLocalisation->dateFormat(),
+            ];
+
+            try {
+                $resolved = app(TaxYearResolver::class)->resolve($primaryCode);
+                $taxYear = [
+                    'label' => $resolved->label,
+                    'starts_on' => $resolved->startsOn->format('Y-m-d'),
+                    'ends_on' => $resolved->endsOn->format('Y-m-d'),
+                ];
+            } catch (\RuntimeException) {
+                // No tax_years row for this jurisdiction (GB today) — the
+                // frontend falls back to its existing GB tax-year chain.
+                $taxYear = null;
+            }
+        }
+
         return response()->json([
             'success' => true,
             'data' => [
@@ -392,6 +430,8 @@ class AuthController extends Controller
                 'active_jurisdictions' => $activeJurisdictions,
                 'primary_jurisdiction' => $primaryCode,
                 'cross_border' => count($activeJurisdictions) > 1,
+                'localisation' => $localisation,
+                'tax_year' => $taxYear,
             ],
         ]);
     }
@@ -526,7 +566,7 @@ class AuthController extends Controller
             // Assign the user's primary jurisdiction from their chosen country of
             // residence (WS1). Legacy pending rows without a country_code default
             // to GB. Single writer keeps every creation path consistent.
-            (new \Fynla\Core\Jurisdiction\AssignPrimaryJurisdiction)
+            (new AssignPrimaryJurisdiction)
                 ->assign($user, $pending->country_code ?? 'GB');
 
             Log::info('User created from pending registration', [
