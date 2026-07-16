@@ -51,13 +51,25 @@ Backend localisation exists per pack but never reaches the SPA:
 
 ### Known convention conflict (resolved by this spec)
 
-Backend `ZaLocalisation::formatMoney` renders comma-decimal (`R 1 234 567,89`,
-asserted in `packs/country-za/tests/Unit/ZaLocalisationTest.php`); frontend
-`formatZAR` renders period-decimal (`R 1 234 567.89`, per SA Research §17).
-**The frontend/research convention wins**: WS3 routes all frontend ZAR
-formatting through `formatZAR`, so the app shows one ZA convention everywhere.
-Backend `formatMoney` is not currently user-facing; aligning it (+ its test)
-is a follow-up, not WS3.
+Three ZA money conventions currently coexist:
+
+- SA Research §17 and `zaCurrency.js`'s own docstring specify
+  **period-decimal**: `R 1 234 567.89`.
+- `formatZAR`'s implementation delegates to `Intl.NumberFormat('en-ZA')`,
+  whose CLDR data uses **comma-decimal** — verified empirically (Node and
+  browser ICU render `1 234 567,89`). So the 32 ZA components actually
+  display comma-decimal today, contradicting the docstring; only the
+  rarely-hit catch-fallback produces periods.
+- Backend `ZaLocalisation::formatMoney` renders comma-decimal
+  (`R 1 234 567,89`, asserted in
+  `packs/country-za/tests/Unit/ZaLocalisationTest.php`).
+
+**The research convention (period-decimal) wins.** WS3 rewrites `formatZAR`
+to format deterministically (no Intl variance): `R 1 234 567.89`, U+00A0
+grouping, sign before the symbol (`-R 123.45`, matching the backend's sign
+placement), `R —` for null/NaN. All frontend ZAR formatting routes through
+it, so the app shows one ZA convention everywhere. Backend `formatMoney`'s
+comma-decimal (not currently user-facing) is a follow-up, not WS3.
 
 ### Tax-year data (traced)
 
