@@ -140,6 +140,10 @@ const actions = {
       dispatch('netWorth/resetState', null, { root: true }).catch(() => {});
       dispatch('mobileDashboard/clearCache', null, { root: true }).catch(() => {});
       dispatch('aiChat/reset', null, { root: true }).catch(() => {});
+      // WS3 — clear jurisdiction formatting singletons on mobile logout
+      // (mirrors logout/exitPreview); fetchUser re-hydrates after
+      // biometric login, so Face ID is unaffected.
+      dispatch('jurisdiction/reset', null, { root: true }).catch(() => {});
     } finally {
       commit('setLoading', false);
     }

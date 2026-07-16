@@ -20,6 +20,8 @@
 
 import gbNavigation from '@gb/navigation';
 import zaNavigation from '@za/navigation';
+import { setLocalisation, resetLocalisation } from '@/utils/localisation';
+import { setJurisdictionTaxYear } from '@/utils/dateFormatter';
 
 // Per-pack navigation registry (R-12). Each pack ships a default-exported
 // `navigation()` thunk that returns its sidebar manifest:
@@ -92,6 +94,11 @@ const actions = {
         : null,
       crossBorder: Boolean(payload.cross_border),
     });
+    // WS3 — mirror the session localisation into the module-level
+    // singletons that currency.js / dateFormatter.js read. Missing
+    // blocks clear them (fail-open to GB formatting).
+    setLocalisation(payload.localisation || null);
+    setJurisdictionTaxYear(payload.tax_year || null);
   },
 
   reset({ commit }) {
@@ -100,6 +107,8 @@ const actions = {
       primary: null,
       crossBorder: false,
     });
+    resetLocalisation();
+    setJurisdictionTaxYear(null);
   },
 };
 

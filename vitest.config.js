@@ -1,6 +1,7 @@
 import { defineConfig } from 'vite';
 import vue from '@vitejs/plugin-vue';
 import { fileURLToPath } from 'node:url';
+import path from 'path';
 
 export default defineConfig({
   plugins: [vue()],
@@ -18,6 +19,8 @@ export default defineConfig({
   resolve: {
     alias: {
       '@': fileURLToPath(new URL('./resources/js', import.meta.url)),
+      '@gb': path.resolve(fileURLToPath(new URL('.', import.meta.url)), 'packs/country-gb/resources/js'),
+      '@za': path.resolve(fileURLToPath(new URL('.', import.meta.url)), 'packs/country-za/resources/js'),
     },
   },
 });

@@ -1,6 +1,8 @@
 import { createStore } from 'vuex';
 import { describe, it, expect, beforeEach } from 'vitest';
 import jurisdiction from '@/store/modules/jurisdiction';
+import { getLocalisation } from '@/utils/localisation';
+import { getCurrentTaxYear, setJurisdictionTaxYear } from '@/utils/dateFormatter';
 
 function makeStore() {
   return createStore({
@@ -13,6 +15,7 @@ describe('jurisdiction store module', () => {
 
   beforeEach(() => {
     store = makeStore();
+    store.dispatch('jurisdiction/reset');
   });
 
   describe('initial state', () => {
@@ -133,6 +136,57 @@ describe('jurisdiction store module', () => {
       expect(store.state.jurisdiction.activeJurisdictions).toEqual([]);
       expect(store.state.jurisdiction.primaryJurisdiction).toBeNull();
       expect(store.state.jurisdiction.crossBorder).toBe(false);
+    });
+  });
+
+  describe('localisation side effects (WS3)', () => {
+    it('hydrates the localisation singleton and jurisdiction tax year from the session payload', () => {
+      store.dispatch('jurisdiction/hydrateFromSession', {
+        active_jurisdictions: ['za'],
+        primary_jurisdiction: 'za',
+        cross_border: false,
+        localisation: {
+          currency_code: 'ZAR',
+          currency_symbol: 'R',
+          locale: 'en_ZA',
+          date_format: 'd M Y',
+        },
+        tax_year: { label: '2026/27', starts_on: '2026-03-01', ends_on: '2027-02-28' },
+      });
+
+      expect(getLocalisation()).toEqual({
+        currencyCode: 'ZAR',
+        currencySymbol: 'R',
+        locale: 'en-ZA',
+        dateFormat: 'd M Y',
+      });
+      expect(getCurrentTaxYear()).toBe('2026/27');
+    });
+
+    it('clears both singletons when the payload has no localisation blocks', () => {
+      store.dispatch('jurisdiction/hydrateFromSession', {
+        active_jurisdictions: ['gb'],
+        primary_jurisdiction: 'gb',
+        cross_border: false,
+      });
+
+      expect(getLocalisation()).toBeNull();
+    });
+
+    it('reset clears both singletons', () => {
+      store.dispatch('jurisdiction/hydrateFromSession', {
+        active_jurisdictions: ['za'],
+        primary_jurisdiction: 'za',
+        cross_border: false,
+        localisation: { currency_code: 'ZAR', currency_symbol: 'R', locale: 'en_ZA', date_format: 'd M Y' },
+        tax_year: { label: '2026/27', starts_on: '2026-03-01', ends_on: '2027-02-28' },
+      });
+
+      store.dispatch('jurisdiction/reset');
+
+      expect(getLocalisation()).toBeNull();
+      expect(getCurrentTaxYear(new Date(2026, 6, 16))).toBe('2026/27'); // GB calendar math again
+      expect(getCurrentTaxYear(new Date(2026, 2, 5))).toBe('2025/26'); // 5 Mar < 6 Apr ⇒ prior GB year
     });
   });
 });
